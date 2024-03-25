@@ -1,0 +1,49 @@
+environment_config:
+  path: app_config/env_config.dart
+  class: EnvironmentConfig
+  
+  fields:
+    env:
+    baseUrl:
+  extensions:
+    dev:
+      fields:
+        env:
+          env_var: APP_ENV
+          default: 'dev'
+          dotenv: true
+        baseUrl:
+          env_var: BASE_URL
+          const: true
+          default: "https://apitest-iportal.nhg.vn/api/v1/"
+    uat:
+      fields:
+        env:
+          env_var: APP_ENV
+          default: 'staging'
+          dotenv: true
+        baseUrl:
+          env_var: BASE_URL
+          const: true
+          default: "https://apitest-iportal.nhg.vn/api/v1/"
+    staging:
+      fields:
+        env:
+          env_var: APP_ENV
+          default: 'staging'
+          dotenv: true
+        baseUrl:
+          env_var: BASE_URL
+          const: true
+          default: "https://apitest-iportal.nhg.vn/api/v1/"
+    prod:
+      fields:
+        env:
+          env_var: APP_ENV
+          default: 'prod'
+          dotenv: true
+        baseUrl:
+          env_var: BASE_URL
+          const: true
+          default: "https://apitest-iportal.nhg.vn/api/v1/"       
+ 
