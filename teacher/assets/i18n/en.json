@@ -7,6 +7,7 @@
     "qr_code" : "with QR code",
     "or" : "or",
     "forgot password" : "Forgot password",
-    "forgot_domain_school": "Please contact school IT if you forget the iProtal website link"
-
+    "forgot_domain_school": "Please contact school IT if you forget the iProtal website link",
+    "toogle_language": "Toggle Language",
+    "current_language" : "Curent Language"
 }

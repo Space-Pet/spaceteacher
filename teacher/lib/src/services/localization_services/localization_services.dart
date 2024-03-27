@@ -21,7 +21,7 @@ class LocalizationServices {
 
   static const List<Locale> supportedLocales = [
     Locale('en', 'US'),
-    Locale('vn', 'VN'),
+    Locale('vi', 'VN'),
   ];
 
   static const List<String> supportedLanguages = [
@@ -37,8 +37,8 @@ class LocalizationServices {
 
   Future<void> load() async {
     for (Locale locale in supportedLocales) {
-      String jsonString = await rootBundle.loadString(
-          'assets/i18n/${locale.languageCode}-${locale.countryCode}.json');
+      String jsonString = await rootBundle
+          .loadString('assets/i18n/${locale.languageCode}.json');
       Map<String, dynamic> jsonMap = json.decode(jsonString);
 
       _localizedString = jsonMap.map((key, value) {
@@ -53,14 +53,19 @@ class LocalizationServices {
 
   static Locale? localeResolutionCallback(
       Locale? locale, Iterable<Locale> supportedLocales) {
-    for (Locale supportedLocale in supportedLocales) {
-      if (supportedLocale.languageCode == locale?.languageCode ||
-          supportedLocale.countryCode == locale?.countryCode) {
-        return supportedLocale;
-      }
+    // for (Locale supportedLocale in supportedLocales) {
+    //   if (supportedLocale.languageCode == locale?.languageCode ||
+    //       supportedLocale.countryCode == locale?.countryCode) {
+    //     return supportedLocale;
+    //   }
+    // }
+    if (supportedLocales.isNotEmpty && locale != null) {
+      return supportedLocales.firstWhere(
+        (element) => element.languageCode == locale.languageCode,
+        orElse: () => supportedLocales.first,
+      );
     }
-
-    return supportedLocales.first;
+    return null;
   }
 
   static const LocalizationsDelegate<LocalizationServices> _delegate =
@@ -68,6 +73,7 @@ class LocalizationServices {
   static const localizationDelegate = [
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
     _delegate,
   ];
 }
@@ -78,7 +84,7 @@ class _LocalizationServicesDelegate
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'vn'].contains(locale.languageCode);
+    return ['en', 'vi'].contains(locale.languageCode);
   }
 
   @override

@@ -7,5 +7,7 @@
     "qr_code" : "với mã QR",
     "or" : "hoặc",
     "forgot password" : "Quên mật khẩu",
-    "forgot_domain_school": "Vui lòng liên hệ IT trường nếu bạn quên đường dẫn website iProtal"
+    "forgot_domain_school": "Vui lòng liên hệ IT trường nếu bạn quên đường dẫn website iProtal",
+    "toggle_language": "Chuyển Vùng",
+    "current_language" : "Ngôn ngữ hiện tại"
 }
