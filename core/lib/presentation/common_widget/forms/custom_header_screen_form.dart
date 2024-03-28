@@ -154,7 +154,7 @@ class _CustomHeaderScreenFormState extends State<CustomHeaderScreenForm>
                     const SizedBox(height: 8),
                     Text(
                       widget.title ?? '',
-                      style: _theme.textTheme.headline3?.copyWith(
+                      style: _theme.textTheme.displaySmall?.copyWith(
                         color: textColor,
                         fontSize: 24,
                       ),
@@ -164,7 +164,7 @@ class _CustomHeaderScreenFormState extends State<CustomHeaderScreenForm>
                     if (widget.des?.isNotEmpty == true)
                       Text(
                         widget.des ?? '',
-                        style: _theme.textTheme.subtitle2?.copyWith(
+                        style: _theme.textTheme.titleSmall?.copyWith(
                           color: desTextColor,
                         ),
                       ),

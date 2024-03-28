@@ -70,7 +70,7 @@ class CircleImageOutline extends StatelessWidget {
                   color: Color(0xFF0767FB),
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                child: Icon(Icons.check, color: Colors.white, size: 16)
+                child: const Icon(Icons.check, color: Colors.white, size: 16)
               ),
             ),
           )
@@ -117,7 +117,7 @@ class CircleImageVerified extends StatelessWidget {
                   color: Color(0xFF0767FB),
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                 ),
-                child: Icon(Icons.check, color: Colors.white, size: 16)
+                child: const Icon(Icons.check, color: Colors.white, size: 16)
               ),
             ),
           )

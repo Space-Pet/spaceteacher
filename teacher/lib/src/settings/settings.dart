@@ -34,11 +34,17 @@ class Settings {
     return jsonData == null ? null : UserInfo.fromJson(json.decode(jsonData));
   }
 
-  Future<void> saveLanguage(String language) async =>
-      await UserSecureStorage.write(LocalStorageKey.language, language);
+  Future<void> saveLanguage(String language) async {
+    await UserSecureStorage.write(LocalStorageKey.language, language);
+    print(await getLanguage());
+  }
+
+  Future<void> removeLanguage() async =>
+      await UserSecureStorage.remove(LocalStorageKey.language);
 
   Future<String> getLanguage() async {
-    final language = await UserSecureStorage.read(LocalStorageKey.language);
-    return language ?? "en";
+    final language =
+        await UserSecureStorage.read(LocalStorageKey.language) ?? "en";
+    return language;
   }
 }

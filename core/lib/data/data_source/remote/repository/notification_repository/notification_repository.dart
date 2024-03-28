@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:injectable/injectable.dart';
 
 import '../../../../models/notification_model.dart';
-import '../../data_repository.dart';
 
-part 'notification_repository_impl.dart';
+// part 'notification_repository_impl.dart';
 
 abstract class NotificationRepository {
   Future<List<NotificationModel>> getNewNotificationiportal(

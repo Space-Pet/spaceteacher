@@ -10,52 +10,52 @@ class AppTextTheme {
   );
 
   static TextTheme getDefaultTextTheme() => TextTheme(
-        headline3: TextStyle(
+        displaySmall: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryText,
         ),
-        headline4: TextStyle(
+        headlineMedium: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryText,
         ),
-        headline5: TextStyle(
+        headlineSmall: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryText,
         ),
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.bold,
           color: themeColor.subText,
         ),
-        subtitle1: TextStyle(
+        titleMedium: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
           color: themeColor.subText,
         ),
-        subtitle2: TextStyle(
+        titleSmall: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: themeColor.subText,
         ),
-        bodyText1: TextStyle(
+        bodyLarge: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryText,
         ),
-        bodyText2: TextStyle(
+        bodyMedium: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: themeColor.primaryText,
         ),
-        caption: TextStyle(
+        bodySmall: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryText,
         ),
-        button: const TextStyle(
+        labelLarge: const TextStyle(
           color: Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -63,52 +63,52 @@ class AppTextTheme {
       );
 
   static TextTheme getDefaultTextThemeDark() => TextTheme(
-        headline3: TextStyle(
+        displaySmall: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryColor,
         ),
-        headline4: TextStyle(
+        headlineMedium: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w500,
           color: themeColor.primaryDarkText,
         ),
-        headline5: TextStyle(
+        headlineSmall: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
           color: themeColor.primaryDarkText,
         ),
-        headline6: TextStyle(
+        titleLarge: TextStyle(
           fontSize: 18,
           fontWeight: FontWeight.w500,
           color: themeColor.primaryDarkText,
         ),
-        subtitle1: TextStyle(
+        titleMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: themeColor.subDarkText,
         ),
-        subtitle2: TextStyle(
+        titleSmall: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
           color: themeColor.subDarkText,
         ),
-        bodyText1: TextStyle(
+        bodyLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
           color: themeColor.primaryDarkText,
         ),
-        bodyText2: TextStyle(
+        bodyMedium: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: themeColor.primaryDarkText,
         ),
-        caption: TextStyle(
+        bodySmall: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: themeColor.primaryDarkText,
         ),
-        button: TextStyle(
+        labelLarge: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: themeColor.primaryDarkText,

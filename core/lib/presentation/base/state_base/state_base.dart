@@ -1,8 +1,7 @@
 part of '../base.dart';
 
-abstract class StateBase<T extends StatefulWidget> extends State<T>
-    implements ApiServiceDelegate {
-  ErrorType? errorTypeShowing;
+abstract class StateBase<T extends StatefulWidget> extends State<T> {
+  // ErrorType? errorTypeShowing;
 
   var _isLoadingShowing = false;
 
@@ -24,7 +23,7 @@ abstract class StateBase<T extends StatefulWidget> extends State<T>
     super.initState();
     LogUtils.d('[${T.toString()}] initState');
     if (willHandleError) {
-      bloc?.errorHandler = onError;
+      // bloc?.errorHandler = onError;
     }
   }
 
@@ -60,11 +59,11 @@ abstract class StateBase<T extends StatefulWidget> extends State<T>
     }
   }
 
-  @override
-  void onError(ErrorData error) {
-    hideLoading();
-    _onError(error);
-  }
+  // @override
+  // void onError(ErrorData error) {
+  //   hideLoading();
+  //   _onError(error);
+  // }
 
   void showLoginNoticeDialog({
     required Function() onSuccess,
@@ -76,7 +75,11 @@ abstract class StateBase<T extends StatefulWidget> extends State<T>
     Function()? onSkip,
   }) {}
 
-  void showErrorDialog(String? message, String? errorCode,{Function()? onClose,}) {
+  void showErrorDialog(
+    String? message,
+    String? errorCode, {
+    Function()? onClose,
+  }) {
     showNoticeErrorDialog(
       context: context,
       errorCode: errorCode,
@@ -91,7 +94,7 @@ abstract class StateBase<T extends StatefulWidget> extends State<T>
 
   @mustCallSuper
   void onCloseErrorDialog() {
-    errorTypeShowing = null;
+    // errorTypeShowing = null;
   }
 
   void showLoginRequired({String? message, Function()? onConfirmed}) {
@@ -128,10 +131,10 @@ abstract class StateBase<T extends StatefulWidget> extends State<T>
   }
 
   Future<void> callCenter() async {
-    final url =
-        '''tel:${(localDataManager.appSettings?.hotline ?? AppConstant.hotline).replaceAll(' ', '')}''';
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
-    }
+    // final url =
+    //     '''tel:${(localDataManager.appSettings?.hotline ?? AppConstant.hotline).replaceAll(' ', '')}''';
+    // if (await canLaunchUrlString(url)) {
+    //   await launchUrlString(url);
+    // }
   }
 }

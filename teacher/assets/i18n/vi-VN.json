@@ -1,0 +1,13 @@
+{
+    "user_name": "Tài khoản",
+    "input": "nhập",
+    "password" :"Mật khẩu",
+    "title_login": "Cha mẹ học sinh / học sinh",
+    "sign_in" : "Đăng nhập",
+    "qr_code" : "với mã QR",
+    "or" : "hoặc",
+    "forgot_password" : "Quên mật khẩu",
+    "forgot_domain_school": "Vui lòng liên hệ IT trường nếu bạn quên đường dẫn website iProtal",
+    "toggle_language": "Chuyển Vùng",
+    "current_language" : "Ngôn ngữ hiện tại"
+}

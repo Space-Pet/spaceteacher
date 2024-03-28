@@ -30,7 +30,7 @@ class EmptyData extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             message,
-            style: _themeData.textTheme.subtitle1,
+            style: _themeData.textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
         ],

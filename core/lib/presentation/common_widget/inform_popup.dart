@@ -30,7 +30,7 @@ class InformationPopup extends StatelessWidget {
         children: [
           Text(
             title,
-            style: theme.textTheme.headline4,
+            style: theme.textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
           const SizedBox(
@@ -38,7 +38,7 @@ class InformationPopup extends StatelessWidget {
           ),
           Text(
             content,
-            style: theme.textTheme.bodyText2?.copyWith(fontSize: 12),
+            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 12),
             textAlign: TextAlign.center,
           ),
           const SizedBox(

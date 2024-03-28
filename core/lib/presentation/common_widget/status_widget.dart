@@ -17,7 +17,7 @@ class StatusWidget extends StatelessWidget {
       ),
       child: Text(
         isSuccess == true ? 'Success' : 'Failed',
-        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Colors.white,
             ),
       ),

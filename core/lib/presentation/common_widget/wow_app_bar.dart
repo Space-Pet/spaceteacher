@@ -48,7 +48,7 @@ class WowAppBar extends StatelessWidget implements PreferredSizeWidget {
                 margin: const EdgeInsets.only(left: 8, right: 16),
                 child: Text(
                   title,
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: themeColor.white,
                         fontSize: 20,
                       ),

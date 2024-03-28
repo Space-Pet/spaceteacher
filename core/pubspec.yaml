@@ -1,6 +1,7 @@
 name: core
 description: A new Flutter package project.
 version: 0.0.1
+publish_to: "none"
 # homepage:
 
 environment:
@@ -13,16 +14,23 @@ dependencies:
   #network
   retrofit: ^4.1.0 #ns
   graphql_flutter: ^5.0.0 #ns
+  dio: ^5.4.1
 
   #base
   flutter_bloc: ^8.1.1 #ns
   shared_preferences: ^2.0.7 #ns
-  get_it: ^7.2.0 #ns
+  get_it: ^7.6.7 #ns
   injectable: ^2.0.0
   intl: ^0.18.1 #ns
   flutter_svg_provider: ^1.0.6 #ns
   flutter_svg: ^2.0.7 #ns
   url_launcher: ^6.0.17
+
+  #storage local
+  flutter_secure_storage: ^9.0.0
+
+  #localization
+  easy_localization: ^3.0.5
 
   #utils
   logger: ^2.0.2+1 #ns

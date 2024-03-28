@@ -59,14 +59,14 @@ class ExpandableContent extends StatelessWidget {
               child: Expandable(
                 collapsed: Text(
                   '''${item.index != null ? '${item.index ?? 0}. ' : ''}${item.title}''',
-                  style: textTheme.bodyText2?.copyWith(
+                  style: textTheme.bodyMedium?.copyWith(
                     fontSize: 14,
                     color: themeColor.primaryText,
                   ),
                 ),
                 expanded: Text(
                   '''${item.index != null ? '${item.index ?? 0}. ' : ''}${item.title}''',
-                  style: textTheme.bodyText2
+                  style: textTheme.bodyMedium
                       ?.copyWith(fontSize: 14, color: themeColor.primaryColor),
                 ),
               ),
@@ -99,7 +99,7 @@ class ExpandableContent extends StatelessWidget {
         _buildHeader(),
         Text(
           item.content ?? '',
-          style: textTheme.bodyText2?.copyWith(
+          style: textTheme.bodyMedium?.copyWith(
             fontSize: 14,
           ),
         ),

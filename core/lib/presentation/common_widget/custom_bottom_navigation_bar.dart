@@ -162,12 +162,12 @@ class BottomItem extends StatelessWidget {
   TextStyle? _getTextStyle(BuildContext context) {
     final theme = Theme.of(context);
     if (selected) {
-      return theme.textTheme.bodyText1?.copyWith(
+      return theme.textTheme.bodyLarge?.copyWith(
         fontSize: 12,
         color: themeColor.primaryColor,
       );
     } else {
-      return theme.textTheme.subtitle2?.copyWith(
+      return theme.textTheme.titleSmall?.copyWith(
         fontSize: 12,
       );
     }

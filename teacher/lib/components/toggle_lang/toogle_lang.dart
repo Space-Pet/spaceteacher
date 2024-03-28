@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/src/services/localization_services/localization_services.dart';
 import 'package:teacher/src/settings/settings.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:teacher/src/utils/lang_utils.dart';
@@ -19,31 +19,21 @@ class _ToggleLangState extends State<ToggleLang> {
   @override
   void initState() {
     super.initState();
-    _getInitialLanguage();
-    print(_getInitialLanguage());
-  }
-
-  Future<void> _getInitialLanguage() async {
-    String? language = await settings.getLanguage();
-    setState(() {
-      _currentLanguage = language; // Default language is 'en' if not set
-
-      print(_currentLanguage);
-    });
   }
 
   Future<void> _toggleLanguage() async {
     String newLanguage = _currentLanguage == 'en' ? 'vi' : 'en';
-    await settings.saveLanguage(newLanguage);
     setState(() {
       _currentLanguage = newLanguage;
+      context.setLocale(
+          Locale(_currentLanguage, LangUtils.getCountryCode(_currentLanguage)));
     });
+
     // TODO: Implement language change logic
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizeServices = LocalizationServices.of(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,20 +41,19 @@ class _ToggleLangState extends State<ToggleLang> {
         Row(
           children: [
             CountryFlag.fromCountryCode(
-              LangUtils.getLangCodeCountryFlag(_currentLanguage),
+              LangUtils.getLangCodeCountryFlag(context.locale.languageCode),
               borderRadius: 30,
               width: 30,
               height: 30,
             ),
-            Text(
-                '${localizeServices.translate("current_language")}: ${LangUtils.getLangName(_currentLanguage)}'),
+            const Text("current_language").tr(),
+            Text(': ${LangUtils.getLangName(context.locale.languageCode)}'),
           ],
         ),
         const SizedBox(width: 10),
         ElevatedButton(
           onPressed: _toggleLanguage,
-          child: Text(localizeServices.translate('toggle_language') ??
-              "Toggle Language"),
+          child: const Text('toggle_language').tr(args: ['toggle_language']),
         ),
       ],
     );

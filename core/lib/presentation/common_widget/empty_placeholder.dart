@@ -34,7 +34,7 @@ class EmptyPlaceholder extends StatelessWidget {
           ),
           child: Text(
             title,
-            style: textTheme.subtitle1,
+            style: textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
         ),

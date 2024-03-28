@@ -52,7 +52,7 @@ class MainPageForm extends StatelessWidget {
                 ),
                 child: Text(
                   title,
-                  style: theme.textTheme.headline3?.copyWith(
+                  style: theme.textTheme.displaySmall?.copyWith(
                     color: Colors.white,
                   ),
                 ),

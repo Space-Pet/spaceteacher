@@ -119,7 +119,7 @@ class TabItem extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: themeData.textTheme.bodyText1?.copyWith(
+            style: themeData.textTheme.bodyLarge?.copyWith(
               color: selected ? Colors.white : themeColor.color8D8D94,
               fontWeight: FontWeight.bold,
             ),

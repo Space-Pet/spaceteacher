@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:teacher/components/textfield/input_text.dart';
+import 'package:teacher/components/toggle_lang/toogle_lang.dart';
 import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/repository/user_repository/user_repositories.dart';
 
 import 'package:teacher/src/screens/authentication/login/bloc/login_bloc.dart';
 import 'package:teacher/src/screens/home/view/home_screen.dart';
-import 'package:teacher/src/services/localization_services/localization_services.dart';
 import 'package:teacher/src/utils/dialog_utils.dart';
 import 'package:teacher/src/utils/extension_context.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../resources/resources.dart';
 
@@ -36,7 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final localizeServices = LocalizationServices.of(context);
+
     return BlocConsumer<LoginBloc, LoginState>(
       bloc: loginBloc,
       listener: (context, state) {
@@ -80,12 +81,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(8),
                 child: Text(
-                  localizeServices.translate("title_login") ?? "",
+                  "title_login",
                   style: context.listHeading.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 24,
                   ),
-                ),
+                ).tr(),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -97,8 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         onChanged: (val) {},
                         controller: userNameController,
                         isRequired: true,
-                        label:
-                            Text(localizeServices.translate("user_name") ?? ""),
+                        label: const Text("user_name").tr(),
                       ),
                       const SizedBox(
                         height: 16,
@@ -115,15 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             isObsecure = !isObsecure;
                           });
                         },
-                        label:
-                            Text(localizeServices.translate("password") ?? ""),
+                        label: const Text("password").tr(),
                       ),
                       const SizedBox(
                         height: 16,
                       ),
                       TitleAndInputText(
                         hintText: "Enter your domain school",
-                        label: const Text("Domain iPortal"),
+                        label: const Text("Domain iPortal").tr(),
                         onChanged: (val) {},
                         controller: schoolDomainController,
                         obscureText: false,
@@ -134,9 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       SizedBox(
                         width: size.width,
-                        child: Text(localizeServices
-                                .translate("forgot_domain_School") ??
-                            ""),
+                        child: const Text("forgot_domain_school").tr(),
                       ),
                       const SizedBox(
                         height: 8,
@@ -146,14 +143,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: size.width,
                         child: InkWell(
                           onTap: () {},
-                          child: Text(
-                            localizeServices.translate("forgot_password") ?? "",
-                            style: const TextStyle(
+                          child: const Text(
+                            "forgot_password",
+                            style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline,
                                 decorationColor: AppColors.blueA200,
                                 color: AppColors.blueA200),
-                          ),
+                          ).tr(),
                         ),
                       ),
                       const SizedBox(
@@ -171,27 +168,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                   userName: userNameController.text,
                                   password: passwordController.text));
                             },
-                            child: Text(
-                              "${localizeServices.translate("sign_in")}",
-                              style: const TextStyle(
+                            child: const Text(
+                              "sign_in",
+                              style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),
+                            ).tr(),
                           ),
                           Container(
                             width: size.width,
                             alignment: Alignment.center,
-                            child: Text("${localizeServices.translate("or")}"),
+                            child: const Text("or").tr(),
                           ),
                           ElevatedButton(
                             onPressed: () {},
                             child: Text(
-                              "${localizeServices.translate("sign_in")} "
-                              "${localizeServices.translate("qr_code")}",
+                              "${"sign_in".tr()} ${"qr_code".tr()}",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
-                            ),
+                            ).tr(),
                           ),
                         ],
                       ),
@@ -199,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              const ToggleLang(),
             ],
           ),
         );

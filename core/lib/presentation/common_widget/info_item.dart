@@ -59,7 +59,7 @@ class InfoItem extends StatelessWidget {
                 style: titleTextTheme ??
                     Theme.of(context)
                         .textTheme
-                        .subtitle2
+                        .titleSmall
                         ?.copyWith(color: Colors.black),
               ),
               const SizedBox(width: 8),
@@ -68,8 +68,8 @@ class InfoItem extends StatelessWidget {
                     child: Text(
                       value ?? '--',
                       style: isBoldValue
-                          ? Theme.of(context).textTheme.bodyText1
-                          : Theme.of(context).textTheme.subtitle2,
+                          ? Theme.of(context).textTheme.bodyLarge
+                          : Theme.of(context).textTheme.titleSmall,
                       textAlign: TextAlign.end,
                     ),
                   ),

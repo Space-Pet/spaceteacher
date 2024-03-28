@@ -136,9 +136,9 @@ class _InputContainerState extends State<InputContainer> {
                   vertical: 6,
                 ),
             hintText: widget.hint,
-            hintStyle: themeData.textTheme.subtitle2?.copyWith(),
+            hintStyle: themeData.textTheme.titleSmall?.copyWith(),
             errorText: value.validation,
-            errorStyle: themeData.textTheme.subtitle1?.copyWith(
+            errorStyle: themeData.textTheme.titleMedium?.copyWith(
               color: Colors.red,
               fontSize: value.validation?.isNotEmpty == true ? null : 1,
             ),
@@ -167,7 +167,7 @@ class _InputContainerState extends State<InputContainer> {
           keyboardType: widget.keyboardType ?? TextInputType.text,
           textAlign: widget.textAlign,
           textCapitalization: widget.textCapitalization,
-          style: themeData.textTheme.bodyText2,
+          style: themeData.textTheme.bodyMedium,
           obscureText:
               widget.isPassword && widget.controller?.isShowPass != true,
           onChanged: (text) {
@@ -236,7 +236,7 @@ class _InputContainerState extends State<InputContainer> {
             ),
         ],
         style: widget.titleTextStyle ??
-            themeData.textTheme.subtitle2?.copyWith(
+            themeData.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w700,
             ),
       ),

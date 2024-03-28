@@ -9,7 +9,7 @@ class TextScaleFixed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQuery.of(context).copyWith(textScaleFactor: scaleFixedFactor),
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scaleFixedFactor)),
       child: child,
     );
   }

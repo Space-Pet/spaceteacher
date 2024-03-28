@@ -1,9 +1,9 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:logger/logger.dart';
 
 import '../../../common/utils.dart';
-import '../../base/base.dart';
 import '../../common_widget/forms/screen_form.dart';
 import '../../theme/theme_color.dart';
 
@@ -35,7 +35,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
             return InkWell(
               onDoubleTap: () {
                 FlutterClipboard.controlC(logStr);
-                showToast('Coppied');
+                Fluttertoast.showToast(msg: 'Coppied');
               },
               onTap: () => _viewLogDetail(log),
               child: Container(
@@ -87,7 +87,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
                     e['title'],
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyLarge
                         ?.copyWith(color: themeColor.black),
                   ),
                 ],
@@ -165,7 +165,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
           final logStr = logsByFilter.join('\n\n');
 
           FlutterClipboard.controlC(logStr);
-          showToast('All Coppied');
+          Fluttertoast.showToast(msg: 'All Coppied');
         },
       },
       {
@@ -228,7 +228,7 @@ class _LogViewerScreenState extends State<LogViewerScreen> {
                     child: InkWell(
                       onDoubleTap: () {
                         FlutterClipboard.controlC(logStr);
-                        showToast('Coppied');
+                        Fluttertoast.showToast(msg: 'Coppied');
                       },
                       child: Text(
                         logStr,

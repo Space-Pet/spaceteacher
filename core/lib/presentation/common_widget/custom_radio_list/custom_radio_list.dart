@@ -72,7 +72,7 @@ class _CustomRadioListState<T> extends State<CustomRadioList<T>> {
         child: RadioListTile<CustomRadioListItemData<T>>(
           title: Text(
             item.title ?? '',
-            style: theme.textTheme.bodyText1?.copyWith(
+            style: theme.textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.normal,
             ),
           ),

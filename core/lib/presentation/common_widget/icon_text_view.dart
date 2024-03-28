@@ -32,7 +32,7 @@ class IconTextView extends StatelessWidget {
           WidgetSpan(
             child: Text(
               content,
-              style: textTheme.bodyText2?.copyWith(fontSize: 14),
+              style: textTheme.bodyMedium?.copyWith(fontSize: 14),
             ),
             alignment: PlaceholderAlignment.middle,
           ),

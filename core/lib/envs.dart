@@ -35,26 +35,21 @@ class Env {
   };
 
   static final Map<String, dynamic> devteacher = {
-    environment: 'WOW Partner Development',
+    environment: 'Teacher Development',
     developmentMode: true,
-    appName: 'WOW Partner Dev',
+    appName: 'Teacher Dev',
     baseApiLayer: '',
     baseGraphQLUrl: 'https://test-controller.fixmeapp.vn/v1/graphql',
-    graphqlSocketUtl: 'wss://test-controller.fixmeapp.vn/v1/graphql',
     app: AppType.teacher,
-    graphqlApiKey:
-        'fm2ss367h1206socg73lqbd4aa5cb82b8deobissoob6mnm8r36necrpm4ho1rd',
   };
 
   static final Map<String, dynamic> prodteacher = {
-    environment: 'WOW Partner Production',
+    environment: 'Teacher Production',
     developmentMode: false,
-    appName: 'WOW Partner',
+    appName: 'Teacher',
     baseApiLayer: '',
     baseGraphQLUrl: 'https://controller.fixmeapp.vn/v1/graphql',
-    graphqlSocketUtl: 'wss://controller.fixmeapp.vn/v1/graphql',
+
     app: AppType.teacher,
-    graphqlApiKey:
-        'fm2ss367h1206socg73lqbd4aa5cb82b8deobissoob6mnm8r36necrpm4ho1rd',
   };
 }

@@ -32,7 +32,7 @@ class DatePickerTheme with DiagnosticableTreeMixin {
       this.itemHeight = 36.0,
       this.theme})
       : doneStyle = TextStyle(
-          color: theme?.backgroundColor,
+          color: theme?.colorScheme.background,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         );

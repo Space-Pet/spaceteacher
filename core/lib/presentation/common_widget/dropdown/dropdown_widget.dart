@@ -53,9 +53,9 @@ class DropdownWidget<T> extends StatelessWidget {
               vertical: 6,
             ),
             hintText: hint,
-            hintStyle: themeData.textTheme.subtitle2,
+            hintStyle: themeData.textTheme.titleSmall,
             errorText: value.validation,
-            errorStyle: themeData.textTheme.subtitle1?.copyWith(
+            errorStyle: themeData.textTheme.titleMedium?.copyWith(
               color: Colors.red,
             ),
           ),

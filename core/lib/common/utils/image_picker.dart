@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart' as ip;
 
 import '../../presentation/extentions/extention.dart';
-import '../../presentation/modules/image_cropper/image_cropper_screen.dart';
+import '../../presentation/modules/image_cropper/image_cropper_screen_web.dart';
 import '../services/permission_service.dart';
 import 'log_utils.dart';
 
@@ -90,7 +90,7 @@ class ImagePicker {
       CupertinoPageRoute(builder: (context) {
         return ImageCropperScreen(
           imagefile: imageFile,
-          trans: trans,
+          // trans: trans,
         );
       }),
     );
