@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teacher/app_main_layout.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/splash/view/splash_screen.dart';
@@ -12,9 +13,11 @@ class AppRouter {
         return _getPage(const HomeScreen());
       case SplashScreen.routeName:
         return _getPage(const SplashScreen());
+      case AppMainLayout.routeName:
+        return _getPage(const AppMainLayout());
     }
     return _getPage(
-      Container(),
+      const AppMainLayout(),
     );
   }
 

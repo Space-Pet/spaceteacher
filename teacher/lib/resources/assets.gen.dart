@@ -9,6 +9,19 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsI18nGen {
+  const $AssetsI18nGen();
+
+  /// File path: assets/i18n/en-US.json
+  String get enUS => 'assets/i18n/en-US.json';
+
+  /// File path: assets/i18n/vi-VN.json
+  String get viVN => 'assets/i18n/vi-VN.json';
+
+  /// List of all assets
+  List<String> get values => [enUS, viVN];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -222,282 +235,20 @@ class $AssetsImagesGen {
   /// File path: assets/images/Login.png
   AssetGenImage get login => const AssetGenImage('assets/images/Login.png');
 
-  /// File path: assets/images/ateendance-pink.png
-  AssetGenImage get ateendancePink =>
-      const AssetGenImage('assets/images/ateendance-pink.png');
-
-  /// File path: assets/images/attendance-blue.png
-  AssetGenImage get attendanceBlue =>
-      const AssetGenImage('assets/images/attendance-blue.png');
-
-  /// File path: assets/images/avatar.png
-  AssetGenImage get avatar => const AssetGenImage('assets/images/avatar.png');
-
-  /// File path: assets/images/backgroundDashb.png
-  AssetGenImage get backgroundDashb =>
-      const AssetGenImage('assets/images/backgroundDashb.png');
-
-  /// File path: assets/images/backgroundNoti.png
-  AssetGenImage get backgroundNoti =>
-      const AssetGenImage('assets/images/backgroundNoti.png');
-
   $AssetsImagesBrandLogoGen get brandLogo => const $AssetsImagesBrandLogoGen();
-
-  /// File path: assets/images/breakfast.png
-  AssetGenImage get breakfast =>
-      const AssetGenImage('assets/images/breakfast.png');
-
-  /// File path: assets/images/brunch.png
-  AssetGenImage get brunch => const AssetGenImage('assets/images/brunch.png');
-
-  /// File path: assets/images/dinner.png
-  AssetGenImage get dinner => const AssetGenImage('assets/images/dinner.png');
-
-  /// File path: assets/images/e.png
-  AssetGenImage get e => const AssetGenImage('assets/images/e.png');
-
-  /// File path: assets/images/en.png
-  AssetGenImage get en => const AssetGenImage('assets/images/en.png');
 
   /// File path: assets/images/example1.png
   AssetGenImage get example1 =>
       const AssetGenImage('assets/images/example1.png');
 
-  /// File path: assets/images/forgot.png
-  AssetGenImage get forgot => const AssetGenImage('assets/images/forgot.png');
-
-  /// File path: assets/images/image-phone-book.png
-  AssetGenImage get imagePhoneBook =>
-      const AssetGenImage('assets/images/image-phone-book.png');
-
-  /// File path: assets/images/image-teacher.png
-  AssetGenImage get imageTeacher =>
-      const AssetGenImage('assets/images/image-teacher.png');
-
-  /// File path: assets/images/image1.png
-  AssetGenImage get image1 => const AssetGenImage('assets/images/image1.png');
-
-  /// File path: assets/images/image2.png
-  AssetGenImage get image2 => const AssetGenImage('assets/images/image2.png');
-
-  /// File path: assets/images/image3.png
-  AssetGenImage get image3 => const AssetGenImage('assets/images/image3.png');
-
-  /// File path: assets/images/image4.png
-  AssetGenImage get image4 => const AssetGenImage('assets/images/image4.png');
-
-  /// File path: assets/images/image_not_found.png
-  AssetGenImage get imageNotFound =>
-      const AssetGenImage('assets/images/image_not_found.png');
-
-  /// File path: assets/images/image_parent.png
-  AssetGenImage get imageParent =>
-      const AssetGenImage('assets/images/image_parent.png');
-
-  /// File path: assets/images/img_830_converted.png
-  AssetGenImage get img830Converted =>
-      const AssetGenImage('assets/images/img_830_converted.png');
-
-  /// File path: assets/images/img_830_converted_114x375.png
-  AssetGenImage get img830Converted114x375 =>
-      const AssetGenImage('assets/images/img_830_converted_114x375.png');
-
-  /// File path: assets/images/img_arrowdown.svg
-  String get imgArrowdown => 'assets/images/img_arrowdown.svg';
-
-  /// File path: assets/images/img_bold_essentional.svg
-  String get imgBoldEssentional => 'assets/images/img_bold_essentional.svg';
-
-  /// File path: assets/images/img_bold_food_kitchen.svg
-  String get imgBoldFoodKitchen => 'assets/images/img_bold_food_kitchen.svg';
-
-  /// File path: assets/images/img_bold_food_kitchen_white_a700.svg
-  String get imgBoldFoodKitchenWhiteA700 =>
-      'assets/images/img_bold_food_kitchen_white_a700.svg';
-
-  /// File path: assets/images/img_bold_medicine.svg
-  String get imgBoldMedicine => 'assets/images/img_bold_medicine.svg';
-
-  /// File path: assets/images/img_bold_messages.svg
-  String get imgBoldMessages => 'assets/images/img_bold_messages.svg';
-
-  /// File path: assets/images/img_bold_messages_red_900_01.svg
-  String get imgBoldMessagesRed90001 =>
-      'assets/images/img_bold_messages_red_900_01.svg';
-
-  /// File path: assets/images/img_bold_notes_document.svg
-  String get imgBoldNotesDocument =>
-      'assets/images/img_bold_notes_document.svg';
-
-  /// File path: assets/images/img_bold_notifications.svg
-  String get imgBoldNotifications => 'assets/images/img_bold_notifications.svg';
-
-  /// File path: assets/images/img_bold_notifications_blue_gray_300.svg
-  String get imgBoldNotificationsBlueGray300 =>
-      'assets/images/img_bold_notifications_blue_gray_300.svg';
-
-  /// File path: assets/images/img_bold_school.svg
-  String get imgBoldSchool => 'assets/images/img_bold_school.svg';
-
-  /// File path: assets/images/img_bold_time_alarm.svg
-  String get imgBoldTimeAlarm => 'assets/images/img_bold_time_alarm.svg';
-
-  /// File path: assets/images/img_bold_time_calendar.svg
-  String get imgBoldTimeCalendar => 'assets/images/img_bold_time_calendar.svg';
-
-  /// File path: assets/images/img_bold_transport.svg
-  String get imgBoldTransport => 'assets/images/img_bold_transport.svg';
-
-  /// File path: assets/images/img_bold_users_user.svg
-  String get imgBoldUsersUser => 'assets/images/img_bold_users_user.svg';
-
-  /// File path: assets/images/img_calendar.svg
-  String get imgCalendar => 'assets/images/img_calendar.svg';
-
-  /// File path: assets/images/img_ellipse_1091.png
-  AssetGenImage get imgEllipse1091 =>
-      const AssetGenImage('assets/images/img_ellipse_1091.png');
-
-  /// File path: assets/images/img_ellipse_69.png
-  AssetGenImage get imgEllipse69 =>
-      const AssetGenImage('assets/images/img_ellipse_69.png');
-
-  /// File path: assets/images/img_ellipse_7.png
-  AssetGenImage get imgEllipse7 =>
-      const AssetGenImage('assets/images/img_ellipse_7.png');
-
-  /// File path: assets/images/img_home.svg
-  String get imgHome => 'assets/images/img_home.svg';
-
-  /// File path: assets/images/img_linear_messages.svg
-  String get imgLinearMessages => 'assets/images/img_linear_messages.svg';
-
-  /// File path: assets/images/img_minus.svg
-  String get imgMinus => 'assets/images/img_minus.svg';
-
-  /// File path: assets/images/img_olo2df1_1.png
-  AssetGenImage get imgOlo2df11 =>
-      const AssetGenImage('assets/images/img_olo2df1_1.png');
-
-  /// File path: assets/images/img_olo2df1_2.png
-  AssetGenImage get imgOlo2df12 =>
-      const AssetGenImage('assets/images/img_olo2df1_2.png');
-
-  /// File path: assets/images/img_plus.svg
-  String get imgPlus => 'assets/images/img_plus.svg';
-
-  /// File path: assets/images/img_template_calendar.svg
-  String get imgTemplateCalendar => 'assets/images/img_template_calendar.svg';
-
-  /// File path: assets/images/img_union.svg
-  String get imgUnion => 'assets/images/img_union.svg';
-
-  /// File path: assets/images/logoUK.png
-  AssetGenImage get logoUK => const AssetGenImage('assets/images/logoUK.png');
-
-  /// File path: assets/images/lunch.png
-  AssetGenImage get lunch => const AssetGenImage('assets/images/lunch.png');
-
   $AssetsImagesMainBackgroundGen get mainBackground =>
       const $AssetsImagesMainBackgroundGen();
-
-  /// File path: assets/images/menu1.png
-  AssetGenImage get menu1 => const AssetGenImage('assets/images/menu1.png');
-
-  /// File path: assets/images/menu2.png
-  AssetGenImage get menu2 => const AssetGenImage('assets/images/menu2.png');
-
-  /// File path: assets/images/menu3.png
-  AssetGenImage get menu3 => const AssetGenImage('assets/images/menu3.png');
-
-  /// File path: assets/images/menu4.png
-  AssetGenImage get menu4 => const AssetGenImage('assets/images/menu4.png');
-
-  /// File path: assets/images/menu5.png
-  AssetGenImage get menu5 => const AssetGenImage('assets/images/menu5.png');
 
   /// File path: assets/images/noti.png
   AssetGenImage get noti => const AssetGenImage('assets/images/noti.png');
 
-  /// File path: assets/images/search.png
-  AssetGenImage get search => const AssetGenImage('assets/images/search.png');
-
-  /// File path: assets/images/splash-1.png
-  AssetGenImage get splash1 =>
-      const AssetGenImage('assets/images/splash-1.png');
-
-  /// File path: assets/images/splash_screen-2.png
-  AssetGenImage get splashScreen2 =>
-      const AssetGenImage('assets/images/splash_screen-2.png');
-
-  /// File path: assets/images/vn.png
-  AssetGenImage get vn => const AssetGenImage('assets/images/vn.png');
-
   /// List of all assets
-  List<dynamic> get values => [
-        login,
-        ateendancePink,
-        attendanceBlue,
-        avatar,
-        backgroundDashb,
-        backgroundNoti,
-        breakfast,
-        brunch,
-        dinner,
-        e,
-        en,
-        example1,
-        forgot,
-        imagePhoneBook,
-        imageTeacher,
-        image1,
-        image2,
-        image3,
-        image4,
-        imageNotFound,
-        imageParent,
-        img830Converted,
-        img830Converted114x375,
-        imgArrowdown,
-        imgBoldEssentional,
-        imgBoldFoodKitchen,
-        imgBoldFoodKitchenWhiteA700,
-        imgBoldMedicine,
-        imgBoldMessages,
-        imgBoldMessagesRed90001,
-        imgBoldNotesDocument,
-        imgBoldNotifications,
-        imgBoldNotificationsBlueGray300,
-        imgBoldSchool,
-        imgBoldTimeAlarm,
-        imgBoldTimeCalendar,
-        imgBoldTransport,
-        imgBoldUsersUser,
-        imgCalendar,
-        imgEllipse1091,
-        imgEllipse69,
-        imgEllipse7,
-        imgHome,
-        imgLinearMessages,
-        imgMinus,
-        imgOlo2df11,
-        imgOlo2df12,
-        imgPlus,
-        imgTemplateCalendar,
-        imgUnion,
-        logoUK,
-        lunch,
-        menu1,
-        menu2,
-        menu3,
-        menu4,
-        menu5,
-        noti,
-        search,
-        splash1,
-        splashScreen2,
-        vn
-      ];
+  List<AssetGenImage> get values => [login, example1, noti];
 }
 
 class $AssetsIconsFeaturesGen {
@@ -717,6 +468,7 @@ class $AssetsImagesMainBackgroundGen {
 class Assets {
   Assets._();
 
+  static const $AssetsI18nGen i18n = $AssetsI18nGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
@@ -779,16 +531,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

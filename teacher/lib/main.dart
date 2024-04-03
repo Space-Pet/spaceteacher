@@ -4,14 +4,12 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/components/toggle_lang/toogle_lang.dart';
-import 'package:teacher/src/screens/home/view/home_screen.dart';
+import 'package:teacher/resources/resources.dart';
 
 import 'package:teacher/src/screens/splash/view/splash_screen.dart';
 import 'package:teacher/src/services/routes/router_services.dart';
 import 'package:teacher/src/settings/injector.dart';
 import 'package:teacher/src/settings/settings.dart';
-import 'package:teacher/src/utils/lang_utils.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
@@ -59,7 +57,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Sizer(
+      builder: (context, orientation, deviceType) => MaterialApp(
         title: 'Flutter Demo Teacher App',
         theme: ThemeData(
           useMaterial3: true,
@@ -70,13 +69,9 @@ class _MyAppState extends State<MyApp> {
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: _appRouter.onGenerateRoute,
         navigatorKey: navigatorKey,
-        home: const HomeScreen()
-        // Scaffold(
-        //     appBar: AppBar(
-        //       title: const Text("Toogle title"),
-        //     ),
-        //     body: const Center(child: ToggleLang())),
-        );
+        // home: const AppMainLayout(),
+      ),
+    );
   }
 }
 

@@ -1,9 +1,9 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teacher/app_main_layout.dart';
 
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
-import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/splash/bloc/splash_bloc.dart';
 import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/utils/extension_context.dart';
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
             context.pushReplacement(LoginScreen.routeName);
             break;
           case SplashStatus.success:
-            context.pushReplacement(HomeScreen.routeName);
+            context.pushReplacement(AppMainLayout.routeName);
             break;
           case SplashStatus.failure:
             break;

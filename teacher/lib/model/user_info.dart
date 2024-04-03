@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:teacher/model/training_level.dart';
 
 part 'user_info.g.dart';
 
@@ -31,6 +32,8 @@ class UserInfo {
   final String? schoolLogo;
   @JsonKey(name: 'school_brand')
   final String? schoolBrand;
+  @JsonKey(name: 'cap_dao_tao')
+  final TrainingLevel? capDaoTao;
 
   UserInfo(
       {this.name,
@@ -46,10 +49,35 @@ class UserInfo {
       this.className,
       this.schoolName,
       this.schoolLogo,
-      this.schoolBrand});
+      this.schoolBrand,
+      this.capDaoTao});
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserInfoToJson(this);
+
+  bool isKinderGarten() {
+    return ['C_001', 'C_002'].contains(capDaoTao?.id);
+  }
+
+  UserInfo coppyWith() {
+    return UserInfo(
+      name: name,
+      userKey: userKey,
+      userId: userId,
+      schoolId: schoolId,
+      pupilId: pupilId,
+      type: type,
+      typeText: typeText,
+      parentId: parentId,
+      parentName: parentName,
+      learnYear: learnYear,
+      className: className,
+      schoolName: schoolName,
+      schoolLogo: schoolLogo,
+      schoolBrand: schoolBrand,
+      capDaoTao: capDaoTao,
+    );
+  }
 }

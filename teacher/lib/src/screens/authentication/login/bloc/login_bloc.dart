@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/repository/user_repository/user_repositories.dart';
@@ -12,7 +13,6 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required this.authRepository,
-    // required this.currentUserBloc,
     required this.userRepository,
   }) : super(const LoginState(
             userName: '',
@@ -25,7 +25,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   final AuthRepository authRepository;
-  // final CurrentUserBloc currentUserBloc;
   final UserRepository userRepository;
 
   void _onPasswordVisibility(
@@ -40,6 +39,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     try {
+      final UserManagerBloc userManagerBloc =
+          UserManagerBloc(userRepository: userRepository);
       final userName = event.userName;
       final password = event.password;
       // [Debug]
@@ -60,8 +61,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       userRepository.saveUserInfo(user ?? UserInfo());
 
-      // currentUserBloc.add(CurrentUserUpdated(user: user));
-
+      userManagerBloc.add(const UserManagerGetUser());
+      // userManagerBloc.add(UserManagerUpdated(userInfo: user ?? UserInfo()));
+      
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
       print("error: $e");

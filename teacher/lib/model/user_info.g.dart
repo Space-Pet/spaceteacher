@@ -21,6 +21,9 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
       schoolName: json['school_name'] as String?,
       schoolLogo: json['school_logo'] as String?,
       schoolBrand: json['school_brand'] as String?,
+      capDaoTao: json['cap_dao_tao'] == null
+          ? null
+          : TrainingLevel.fromJson(json['cap_dao_tao'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
@@ -38,4 +41,5 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
       'school_name': instance.schoolName,
       'school_logo': instance.schoolLogo,
       'school_brand': instance.schoolBrand,
+      'cap_dao_tao': instance.capDaoTao,
     };
