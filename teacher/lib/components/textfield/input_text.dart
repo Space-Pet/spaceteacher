@@ -56,7 +56,6 @@ class TitleAndInputText extends StatefulWidget {
 }
 
 class _TitleAndInputTextState extends State<TitleAndInputText> {
-
   @override
   Widget build(BuildContext context) {
     const redColor = Color(0xffCE2D30);
@@ -108,6 +107,10 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
             ),
             hintText: widget.hintText,
             hintStyle: const TextStyle(color: AppColors.gray500),
+            labelStyle: TextStyle(
+              color: widget.isValid ? Colors.grey : redColor,
+              fontSize: 16,
+            ),
             filled: true,
             fillColor: Colors.white,
             prefixIconColor: widget.isValid ? null : redColor,
