@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/components/buttons/rounded_button.dart';
@@ -35,7 +36,7 @@ class ImagesLibrary extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      'Thư viện ảnh hoạt động',
+                      'activity photo'.tr(),
                       style: AppTextStyles.semiBold14(
                         color: AppColors.blueGray800,
                       ),
@@ -52,7 +53,7 @@ class ImagesLibrary extends StatelessWidget {
                 ),
                 buttonColor: AppColors.white,
                 child: Text(
-                  'Xem thêm',
+                  'see more'.tr(),
                   style: AppTextStyles.normal12(color: AppColors.gray600),
                 ),
               ),

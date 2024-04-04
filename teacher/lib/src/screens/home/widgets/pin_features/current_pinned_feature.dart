@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:teacher/components/home_shadow_box.dart';
+import 'package:teacher/resources/assets.gen.dart';
 
 
 import 'package:teacher/resources/resources.dart';
@@ -100,7 +101,7 @@ class CurrentPinnedFeature extends StatelessWidget {
                       onTap: () {
                         updatePin();
                       },
-                      child: SvgPicture.asset('assets/icons/pin.svg')),
+                      child: SvgPicture.asset(Assets.icons.pin)),
                 ],
               ),
             ),

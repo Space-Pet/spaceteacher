@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,20 +63,19 @@ class FeatureItem extends StatelessWidget {
                         ),
                   child: Center(
                       child: SvgPicture.asset(
-                    'assets/icons/features/${isKinderGarten ? feature.preSIcon : feature.highSIcon}.svg',
-                  )),
+                          '${isKinderGarten ? feature.preSIcon : feature.highSIcon}')),
                 ),
               ),
               const SizedBox(height: 4),
               Expanded(
                 child: Text(
-                  feature.name,
+                  feature.name.tr(),
                   style: AppTextStyles.custom(
-                      fontSize: isInBottomSheet ? 12.fSize : 14.fSize,
+                      fontSize: isInBottomSheet ? 10.fSize : 12.fSize,
                       fontWeight: FontWeight.w500,
                       height: 20 / 14,
                       color: AppColors.black.withOpacity(0.9)),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                 ),

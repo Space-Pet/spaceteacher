@@ -4,4 +4,5 @@ class ApiPath {
   static String login = '${baseUrl}login';
   static String loginWithQR = '${baseUrl}login-QRCode';
   static String logout = '${baseUrl}logout';
+  static String getInfoStudent = '${baseUrl}member/pupil/';
 }

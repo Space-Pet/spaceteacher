@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:teacher/model/children_model.dart';
 import 'package:teacher/model/training_level.dart';
 
 part 'user_info.g.dart';
@@ -34,7 +35,12 @@ class UserInfo {
   final String? schoolBrand;
   @JsonKey(name: 'cap_dao_tao')
   final TrainingLevel? capDaoTao;
+  final String? email;
+  @JsonKey(name: 'father_name')
+  final String? fatherName;
 
+  final int? semester;
+  final ChildrenModel? children;
   UserInfo(
       {this.name,
       this.userKey,
@@ -50,7 +56,11 @@ class UserInfo {
       this.schoolName,
       this.schoolLogo,
       this.schoolBrand,
-      this.capDaoTao});
+      this.capDaoTao,
+      this.email,
+      this.fatherName,
+      this.semester,
+      this.children});
 
   factory UserInfo.fromJson(Map<String, dynamic> json) =>
       _$UserInfoFromJson(json);
@@ -61,23 +71,45 @@ class UserInfo {
     return ['C_001', 'C_002'].contains(capDaoTao?.id);
   }
 
-  UserInfo coppyWith() {
+  UserInfo coppyWith(
+      {String? name,
+      String? userKey,
+      int? userId,
+      int? schoolId,
+      int? pupilId,
+      int? type,
+      String? typeText,
+      int? parentId,
+      String? parentName,
+      String? learnYear,
+      String? className,
+      String? schoolName,
+      String? schoolLogo,
+      String? schoolBrand,
+      TrainingLevel? capDaoTao,
+      String? email,
+      String? fatherName,
+      int? semester,
+      ChildrenModel? children}) {
     return UserInfo(
-      name: name,
-      userKey: userKey,
-      userId: userId,
-      schoolId: schoolId,
-      pupilId: pupilId,
-      type: type,
-      typeText: typeText,
-      parentId: parentId,
-      parentName: parentName,
-      learnYear: learnYear,
-      className: className,
-      schoolName: schoolName,
-      schoolLogo: schoolLogo,
-      schoolBrand: schoolBrand,
-      capDaoTao: capDaoTao,
-    );
+        name: name ?? this.name,
+        userKey: userKey ?? this.userKey,
+        userId: userId ?? this.userId,
+        schoolId: schoolId ?? this.schoolId,
+        pupilId: pupilId ?? this.pupilId,
+        type: type ?? this.type,
+        typeText: typeText ?? this.typeText,
+        parentId: parentId ?? this.parentId,
+        parentName: parentName ?? this.parentName,
+        learnYear: learnYear ?? this.learnYear,
+        className: className ?? this.className,
+        schoolName: schoolName ?? this.schoolName,
+        schoolLogo: schoolLogo ?? this.schoolLogo,
+        schoolBrand: schoolBrand ?? this.schoolBrand,
+        capDaoTao: capDaoTao ?? this.capDaoTao,
+        email: email ?? this.email,
+        fatherName: fatherName ?? this.fatherName,
+        semester: semester ?? this.semester,
+        children: children ?? this.children);
   }
 }

@@ -69,7 +69,6 @@ class _MyAppState extends State<MyApp> {
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: _appRouter.onGenerateRoute,
         navigatorKey: navigatorKey,
-        // home: const AppMainLayout(),
       ),
     );
   }

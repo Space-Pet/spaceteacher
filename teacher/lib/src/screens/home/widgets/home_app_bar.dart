@@ -1,59 +1,73 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/model/user_info.dart';
+import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
+import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
-    required this.userInfo,
     super.key,
+    required this.user,
   });
-  final UserInfo userInfo;
+
+  final UserInfo user;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8, 36, 8, 28),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            flex: 3,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.transparent,
-                    child: Image.network("${userInfo.schoolLogo}") 
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      userInfo.name ?? 'Nguyễn Ngọc Tuyết Lan',
-                      style: AppTextStyles.semiBold12(
-                        color: AppColors.white,
-                        height: 24 / 12,
-                      ),
-                    ),
-                    Text(
-                      userInfo.className ?? 'Lớp 6.1',
-                      style: AppTextStyles.normal12(
-                        color: AppColors.white,
-                      ),
-                    )
-                  ],
-                )
-              ],
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                ProfileScreen.routeName,
+                arguments: {
+                  'userInfo': user,
+                },
+              );
+            },
+            child: CircleAvatar(
+              backgroundColor: AppColors.whiteBackground,
+              radius: 21,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.transparent,
+                child: Image.network("${user.schoolLogo}"),
+              ),
             ),
           ),
+          const SizedBox(
+            width: 20,
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${user.name}",
+                style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                "${user.className}",
+                style: const TextStyle(color: AppColors.white, fontSize: 12),
+              ),
+            ],
+          ),
+          const Spacer(),
           CircleAvatar(
-            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.205),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset('assets/images/noti.png'),
+            backgroundColor: AppColors.whiteOpacity.withOpacity(0.3),
+            radius: 20,
+            child: CircleAvatar(
+              radius: 13,
+              backgroundColor: Colors.transparent,
+              child: Assets.images.noti.image(),
             ),
           ),
         ],
