@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -61,7 +62,7 @@ class _NotiSliderState extends State<NotiSlider> {
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.bold12(
                             height: 18 / 12, color: AppColors.gray90002)),
-                    Text('Xem chi tiết',
+                    Text('see detail'.tr(),
                         style: AppTextStyles.normal12(
                           color: AppColors.gray600,
                         ))

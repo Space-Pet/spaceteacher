@@ -28,6 +28,7 @@ class TitleAndInputText extends StatefulWidget {
     this.onTapVisibilityPassword,
     this.isPasswordFeild = false,
     this.label,
+    this.keyboardType,
   }) : super(key: key);
 
   final String hintText;
@@ -50,7 +51,7 @@ class TitleAndInputText extends StatefulWidget {
   final TextEditingController? controller;
   final bool isPasswordFeild;
   final Widget? label;
-
+  final TextInputType? keyboardType;
   @override
   _TitleAndInputTextState createState() => _TitleAndInputTextState();
 }
@@ -84,6 +85,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
           },
           cursorColor: widget.isValid ? null : redColor,
           decoration: InputDecoration(
+            
             constraints: const BoxConstraints(
               maxHeight: 50,
               minHeight: 42,
@@ -130,6 +132,8 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
                 : null,
           ),
           obscureText: widget.obscureText,
+          keyboardType: widget.keyboardType,
+
         ),
       ],
     );

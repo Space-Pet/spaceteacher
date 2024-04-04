@@ -65,6 +65,9 @@ class UserManager {
 
       await setting.clearAllDataSecure();
       UserManager.instance.removeInstance();
+      final user = await setting.getUserInfoSecure();
+      Log.prettyJson(user?.toJson() ?? {});
+      Log.d('Logout success', name: 'UserManager -> logout()');
     } catch (e) {
       Log.e('$e', name: 'FunctionMapping -> _logout()');
     }

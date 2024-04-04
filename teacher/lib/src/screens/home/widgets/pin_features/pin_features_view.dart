@@ -1,5 +1,7 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
@@ -26,9 +28,9 @@ class _PinFeaturesState extends State<PinFeatures> {
     pinnedFeatures.add(FeatureModel(
       id: 999,
       hasPinned: true,
-      highSIcon: 'dots',
-      preSIcon: 'dots',
-      name: 'Tất cả',
+      highSIcon: Assets.icons.features.dots,
+      preSIcon: Assets.icons.features.dots,
+      name: 'all'.tr(),
       category: FeatureCategory.all,
       gradientType: FeatureGradient.gray,
     ));
@@ -141,6 +143,7 @@ class _PinFeaturesState extends State<PinFeatures> {
       width: double.infinity,
       child: Wrap(
         // spacing: (MediaQuery.of(context).size.width - 372) / 3,
+        runSpacing: 16,
         children: listFeature,
       ),
     );

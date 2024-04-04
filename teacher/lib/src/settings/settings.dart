@@ -34,6 +34,12 @@ class Settings {
     return jsonData == null ? null : UserInfo.fromJson(json.decode(jsonData));
   }
 
+  Future<String?> getAccessToken() async {
+    final accessToken = await UserSecureStorage.read(LocalStorageKey.token);
+    Log.d(accessToken);
+    return accessToken;
+  }
+
   Future<void> saveLanguage(String language) async {
     await UserSecureStorage.write(LocalStorageKey.language, language);
     print(await getLanguage());

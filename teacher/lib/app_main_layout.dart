@@ -1,10 +1,13 @@
 import 'package:core/core.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
+import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/repository/user_repository/user_repositories.dart';
+import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 
@@ -96,7 +99,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                     Tab(
                       height: 92.v,
                       icon: SvgPicture.asset(
-                        'assets/icons/home.svg',
+                        Assets.icons.home,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 0
                               ? AppColors.red
@@ -104,12 +107,12 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'Trang chủ',
+                      text: 'home'.tr(),
                     ),
                     state.userInfo.isKinderGarten()
                         ? Tab(
                             icon: SvgPicture.asset(
-                              'assets/icons/calendar.svg',
+                              Assets.icons.calendar,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? AppColors.red
@@ -117,11 +120,11 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: 'Dự án tuần',
+                            text: 'week project'.tr(),
                           )
                         : Tab(
                             icon: SvgPicture.asset(
-                              'assets/icons/calendar.svg',
+                              Assets.icons.calendar,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? AppColors.red
@@ -129,11 +132,11 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: 'Thời khóa biểu',
+                            text: 'schedule'.tr(),
                           ),
                     Tab(
                       icon: SvgPicture.asset(
-                        'assets/icons/check.svg',
+                        Assets.icons.check,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 2
                               ? AppColors.red
@@ -141,11 +144,11 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'Điểm danh',
+                      text: 'attendance'.tr(),
                     ),
                     Tab(
                       icon: SvgPicture.asset(
-                        'assets/icons/noti.svg',
+                        Assets.icons.noti,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 3
                               ? AppColors.red
@@ -153,11 +156,11 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'Thông báo',
+                      text: 'noti'.tr(),
                     ),
                     Tab(
                       icon: SvgPicture.asset(
-                        'assets/icons/menu.svg',
+                        Assets.icons.menu,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 4
                               ? AppColors.red
@@ -165,7 +168,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'Thực đơn',
+                      text: 'menu'.tr(),
                     ),
                   ],
                   onTap: (index) async {
