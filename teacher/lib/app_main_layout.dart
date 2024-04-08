@@ -5,11 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
+
 import 'package:teacher/repository/user_repository/user_repositories.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/i18n/locale_keys.g.dart';
 import 'package:teacher/resources/resources.dart';
-import 'package:teacher/src/screens/home/view/home_screen.dart';
+import 'package:teacher/src/screens/attendance/attendance_screen.dart';
+import 'package:teacher/src/screens/home/view/home_navigator.dart';
+import 'package:teacher/src/screens/menu/menu_screen.dart';
+import 'package:teacher/src/screens/notifications/notifications_screen.dart';
+import 'package:teacher/src/screens/schedule/schedule_screen.dart';
+import 'package:teacher/src/screens/week_schedule/week_schedule_screen.dart';
 
 class AppMainLayout extends StatefulWidget {
   static const String routeName = '/';
@@ -28,27 +34,19 @@ class _AppMainLayoutState extends State<AppMainLayout> {
   int _selectedIndex = 0;
   final bloc = UserManagerBloc(userRepository: Injection.get<UserRepository>());
   final List<Widget> widgetOptionKinderGarten = [
-    const HomeScreen(),
-    // const WeekScheduleScreen(),
-    // const AttendanceScreen(),
-    // const NotificationsScreen(),
-    // const MenuScreen(),
-    Container(),
-    Container(),
-    Container(),
-    Container(),
+    HomeNavigator(),
+    const WeekScheduleScreen(),
+    const AttendanceScreen(),
+    const NotificationsScreen(),
+    const MenuScreen(),
   ];
 
   final List<Widget> widgetOptions = <Widget>[
-    const HomeScreen(),
-    // const ScheduleScreen(),
-    // const AttendanceScreen(),
-    // const NotificationsScreen(),
-    // const MenuScreen(),
-    Container(),
-    Container(),
-    Container(),
-    Container(),
+    HomeNavigator(),
+    const ScheduleScreen(),
+    const AttendanceScreen(),
+    const NotificationsScreen(),
+    const MenuScreen(),
   ];
 
   @override
@@ -94,7 +92,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                   labelPadding: EdgeInsets.zero,
                   labelColor: AppColors.red,
                   indicator: const BoxDecoration(),
-                  labelStyle: AppTextStyles.normal12(),
+                  labelStyle: AppTextStyles.normal10(),
                   tabs: [
                     Tab(
                       height: 92.v,

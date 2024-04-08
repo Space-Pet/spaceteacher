@@ -66,7 +66,7 @@ class TabInstruction extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    lesson.name,
+                                    '${lesson.name}',
                                     style: AppTextStyles.semiBold14(
                                         color: AppColors.black24),
                                   ),
@@ -100,20 +100,20 @@ class TabInstruction extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                lesson.name,
+                                lesson.name ?? "",
                                 style: AppTextStyles.semiBold14(
                                     color: AppColors.black24),
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                lesson.description,
+                                lesson.description ?? "",
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: AppTextStyles.normal12(
                                     color: AppColors.gray61),
                               ),
                               const SizedBox(height: 6),
-                              if (lesson.fileUrl.isNotEmpty)
+                              if (lesson.fileUrl?.isNotEmpty ?? false)
                                 GestureDetector(
                                   onTap: () async {
                                     // try {
@@ -147,7 +147,7 @@ class TabInstruction extends StatelessWidget {
                                     //   debugPrint(e.toString());
                                     // }
                                     launchUrl(
-                                      Uri.parse(lesson.fileUrl),
+                                      Uri.parse(lesson.fileUrl ?? ""),
                                       mode: LaunchMode.inAppBrowserView,
                                     );
                                   },

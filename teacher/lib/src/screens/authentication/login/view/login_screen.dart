@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:teacher/app_main_layout.dart';
 import 'package:teacher/components/textfield/input_text.dart';
@@ -68,24 +69,144 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: Assets.images.login.provider(),
+        return Stack(
+          children: [
+            Container(
+              width: size.width,
+              height: size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: Assets.images.login.loginBackground.provider(),
+                ),
               ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: size.height / 4,
+                width: size.width,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(6),
+                          backgroundColor: const Color(0xFF9C292E),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                Assets.icons.office365,
+                                width: 24,
+                                height: 24,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                'Đăng nhập với Office 365',
+                                style: AppTextStyles.semiBold14(
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 12),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _loginWithiPortalAccount(context, size, () {
+                            setState(() {
+                              isObsecure = !isObsecure;
+                            });
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(6),
+                          backgroundColor: AppColors.brand500,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.person,
+                                size: 24,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                'Đăng nhập với Iportal',
+                                style: AppTextStyles.semiBold14(
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<dynamic> _loginWithiPortalAccount(
+      BuildContext context, Size size, Function showPassword) {
+    return showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        barrierColor: Colors.transparent,
+        builder: (ctx) {
+          return Container(
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
-                  height: size.height / 3,
-                  width: size.width / 2,
-                  // padding: const EdgeInsets.symmetric(horizontal: 24),
-                  // child: const Placeholder(),
-                ),
+                // Container(
+                //     height: size.height / 4,
+                //     width: size.width / 3,
+                //     padding: const EdgeInsets.symmetric(
+                //         horizontal: 24),
+                //     child: Image.asset(
+                //       Assets
+                //           .images.logoIportalTeacher.path,
+                //       fit: BoxFit.contain,
+                //     )),
                 Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(8),
@@ -94,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: context.listHeading.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
-                        color: AppColors.white),
+                        color: AppColors.brand600),
                   ),
                 ),
                 Padding(
@@ -119,11 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           isPasswordFeild: true,
                           obscureText: isObsecure,
                           isRequired: true,
-                          onTapVisibilityPassword: () {
-                            setState(() {
-                              isObsecure = !isObsecure;
-                            });
-                          },
+                          onTapVisibilityPassword: () => showPassword.call(),
                           label: const Text(LocaleKeys.password).tr(),
                         ),
                         const SizedBox(
@@ -144,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: size.width,
                           child: const Text(
                             LocaleKeys.forgotDomainSchool,
-                            style: TextStyle(color: AppColors.white),
+                            style: TextStyle(color: AppColors.grayText),
                           ).tr(),
                         ),
                         const SizedBox(
@@ -173,6 +290,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               height: 8,
                             ),
                             ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.brand500),
                               onPressed: () {
                                 loginBloc.add(LoginButtonPressed(
                                     userName: userNameController.text,
@@ -182,6 +301,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 LocaleKeys.signIn,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.white,
                                 ),
                               ).tr(),
                             ),
@@ -192,10 +312,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             ElevatedButton(
                               onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.brand500),
                               child: Text(
                                 "${LocaleKeys.signIn.tr()} ${LocaleKeys.qrCode.tr()}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
+                                  color: AppColors.white,
                                 ),
                               ).tr(),
                             ),
@@ -205,11 +328,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(
+                  height: 50,
+                ),
               ],
             ),
-          ),
-        );
-      },
-    );
+          );
+        });
   }
 }

@@ -52,7 +52,7 @@ class TabBarStudent extends StatelessWidget {
             isShowIcon: false,
           ),
           TabContent(
-            title: 'mobile phone'.tr(),
+            title: 'phone number'.tr(),
             content: '${studentModel.pupilModel?.phone}',
             isShowIcon: true,
             onTap: () {

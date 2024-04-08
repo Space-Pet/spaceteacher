@@ -1,10 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:teacher/model/children_model.dart';
+
 import 'package:teacher/model/student_model.dart';
+
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
+
 import 'package:teacher/src/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
+
 import 'package:teacher/src/utils/extension_context.dart';
 import 'package:teacher/src/utils/user_manager.dart';
 
@@ -13,8 +19,13 @@ class ProfileAppBar extends StatefulWidget {
   final int role;
 
   final StudentModel studentModel;
+  final ChildrenModel childrenModel;
   const ProfileAppBar(
-      {super.key, this.onBack, required this.role, required this.studentModel});
+      {super.key,
+      this.onBack,
+      required this.role,
+      required this.studentModel,
+      required this.childrenModel});
 
   @override
   State<ProfileAppBar> createState() => _ProfileAppBarState();
@@ -44,9 +55,22 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                 CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.transparent,
-                  child: Image.asset(widget.role == 0
-                      ? 'assets/images/avatar.png'
-                      : 'assets/images/image_parent.png'),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.childrenModel.urlImageModel?.mobile ??
+                        Assets.images.brandLogo.iSchool.path,
+                    imageBuilder: (context, imageProvider) => CircleAvatar(
+                      radius: 25,
+                      backgroundImage: imageProvider,
+                    ),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    fit: BoxFit.cover,
+                  ),
+                  // Image.asset(widget.role == 0
+                  //     ? 'assets/images/avatar.png'
+                  //     : 'assets/images/image_parent.png'),
                 ),
                 const SizedBox(width: 6),
                 Column(
@@ -103,7 +127,10 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             children: [
               IconButton(
                   onPressed: () async {
-                    context.push(SettingScreen.routeName);
+                    final res = await context.push(SettingScreen.routeName);
+                    if (res == true) {
+                      setState(() {});
+                    }
                   },
                   icon: const Icon(
                     Icons.settings,
