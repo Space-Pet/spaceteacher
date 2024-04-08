@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/model/children_model.dart';
 import 'package:teacher/model/user_info.dart';
 
 import 'package:teacher/repository/student_repository/student_repository.dart';
@@ -44,8 +45,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 ProfileAppBar(
                   studentModel: state.studentModel,
+                  childrenModel: widget.userInfo.children ?? ChildrenModel(),
                   onBack: () {
-                    context.pop();
+                    context.pop(result: true);
                   },
                   role: role,
                 ),

@@ -25,6 +25,8 @@ class AppColors {
   static const Color grayList = Color(0xFFF2F4F7);
   static const Color brand600 = Color(0xFF1B3A6D);
   static const Color brand50 = Color(0xFFE6F1EB);
+  static const Color brand500 = Color(0xFF9C292E);
+  
 
   // Amber
   static const Color amberA200 = Color(0XFFF4CC46);
@@ -79,6 +81,7 @@ class AppColors {
   static const Color gray61 = Color(0XFF616161);
   static const Color grayD0 = Color(0XFFCAC4D0);
   static const Color gray666 = Color(0xFF666666);
+  static const Color gray79 = Color(0xFF797979);
 
   // Grayc
   static const Color gray9000c = Color(0X0C101828);

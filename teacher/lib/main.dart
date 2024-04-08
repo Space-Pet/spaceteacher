@@ -7,10 +7,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/resources/resources.dart';
 
-import 'package:teacher/src/screens/splash/view/splash_screen.dart';
 import 'package:teacher/src/services/routes/router_services.dart';
 import 'package:teacher/src/settings/injector.dart';
 import 'package:teacher/src/settings/settings.dart';
+import 'package:teacher/src/splash/loading_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
@@ -42,7 +42,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final AppRouter _appRouter = AppRouter();
   final settings = Injection.get<Settings>();
-
+  Locale locale = const Locale('en', 'US');
   @override
   void dispose() {
     super.dispose();
@@ -64,8 +64,8 @@ class _MyAppState extends State<MyApp> {
         ),
         supportedLocales: context.supportedLocales,
         localizationsDelegates: context.localizationDelegates,
-        locale: context.locale,
-        initialRoute: SplashScreen.routeName,
+        locale: navigatorKey.currentContext?.locale ?? context.locale,
+        initialRoute: LoadingScreen.routeName,
         onGenerateRoute: _appRouter.onGenerateRoute,
         navigatorKey: navigatorKey,
       ),

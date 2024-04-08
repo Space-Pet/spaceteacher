@@ -28,6 +28,42 @@ class AppTextStyles {
         fontWeight: FontWeight.w800,
       );
 
+// 26
+
+  static TextStyle bold26({
+    Color color = AppColors.gray800,
+  }) =>
+      custom(
+        fontSize: 26,
+        fontWeight: FontWeight.w700,
+        color: color,
+        height: 32 / 26,
+      );
+  // 10
+  static TextStyle normal10({
+    Color color = AppColors.black,
+    FontWeight fontWeight = FontWeight.w400,
+    double? height,
+  }) =>
+      GoogleFonts.inter(
+        color: color,
+        fontSize: 10.fSize,
+        fontWeight: fontWeight,
+        height: height,
+      );
+
+  static TextStyle semiBold10({
+    Color color = AppColors.black,
+    double? height,
+  }) =>
+      normal10(fontWeight: FontWeight.w600, color: color, height: height);
+
+  static TextStyle bold10({
+    Color color = AppColors.black,
+    double? height,
+  }) =>
+      normal12(fontWeight: FontWeight.w700, color: color, height: height);
+
   // 12
   static TextStyle normal12({
     Color color = AppColors.black,

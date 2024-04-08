@@ -12,14 +12,14 @@ import 'package:flutter/widgets.dart';
 class $AssetsI18nGen {
   const $AssetsI18nGen();
 
-  /// File path: assets/i18n/en-US.json
-  String get enUS => 'assets/i18n/en-US.json';
+  /// File path: assets/i18n/en.json
+  String get en => 'assets/i18n/en.json';
 
-  /// File path: assets/i18n/vi-VN.json
-  String get viVN => 'assets/i18n/vi-VN.json';
+  /// File path: assets/i18n/vi.json
+  String get vi => 'assets/i18n/vi.json';
 
   /// List of all assets
-  List<String> get values => [enUS, viVN];
+  List<String> get values => [en, vi];
 }
 
 class $AssetsIconsGen {
@@ -139,6 +139,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/noti.svg
   String get noti => 'assets/icons/noti.svg';
 
+  /// File path: assets/icons/office 365.svg
+  String get office365 => 'assets/icons/office 365.svg';
+
   /// File path: assets/icons/paperclip.svg
   String get paperclip => 'assets/icons/paperclip.svg';
 
@@ -214,6 +217,7 @@ class $AssetsIconsGen {
         minus,
         niceRewardBadge,
         noti,
+        office365,
         paperclip,
         phoneBook,
         phone,
@@ -232,23 +236,83 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/Login.png
-  AssetGenImage get login => const AssetGenImage('assets/images/Login.png');
+  /// File path: assets/images/Logo_iportal_teacher.png
+  AssetGenImage get logoIportalTeacher =>
+      const AssetGenImage('assets/images/Logo_iportal_teacher.png');
+
+  /// File path: assets/images/ateendance-pink.png
+  AssetGenImage get ateendancePink =>
+      const AssetGenImage('assets/images/ateendance-pink.png');
+
+  /// File path: assets/images/attendance-blue.png
+  AssetGenImage get attendanceBlue =>
+      const AssetGenImage('assets/images/attendance-blue.png');
+
+  /// File path: assets/images/avatar.png
+  AssetGenImage get avatar => const AssetGenImage('assets/images/avatar.png');
 
   $AssetsImagesBrandLogoGen get brandLogo => const $AssetsImagesBrandLogoGen();
+
+  /// File path: assets/images/breakfast.png
+  AssetGenImage get breakfast =>
+      const AssetGenImage('assets/images/breakfast.png');
+
+  /// File path: assets/images/brunch.png
+  AssetGenImage get brunch => const AssetGenImage('assets/images/brunch.png');
+
+  /// File path: assets/images/dinner.png
+  AssetGenImage get dinner => const AssetGenImage('assets/images/dinner.png');
 
   /// File path: assets/images/example1.png
   AssetGenImage get example1 =>
       const AssetGenImage('assets/images/example1.png');
 
+  $AssetsImagesLoginGen get login => const $AssetsImagesLoginGen();
+
+  /// File path: assets/images/lunch.png
+  AssetGenImage get lunch => const AssetGenImage('assets/images/lunch.png');
+
   $AssetsImagesMainBackgroundGen get mainBackground =>
       const $AssetsImagesMainBackgroundGen();
+
+  /// File path: assets/images/menu1.png
+  AssetGenImage get menu1 => const AssetGenImage('assets/images/menu1.png');
+
+  /// File path: assets/images/menu2.png
+  AssetGenImage get menu2 => const AssetGenImage('assets/images/menu2.png');
+
+  /// File path: assets/images/menu3.png
+  AssetGenImage get menu3 => const AssetGenImage('assets/images/menu3.png');
+
+  /// File path: assets/images/menu4.png
+  AssetGenImage get menu4 => const AssetGenImage('assets/images/menu4.png');
+
+  /// File path: assets/images/menu5.png
+  AssetGenImage get menu5 => const AssetGenImage('assets/images/menu5.png');
 
   /// File path: assets/images/noti.png
   AssetGenImage get noti => const AssetGenImage('assets/images/noti.png');
 
+  $AssetsImagesSplashGen get splash => const $AssetsImagesSplashGen();
+
   /// List of all assets
-  List<AssetGenImage> get values => [login, example1, noti];
+  List<AssetGenImage> get values => [
+        logoIportalTeacher,
+        ateendancePink,
+        attendanceBlue,
+        avatar,
+        breakfast,
+        brunch,
+        dinner,
+        example1,
+        lunch,
+        menu1,
+        menu2,
+        menu3,
+        menu4,
+        menu5,
+        noti
+      ];
 }
 
 class $AssetsIconsFeaturesGen {
@@ -412,6 +476,17 @@ class $AssetsImagesBrandLogoGen {
   List<AssetGenImage> get values => [iSchool, iec, sga, sna, uka];
 }
 
+class $AssetsImagesLoginGen {
+  const $AssetsImagesLoginGen();
+
+  /// File path: assets/images/login/Login_background.png
+  AssetGenImage get loginBackground =>
+      const AssetGenImage('assets/images/login/Login_background.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [loginBackground];
+}
+
 class $AssetsImagesMainBackgroundGen {
   const $AssetsImagesMainBackgroundGen();
 
@@ -463,6 +538,26 @@ class $AssetsImagesMainBackgroundGen {
         ukaHighS,
         ukaPreS
       ];
+}
+
+class $AssetsImagesSplashGen {
+  const $AssetsImagesSplashGen();
+
+  /// File path: assets/images/splash/Splash screen 1.png
+  AssetGenImage get splashScreen1 =>
+      const AssetGenImage('assets/images/splash/Splash screen 1.png');
+
+  /// File path: assets/images/splash/Splash screen 2.png
+  AssetGenImage get splashScreen2 =>
+      const AssetGenImage('assets/images/splash/Splash screen 2.png');
+
+  /// File path: assets/images/splash/Splash screen 3.png
+  AssetGenImage get splashScreen3 =>
+      const AssetGenImage('assets/images/splash/Splash screen 3.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [splashScreen1, splashScreen2, splashScreen3];
 }
 
 class Assets {
@@ -531,16 +626,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 

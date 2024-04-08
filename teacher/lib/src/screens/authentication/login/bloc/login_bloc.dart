@@ -64,8 +64,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       await userRepository.saveUserInfo(user ?? UserInfo());
       await UserManager.instance.loadSession(Injection.get<Settings>());
+      await Injection.get<Settings>().saveIsFirstTime(false);
       userManagerBloc.add(const UserManagerGetUser());
-      // userManagerBloc.add(UserManagerUpdated(userInfo: user ?? UserInfo()));
+
       Log.d('User: $user');
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {

@@ -25,11 +25,17 @@
             "flutterMode": "release"
         },
         {
-            "name": "iportal2 (dev mode)",
+            "name": "iportal2",
+            "cwd": "iportal2",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "iportal2 (profile mode)",
             "cwd": "iportal2",
             "request": "launch",
             "type": "dart",
-            "program": "${workspaceRoot}/iportal2/lib/main_dev.dart"
+            "flutterMode": "profile"
         },
         {
             "name": "iportal2 (release mode)",
@@ -44,5 +50,99 @@
             "request": "launch",
             "type": "dart"
         },
+        {
+            "name": "teacher (profile mode)",
+            "cwd": "teacher",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "teacher (release mode)",
+            "cwd": "teacher",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "local_data_source",
+            "cwd": "iportal2/packages/local_data_source",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "local_data_source (profile mode)",
+            "cwd": "iportal2/packages/local_data_source",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "local_data_source (release mode)",
+            "cwd": "iportal2/packages/local_data_source",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "network_data_source",
+            "cwd": "iportal2/packages/network_data_source",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "network_data_source (profile mode)",
+            "cwd": "iportal2/packages/network_data_source",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "network_data_source (release mode)",
+            "cwd": "iportal2/packages/network_data_source",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "repository",
+            "cwd": "iportal2/packages/repository",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "repository (profile mode)",
+            "cwd": "iportal2/packages/repository",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "repository (release mode)",
+            "cwd": "iportal2/packages/repository",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "utils",
+            "cwd": "iportal2/packages/utils",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "utils (profile mode)",
+            "cwd": "iportal2/packages/utils",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "utils (release mode)",
+            "cwd": "iportal2/packages/utils",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
     ]
 }

@@ -6,6 +6,7 @@ import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/feature_item.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
@@ -37,7 +38,7 @@ class _PinFeaturesState extends State<PinFeatures> {
   }
 
   void onSavePinned(List<FeatureModel> newPinnedFeatures) async {
-    Navigator.of(context).pop();
+    context.pop();
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       pinnedFeatures = newPinnedFeatures;

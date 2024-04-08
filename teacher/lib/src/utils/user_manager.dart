@@ -63,7 +63,8 @@ class UserManager {
       // await UserManager.instance.loadSession(setting);
       // await authRepository.
 
-      await setting.clearAllDataSecure();
+      await setting.clearUserInfoSecure();
+      await setting.clearAccessToken();
       UserManager.instance.removeInstance();
       final user = await setting.getUserInfoSecure();
       Log.prettyJson(user?.toJson() ?? {});

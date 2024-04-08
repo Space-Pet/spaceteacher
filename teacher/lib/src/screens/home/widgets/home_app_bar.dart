@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends StatefulWidget {
   const HomeAppBar({
     super.key,
     required this.user,
@@ -13,6 +16,11 @@ class HomeAppBar extends StatelessWidget {
   final UserInfo user;
 
   @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(8, 36, 8, 28),
@@ -20,22 +28,31 @@ class HomeAppBar extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
+            onTap: () async {
+              final res = await context.push(
                 ProfileScreen.routeName,
                 arguments: {
-                  'userInfo': user,
+                  'userInfo': widget.user,
                 },
               );
+
+              if (res == true) {
+                setState(() {});
+              }
             },
             child: CircleAvatar(
-              backgroundColor: AppColors.whiteBackground,
+              backgroundColor: AppColors.blackTransparent,
               radius: 21,
-              child: CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.transparent,
-                child: Image.network("${user.schoolLogo}"),
+              child: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: '${widget.user.children?.urlImageModel?.mobile}',
+                placeholder: (context, url) =>
+                    const CupertinoActivityIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                imageBuilder: (context, imageProvider) => CircleAvatar(
+                  radius: 25,
+                  backgroundImage: imageProvider,
+                ),
               ),
             ),
           ),
@@ -47,14 +64,14 @@ class HomeAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${user.name}",
+                "${widget.user.name}",
                 style: const TextStyle(
                     color: AppColors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                "${user.className}",
+                "${widget.user.className}",
                 style: const TextStyle(color: AppColors.white, fontSize: 12),
               ),
             ],

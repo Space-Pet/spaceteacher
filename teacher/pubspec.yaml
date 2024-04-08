@@ -54,6 +54,9 @@ dependencies:
   dotted_border: ^2.1.0
   dotted_line: ^3.2.2
   shared_preferences: ^2.2.2
+  cached_network_image: ^3.3.1
+  provider: ^6.1.2
+  timeline_tile: ^2.0.0
   
  
 
@@ -93,6 +96,8 @@ flutter:
     - assets/images/brand_logo/
     - assets/icons/
     - assets/icons/features/  
+    - assets/images/login/
+    - assets/images/splash/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

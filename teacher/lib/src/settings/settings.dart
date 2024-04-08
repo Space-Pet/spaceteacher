@@ -21,6 +21,9 @@ class Settings {
   Future<void> clearUserInfoSecure() async =>
       await UserSecureStorage.remove(LocalStorageKey.userLogin);
 
+  Future<void> clearAccessToken() async =>
+      await UserSecureStorage.remove(LocalStorageKey.token);
+
   Future<void> clearAllDataSecure() async =>
       await UserSecureStorage.clearAllData();
 
@@ -52,5 +55,16 @@ class Settings {
     final language =
         await UserSecureStorage.read(LocalStorageKey.language) ?? "en";
     return language;
+  }
+
+  Future<void> saveIsFirstTime(bool isFirstTime) async {
+    await UserSecureStorage.write(
+        LocalStorageKey.isFistTime, isFirstTime.toString());
+  }
+
+  Future<bool> getIsFirstTime() async {
+    final isFirstTime =
+        await UserSecureStorage.read(LocalStorageKey.isFistTime);
+    return isFirstTime == null ? true : isFirstTime == "true";
   }
 }

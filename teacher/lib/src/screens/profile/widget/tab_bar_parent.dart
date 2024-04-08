@@ -42,7 +42,7 @@ class TabBarParent extends StatelessWidget {
             isShowIcon: false,
           ),
           TabContent(
-            title: 'mobile phone'.tr(),
+            title: 'phone number'.tr(),
             content: '0983526182',
             isShowIcon: true,
             onTap: () {

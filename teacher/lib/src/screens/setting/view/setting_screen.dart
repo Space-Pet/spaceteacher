@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/main.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
@@ -38,7 +39,7 @@ class _SettingScreenState extends State<SettingScreen> {
             previous.logoutStatus != current.logoutStatus,
         listener: (context, state) {
           if (state.logoutStatus.isSuccess) {
-            context.pushReplacement(LoginScreen.routeName);
+            navigatorKey.currentContext!.pushReplacement(LoginScreen.routeName);
           }
 
           if (state.logoutStatus.isFailure) {

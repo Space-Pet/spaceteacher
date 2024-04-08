@@ -98,7 +98,7 @@ static const Map<String,dynamic> vi = {
   "forgotDomainSchool": "Vui lòng liên hệ IT trường nếu bạn quên đường dẫn website iProtal",
   "changeLanguage": "Chuyển ngôn ngữ",
   "currentLanguage": "Ngôn ngữ hiện tại",
-  "fullname": "Họ và Tên",
+  "fullName": "Họ và Tên",
   "yearOfBirth": "Năm sinh",
   "occupation": "Nghề nghiệp",
   "workplace": "Nơi làm việc",

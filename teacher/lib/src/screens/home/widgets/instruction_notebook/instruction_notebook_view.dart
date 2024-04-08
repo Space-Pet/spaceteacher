@@ -44,11 +44,11 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    lesson.name,
+                    '${lesson.name}',
                     style: AppTextStyles.semiBold14(color: AppColors.black24),
                   ),
                   Text(
-                    lesson.description,
+                    '${lesson.description}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.normal12(color: AppColors.gray61),
