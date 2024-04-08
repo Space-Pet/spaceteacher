@@ -53,7 +53,7 @@ class GradientBorderContainer extends StatelessWidget {
   final double borderWidth;
   final double padding;
 
-  GradientBorderContainer({
+  const GradientBorderContainer({super.key, 
     required this.child,
     required this.gradient,
     required this.bgColor,

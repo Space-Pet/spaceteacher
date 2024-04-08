@@ -9,6 +9,8 @@ void bootstrap({
   required AbstractAuthLocalStorage authLocalStorage,
   required UserApi userApi,
   required JobApi jobApi,
+  required RegisterNoteBookApi registerNoteBookApi,
+  required AppFetchApi appFetchApi,
   required UserLocalStorage userLocalStorage,
 }) {
   final authRepository =
@@ -19,8 +21,16 @@ void bootstrap({
 
   final jobRepository = JobRepository(jobApi: jobApi);
 
+  final registerNoteBookRepository =
+      RegisterNotebookRepository(registerNoteBookApi: registerNoteBookApi);
+
+  final appFetchApiRepository = AppFetchApiRepository(appFetchApi: appFetchApi);
+
   runApp(IPortal2App(
-      authRepository: authRepository,
-      userRepository: userRepository,
-      jobRepository: jobRepository));
+    authRepository: authRepository,
+    userRepository: userRepository,
+    jobRepository: jobRepository,
+    registerRepository: registerNoteBookRepository,
+    appFetchApiRepository: appFetchApiRepository,
+  ));
 }

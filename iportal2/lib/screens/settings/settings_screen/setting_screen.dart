@@ -15,6 +15,7 @@ import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
 import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
+import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
 import 'package:repository/repository.dart';
 
 import '../widget/switch_setting.dart';
@@ -111,7 +112,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       SwitchSetting(
                         showDottedLine: true,
                         text: AppStrings.changePassword,
-                        iconAsset: Assets.icons.message,
+                        iconAsset: Assets.icons.lockPassword,
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -168,16 +169,24 @@ class _SettingScreenState extends State<SettingScreen> {
                           builder: (context, state) {
                             return GestureDetector(
                               onTap: () {
-                                context
-                                    .read<SettingScreenBloc>()
-                                    .add(SettingScreenLoggedOut());
+                                ShowDialogLogout.show(
+                                  context,
+                                  textConten: '',
+                                  title: 'Bạn muốn đăng xuất?',
+                                  onTapConfirm: () {
+                                    context
+                                        .read<SettingScreenBloc>()
+                                        .add(SettingScreenLoggedOut());
+                                  },
+                                );
                               },
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: AppColors.error,
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
-                                padding: EdgeInsets.symmetric(vertical: 15.0),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 5),
                                 child: Row(
                                   children: [
                                     Padding(
@@ -191,8 +200,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                         AppStrings.logout,
                                         style: TextStyle(
                                           color: AppColors.red,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     )

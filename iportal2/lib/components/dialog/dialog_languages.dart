@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
 
 class DialogLanguages extends StatefulWidget {
   const DialogLanguages({
+    super.key,
     required this.title,
     this.onSavePressed,
     this.onClosePressed,
@@ -35,19 +34,21 @@ class _DialogLanguagesState extends State<DialogLanguages> {
           children: [
             Text(
               widget.title,
-              style: TextStyle(fontWeight: FontWeight.w700),
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
-            buildLanguageRow('Tiếng Việt', 'assets/images/vn.png'),
+            Padding(
+              padding: const EdgeInsets.only(top: 18.0),
+              child: buildLanguageRow('Tiếng Việt', 'assets/images/vn.png'),
+            ),
             const SizedBox(height: 16),
             buildLanguageRow('English', 'assets/images/en.png'),
-            
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: widget.onSavePressed ?? () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.redMenu,
               ),
-              child: SizedBox(
+              child: const SizedBox(
                 width: double.infinity,
                 child: Text(
                   'Cập nhật',
@@ -66,7 +67,7 @@ class _DialogLanguagesState extends State<DialogLanguages> {
                 ),
               ),
               onPressed: widget.onClosePressed ?? () => Navigator.pop(context),
-              child: SizedBox(
+              child: const SizedBox(
                 width: double.infinity,
                 child: Text(
                   'Đóng',
@@ -96,9 +97,7 @@ class _DialogLanguagesState extends State<DialogLanguages> {
                 height: 20,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: Colors.black,
-                  ),
+                  border: Border.all(),
                   color: Colors.transparent,
                 ),
                 child: widget.selectedLanguage == language
@@ -115,12 +114,12 @@ class _DialogLanguagesState extends State<DialogLanguages> {
             const SizedBox(width: 12),
             Text(
               language,
-              style: TextStyle(fontWeight: FontWeight.w500),
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 0),
+          padding: const EdgeInsets.only(),
           child: Image.asset(imagePath),
         ),
       ],

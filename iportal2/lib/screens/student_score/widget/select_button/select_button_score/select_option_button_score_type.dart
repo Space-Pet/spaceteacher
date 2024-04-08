@@ -1,6 +1,7 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iportal2/screens/student_score/student_score_screen.dart';
 import 'package:iportal2/screens/student_score/widget/select_button/select_button_score/bottom_sheet_select_score_type.dart';
 import 'package:iportal2/resources/app_colors.dart';
 
@@ -15,12 +16,12 @@ class SelectScoreType extends StatefulWidget {
 }
 
 class _SelectScoreTypeState extends State<SelectScoreType> {
-  String selectedOption = "Điểm MOET";
-  List<String> optionList = ["Điểm MOET", "Điểm chương trình khác"];
+  String selectedOption = ScoreType.monet.text();
+  List<String> optionList = ScoreType.values.map((e) => e.text()).toList();
   @override
   void initState() {
     super.initState();
-    selectedOption = "Điểm MOET";
+    selectedOption = ScoreType.monet.text();
   }
 
   void updateSelectedOption(String newOption) async {

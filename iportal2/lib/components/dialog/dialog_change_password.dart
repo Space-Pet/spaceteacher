@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iportal2/components/textfield/input_text.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 
 class DialogChangePassword extends StatefulWidget {
-  const DialogChangePassword({
+  const DialogChangePassword({super.key, 
     this.onSavePressed,
     this.onClosePressed,
   });
@@ -106,7 +105,7 @@ class _DialogChangePasswordState extends State<DialogChangePassword> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.redMenu,
                         ),
-                        child: SizedBox(
+                        child: const SizedBox(
                           width: double.infinity,
                           child: Text(
                             'Cập nhật',
@@ -126,7 +125,7 @@ class _DialogChangePasswordState extends State<DialogChangePassword> {
                         ),
                         onPressed: widget.onClosePressed ??
                             () => Navigator.pop(context),
-                        child: SizedBox(
+                        child: const SizedBox(
                           width: double.infinity,
                           child: Text(
                             'Đóng',

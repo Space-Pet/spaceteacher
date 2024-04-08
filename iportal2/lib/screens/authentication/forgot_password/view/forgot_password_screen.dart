@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/input_text.dart';
-import 'package:iportal2/screens/authentication/send_opt/view/send_otp_screen.dart';
-import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_strings.dart';
 import 'package:iportal2/resources/assets.gen.dart';
+import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/authentication/send_opt/view/send_otp_screen.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -13,6 +13,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    TextEditingController phoneNumberController = TextEditingController();
 
     return GestureDetector(
       onTap: () {
@@ -28,14 +29,26 @@ class ForgotPasswordScreen extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 40, left: 8, right: 12),
+            child: IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(
+                  Icons.keyboard_arrow_left,
+                  size: 34,
+                  color: AppColors.white,
+                )),
+          ),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
               padding: const EdgeInsets.only(
-                  top: 20, bottom: 20, left: 14, right: 14),
-              height: screenHeight / 1.8,
+                  top: 6, bottom: 24, left: 14, right: 14),
+              height: screenHeight / 1.7,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -44,45 +57,46 @@ class ForgotPasswordScreen extends StatelessWidget {
                 color: Colors.white,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 4),
                     child: Text(
                       AppStrings.titleForgotPassword,
-                      style: TextStyle(
+                      style: AppTextStyles.bold16(
                         color: AppColors.textTitleLogin,
-                        fontSize: 16,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        height: 0.09,
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 10),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
                     child: Text(
                       textAlign: TextAlign.center,
                       AppStrings.derForgotPassword,
-                      style: TextStyle(
-                        color: AppColors.grayText,
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: AppTextStyles.normal14(color: AppColors.gray79),
                     ),
                   ),
                   TitleAndInputText(
+                      isValid: isValidPhoneNumber(phoneNumberController.text),
                       title: 'title',
                       hintText: AppStrings.enterPhone,
                       prefixIcon: Assets.icons.phone.image(),
-                      onChanged: (value) {}),
+                      onChanged: (value) {
+                        phoneNumberController.text = value;
+                      }),
                   GestureDetector(
                     onTap: () {
-                      context.push(SendOTPScreen());
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      if (isValidPhoneNumber(phoneNumberController.text)) {
+                        context.push(const SendOTPScreen());
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Số điện thoại chưa đúng'),
+                        ));
+                      }
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 15),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Container(
                           alignment: Alignment.center,
                           width: double.infinity,
@@ -93,12 +107,12 @@ class ForgotPasswordScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(60),
                             ),
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.only(top: 20, bottom: 20),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 16),
                             child: Text(
                               AppStrings.next,
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                                  AppTextStyles.semiBold16(color: Colors.white),
                             ),
                           )),
                     ),
@@ -111,4 +125,9 @@ class ForgotPasswordScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+bool isValidPhoneNumber(String input) {
+  final RegExp phoneRegex = RegExp(r'^[0-9]{10}$');
+  return phoneRegex.hasMatch(input);
 }

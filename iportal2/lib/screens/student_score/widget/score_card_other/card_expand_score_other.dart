@@ -142,14 +142,6 @@ class CardExpandScoreOther extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.transparent,
-                          child: Image.asset('assets/images/avatar.png'),
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
                         Text(
                           "GV: ",
                           style:

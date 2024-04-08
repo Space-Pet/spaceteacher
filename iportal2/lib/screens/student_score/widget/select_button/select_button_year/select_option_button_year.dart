@@ -1,35 +1,36 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:iportal2/screens/exercise_notice/widgets/select_popup_sheet/bottom_sheet_select.dart';
 import 'package:iportal2/resources/app_colors.dart';
-
 import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/screens/student_score/student_score_screen.dart';
+import 'package:iportal2/screens/student_score/widget/select_button/select_button_year/bottom_sheet_select_year.dart';
 
 class SelectPopupSheetYear extends StatefulWidget {
   const SelectPopupSheetYear({
     super.key,
+    required this.optionList,
+    this.selectedOption,
+    this.handleSelectedOptionChanged,
   });
+
+  final List<String> optionList;
+  final ViewScoreSelectedParam? selectedOption;
+  final void Function(ViewScoreSelectedParam)? handleSelectedOptionChanged;
 
   @override
   State<SelectPopupSheetYear> createState() => _SelectPopupSheetYearState();
 }
 
 class _SelectPopupSheetYearState extends State<SelectPopupSheetYear> {
-  String selectedOption = "Năm học: 2023 - 2024";
-  List<String> optionList = ["Năm học: 2023 - 2024", "Năm học: 2024 - 2025"];
   @override
   void initState() {
     super.initState();
-    selectedOption = "Năm học: 2023 - 2024";
   }
 
-  void updateSelectedOption(String newOption) async {
-    setState(() {
-      selectedOption = newOption;
-    });
+  void updateSelectedOption(ViewScoreSelectedParam newOption) async {
+    widget.handleSelectedOptionChanged?.call(newOption);
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 500));
   }
@@ -48,11 +49,11 @@ class _SelectPopupSheetYearState extends State<SelectPopupSheetYear> {
             ScrollController scrollController,
             double bottomSheetOffset,
           ) =>
-              BottomSheetSelect(
-            optionList: optionList,
+              BottomSheetSelectYear(
+            optionList: widget.optionList,
             scrollController: scrollController,
             onSelectedOption: updateSelectedOption,
-            selectedOption: selectedOption,
+            selectedOption: widget.selectedOption,
           ),
           anchors: [0, 1],
           isSafeArea: true,
@@ -71,7 +72,7 @@ class _SelectPopupSheetYearState extends State<SelectPopupSheetYear> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                selectedOption,
+                'Lọc',
                 style: AppTextStyles.semiBold14(
                   color: AppColors.white,
                 ),

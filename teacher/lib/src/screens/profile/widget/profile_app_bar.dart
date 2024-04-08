@@ -1,15 +1,10 @@
-import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:teacher/model/pupil_model.dart';
 import 'package:teacher/model/student_model.dart';
-import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
-import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
-import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 import 'package:teacher/src/utils/user_manager.dart';
 

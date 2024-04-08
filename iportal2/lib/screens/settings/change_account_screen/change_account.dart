@@ -52,7 +52,7 @@ class ChangeAccountScreen extends StatelessWidget {
                         itemCount: 2,
                         itemBuilder: (BuildContext context, int index) {
                           final islastIndex = index == childCount - 1;
-                          return Container(
+                          return SizedBox(
                             width: double.infinity,
                             child: Column(
                               children: [
@@ -69,7 +69,7 @@ class ChangeAccountScreen extends StatelessWidget {
                                             backgroundColor:
                                                 AppColors.whiteBackground,
                                             child: Image.asset(
-                                                'assets/images/avatar.png'),
+                                                'assets/images/default-user.png'),
                                           ),
                                           Column(
                                             crossAxisAlignment:
@@ -83,7 +83,6 @@ class ChangeAccountScreen extends StatelessWidget {
                                                 children: [
                                                   SvgPicture.asset(
                                                     Assets.icons.academic,
-                                                    color: AppColors.gray500,
                                                   ),
                                                   Padding(
                                                     padding:
@@ -118,7 +117,7 @@ class ChangeAccountScreen extends StatelessWidget {
                                                       '6.1',
                                                       style: AppTextStyles
                                                           .normal12(
-                                                        color: AppColors.black,
+                                                        
                                                       ),
                                                     ),
                                                   ),
@@ -130,7 +129,7 @@ class ChangeAccountScreen extends StatelessWidget {
                                       )),
                                       IconButton(
                                           onPressed: () {},
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.keyboard_arrow_right,
                                             size: 24,
                                           ))
@@ -138,7 +137,7 @@ class ChangeAccountScreen extends StatelessWidget {
                                   ),
                                 ),
                                 if (!islastIndex)
-                                  DottedLine(
+                                  const DottedLine(
                                     dashLength: 2,
                                     dashColor: AppColors.gray400,
                                   )

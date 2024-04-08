@@ -23,7 +23,7 @@ class CurrentPinnedFeature extends StatelessWidget {
   final bool hasUpdated;
   final bool isKinderGarten;
   final void Function() updatePin;
-  final void Function(int id, bool status) removePinned;
+  final void Function(FeatureKey key, bool status) removePinned;
   final void Function(List<FeatureModel> pinnedFeatures) onSavePinned;
 
   @override
@@ -49,7 +49,7 @@ class CurrentPinnedFeature extends StatelessWidget {
               ? DottedBlock(w: w)
               : GestureDetector(
                   onTap: () {
-                    removePinned(feature.id, false);
+                    removePinned(feature.key, false);
                   },
                   child: FeatureItem(
                     feature: feature,

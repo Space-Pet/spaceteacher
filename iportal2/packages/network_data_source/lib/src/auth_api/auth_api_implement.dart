@@ -13,7 +13,9 @@ class NoteFailure implements Exception {}
 class SettingFailure implements Exception {}
 
 class AuthApi extends AbstractAuthApi {
-  AuthApi({required AbstractDioClient client}) : _client = client;
+  AuthApi({
+    required AbstractDioClient client,
+  }) : _client = client;
 
   final AbstractDioClient _client;
 
@@ -23,7 +25,7 @@ class AuthApi extends AbstractAuthApi {
   }) async {
     try {
       final data = await _client.doHttpPost(
-        url: 'login',
+        url: '/api/v1/login',
         requestBody: {"user_key": email, "password": password, "login_app": 0},
       );
       final dataToken = data['data'] as Map<String, dynamic>;

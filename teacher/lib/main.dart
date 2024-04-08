@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:core/common/constants/app_locale.dart';
 import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +21,11 @@ void main() {
     Injector.init();
     runApp(
       EasyLocalization(
-          supportedLocales: const [
-            Locale('en', 'US'),
-            Locale('vi', 'VN'),
-          ],
-          path: 'assets/i18n/',
-          fallbackLocale: const Locale('en', 'US'),
-          child: const MyApp()),
+        supportedLocales: const [AppLocale.en, AppLocale.vi],
+        path: 'assets/i18n',
+        fallbackLocale: AppLocale.vi,
+        child: const MyApp(),
+      ),
     );
   }, (error, stack) {
     Log.e(error);

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:iportal2/screens/settings/settings_screen/setting_screen.dart';
+import 'package:network_data_source/network_data_source.dart';
 
 class ProfileAppBar extends StatefulWidget {
   final VoidCallback? onBack;
   final int role;
-  const ProfileAppBar({super.key, this.onBack, required this.role});
+  final ProfileInfo user;
+  const ProfileAppBar(
+      {super.key, this.onBack, required this.role, required this.user});
 
   @override
   _ProfileAppBarState createState() => _ProfileAppBarState();
@@ -37,57 +38,34 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.transparent,
-                  child: Image.asset(widget.role == 0
-                      ? 'assets/images/avatar.png'
-                      : 'assets/images/image_parent.png'),
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                              widget.user.children.url_image.mobile)),
+                      shape: BoxShape.circle,
+                      color: AppColors.white,
+                      border: Border.all(color: AppColors.white, width: 2)),
                 ),
                 const SizedBox(width: 6),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Nguyễn Ngọc Tuyết Lan',
+                      widget.user.name,
                       style: AppTextStyles.semiBold12(
                         color: AppColors.white,
                         height: 24 / 12,
                       ),
                     ),
-                    Row(
-                      children: [
-                        SvgPicture.asset(Assets.icons.academic),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: Text(
-                            'UKA Vũng Tàu',
-                            style: AppTextStyles.normal12(
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: Container(
-                            width: 5,
-                            height: 5,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: Text(
-                            '6.1',
-                            style: AppTextStyles.normal12(
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      widget.user.class_name,
+                      style: AppTextStyles.normal12(
+                        color: AppColors.white,
+                      ),
                     ),
                   ],
                 )

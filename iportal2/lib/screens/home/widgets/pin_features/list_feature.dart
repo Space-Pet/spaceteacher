@@ -20,19 +20,19 @@ class ListFeature extends StatelessWidget {
   final String title;
   final bool isUpdatePin;
   final bool isKinderGarten;
-  final void Function(int id, bool status) onTapFeature;
+  final void Function(FeatureKey key, bool status) onTapFeature;
 
   @override
   Widget build(BuildContext context) {
-    final listPinnedId = currentPinnedFeatures.map((e) => e.id).toList();
+    final listPinnedId = currentPinnedFeatures.map((e) => e.key).toList();
     final features = List.generate(listFeature.length, (index) {
       final feature = listFeature[index];
 
-      final isPinned = listPinnedId.contains(feature.id);
+      final isPinned = listPinnedId.contains(feature.key);
 
       return GestureDetector(
         onTap: () {
-          onTapFeature(feature.id, !isPinned);
+          onTapFeature(feature.key, !isPinned);
         },
         child: FeatureItem(
           feature: feature,

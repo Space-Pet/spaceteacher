@@ -25,14 +25,14 @@ class ShaDowBoxContainer extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: AppRadius.rounded14,
         color: Colors.white,
-        boxShadow: [myBoxShadow()],
+        boxShadow: [homeBoxShadow()],
       ),
       child: child,
     );
   }
 }
 
-BoxShadow myBoxShadow() {
+BoxShadow homeBoxShadow() {
   return const BoxShadow(
     color: Color.fromRGBO(46, 46, 79, 0.12),
     offset: Offset(0, 6),

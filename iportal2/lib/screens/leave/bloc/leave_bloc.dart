@@ -1,0 +1,42 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:meta/meta.dart';
+import 'package:network_data_source/network_data_source.dart';
+import 'package:repository/repository.dart';
+
+part 'leave_event.dart';
+part 'leave_state.dart';
+
+class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
+  LeaveBloc(
+      {required this.appFetchApiRepo,
+      required this.currentUserBloc,
+      required this.userRepository})
+      : super(LeaveState(user: userRepository.notSignedIn())) {
+    on<GetLeaves>(_onGetLeaves);
+    on<CurrentUserUpdated>(_onUpdateUser);
+  }
+  final AppFetchApiRepository appFetchApiRepo;
+  final CurrentUserBloc currentUserBloc;
+  final UserRepository userRepository;
+
+  Future<dynamic> _onUpdateUser(
+    CurrentUserUpdated event,
+    Emitter<LeaveState> emit,
+  ) async {
+    emit(state.copyWith(
+      user: event.user,
+    ));
+  }
+
+  void _onGetLeaves(GetLeaves event, Emitter<LeaveState> emitter) async {
+    emit(state.copyWith(leaveStatus: LeaveStatus.init));
+    final data = await appFetchApiRepo.getLeaves(
+        classId: currentUserBloc.state.user.children.class_id,
+        pupilId: currentUserBloc.state.user.children.pupil_id,
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand);
+    emit(state.copyWith(leaveStatus: LeaveStatus.success, leaveData: data));
+  }
+}

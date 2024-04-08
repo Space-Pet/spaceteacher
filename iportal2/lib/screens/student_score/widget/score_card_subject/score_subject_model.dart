@@ -6,6 +6,7 @@ class ScoreSubjectModel {
   final String teacherName;
   final String teacherAva;
   final String advice;
+  final String typeScore;
 
   ScoreSubjectModel({
     required this.id,
@@ -15,5 +16,6 @@ class ScoreSubjectModel {
     required this.teacherName,
     required this.teacherAva,
     required this.advice,
+    required this.typeScore,
   });
 }

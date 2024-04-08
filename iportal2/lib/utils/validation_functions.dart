@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Checks if string is email.
 bool isValidEmail(
   String? inputString, {
@@ -38,4 +40,21 @@ bool isValidPassword(
     isInputStringValid = regExp.hasMatch(inputString);
   }
   return isInputStringValid;
+}
+
+String getFileName(String filePath, {int maxLength = 24}) {
+  if (filePath == '') {
+    return '';
+  }
+
+  List<String> parts = filePath.split('-');
+  List<String> remainingParts = parts.skip(2).toList();
+
+  String name = remainingParts.join('-');
+
+  if (name.length > maxLength) {
+    name = "${name.substring(0, maxLength)}..-${name.substring(name.length - 5)}";
+  }
+
+  return name;
 }

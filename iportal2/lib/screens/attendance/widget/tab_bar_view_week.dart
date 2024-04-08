@@ -1,19 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:network_data_source/network_data_source.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../../../resources/assets.gen.dart';
-import '../../home/models/attendance_model.dart';
 
 class TabBarViewWeek extends StatefulWidget {
-  final List<WeekData> weekData;
+  final AttendanceWeek? attendanceWeek;
   final bool isWeek;
 
-  const TabBarViewWeek({Key? key, required this.weekData, this.isWeek = true})
-      : super(key: key);
+  const TabBarViewWeek({super.key, this.attendanceWeek, this.isWeek = true});
 
   @override
   _TabBarViewWeekState createState() => _TabBarViewWeekState();
@@ -23,7 +18,8 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
   int _currentIndex = 0;
 
   void _nextWeek() {
-    if (_currentIndex < widget.weekData.length - 1) {
+    if (_currentIndex <
+        (widget.attendanceWeek?.absentData.items?.length ?? 0) - 1) {
       setState(() {
         _currentIndex++;
       });
@@ -40,22 +36,21 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
 
   @override
   Widget build(BuildContext context) {
-    WeekData currentWeekData = widget.weekData[_currentIndex];
+    List<Items> currentWeekData = widget.attendanceWeek?.absentData.items ?? [];
 
-    List<Map<String, String>> dataListAttendance = [];
+    List<Map<String, dynamic>> dataListAttendance = [];
 
-    for (final attendance in currentWeekData.attendanceList) {
+    for (final attendance in currentWeekData) {
       bool isFirstDay = true;
 
-      for (final dayItem in attendance.dayList) {
-        if (isFirstDay) {
-          dataListAttendance.add({'day': attendance.day});
-          isFirstDay = false;
-        }
-
-        final Map<String, String> dayData = {
-          'description': dayItem.description,
-          'isAbsent': dayItem.isAbsent
+      if (isFirstDay) {
+        dataListAttendance.add({'day': attendance.date});
+        isFirstDay = false;
+      }
+      for (var itemData in attendance.data ?? []) {
+        final Map<String, dynamic> dayData = {
+          'description': itemData.subjectName,
+          'isAbsent': itemData.description
         };
         dataListAttendance.add(dayData);
       }
@@ -63,7 +58,6 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
 
     final listAttendance = List.generate(dataListAttendance.length, (index) {
       final data = dataListAttendance[index];
-      print('object: ${data}');
       return SizedBox(
         height: 60,
         width: double.infinity,
@@ -84,7 +78,16 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
             indicator: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: data['day'] != null ? Colors.blue : Colors.red,
+                color: data['day'] != null ? AppColors.brand600 : Colors.red,
+                boxShadow: data['day'] != null
+                    ? null
+                    : [
+                        const BoxShadow(
+                          color: Color.fromARGB(255, 226, 155, 150),
+                          blurRadius: 5,
+                          spreadRadius: 2,
+                        ),
+                      ],
               ),
             ),
             drawGap: true,
@@ -107,9 +110,7 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                       ),
                       Text(
                         data['isAbsent'] ?? '',
-                        style: AppTextStyles.normal12(
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.red700),
+                        style: AppTextStyles.normal12(color: AppColors.red700),
                       )
                     ],
                   ),
@@ -117,6 +118,27 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
         ),
       );
     });
+    int getWeekNumber(DateTime date) {
+      final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
+      final lastDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
+      final firstDayOfYear = DateTime(firstDayOfWeek.year, 1, 1);
+      final daysOffset = firstDayOfYear.weekday;
+      final daysOfYear = firstDayOfWeek.difference(firstDayOfYear).inDays + 1;
+      return ((daysOfYear - daysOffset) / 7).ceil();
+    }
+
+    DateTime getWeekStartDate(DateTime date) {
+      return date.subtract(Duration(days: date.weekday - 1));
+    }
+
+    DateTime getWeekEndDate(DateTime date) {
+      return date.add(Duration(days: DateTime.daysPerWeek - date.weekday));
+    }
+
+    String getFormattedDate(DateTime date) {
+      return '${date.day}/${date.month}';
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: Container(
@@ -159,7 +181,9 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                     ),
                   ),
                   Text(
-                    currentWeekData.data,
+                    widget.isWeek
+                        ? 'Tuần ${getWeekNumber(DateTime.now())} (${getFormattedDate(getWeekStartDate(DateTime.now()))} - ${getFormattedDate(getWeekEndDate(DateTime.now()))})'
+                        : 'Tháng ${DateTime.now().month}',
                     style: AppTextStyles.normal14(
                       height: 0.10,
                       fontWeight: FontWeight.w600,
@@ -184,7 +208,7 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                   width: double.infinity,
                   color: widget.isWeek == true
                       ? const Color.fromARGB(255, 247, 245, 245)
-                      : Color.fromARGB(255, 245, 245, 245),
+                      : const Color.fromARGB(255, 245, 245, 245),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -197,13 +221,12 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Expanded(
                             child: Column(
                               children: [
                                 Text(
-                                  '${currentWeekData.totalWeekLessons}',
+                                  '${widget.attendanceWeek?.totalLessons.toString() ?? 0}',
                                   style: AppTextStyles.normal18(
                                     color: AppColors.brand600,
                                     fontWeight: FontWeight.w700,
@@ -213,7 +236,6 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                                   'Tiết học',
                                   style: AppTextStyles.normal14(
                                     color: AppColors.gray500,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 )
                               ],
@@ -228,7 +250,7 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                             child: Column(
                               children: [
                                 Text(
-                                  '${currentWeekData.totalWeekPresent}',
+                                  '${widget.attendanceWeek?.countPresent ?? 0}',
                                   style: AppTextStyles.normal18(
                                     color: AppColors.green600,
                                     fontWeight: FontWeight.w700,
@@ -238,7 +260,6 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                                   'Có mặt',
                                   style: AppTextStyles.normal14(
                                     color: AppColors.gray500,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 )
                               ],
@@ -253,7 +274,7 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                             child: Column(
                               children: [
                                 Text(
-                                  '${currentWeekData.totalWeekAbsent}',
+                                  '${widget.attendanceWeek?.absentData.count.toString() ?? 0}',
                                   style: AppTextStyles.normal18(
                                     color: AppColors.red700,
                                     fontWeight: FontWeight.w700,
@@ -263,7 +284,6 @@ class _TabBarViewWeekState extends State<TabBarViewWeek> {
                                   'Vắng',
                                   style: AppTextStyles.normal14(
                                     color: AppColors.gray500,
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 )
                               ],

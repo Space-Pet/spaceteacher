@@ -12,22 +12,19 @@ class HomeNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Navigator(
-        key: homeNavigatorKey,
-        initialRoute: HomeScreen.routeName,
-        onGenerateRoute: _onGenerateRoute,
-        onGenerateInitialRoutes: (navigator, initialRoute) {
-          return [
-            navigator.widget.onGenerateRoute!(
-              const RouteSettings(
-                name: HomeScreen.routeName,
-              ),
-            )!,
-          ];
-        },
-      ),
+    return Navigator(
+      key: homeNavigatorKey,
+      initialRoute: HomeScreen.routeName,
+      onGenerateRoute: _onGenerateRoute,
+      onGenerateInitialRoutes: (navigator, initialRoute) {
+        return [
+          navigator.widget.onGenerateRoute!(
+            const RouteSettings(
+              name: HomeScreen.routeName,
+            ),
+          )!,
+        ];
+      },
     );
   }
 

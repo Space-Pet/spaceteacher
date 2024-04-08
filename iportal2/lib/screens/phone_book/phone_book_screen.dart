@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/screens/phone_book/widget/app_bar_phone_book.dart';
+import 'package:iportal2/components/select_child.dart';
 import 'package:iportal2/screens/phone_book/widget/tab_bar_phone_book.dart';
 
 import '../../resources/app_colors.dart';
@@ -38,10 +38,14 @@ class PhoneBookScreen extends StatelessWidget {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   children: [
-                    const AppBarPhoneBook(),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: SelectChild(),
+                    ),
+                    const SizedBox(height: 8),
                     TabBarPhoneBook(),
                   ],
                 ),

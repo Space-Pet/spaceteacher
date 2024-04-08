@@ -15,7 +15,7 @@ environment_config:
         baseUrl:
           env_var: BASE_URL
           const: true
-          default: "https://apitest-iportal.nhg.vn/api/v1/"
+          default: "https://apitest-iportal.nhg.vn"
     uat:
       fields:
         env:
@@ -25,7 +25,7 @@ environment_config:
         baseUrl:
           env_var: BASE_URL
           const: true
-          default: "https://apitest-iportal.nhg.vn/api/v1/"
+          default: "https://apitest-iportal.nhg.vn"
     staging:
       fields:
         env:
@@ -35,7 +35,7 @@ environment_config:
         baseUrl:
           env_var: BASE_URL
           const: true
-          default: "https://apitest-iportal.nhg.vn/api/v1/"
+          default: "https://apitest-iportal.nhg.vn"
     prod:
       fields:
         env:
@@ -45,5 +45,5 @@ environment_config:
         baseUrl:
           env_var: BASE_URL
           const: true
-          default: "https://apitest-iportal.nhg.vn/api/v1/"       
+          default: "https://apitest-iportal.nhg.vn"       
  

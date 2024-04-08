@@ -1,34 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
+import 'package:network_data_source/network_data_source.dart';
 
 import '../../../components/tab/tab_bar.dart';
 import '../../../components/tab/tab_content.dart';
 import '../../../components/custom_dialog_update_phone.dart';
 
 class TabBarStudent extends StatelessWidget {
-  const TabBarStudent({
-    super.key,
-  });
-
+  const TabBarStudent({super.key, this.studentData});
+  final StudentData? studentData;
+  
   @override
   Widget build(BuildContext context) {
+    const statusMap = {
+      0: 'Đang học',
+      2: 'Đã nghỉ',
+      7: 'Đã tốt nghiệp',
+      8: 'Bảo lưu'
+    };
+
+
+
     return TabBarFlexible(
       tabTitles: const ['Thông tin học sinh', 'Thông tin phụ huynh'],
       tabContent: [
         [
-          const TabContent(
+          TabContent(
             title: 'Trường',
-            content: 'UKA Vũng Tàu',
+            content: studentData?.school.name ?? '',
             isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
             title: 'Lớp',
-            content: '6.1',
+            content: studentData?.classInfo.name.substring(1) ?? '',
             isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
             title: 'Mã học sinh',
-            content: 'UKA2974392',
+            content: studentData?.pupil.userKey ?? '',
             isShowIcon: false,
           ),
           const TabContent(
@@ -36,75 +47,66 @@ class TabBarStudent extends StatelessWidget {
             content: '234783947239',
             isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
             title: 'Ngày sinh',
-            content: '01/01/205',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Địa chỉ ',
-            content: '10/2 đường số 8, Bình Hưng Hoà, Bình Tân, TPHCM',
+            content: studentData?.pupil.birthday ?? '',
             isShowIcon: false,
           ),
           TabContent(
-            title: 'Số điện thoại',
-            content: '0983526182',
-            isShowIcon: true,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomDialogUpdatePhone(
-                    title: 'Chỉnh sửa số điện thoại',
-                    saveButtonTitle: 'Lưu lại',
-                    closeButtonTitle: 'Đóng',
-                    onSavePressed: () {
-                      context.pop();
-                    },
-                    onClosePressed: () {
-                      context.pop();
-                    },
-                  );
-                },
-              );
-            },
+            title: 'Địa chỉ ',
+            content: studentData?.pupil.address ?? '',
+            isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
+              title: 'Số điện thoại',
+              content: studentData?.pupil.phone ?? '',
+              isShowIcon: true,
+              onTap: () {
+                CustomDialogUpdatePhone.show(
+                  context,
+                  title: 'Chỉnh sửa số điện thoại',
+                  saveButtonTitle: 'Lưu lại',
+                  closeButtonTitle: 'Đóng',
+                  onSavePressed: (String phone) {
+                    context.read<ProfileBloc>().add(UpdateProfileStudent(
+                        phone: phone,
+                        motherName: studentData?.parent.motherName ?? '',
+                        fatherPhone: studentData?.parent.fatherPhone ?? ''));
+                
+                  },
+                );
+              }),
+          TabContent(
             title: 'Email',
-            content: 'lannt@ukavt.com',
+            content: studentData?.pupil.email ?? '',
             isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
             title: 'Tình trạng học sinh',
-            content: 'UKA Vũng Tàu',
+            content:
+                statusMap[studentData?.pupil.status ?? 0]?.toString() ?? '',
             isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Trường',
-            content: 'Đang học',
-            isShowIcon: false,
-            isShowDottedLine: false,
           ),
         ],
-        const [
+        [
           TabContent(
             title: 'Họ & tên cha',
-            content: 'Nguyễn Minh Tâm',
+            content: studentData?.parent.fatherName ?? '',
             isShowIcon: false,
           ),
           TabContent(
             title: 'Số điện thoại cha',
-            content: '0909 999 999',
+            content: studentData?.parent.fatherPhone ?? '',
             isShowIcon: false,
           ),
           TabContent(
             title: 'Họ & tên mẹ',
-            content: 'Trương Ánh Hoa',
+            content: studentData?.parent.motherName ?? '',
             isShowIcon: false,
           ),
           TabContent(
             title: 'Số điện thoại mẹ',
-            content: '0987 277 888',
+            content: studentData?.parent.motherPhone ?? '',
             isShowIcon: false,
             isShowDottedLine: false,
           ),

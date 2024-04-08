@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 
 // Step 1: Define a model for list items
 class ListItem<T> {
@@ -49,14 +50,13 @@ class _BottomSheetSelectState extends State<BottomSheetSelect> {
           controller: widget.scrollController,
           itemBuilder: (context, index) => GestureDetector(
             onTap: () {
-              debugPrint('setState called');
               setState(() {
                 for (var i = 0; i < _items.length; i++) {
                   _items[i].isSelected = false;
                 }
                 _items[index].isSelected = true;
               });
-              widget.onSelectedOption(_items[index].data);
+              widget.onSelectedOption(widget.optionList[index]);
             },
             child: Container(
               decoration: const BoxDecoration(

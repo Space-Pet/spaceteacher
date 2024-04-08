@@ -25,6 +25,7 @@ class AppColors {
   static const Color grayList = Color(0xFFF2F4F7);
   static const Color brand600 = Color(0xFF1B3A6D);
   static const Color brand50 = Color(0xFFE6F1EB);
+  static const Color brand500 = Color(0xFF9C292E);
 
   // Amber
   static const Color amberA200 = Color(0XFFF4CC46);
@@ -34,10 +35,13 @@ class AppColors {
   static const Color green700 = Color(0XFF027A48);
   static const Color green600 = Color(0xFF039754);
   static const Color green100 = Color(0XFFD1FADF);
+  static const Color green400 = Color(0XFF358E5E);
   static const Color green = Color(0XFF7CFC00);
+  static const Color greenSwitch = Color(0XFF037236);
 
   // Blue
   static const Color blue400 = Color(0XFF45A4DE);
+  static const Color blue500 = Color(0XFF2E90FA);
   static const Color blueA200 = Color(0XFF4A89FD);
 
   // BlueGray
@@ -68,6 +72,7 @@ class AppColors {
   static const Color gray300 = Color(0XFFE0E0E0);
   static const Color gray400 = Color(0XFF98A2B3);
   static const Color gray50 = Color(0XFFFBFCFC);
+  static const Color gray20 = Color(0XFF333333);
   static const Color gray500 = Color(0XFF667085);
   static const Color gray5001 = Color(0XFFF8F9FB);
   static const Color gray600 = Color(0XFF475467);
@@ -79,6 +84,9 @@ class AppColors {
   static const Color gray61 = Color(0XFF616161);
   static const Color grayD0 = Color(0XFFCAC4D0);
   static const Color gray666 = Color(0xFF666666);
+  static const Color gray79 = Color(0xFF797979);
+
+  
 
   // Grayc
   static const Color gray9000c = Color(0X0C101828);
@@ -91,6 +99,7 @@ class AppColors {
 
   // LightBlue
   static const Color lightBlue300 = Color(0XFF5FCFF4);
+  static const Color lightBlue600 = Color(0XFF0086C9);
 
   // Orange
   static const Color orange400 = Color(0XFFF88F33);
@@ -122,4 +131,11 @@ class AppColors {
 
   static const Color lightSkyBlue = Color(0xFFE3F0FF);
   static const Color lightPink = Color(0xFFFFE3E3);
+
+  static const Color textSecondary = Color(0XFF4F5E7B);
+  static const Color primarySurface = Color(0XFFF3F4F9);
+  static const Color skyLighter = Color(0XFFF2F4F5);
+
+  static const Color lightRed = Color(0xFFFEE4E2);
+  static const Color pink100 = Color(0xFFE7E7E7);
 }

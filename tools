@@ -1,0 +1,161 @@
+
+function run_clean_packages() {
+	echo "================== Clean $1 =================="
+	cd $1
+	./tools run_clean
+	cd ../
+}
+
+function run_clean_core() {
+	echo "================== Clean core =================="
+	cd core
+	flutter clean
+	flutter pub get
+	dart run build_runner build -d
+	cd ../
+}
+
+function run_clean(){
+	echo "Choose app need to clean:"
+	select app in "iportal2" "teacher" "core" "defailt - all"; do
+		case $app in
+			iportal2)
+				run_clean_packages iportal2
+				break
+				;;
+			teacher)
+				run_clean_packages teacher
+				break
+				;;
+			core)
+				run_clean_core
+				break
+				;;
+			*)
+				run_clean_packages iportal2
+				run_clean_packages teacher
+				run_clean_core
+				break
+				;;
+		esac
+	done
+}
+
+function pod_reset_cache() {
+	echo "================== Reset pod cache =================="
+	echo "Choose app need to reset pod cache:"
+	select app in "iportal2" "teacher"; do
+		case $app in
+			iportal2)
+				cd iportal2
+				break
+				;;
+			teacher)
+				cd teacher
+				break
+				;;
+			*)
+				echo "Invalid choice."
+				;;
+		esac
+	done
+	cd ios
+	rm -rf ~/Library/Caches/CocoaPods
+	rm -rf Pods
+	rm -rf ~/Library/Developer/Xcode/DerivedData/*
+	pod deintegrate
+	pod setup
+	pod install
+}
+
+function build_apk() {
+	echo "================== Build APK =================="
+	echo "Choose app need to build APK:"
+	select app in "iportal2" "teacher"; do
+		case $app in
+			iportal2)
+				cd iportal2
+				break
+				;;
+			teacher)
+				cd teacher
+				break
+				;;
+			*)
+				echo "Invalid choice."
+				;;
+		esac
+	done
+	flutter build apk
+	echo "Enter app version:"
+	read version
+	cp build/app/outputs/flutter-apk/app-release.apk releases/$app-$version.apk
+}
+
+function activate_script(){
+	cd $1
+	chmod +x tools
+	cd ..
+}
+
+function activate_tools_script(){
+	echo "================== Activate tools scripts =================="
+	echo "Choose app need to activate tools scripts:"
+	select app in "iportal2" "teacher" "core"; do
+		case $app in
+			iportal2)
+				activate_script iportal2
+				break
+				;;
+			teacher)
+				activate_script teacher
+				break
+				;;
+			core)
+				echo "Core does not have tools script. Not implemented yet."
+				break
+				;;
+			*)
+				echo "Invalid choice."
+				;;
+		esac
+	done
+}
+
+function menu() {
+	echo "================== Menu =================="
+	echo "1. Activate tools scripts"
+	echo "2. Build APK"
+	echo "3. Clean"
+	echo "4. Reset pod cache"
+	echo "0. Exit"
+}
+
+function main() {
+	while true; do
+		menu
+		read -p "Enter your choice: " choice
+		case $choice in
+			1)
+				activate_tools_script
+				;;
+			2)
+				build_apk
+				;;
+			3)
+				run_clean
+				;;
+			4)
+				pod_reset_cache
+				;;
+			0)
+				break
+				;;
+			*)
+				echo "Invalid choice."
+				;;
+		esac
+	done
+}
+# execute main function
+main

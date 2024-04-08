@@ -3,7 +3,6 @@ class LessonModel {
   final int number;
   final String name;
   final String teacherName;
-  final String teacherAva;
   final String description;
   final String timeStart;
   final String timeEnd;
@@ -17,7 +16,6 @@ class LessonModel {
     required this.number,
     required this.name,
     required this.teacherName,
-    required this.teacherAva,
     required this.description,
     required this.timeStart,
     required this.timeEnd,

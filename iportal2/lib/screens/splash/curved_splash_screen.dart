@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/splash/bloc/splash_cubit.dart';
 import 'package:iportal2/resources/app_colors.dart';
@@ -11,14 +13,14 @@ import '../../resources/app_strings.dart';
 
 class CurvedSplashScreen extends StatelessWidget {
   const CurvedSplashScreen({
-    Key? key, // Đảm bảo key là kiểu Key, không phải super.key
+    super.key, // Đảm bảo key là kiểu Key, không phải super.key
     required this.screensLength,
     required this.screenBuilder,
     this.nextText = AppStrings.nextText,
     this.skipText = AppStrings.skipText,
     this.textColor = const Color(0xFF181818),
     this.backgroundColor = Colors.white,
-  }) : super(key: key); // Thêm super(key: key) vào đây để tránh lỗi
+  }); // Thêm super(key: key) vào đây để tránh lỗi
 
   /// Number of screens you want to add
   final int screensLength;
@@ -113,54 +115,53 @@ class _CurvedSplashViewState extends State<CurvedSplashView> {
   @override
   Widget build(BuildContext context) {
     SizeConfig.initSize(context);
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController();
     saveData();
     return Scaffold(
-        backgroundColor: Colors.transparent,
         body: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: PageView.builder(
-                itemCount: widget.screensLength,
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentPageIndex = index;
-                  });
-                },
-                itemBuilder: (context, index) =>
-                    Center(child: widget.screenBuilder(index)),
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: CurvedSheet(
-                totalPages: widget.screensLength,
-                currentPage: currentPageIndex,
-                nextText: widget.nextText,
-                skipText: widget.skipText,
-                textColor: widget.textColor,
-                backgroundColor: widget.backgroundColor,
-                onPressedChange: () async {
-                  context.pushReplacement(LoginScreen());
-                },
-                skip: () {
-                  context.pushReplacement(LoginScreen());
-                },
-                next: () {
-                  if (_pageController.page! < 2) {
-                    _pageController.animateToPage(
-                      _pageController.page!.toInt() + 1,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeIn,
-                    );
-                  }
-                },
-              ),
-            ),
-          ],
-        ));
+      children: [
+        Align(
+          alignment: Alignment.topCenter,
+          child: PageView.builder(
+            itemCount: widget.screensLength,
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                currentPageIndex = index;
+              });
+            },
+            itemBuilder: (context, index) =>
+                Center(child: widget.screenBuilder(index)),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: CurvedSheet(
+            totalPages: widget.screensLength,
+            currentPage: currentPageIndex,
+            nextText: widget.nextText,
+            skipText: widget.skipText,
+            textColor: widget.textColor,
+            backgroundColor: widget.backgroundColor,
+            onPressedChange: () {
+              context.pushReplacement(const LoginScreen());
+            },
+            skip: () {
+              context.pushReplacement(const LoginScreen());
+            },
+            next: () {
+              if (_pageController.page! < 2) {
+                _pageController.animateToPage(
+                  _pageController.page!.toInt() + 1,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn,
+                );
+              }
+            },
+          ),
+        ),
+      ],
+    ));
   }
 }
 
@@ -190,29 +191,29 @@ class CurvedSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         color: backgroundColor,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: 100,
               child: currentPage != 2
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton(
                           onPressed: () {
-                            skip();
+                            if (currentPage != 0) {
+                              skip();
+                            }
                           },
-                          child: Text(
-                            skipText,
-                            style: const TextStyle(color: AppColors.gray400),
-                          ),
+                          child: Text(skipText,
+                              style: AppTextStyles.normal18(
+                                color: AppColors.gray400
+                                    .withOpacity(currentPage == 0 ? 0.5 : 1),
+                              )),
                         ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: getSplashDots(totalPages, currentPage)),
+                        Row(children: getSplashDots(totalPages, currentPage)),
                         TextButton(
                             onPressed: () {
                               next();
@@ -226,10 +227,9 @@ class CurvedSheet extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              style: const TextStyle(
-                                  fontFamily: 'Inter',
-                                  color: AppColors.gray500,
-                                  fontWeight: FontWeight.w600),
+                              style: AppTextStyles.semiBold18(
+                                color: AppColors.gray500,
+                              ),
                               textAlign: TextAlign.center,
                             )),
                       ],
@@ -243,18 +243,15 @@ class CurvedSheet extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: onPressedChange,
                             style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(6),
                               backgroundColor: const Color(0xFF9C292E),
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.only(top: 17, bottom: 17),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 10),
                               child: Text(
                                 'Bắt đầu ngay',
-                                style: TextStyle(
-                                    height: 0.09,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
+                                style: AppTextStyles.semiBold16(
                                     color: Colors.white),
                               ),
                             ),

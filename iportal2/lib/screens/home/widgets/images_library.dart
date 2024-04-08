@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/screens/gallery/gallery_screen.dart';
 
 class ImagesLibrary extends StatelessWidget {
   const ImagesLibrary({
@@ -43,6 +45,9 @@ class ImagesLibrary extends StatelessWidget {
                 ],
               ),
               RoundedButton(
+                onTap: () {
+                  context.push(const GalleryScreen());
+                },
                 margin: const EdgeInsets.only(right: 12),
                 padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
                 borderRadius: 12,

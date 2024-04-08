@@ -32,15 +32,13 @@ class AppBarScore extends StatelessWidget {
                       children: [
                         Text(
                           'Nguyễn Ngọc Tuyết Lan',
-                          style: AppTextStyles.normal16(
-                            color: AppColors.black,
+                          style: AppTextStyles.semiBold16(
                           ),
                         ),
                         Row(
                           children: [
                             SvgPicture.asset(
                               Assets.icons.academic,
-                              color: AppColors.gray500,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 6),
@@ -81,7 +79,7 @@ class AppBarScore extends StatelessWidget {
               Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 0),
+                    padding: const EdgeInsets.only(),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [

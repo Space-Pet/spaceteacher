@@ -5,18 +5,18 @@ import '../../resources/app_colors.dart';
 import '../../resources/app_text_styles.dart';
 
 class CheckBoxItem extends StatefulWidget {
-  final String title;
+  final String? title;
   final bool isChecked;
   final Function(bool)? onTap;
-  final String svgAssetPath; 
+  final String? svgAssetPath;
 
   const CheckBoxItem({
-    Key? key,
-    required this.title,
+    super.key,
+    this.title,
     required this.isChecked,
-    required this.svgAssetPath, 
+    this.svgAssetPath,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   _CheckBoxItemState createState() => _CheckBoxItemState();
@@ -32,12 +32,15 @@ class _CheckBoxItemState extends State<CheckBoxItem> {
         }
       },
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: widget.isChecked ? AppColors.gray400 : AppColors.gray100,
-          ),
-        ),
+        decoration: widget.svgAssetPath != null
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color:
+                      widget.isChecked ? AppColors.gray400 : AppColors.gray100,
+                ),
+              )
+            : null,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -56,10 +59,10 @@ class _CheckBoxItemState extends State<CheckBoxItem> {
                       height: 20,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                        color: widget.isChecked ? Colors.white : Colors.transparent,
+                        border: Border.all(),
+                        color: widget.isChecked
+                            ? Colors.white
+                            : Colors.transparent,
                       ),
                       child: widget.isChecked
                           ? const Padding(
@@ -75,16 +78,19 @@ class _CheckBoxItemState extends State<CheckBoxItem> {
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text(
-                      widget.title,
-                      style: AppTextStyles.normal16(fontWeight: FontWeight.w500),
+                      widget.title!,
+                      style:
+                          AppTextStyles.normal16(fontWeight: FontWeight.w500),
                     ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: SvgPicture.asset(widget.svgAssetPath), // Sử dụng giá trị của tham số này
-              ),
+              if (widget.svgAssetPath != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: SvgPicture.asset(
+                      widget.svgAssetPath!), // Sử dụng giá trị của tham số này
+                ),
             ],
           ),
         ),

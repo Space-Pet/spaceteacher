@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/app_main_layout.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:iportal2/components/input_text.dart';
 import 'package:iportal2/resources/app_strings.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/app_main_layout.dart';
+import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/authentication/forgot_password/view/forgot_password_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
-import 'package:iportal2/components/input_text.dart';
 import 'package:repository/repository.dart';
 
 import '../bloc/login_bloc.dart';
@@ -22,6 +22,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final authRepository = context.read<AuthRepository>();
     final currentUserBloc = context.read<CurrentUserBloc>();
+
     return BlocProvider(
       create: (context) => LoginBloc(
         context: context,
@@ -103,8 +104,8 @@ class _LoginViewState extends State<LoginView> {
                   right: 0,
                   child: Container(
                     padding: const EdgeInsets.only(
-                        top: 20, bottom: 20, left: 14, right: 14),
-                    height: screenHeight / 1.61,
+                        top: 6, bottom: 24, left: 14, right: 14),
+                    height: screenHeight / 1.70,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -114,21 +115,17 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     child: Column(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 20, bottom: 15),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 4),
                           child: Text(
                             AppStrings.titleLogin,
-                            style: TextStyle(
+                            style: AppTextStyles.bold16(
                               color: AppColors.textTitleLogin,
-                              fontSize: 16,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
-                              height: 0.09,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 16),
                           child: TitleAndInputText(
                               title: 'title',
                               hintText: AppStrings.account,
@@ -148,7 +145,7 @@ class _LoginViewState extends State<LoginView> {
                               }),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.only(top: 16),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -156,14 +153,11 @@ class _LoginViewState extends State<LoginView> {
                                 onTap: () {
                                   context.push(const ForgotPasswordScreen());
                                 },
-                                child: const Text(
+                                child: Text(
                                   AppStrings.forgetPassword,
-                                  style: TextStyle(
+                                  style: AppTextStyles.custom(
+                                    fontSize: 14,
                                     color: AppColors.textTitleLogin,
-                                    fontSize: 15,
-                                    fontStyle: FontStyle.italic,
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               )
@@ -186,15 +180,13 @@ class _LoginViewState extends State<LoginView> {
                                     borderRadius: BorderRadius.circular(60),
                                   ),
                                 ),
-                                child: const Padding(
-                                  padding: EdgeInsets.only(top: 17, bottom: 17),
-                                  child: Text(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 16, bottom: 16),
+                                  child: Text(   
                                     AppStrings.login,
-                                    style: TextStyle(
+                                    style: AppTextStyles.semiBold16(
                                       color: AppColors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 )),
@@ -211,9 +203,10 @@ class _LoginViewState extends State<LoginView> {
                                     height: 36,
                                   )),
                             ),
-                            const Text(
+                            Text(
                               AppStrings.or,
-                              style: TextStyle(color: AppColors.gray400),
+                              style: AppTextStyles.normal14(
+                                  color: AppColors.gray400),
                             ),
                             Expanded(
                               child: Container(
@@ -244,15 +237,12 @@ class _LoginViewState extends State<LoginView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset('assets/icons/qrcode.png'),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 5),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8),
                                     child: Text(
                                       AppStrings.qrCode,
-                                      style: TextStyle(
-                                        color: Color(0xFF1D2838),
-                                        fontSize: 14,
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
+                                      style: AppTextStyles.semiBold14(
+                                        color: AppColors.gray800,
                                       ),
                                     ),
                                   ),
@@ -261,16 +251,12 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(top: 15),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12),
                           child: Text(
-                            'iPortal version 1.0.0 (3) - 20240220',
-                            style: TextStyle(
-                              color: Color(0xFF98A1B2),
-                              fontSize: 12,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
+                            'iPortal version 1.0.0 (24) - 20240220',
+                            style: AppTextStyles.normal12(
+                              color: AppColors.gray400,
                             ),
                           ),
                         )

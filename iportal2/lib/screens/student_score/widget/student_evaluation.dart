@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/screens/student_score/widget/student_evaluation_item.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/resources.dart';
 
 class StudentEvaluation extends StatelessWidget {
@@ -26,7 +25,7 @@ class StudentEvaluation extends StatelessWidget {
                 width: 4,
               ),
               Text(
-                'Đánh giá năng lực và phẩm chất',
+                'Đánh giá hạnh kiếm',
                 style: AppTextStyles.bold16(color: AppColors.brand600),
               )
             ],
@@ -109,39 +108,6 @@ class StudentEvaluation extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: AppColors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: AppColors.gray300))),
-                        child: Text("Nhận xét",
-                            style: AppTextStyles.bold14(
-                                color: AppColors.brand600)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Text(
-                            "Trung thực trong học tập. Đoàn kết giúp đỡ bạn bè.",
-                            style: AppTextStyles.normal14(
-                                color: AppColors.gray600)),
-                      ),
-                    ],
-                  ),
-                )
               ],
             ),
           ),
@@ -233,39 +199,79 @@ class StudentEvaluation extends StatelessWidget {
                     ],
                   ),
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
+          Container(
+            padding: const EdgeInsets.all(6),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFFFEF0C7),
+                  Color(0xFFFEF0C7),
+                ],
+                stops: [
+                  0.0189,
+                  0.9356,
+                ],
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromRGBO(0, 0, 0, 0.10),
+                  offset: Offset(0.0, 5.0),
+                  blurRadius: 20.0,
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      backgroundColor: const Color(0xFFF88F33),
+                      child: SvgPicture.asset(
+                        'assets/icons/emoji-normal.svg',
+                        height: 12,
+                        width: 12,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(
+                      'Nhận xét',
+                      style: AppTextStyles.bold14(color: AppColors.brand600),
+                    )
+                  ],
+                ),
                 const SizedBox(
-                  height: 4,
+                  height: 8,
                 ),
                 Container(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: AppColors.white,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(color: AppColors.gray300))),
-                        child: Text("Nhận xét",
-                            style: AppTextStyles.bold14(
-                                color: AppColors.brand600)),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: Text(
-                            "Trung thực trong học tập. Đoàn kết giúp đỡ bạn bè.",
-                            style: AppTextStyles.normal14(
-                                color: AppColors.gray600)),
-                      ),
-                    ],
-                  ),
-                )
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      color: AppColors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromRGBO(0, 0, 0, 0.10),
+                          offset: Offset(0.0, 5.0),
+                          blurRadius: 20.0,
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                        "Trung thực trong học tập. Đoàn kết giúp đỡ bạn bè.",
+                        style:
+                            AppTextStyles.normal14(color: AppColors.gray600))),
               ],
             ),
           )

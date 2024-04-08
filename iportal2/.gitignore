@@ -43,7 +43,7 @@ app.*.map.json
 /android/app/release
 
 # Code gen from tools
-/lib/resources/gen/*
+/lib/resources/*.gen.dart
 
 # ignore all .g.dart files
 **/*.g.dart

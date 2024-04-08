@@ -1,42 +1,82 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
 
-class TimeSelectBox extends StatefulWidget {
-  const TimeSelectBox({
+class TimeSelectBoxStart extends StatefulWidget {
+  const TimeSelectBoxStart({
     super.key,
     required this.title,
     required this.date,
     required this.time,
+    required this.onDateChanged,
+    this.dateStart,
     required this.helpText,
     this.canSelectTime = true,
-    this.onSelectTime,
   });
 
   final String title;
   final DateTime date;
+  final DateTime? dateStart;
+  final Function(DateTime) onDateChanged;
   final TimeOfDay time;
   final String helpText;
   final bool canSelectTime;
-  final Future<void> Function(TimeOfDay)? onSelectTime;
 
   @override
-  State<TimeSelectBox> createState() => TimeSelectBoxState();
+  State<TimeSelectBoxStart> createState() => TimeSelectBoxStartState();
 }
 
-class TimeSelectBoxState extends State<TimeSelectBox> {
+class TimeSelectBoxStartState extends State<TimeSelectBoxStart> {
   TimeOfDay? selectedTime;
-  DateFormat formatDate = DateFormat('EEEE ,dd/MM/yyyy', 'vi');
-  DateTime now = DateTime.now().add(Duration(days: 1));
+  DateFormat formatDate = DateFormat('EEEE, dd/MM/yyyy', 'vi');
+  DateTime now = DateTime.now().add(const Duration(days: 1));
   late String datePicked;
   late String dataTime;
+
   Future<void> _selectTime() async {
-    final TimeOfDay? pickedTime = await showTimePicker(
+    final TimeOfDay? pickedTime = await showModalBottomSheet(
       context: context,
-      initialTime: selectedTime ?? TimeOfDay.now(),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 200,
+          child: Column(
+            children: [
+              Expanded(
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.time,
+                  initialDateTime: selectedTime != null
+                      ? DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime!.hour,
+                          selectedTime!.minute,
+                        )
+                      : DateTime(
+                          widget.date.year,
+                          widget.date.month,
+                          widget.date.day,
+                          widget.time.hour,
+                          widget.time.minute,
+                        ),
+                  onDateTimeChanged: (DateTime newDateTime) {
+                    setState(() {
+                      selectedTime = TimeOfDay.fromDateTime(newDateTime);
+                      dataTime =
+                          '${selectedTime!.hourOfPeriod}:${selectedTime!.minute} ${selectedTime!.period == DayPeriod.am ? 'AM' : 'PM'}';
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
+
     if (pickedTime != null && pickedTime != selectedTime) {
       setState(() {
         selectedTime = pickedTime;
@@ -80,36 +120,34 @@ class TimeSelectBoxState extends State<TimeSelectBox> {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    if (widget.canSelectTime) {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        helpText: widget.helpText,
-                        initialEntryMode: DatePickerEntryMode.calendarOnly,
-                        cancelText: 'Trở về',
-                        confirmText: 'Xong',
-                        initialDate: formatDate.parse(datePicked),
-                        firstDate: DateTime(now.year, now.month, now.day - 7),
-                        lastDate: DateTime(now.year, now.month, now.day + 7),
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              colorScheme: const ColorScheme.light(
-                                primary: AppColors.brand600,
-                                secondary: AppColors.white,
-                              ),
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      helpText: widget.helpText,
+                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                      cancelText: 'Trở về',
+                      confirmText: 'Xong',
+                      initialDate: formatDate.parse(datePicked),
+                      firstDate: DateTime(now.year, now.month, now.day - 1),
+                      lastDate: DateTime(now.year, now.month, now.year + 1),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: AppColors.brand600,
+                              secondary: AppColors.white,
                             ),
-                            child: child!,
-                          );
-                        },
-                      );
-                      if (pickedDate != null) {
-                        String formattedDate = formatDate.format(pickedDate);
-                        setState(() {
-                          datePicked = formattedDate;
-                          _selectTime();
-                        });
-                      } else {}
-                    }
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (pickedDate != null) {
+                      String formattedDate = formatDate.format(pickedDate);
+                      setState(() {
+                        datePicked = formattedDate;
+                      });
+                      widget.onDateChanged(pickedDate);
+                    } else {}
                   },
                   child: Row(
                     children: [

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iportal2/components/buttons/buttons.dart';
+import 'package:iportal2/components/dropdown/dropdown.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/student_score/student_score_screen.dart';
+import 'package:iportal2/screens/student_score/widget/select_button/select_button_year/select_option_button_year.dart';
 
 // Step 1: Define a model for list items
 class ListItem<T> {
@@ -15,69 +20,202 @@ class BottomSheetSelectYear extends StatefulWidget {
     required this.scrollController,
     required this.onSelectedOption,
     required this.optionList,
-    required this.selectedOption,
+    this.selectedOption,
   });
 
   final ScrollController scrollController;
-  final String selectedOption;
+  final ViewScoreSelectedParam? selectedOption;
   final List<String> optionList;
-  final void Function(String) onSelectedOption;
+  final void Function(ViewScoreSelectedParam) onSelectedOption;
 
   @override
   State<BottomSheetSelectYear> createState() => _BottomSheetSelectYearState();
 }
 
 class _BottomSheetSelectYearState extends State<BottomSheetSelectYear> {
-  // Convert the optionList to a list of ListItem objects
-  List<ListItem<String>> _items = [];
+  String selectedYear = '';
+  String selectedTerm = '';
+  String selectedScoreType = '';
 
   @override
   void initState() {
     super.initState();
-    _items = widget.optionList
-        .map((option) =>
-            ListItem(option, isSelected: option == widget.selectedOption))
-        .toList();
+    selectedYear = widget.selectedOption != null
+        ? widget.selectedOption!.selectedYear
+        : '';
+    selectedTerm = widget.selectedOption != null
+        ? TermType.values
+            .firstWhere((element) =>
+                element.getValue() == widget.selectedOption!.selectedTerm)
+            .text()
+        : TermType.term1.text();
+    selectedScoreType = widget.selectedOption != null
+        ? widget.selectedOption!.selectedScoreType
+        : 'MOET';
   }
+
+  void onSelectedOptionBottom() {
+    if (TermType.values
+        .map((e) => e.getValue())
+        .toList()
+        .contains(selectedTerm)) {
+      ViewScoreSelectedParam selectedParam = ViewScoreSelectedParam(
+          selectedYear: selectedYear,
+          selectedScoreType: selectedScoreType,
+          selectedTerm: selectedTerm);
+      print('select parram 1 $selectedParam');
+      widget.onSelectedOption(selectedParam);
+    } else {
+      ViewScoreSelectedParam selectedParam = ViewScoreSelectedParam(
+          selectedYear: selectedYear,
+          selectedScoreType: selectedScoreType,
+          selectedTerm: TermType.values
+              .firstWhere((element) => element.text() == selectedTerm)
+              .getValue());
+      print('select parram 2 $selectedParam');
+      widget.onSelectedOption(selectedParam);
+    }
+  }
+
+  void onUpdateYear(String value) {
+    print('year $value');
+    setState(() {
+      selectedYear = value;
+    });
+  }
+
+  void onUpdateTerm(String value) {
+    final String updateValue = TermType.values
+        .firstWhere((element) => element.text() == value)
+        .getValue();
+    print('Term value $updateValue');
+    setState(() {
+      selectedTerm = updateValue;
+    });
+  }
+
+  void onUpdateScoreType(String value) {
+    print('Type $value');
+    setState(() {
+      selectedScoreType = value;
+    });
+  }
+
+  void unSelectOption() {}
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 32),
-        child: ListView.separated(
-          controller: widget.scrollController,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () {
-              debugPrint('setState called');
-              setState(() {
-                for (var i = 0; i < _items.length; i++) {
-                  _items[i].isSelected = false;
-                }
-                _items[index].isSelected = true;
-              });
-              widget.onSelectedOption(_items[index].data);
-            },
-            child: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.black12,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Bộ lọc',
+                  style: AppTextStyles.bold18(color: AppColors.black24),
+                ),
+                RoundedButton(
+                  onTap: unSelectOption,
+                  padding: const EdgeInsets.all(0),
+                  buttonColor: Colors.transparent,
+                  child: SvgPicture.asset(
+                    'assets/icons/reset.svg',
+                    height: 24,
+                    width: 24,
+                    colorFilter: const ColorFilter.mode(
+                        Color.fromARGB(255, 83, 83, 83), BlendMode.srcIn),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Chương trình học',
+                  style: AppTextStyles.semiBold16(color: AppColors.gray700),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownButtonComponent(
+                    selectedOption:
+                        selectedScoreType != '' ? selectedScoreType : null,
+                    onUpdateOption: onUpdateScoreType,
+                    onUnselectOption: unSelectOption,
+                    hint: 'Chọn chương trình học',
+                    optionList: ScoreType.values.map((e) => e.text()).toList(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  'Năm học',
+                  style: AppTextStyles.semiBold16(color: AppColors.gray700),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownButtonComponent(
+                    selectedOption: selectedYear != '' ? selectedYear : null,
+                    onUpdateOption: onUpdateYear,
+                    onUnselectOption: unSelectOption,
+                    hint: 'Chọn năm học',
+                    optionList: widget.optionList,
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  'Học kỳ',
+                  style: AppTextStyles.semiBold16(color: AppColors.gray700),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DropdownButtonComponent(
+                    selectedOption: selectedTerm != '' ? selectedTerm : null,
+                    onUpdateOption: onUpdateTerm,
+                    onUnselectOption: unSelectOption,
+                    hint: 'Chọn học kỳ',
+                    optionList: TermType.values.map((e) => e.text()).toList(),
+                  ),
+                ),
+              ],
+            )),
+            SizedBox(
+              height: 44,
+              child: RoundedButton(
+                onTap: onSelectedOptionBottom,
+                borderRadius: 70,
+                padding: EdgeInsets.zero,
+                buttonColor: AppColors.red90001,
+                child: Text(
+                  'Áp dụng',
+                  style: AppTextStyles.semiBold16(
+                    color: AppColors.white,
                   ),
                 ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 5),
-              child: Text(
-                _items[index].data,
-                style: TextStyle(
-                    color: _items[index].isSelected
-                        ? AppColors.primaryRedColor
-                        : AppColors.brand600),
-              ),
             ),
-          ),
-          separatorBuilder: (context, index) => const SizedBox(height: 0),
-          itemCount: _items.length,
+          ],
         ),
       ),
     );

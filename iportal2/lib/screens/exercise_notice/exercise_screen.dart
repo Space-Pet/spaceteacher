@@ -1,28 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_card.dart';
+import 'package:iportal2/components/empty_screen.dart';
+import 'package:iportal2/components/select_date.dart';
+import 'package:iportal2/screens/exercise_notice/bloc/exercise_bloc.dart';
+import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/select_popup_sheet/select_option_button.dart';
+import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/components/back_ground_container.dart';
+import 'package:network_data_source/network_data_source.dart';
+import 'package:repository/repository.dart';
 
-class ExerciseScreen extends StatefulWidget {
+enum SubjectType {
+  all,
+  math,
+  physics,
+  chemistry,
+  english,
+}
+
+extension SubjectTypeX on SubjectType {
+  String text() {
+    switch (this) {
+      case SubjectType.all:
+        return "Tất cả các môn";
+      case SubjectType.math:
+        return "Toán";
+      case SubjectType.physics:
+        return "Vật lý";
+      case SubjectType.chemistry:
+        return "Hóa học";
+      case SubjectType.english:
+        return "Tiếng Anh";
+      default:
+        return "Tất cả các môn";
+    }
+  }
+}
+
+class ExerciseScreen extends StatelessWidget {
   const ExerciseScreen({super.key});
   static const routeName = '/exercise';
 
   @override
-  State<ExerciseScreen> createState() => ExerciseScreenState();
+  Widget build(BuildContext context) {
+    DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
+
+    return BlocProvider(
+      create: (context) => ExerciseBloc(
+        todayString: formatDateDrill.format(DateTime.now()),
+        appFetchApiRepo: context.read<AppFetchApiRepository>(),
+        currentUserBloc: context.read<CurrentUserBloc>(),
+      ),
+      child:
+          BlocBuilder<ExerciseBloc, ExerciseState>(builder: (context, state) {
+        final exerciseList = state.exerciseDataList;
+        return ExerciseScreenView(exerciseList: exerciseList);
+      }),
+    );
+  }
 }
 
-class ExerciseScreenState extends State<ExerciseScreen> {
-  String selectedSubject = "Tất cả các môn";
+class ExerciseScreenView extends StatefulWidget {
+  const ExerciseScreenView({
+    super.key,
+    required this.exerciseList,
+  });
+  final ExerciseData exerciseList;
+  static const routeName = '/exercise';
+
+  @override
+  State<ExerciseScreenView> createState() => ExerciseScreenViewState();
+}
+
+class ExerciseScreenViewState extends State<ExerciseScreenView> {
+  String selectedSubject = SubjectType.all.text();
 
   @override
   void initState() {
     super.initState();
-    selectedSubject = "Tất cả các môn";
+    selectedSubject = SubjectType.all.text();
   }
 
   void handleSelectedOptionChanged(String newOption) {
@@ -33,20 +95,22 @@ class ExerciseScreenState extends State<ExerciseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final exerciseBloc = context.read<ExerciseBloc>();
+
     return BackGroundContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScreenAppBar(
-            title: 'Báo bài',
+            title: 'Sổ báo bài',
             canGoback: true,
             onBack: () {
               context.pop();
             },
           ),
-          Flexible(
+          Expanded(
             child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 18),
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: AppColors.white,
@@ -57,16 +121,25 @@ class ExerciseScreenState extends State<ExerciseScreen> {
               ),
               child: Column(
                 children: [
-                  const SelectDate(),
+                  SelectDate(
+                    onDatePicked: (date) {
+                      exerciseBloc.add(ExerciseSelectDate(datePicked: date));
+                    },
+                  ),
                   const SizedBox(height: 16),
                   SelectSubject(
+                      optionList: widget.exerciseList.getSubjectList(),
                       onSelectedOptionChanged: handleSelectedOptionChanged),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: ExerciseItemList(
-                      selectedSubject: selectedSubject,
-                      exercise: exercises,
-                    ),
+                    child: widget.exerciseList.exerciseDataList.isEmpty
+                        ? const EmptyScreen(text: 'Sổ báo bài trống')
+                        : SingleChildScrollView(
+                            child: ExerciseItemList(
+                              selectedSubject: selectedSubject,
+                              exercise: widget.exerciseList.exerciseDataList,
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -78,125 +151,20 @@ class ExerciseScreenState extends State<ExerciseScreen> {
   }
 }
 
-class SelectDate extends StatefulWidget {
-  const SelectDate({super.key});
-
-  @override
-  State<SelectDate> createState() => _SelectDateState();
-}
-
-class _SelectDateState extends State<SelectDate> {
-  DateTime now = DateTime.now();
-
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
-  late String datePicked;
-
-  @override
-  void initState() {
-    super.initState();
-    datePicked = formatDate.format(now);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: context,
-          helpText: 'Chọn ngày',
-          cancelText: 'Trở về',
-          confirmText: 'Xong',
-          initialDate: formatDate.parse(datePicked),
-          firstDate: DateTime(now.year, now.month, now.day - 7),
-          lastDate: DateTime(now.year, now.month, now.day + 7),
-          builder: (context, child) {
-            return Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(
-                  primary: AppColors.brand600,
-                  secondary: AppColors.white,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
-
-        if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
-          setState(() {
-            datePicked = formattedDate;
-          });
-        } else {}
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: AppColors.white,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: AppColors.blueGray100),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          shadows: const [
-            BoxShadow(
-              color: AppColors.gray9000c,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.calendar_month_outlined,
-                    size: 20,
-                    color: AppColors.gray500,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      child: Text(
-                        datePicked,
-                        style: AppTextStyles.normal16(color: AppColors.gray500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 24,
-              color: AppColors.gray900,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class SelectSubject extends StatefulWidget {
-  const SelectSubject({super.key, required this.onSelectedOptionChanged});
+  const SelectSubject({
+    super.key,
+    required this.onSelectedOptionChanged,
+    required this.optionList,
+  });
   final Function(String) onSelectedOptionChanged;
+  final List<String> optionList;
 
   @override
   State<SelectSubject> createState() => _SelectSubjectState();
 }
 
 class _SelectSubjectState extends State<SelectSubject> {
-  void handleSelectedOptionChanged(String newOption) {
-    widget.onSelectedOptionChanged(newOption);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -226,7 +194,8 @@ class _SelectSubjectState extends State<SelectSubject> {
             ],
           ),
           SelectPopupSheet(
-            onSelectedOptionChanged: handleSelectedOptionChanged,
+            optionList: widget.optionList,
+            onSelectedOptionChanged: widget.onSelectedOptionChanged,
           )
         ],
       ),

@@ -3,7 +3,7 @@ class AppStrings {
   static const String skipText = 'Bỏ qua';
   static const String login = 'Đăng nhập';
   static const String forgetPassword = 'Quên mật khẩu?';
-  static const String titleLogin = 'Phụ huynh/Học sinh';
+  static const String titleLogin = 'Cha mẹ học sinh/Học sinh';
   static const String titleForgotPassword = 'Bạn quên mật khẩu?';
   static const String account = 'Tài khoản';
   static const String next = 'Tiếp theo';

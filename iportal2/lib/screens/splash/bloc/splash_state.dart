@@ -11,6 +11,7 @@ extension SplashStatusX on SplashStatus {
 class SplashState extends Equatable {
   const SplashState({this.status = SplashStatus.init});
   final SplashStatus status;
+
   @override
   List<Object> get props => [status];
 
@@ -23,8 +24,7 @@ class SplashState extends Equatable {
   }
 }
 
-class SplashStateCleanToken extends Equatable{
-
+class SplashStateCleanToken extends Equatable {
   const SplashStateCleanToken();
   @override
   List<Object> get props => [];

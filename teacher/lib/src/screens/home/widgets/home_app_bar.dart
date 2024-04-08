@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';

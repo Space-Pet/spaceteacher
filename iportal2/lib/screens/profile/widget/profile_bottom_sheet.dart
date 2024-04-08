@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProfileBottomSheet extends StatefulWidget {
   final VoidCallback? onIndexChanged;
 
-  const ProfileBottomSheet({Key? key, this.onIndexChanged}) : super(key: key);
+  const ProfileBottomSheet({super.key, this.onIndexChanged});
 
   @override
   _ProfileBottomSheetState createState() => _ProfileBottomSheetState();
@@ -91,7 +91,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                                       radius: 25,
                                       backgroundColor: Colors.transparent,
                                       child: Image.asset(
-                                        'assets/images/avatar.png',
+                                        'assets/images/default-user.png',
                                       ),
                                     ),
                                     const SizedBox(width: 8),
@@ -102,7 +102,6 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                                         Text(
                                           'Nguyễn Ngọc Tuyết Lan',
                                           style: AppTextStyles.semiBold12(
-                                            color: AppColors.black,
                                             height: 18 / 12,
                                           ),
                                         ),
@@ -110,16 +109,13 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                                           children: [
                                             SvgPicture.asset(
                                               Assets.icons.academic,
-                                              color: AppColors.black,
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 5),
                                               child: Text(
                                                 'UKA Vũng Tàu',
-                                                style: AppTextStyles.normal12(
-                                                  color: AppColors.black,
-                                                ),
+                                                style: AppTextStyles.normal12(),
                                               ),
                                             ),
                                             Padding(
@@ -139,9 +135,7 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                                                   left: 5),
                                               child: Text(
                                                 '6.1',
-                                                style: AppTextStyles.normal12(
-                                                  color: AppColors.black,
-                                                ),
+                                                style: AppTextStyles.normal12(),
                                               ),
                                             ),
                                           ],

@@ -11,13 +11,11 @@ class FeatureItem extends StatelessWidget {
     required this.isPinned,
     required this.isUpdatePin,
     required this.isKinderGarten,
-    this.gradeLevel,
     this.isPinnedList = false,
     this.isInBottomSheet = false,
   });
 
   final FeatureModel feature;
-  final FeatureGradeLevel? gradeLevel;
   final bool isPinned;
   final bool isUpdatePin;
   final bool isPinnedList;
@@ -26,7 +24,7 @@ class FeatureItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = SizeUtils.width - (isInBottomSheet ? 40 : 32);
+    final w = SizeUtils.width - (isInBottomSheet ? 40 : 8);
 
     final iconAction = isPinnedList
         ? 'close-gray-circle'
@@ -62,7 +60,7 @@ class FeatureItem extends StatelessWidget {
                         ),
                   child: Center(
                       child: SvgPicture.asset(
-                    'assets/icons/features/${isKinderGarten ? feature.preSIcon : feature.highSIcon}.svg',
+                    'assets/icons/features/${feature.icon}.svg',
                   )),
                 ),
               ),

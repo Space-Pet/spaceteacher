@@ -1,12 +1,18 @@
 import 'package:core/common/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/screens/bus/bus_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
+import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
+import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/home/home_navigator.dart';
+import 'package:iportal2/screens/home/models/feature_list_model.dart';
 import 'package:iportal2/screens/home/models/feature_model.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/current_pinned_feature.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/list_feature.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
+import 'package:iportal2/screens/menu/menu_screen.dart';
+import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/student_score/student_score_screen_main.dart';
@@ -57,7 +63,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
       FeatureModel fDefault = defaultList[i];
       FeatureModel fTemp = tempList[i];
 
-      if (fDefault.id != fTemp.id ||
+      if (fDefault.key != fTemp.key ||
           fDefault.name != fTemp.name ||
           fDefault.hasPinned != fTemp.hasPinned) {
         return true;
@@ -66,7 +72,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
     return false;
   }
 
-  void onTapFeature(int id, bool status) {
+  void onTapFeature(FeatureKey key, bool status) {
     if (isUpdatePin) {
       if (status) {
         if (tempPinnedFeatures.length == 7) {
@@ -75,9 +81,10 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
           return;
         }
 
-        final featureAdd = features
-            .firstWhere((element) => element.id == id)
-            .copyWith(hasPinned: status);
+        final featureAdd =
+            (widget.isKinderGarten ? preSFeatures : hihgSFeatures)
+                .firstWhere((element) => element.key == key)
+                .copyWith(hasPinned: status);
 
         final newPinnedList = List<FeatureModel>.from(tempPinnedFeatures);
         newPinnedList.add(featureAdd);
@@ -87,7 +94,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
         });
       } else {
         final newPinnedList =
-            tempPinnedFeatures.where((element) => element.id != id).toList();
+            tempPinnedFeatures.where((element) => element.key != key).toList();
         setState(() {
           tempPinnedFeatures = newPinnedList;
         });
@@ -95,30 +102,62 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
     } else {
       Navigator.of(context).pop();
 
-      switch (id) {
-        case 1:
+      switch (key) {
+        case FeatureKey.registerNotebook:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: RegisterNoteBoookScreen.routeName);
           break;
 
-        case 4:
+        // case FeatureKey.bus:
+        //   homeNavigatorKey.currentContext
+        //       ?.pushNamed(routeName: BusScreen.routeName);
+        //   break;
+
+        case FeatureKey.instructionNotebook:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: ExerciseScreen.routeName);
           break;
 
-        case 5:
+        case FeatureKey.onLeave:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: OnLeaveScreen.routeName);
           break;
 
-        case 6:
+        case FeatureKey.scores:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: StudentScoreScreenMain.routeName);
+          break;
+        case FeatureKey.comment:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: StudentScoreScreenMain.routeName);
           break;
 
-        case 9:
+        case FeatureKey.phoneBook:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: PhoneBookScreen.routeName);
+          break;
+
+        case FeatureKey.health:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: NutritionScreen.routeName);
+          break;
+
+        case FeatureKey.gallery:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: GalleryScreen.routeName);
+          break;
+
+        case FeatureKey.menu:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: MenuScreen.routeName);
+          break;
+        case FeatureKey.bus:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: BusScreen.routeName);
+          break;
+        case FeatureKey.tariff:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: FeePlanScreen.routeName);
           break;
 
         default:

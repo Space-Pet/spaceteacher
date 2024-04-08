@@ -1,6 +1,7 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 
 import 'package:iportal2/screens/exercise_notice/widgets/select_popup_sheet/bottom_sheet_select.dart';
 import 'package:iportal2/resources/app_colors.dart';
@@ -9,26 +10,23 @@ import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
 
 class SelectPopupSheet extends StatefulWidget {
-  const SelectPopupSheet({super.key, required this.onSelectedOptionChanged});
+  const SelectPopupSheet(
+      {super.key,
+      required this.onSelectedOptionChanged,
+      required this.optionList});
   final Function(String) onSelectedOptionChanged;
+  final List<String> optionList;
 
   @override
   State<SelectPopupSheet> createState() => _SelectPopupSheetState();
 }
 
 class _SelectPopupSheetState extends State<SelectPopupSheet> {
-  String selectedOption = "Tất cả các môn";
-  List<String> optionList = [
-    "Tất cả các môn",
-    "Toán",
-    "Vật lý",
-    "Hóa học",
-    "Tiếng Anh"
-  ];
+  String selectedOption = SubjectType.all.text();
   @override
   void initState() {
     super.initState();
-    selectedOption = "Tất cả các môn";
+    selectedOption = SubjectType.all.text();
   }
 
   void updateSelectedOption(String newOption) async {
@@ -55,7 +53,7 @@ class _SelectPopupSheetState extends State<SelectPopupSheet> {
             double bottomSheetOffset,
           ) =>
               BottomSheetSelect(
-            optionList: optionList,
+            optionList: widget.optionList,
             scrollController: scrollController,
             onSelectedOption: updateSelectedOption,
             selectedOption: selectedOption,

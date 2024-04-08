@@ -34,14 +34,13 @@ class _SwitchSettingState extends State<SwitchSetting> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10),
+                padding: const EdgeInsets.only(left: 10, top: 0),
                 child: Row(
                   children: [
                     SvgPicture.asset(
                       widget.iconAsset,
                       height: 20,
                       width: 20,
-                      color: AppColors.black,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
@@ -55,8 +54,8 @@ class _SwitchSettingState extends State<SwitchSetting> {
               ),
               if (widget.onPressed == null)
                 Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
+                  scale: 0.7,
+                  child: Switch.adaptive(
                     value: isSwitched,
                     onChanged: (value) {
                       setState(() {
@@ -66,8 +65,6 @@ class _SwitchSettingState extends State<SwitchSetting> {
                     activeTrackColor: AppColors.green,
                     activeColor: AppColors.white,
                     inactiveThumbColor: AppColors.white,
-                    inactiveTrackColor: AppColors.gray300,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               if (widget.onPressed != null)
@@ -90,7 +87,7 @@ class _SwitchSettingState extends State<SwitchSetting> {
           ),
           if (widget.showDottedLine)
             const Padding(
-              padding: EdgeInsets.only(top: 18),
+              padding: EdgeInsets.only(top: 5),
               child: SizedBox(
                 width: double.infinity,
                 child: DottedLine(

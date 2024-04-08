@@ -89,17 +89,17 @@ class TitleAndInputText extends StatelessWidget {
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: isValid ? AppColors.gray300 : redColor),
+                  color: isValid ? AppColors.gray300 : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide:
-                  BorderSide(width: 1, color: isValid ? Colors.blue : redColor),
+                  BorderSide(color: isValid ? Colors.blue : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: isValid ? AppColors.gray300 : redColor),
+                  color: isValid ? AppColors.gray300 : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             hintText: hintText,
@@ -162,7 +162,6 @@ class ChooseTypeButton extends StatelessWidget {
                 borderRadius: borderRadius ?? BorderRadius.circular(4),
                 color: Colors.white,
                 border: Border.all(
-                    width: 1,
                     color: isValid ? Colors.grey : const Color(0xffCE2D30))),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

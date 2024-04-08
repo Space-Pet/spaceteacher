@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
+import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
+import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/home/home_screen.dart';
 import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
+import 'package:iportal2/screens/menu/menu_screen.dart';
+import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
+import 'package:iportal2/screens/student_score/student_score_screen_main.dart';
 
 class CustomRouter {
   static PageRouteBuilder transitionAnimation({
@@ -24,7 +29,6 @@ class CustomRouter {
         ).animate(anim),
         child: child,
       ),
-      transitionDuration: const Duration(milliseconds: 500),
     );
   }
 
@@ -82,6 +86,26 @@ class CustomRouter {
         return transitionAnimation(
             child: const BusScreen(), routeName: BusScreen.routeName);
 
+      case FeePlanScreen.routeName:
+        return transitionAnimation(
+            child: const FeePlanScreen(), routeName: FeePlanScreen.routeName);
+
+      case MenuScreen.routeName:
+        return transitionAnimation(
+            child: const MenuScreen(), routeName: MenuScreen.routeName);
+
+      case GalleryScreen.routeName:
+        return transitionAnimation(
+            child: const GalleryScreen(), routeName: GalleryScreen.routeName);
+
+      case NutritionScreen.routeName:
+        return transitionAnimation(
+            child: const NutritionScreen(),
+            routeName: NutritionScreen.routeName);
+      case StudentScoreScreenMain.routeName:
+        return transitionAnimation(
+            child: const StudentScoreScreenMain(),
+            routeName: StudentScoreScreenMain.routeName);
       default:
         assert(false, 'Need to implement ${settings.name}');
         return null;

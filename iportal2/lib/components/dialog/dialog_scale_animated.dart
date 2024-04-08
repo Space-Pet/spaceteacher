@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DialogScaleAnimated extends StatefulWidget {
   const DialogScaleAnimated({
     super.key,
     required this.title,
     required this.content,
+    this.isLink = false,
+    this.link = '',
   });
 
   final String title;
   final String content;
+  final bool isLink;
+  final String link;
 
   @override
   State<StatefulWidget> createState() => DialogScaleAnimatedState();
@@ -81,22 +86,32 @@ class DialogScaleAnimatedState extends State<DialogScaleAnimated>
                         horizontal: 24,
                         vertical: 16,
                       ),
-                      child: Center(
-                        child: Text(
-                          widget.content,
-                          textAlign: TextAlign.center,
-                          style:
-                              AppTextStyles.normal14(color: AppColors.gray800),
+                      child: InkWell(
+                        onTap: () async {
+                          launchUrl(
+                            Uri.parse(widget.link),
+                            mode: LaunchMode.inAppBrowserView,
+                          );
+                        },
+                        child: Center(
+                          child: Text(
+                            widget.content,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.normal14(
+                                color: widget.isLink
+                                    ? AppColors.brand600
+                                    : AppColors.gray800),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
                     },
                     child: SizedBox(
-                      height: 40,
+                      height: 50,
                       child: Center(
                         child: Text(
                           'Đóng',

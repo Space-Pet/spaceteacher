@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -9,8 +11,6 @@ abstract class AbstractDioClient with TokenManagementMixin {
   init({required String baseUrl}) {
     dio.interceptors.add(InterceptorsWrapper(
       onError: (error, handler) async {
-        RequestOptions origin = error.requestOptions;
-
         // if (unauthenCall(error.response?.statusCode)) {
         //   await refreshTokenCall();
         //   // handler.resolve(await dio.request(origin.path, options: origin));
@@ -48,7 +48,15 @@ abstract class AbstractDioClient with TokenManagementMixin {
   }
 
   void setHeader() {
-    dio.options.headers["authorization"] = accessToken.isNotEmpty ? tokenFormat : accessToken;
+    dio.options.headers["authorization"] =
+        accessToken.isNotEmpty ? tokenFormat : accessToken;
+
+    const parnerToken =
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTczMzE2ODgsImV4cCI6MTY4ODg2NzY4OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.3PXXeua7B4UfGhvH4s8QWKCzf5w0M_uGUODs7-wXj_g';
+
+    dio.options.headers["Parter-Token"] = parnerToken;
+
+    // accessToken.isNotEmpty ? tokenFormat : accessToken;
   }
 
   String get tokenFormat => accessToken;
@@ -63,9 +71,15 @@ abstract class AbstractDioClient with TokenManagementMixin {
     String url, {
     Json? requestBody,
     Json? queryParameters,
+    Json? headers,
   }) async {
     try {
-      Response response = await dio.get(url, data: requestBody, queryParameters: queryParameters);
+      Response response = await dio.get(
+        url,
+        data: requestBody,
+        queryParameters: queryParameters,
+        options: headers != null ? Options(headers: headers) : null,
+      );
       final data = response.data;
       return data as Json;
     } on DioError {
@@ -252,5 +266,87 @@ abstract class AbstractDioClient with TokenManagementMixin {
     } catch (e) {
       throw Exception('Failed to upload file: $e');
     }
+  }
+}
+
+class RestApiClient {
+  RestApiClient({
+    required this.dio,
+  });
+
+  final Dio dio;
+
+  Future<Json> doHttpGet(
+    String url, {
+    Json? requestBody,
+    Json? queryParameters,
+    Json? headers,
+  }) async {
+    try {
+      Response response = await dio.get(
+        url,
+        data: requestBody,
+        queryParameters: queryParameters,
+        options: headers != null ? Options(headers: headers) : null,
+      );
+      final data = response.data;
+      return data as Json;
+    } on DioError {
+      throw Exception();
+    }
+  }
+
+  Future<Json> doHttpPost({
+    required String url,
+    Json? requestBody,
+    Json? queryParameters,
+  }) async {
+    Response response = await dio.post(
+      url,
+      data: requestBody,
+      queryParameters: queryParameters,
+    );
+
+    return response.data as Json;
+  }
+
+  Future<Json> doHttpPut({
+    required String url,
+    Json? requestBody,
+    Json? queryParameters,
+  }) async {
+    Response response = await dio.put(
+      url,
+      data: requestBody,
+      queryParameters: queryParameters,
+    );
+
+    return response.data as Json;
+  }
+
+  Future<Json> doHttpDelete({
+    required String url,
+    Json? requestBody,
+    Json? queryParameters,
+  }) async {
+    Response response = await dio.delete(
+      url,
+      data: requestBody,
+      queryParameters: queryParameters,
+    );
+
+    return response.data as Json;
+  }
+
+  Future<Json> uploadFile({
+    required String url,
+    required FormData formData,
+  }) async {
+    Response response = await dio.post(
+      url,
+      data: formData,
+    );
+
+    return response.data as Json;
   }
 }

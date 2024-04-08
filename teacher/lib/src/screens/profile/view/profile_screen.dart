@@ -2,7 +2,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/components/back_ground_container.dart';
-import 'package:teacher/model/pupil_model.dart';
 import 'package:teacher/model/user_info.dart';
 
 import 'package:teacher/repository/student_repository/student_repository.dart';

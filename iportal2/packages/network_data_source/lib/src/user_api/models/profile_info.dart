@@ -1,5 +1,6 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
 
 import 'package:local_data_source/local_data_source.dart';
 
@@ -24,6 +25,7 @@ class ProfileInfo {
   final int semester;
   final Children children;
   final TrainingLevel cap_dao_tao;
+  
   ProfileInfo({
     required this.name,
     required this.user_key,
@@ -105,9 +107,6 @@ class ProfileInfo {
   // sna -> SNA
   // iec -> IEC
   // iSchool -> Ischool
-
-
-  
 
   bool isUK() {
     return school_brand == 'uka';

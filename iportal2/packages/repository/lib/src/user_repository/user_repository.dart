@@ -1,44 +1,6 @@
 import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 
-enum Position {
-  GN,
-  TK,
-  QLK,
-}
-
-extension TextProfile on Position {
-  String get name {
-    switch (this) {
-      case Position.GN:
-        return 'Giao nhận';
-      case Position.QLK:
-        return 'Quản lý kho';
-      case Position.TK:
-        return 'Thủ kho';
-      default:
-        return 'Không xác định';
-    }
-  }
-}
-
-// extension ProfileInfoExtensions on ProfileInfo {
-//   Position get position {
-//     switch (strPosition) {
-//       case "GN":
-//         return Position.GN;
-//       case "TK":
-//         return Position.TK;
-//       case "QLK":
-//         return Position.QLK;
-//       default:
-//         throw Exception("Invalid position value: $strPosition");
-//     }
-//   }
-//   bool get isTK => position == Position.TK;
-//   bool get isQLK => position == Position.QLK;
-//   bool get isGN => position == Position.GN;
-// }
 class UserRepository {
   UserRepository({
     required UserApi userApi,
@@ -97,7 +59,8 @@ class UserRepository {
           mobile: user.children.url_image.mobile,
         ),
       ),
-      cap_dao_tao: LocalTrainingLevel(id: user.cap_dao_tao.id, name: user.cap_dao_tao.name),
+      cap_dao_tao: LocalTrainingLevel(
+          id: user.cap_dao_tao.id, name: user.cap_dao_tao.name),
     );
 
     await _userLocalStorage.saveUser(localUser);
@@ -105,7 +68,10 @@ class UserRepository {
 
   Future clearLocalUser() => _userLocalStorage.clearUser();
 
-  Future<bool> changePassword({required String oldPassword, required String newPassword, required String confirmPassword}) async {
+  Future<bool> changePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required String confirmPassword}) async {
     try {
       bool isSuccess = await _userApi.changePassword(
         oldPassword: oldPassword,
@@ -123,31 +89,26 @@ class UserRepository {
     }
   }
 
-  Future<bool> updateProfile({
-    required String phone,
-    required String position,
-    required String gender,
-  }) async {
+  Future<Map<String, dynamic>?> updateProfileStudent(
+      {required String phone,
+      required String motherName,
+      required String fatherPhone,
+      required String pupil_id}) async {
     try {
-      bool isSuccess = await _userApi.updateProfile(
-        phone: phone,
-        position: position,
-        gender: gender,
-      );
-      if (isSuccess) {
-        return true;
-      } else {
-        return false;
-      }
+     final data = await _userApi.updateProfile(
+          phone: phone,
+          fatherPhone: fatherPhone,
+          motherName: motherName,
+          pupil_id: pupil_id);
+      return data;
     } catch (e) {
-      throw UpdataProfileFailure();
+      return null;
     }
   }
 
-  Future<ProfileInfo> getUserProfile() async {
+  Future<StudentData> getProfileStudent({required String pupil_id}) async {
     try {
-      final resProfile = await _userApi.getProfile();
-
+      final resProfile = await _userApi.getProfileStudent(pupil_id: pupil_id);
       return resProfile;
     } catch (e) {
       throw GetProfileFailure();

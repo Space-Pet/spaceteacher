@@ -24,6 +24,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/add-circle-darkblue.svg
   String get addCircleDarkblue => 'assets/icons/add-circle-darkblue.svg';
 
+  /// File path: assets/icons/add_message.svg
+  String get addMessage => 'assets/icons/add_message.svg';
+
   /// File path: assets/icons/advice.svg
   String get advice => 'assets/icons/advice.svg';
 
@@ -42,14 +45,23 @@ class $AssetsIconsGen {
   /// File path: assets/icons/calendar.svg
   String get calendar => 'assets/icons/calendar.svg';
 
+  /// File path: assets/icons/calendar_leave.svg
+  String get calendarLeave => 'assets/icons/calendar_leave.svg';
+
   /// File path: assets/icons/call.svg
   String get call => 'assets/icons/call.svg';
+
+  /// File path: assets/icons/car.svg
+  String get car => 'assets/icons/car.svg';
 
   /// File path: assets/icons/check-circle-green.svg
   String get checkCircleGreen => 'assets/icons/check-circle-green.svg';
 
   /// File path: assets/icons/check.svg
   String get check => 'assets/icons/check.svg';
+
+  /// File path: assets/icons/checked-noti.svg
+  String get checkedNoti => 'assets/icons/checked-noti.svg';
 
   /// File path: assets/icons/chevron-down.svg
   String get chevronDown => 'assets/icons/chevron-down.svg';
@@ -60,6 +72,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chevron-right.svg
   String get chevronRight => 'assets/icons/chevron-right.svg';
 
+  /// File path: assets/icons/clock-noti.svg
+  String get clockNoti => 'assets/icons/clock-noti.svg';
+
   /// File path: assets/icons/clock-time.svg
   String get clockTime => 'assets/icons/clock-time.svg';
 
@@ -69,8 +84,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/conversation-icon.svg
   String get conversationIcon => 'assets/icons/conversation-icon.svg';
 
+  /// File path: assets/icons/default_ava.svg
+  String get defaultAva => 'assets/icons/default_ava.svg';
+
   /// File path: assets/icons/document-medicine.svg
   String get documentMedicine => 'assets/icons/document-medicine.svg';
+
+  /// File path: assets/icons/download.svg
+  String get download => 'assets/icons/download.svg';
 
   /// File path: assets/icons/e.svg
   String get e => 'assets/icons/e.svg';
@@ -84,10 +105,16 @@ class $AssetsIconsGen {
   /// File path: assets/icons/exercise.svg
   String get exercise => 'assets/icons/exercise.svg';
 
+  /// File path: assets/icons/failed-noti.svg
+  String get failedNoti => 'assets/icons/failed-noti.svg';
+
   $AssetsIconsFeaturesGen get features => const $AssetsIconsFeaturesGen();
 
   /// File path: assets/icons/file.svg
   String get file => 'assets/icons/file.svg';
+
+  /// File path: assets/icons/file_message.svg
+  String get fileMessage => 'assets/icons/file_message.svg';
 
   /// File path: assets/icons/global.svg
   String get global => 'assets/icons/global.svg';
@@ -101,6 +128,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/image-teacher.png
   AssetGenImage get imageTeacher =>
       const AssetGenImage('assets/icons/image-teacher.png');
+
+  /// File path: assets/icons/list-check-noti.svg
+  String get listCheckNoti => 'assets/icons/list-check-noti.svg';
 
   /// File path: assets/icons/lock.png
   AssetGenImage get lock => const AssetGenImage('assets/icons/lock.png');
@@ -126,6 +156,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/noti.svg
   String get noti => 'assets/icons/noti.svg';
 
+  /// File path: assets/icons/nutri-height.svg
+  String get nutriHeight => 'assets/icons/nutri-height.svg';
+
+  /// File path: assets/icons/nutri-weight.svg
+  String get nutriWeight => 'assets/icons/nutri-weight.svg';
+
   /// File path: assets/icons/paperclip.svg
   String get paperclip => 'assets/icons/paperclip.svg';
 
@@ -135,29 +171,59 @@ class $AssetsIconsGen {
   /// File path: assets/icons/phone.png
   AssetGenImage get phone => const AssetGenImage('assets/icons/phone.png');
 
+  /// File path: assets/icons/pin-gallery.svg
+  String get pinGallery => 'assets/icons/pin-gallery.svg';
+
   /// File path: assets/icons/pin.svg
   String get pin => 'assets/icons/pin.svg';
 
   /// File path: assets/icons/qrcode.png
   AssetGenImage get qrcode => const AssetGenImage('assets/icons/qrcode.png');
 
+  /// File path: assets/icons/read-indicator-noti.svg
+  String get readIndicatorNoti => 'assets/icons/read-indicator-noti.svg';
+
   /// File path: assets/icons/report.svg
   String get report => 'assets/icons/report.svg';
+
+  /// File path: assets/icons/scores.svg
+  String get scores => 'assets/icons/scores.svg';
+
+  /// File path: assets/icons/scores_active.svg
+  String get scoresActive => 'assets/icons/scores_active.svg';
 
   /// File path: assets/icons/send.svg
   String get send => 'assets/icons/send.svg';
 
+  /// File path: assets/icons/send_message.svg
+  String get sendMessage => 'assets/icons/send_message.svg';
+
   /// File path: assets/icons/setting.svg
   String get setting => 'assets/icons/setting.svg';
 
+  /// File path: assets/icons/share.svg
+  String get share => 'assets/icons/share.svg';
+
+  /// File path: assets/icons/sort-noti.svg
+  String get sortNoti => 'assets/icons/sort-noti.svg';
+
   /// File path: assets/icons/tablet.svg
   String get tablet => 'assets/icons/tablet.svg';
+
+  /// File path: assets/icons/topic_week.svg
+  String get topicWeek => 'assets/icons/topic_week.svg';
+
+  /// File path: assets/icons/trash.svg
+  String get trash => 'assets/icons/trash.svg';
 
   /// File path: assets/icons/user.png
   AssetGenImage get user => const AssetGenImage('assets/icons/user.png');
 
   /// File path: assets/icons/user_manual.svg
   String get userManual => 'assets/icons/user_manual.svg';
+
+  /// File path: assets/icons/wallet-noti.svg
+  String get walletNoti => 'assets/icons/wallet-noti.svg';
 
   /// File path: assets/icons/wallpaper.svg
   String get wallpaper => 'assets/icons/wallpaper.svg';
@@ -168,31 +234,41 @@ class $AssetsIconsGen {
         academic,
         accountConversion,
         addCircleDarkblue,
+        addMessage,
         advice,
         bell,
         boldNoteClipboard,
         boldNoteDocument,
         calendarPlus,
         calendar,
+        calendarLeave,
         call,
+        car,
         checkCircleGreen,
         check,
+        checkedNoti,
         chevronDown,
         chevronLeft,
         chevronRight,
+        clockNoti,
         clockTime,
         closeGrayCircle,
         conversationIcon,
+        defaultAva,
         documentMedicine,
+        download,
         e,
         editProfile,
         emojiNormal,
         exercise,
+        failedNoti,
         file,
+        fileMessage,
         global,
         homeNotiWhite,
         home,
         imageTeacher,
+        listCheckNoti,
         lock,
         lockPassword,
         logout,
@@ -201,17 +277,29 @@ class $AssetsIconsGen {
         minus,
         niceRewardBadge,
         noti,
+        nutriHeight,
+        nutriWeight,
         paperclip,
         phoneBook,
         phone,
+        pinGallery,
         pin,
         qrcode,
+        readIndicatorNoti,
         report,
+        scores,
+        scoresActive,
         send,
+        sendMessage,
         setting,
+        share,
+        sortNoti,
         tablet,
+        topicWeek,
+        trash,
         user,
         userManual,
+        walletNoti,
         wallpaper
       ];
 }
@@ -250,6 +338,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/brunch.png
   AssetGenImage get brunch => const AssetGenImage('assets/images/brunch.png');
 
+  /// File path: assets/images/calendar.png
+  AssetGenImage get calendar =>
+      const AssetGenImage('assets/images/calendar.png');
+
+  /// File path: assets/images/default-user.png
+  AssetGenImage get defaultUser =>
+      const AssetGenImage('assets/images/default-user.png');
+
   /// File path: assets/images/dinner.png
   AssetGenImage get dinner => const AssetGenImage('assets/images/dinner.png');
 
@@ -265,6 +361,54 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/forgot.png
   AssetGenImage get forgot => const AssetGenImage('assets/images/forgot.png');
+
+  /// File path: assets/images/gallery-1.png
+  AssetGenImage get gallery1 =>
+      const AssetGenImage('assets/images/gallery-1.png');
+
+  /// File path: assets/images/gallery-10.png
+  AssetGenImage get gallery10 =>
+      const AssetGenImage('assets/images/gallery-10.png');
+
+  /// File path: assets/images/gallery-11.png
+  AssetGenImage get gallery11 =>
+      const AssetGenImage('assets/images/gallery-11.png');
+
+  /// File path: assets/images/gallery-12.png
+  AssetGenImage get gallery12 =>
+      const AssetGenImage('assets/images/gallery-12.png');
+
+  /// File path: assets/images/gallery-2.png
+  AssetGenImage get gallery2 =>
+      const AssetGenImage('assets/images/gallery-2.png');
+
+  /// File path: assets/images/gallery-3.png
+  AssetGenImage get gallery3 =>
+      const AssetGenImage('assets/images/gallery-3.png');
+
+  /// File path: assets/images/gallery-4.png
+  AssetGenImage get gallery4 =>
+      const AssetGenImage('assets/images/gallery-4.png');
+
+  /// File path: assets/images/gallery-5.png
+  AssetGenImage get gallery5 =>
+      const AssetGenImage('assets/images/gallery-5.png');
+
+  /// File path: assets/images/gallery-6.png
+  AssetGenImage get gallery6 =>
+      const AssetGenImage('assets/images/gallery-6.png');
+
+  /// File path: assets/images/gallery-7.png
+  AssetGenImage get gallery7 =>
+      const AssetGenImage('assets/images/gallery-7.png');
+
+  /// File path: assets/images/gallery-8.png
+  AssetGenImage get gallery8 =>
+      const AssetGenImage('assets/images/gallery-8.png');
+
+  /// File path: assets/images/gallery-9.png
+  AssetGenImage get gallery9 =>
+      const AssetGenImage('assets/images/gallery-9.png');
 
   /// File path: assets/images/image-phone-book.png
   AssetGenImage get imagePhoneBook =>
@@ -416,6 +560,13 @@ class $AssetsImagesGen {
   /// File path: assets/images/menu5.png
   AssetGenImage get menu5 => const AssetGenImage('assets/images/menu5.png');
 
+  /// File path: assets/images/no_messages.png
+  AssetGenImage get noMessagesPng =>
+      const AssetGenImage('assets/images/no_messages.png');
+
+  /// File path: assets/images/no_messages.svg
+  String get noMessagesSvg => 'assets/images/no_messages.svg';
+
   /// File path: assets/images/noti.png
   AssetGenImage get noti => const AssetGenImage('assets/images/noti.png');
 
@@ -443,11 +594,25 @@ class $AssetsImagesGen {
         backgroundNoti,
         breakfast,
         brunch,
+        calendar,
+        defaultUser,
         dinner,
         e,
         en,
         example1,
         forgot,
+        gallery1,
+        gallery10,
+        gallery11,
+        gallery12,
+        gallery2,
+        gallery3,
+        gallery4,
+        gallery5,
+        gallery6,
+        gallery7,
+        gallery8,
+        gallery9,
         imagePhoneBook,
         imageTeacher,
         image1,
@@ -492,6 +657,8 @@ class $AssetsImagesGen {
         menu3,
         menu4,
         menu5,
+        noMessagesPng,
+        noMessagesSvg,
         noti,
         search,
         splash1,
@@ -521,17 +688,14 @@ class $AssetsIconsFeaturesGen {
   /// File path: assets/icons/features/health.svg
   String get health => 'assets/icons/features/health.svg';
 
-  /// File path: assets/icons/features/highS_alarm.svg
-  String get highSAlarm => 'assets/icons/features/highS_alarm.svg';
-
   /// File path: assets/icons/features/highS_attendance.svg
   String get highSAttendance => 'assets/icons/features/highS_attendance.svg';
 
   /// File path: assets/icons/features/highS_bus.svg
   String get highSBus => 'assets/icons/features/highS_bus.svg';
 
-  /// File path: assets/icons/features/highS_dollar.svg
-  String get highSDollar => 'assets/icons/features/highS_dollar.svg';
+  /// File path: assets/icons/features/highS_calendar.svg
+  String get highSCalendar => 'assets/icons/features/highS_calendar.svg';
 
   /// File path: assets/icons/features/highS_gallery.svg
   String get highSGallery => 'assets/icons/features/highS_gallery.svg';
@@ -540,8 +704,8 @@ class $AssetsIconsFeaturesGen {
   String get highSInstructionNotebook =>
       'assets/icons/features/highS_instruction-notebook.svg';
 
-  /// File path: assets/icons/features/highS_message.svg
-  String get highSMessage => 'assets/icons/features/highS_message.svg';
+  /// File path: assets/icons/features/highS_menu.svg
+  String get highSMenu => 'assets/icons/features/highS_menu.svg';
 
   /// File path: assets/icons/features/highS_phone-book.svg
   String get highSPhoneBook => 'assets/icons/features/highS_phone-book.svg';
@@ -553,11 +717,17 @@ class $AssetsIconsFeaturesGen {
   /// File path: assets/icons/features/highS_scores.svg
   String get highSScores => 'assets/icons/features/highS_scores.svg';
 
+  /// File path: assets/icons/features/highS_survey.svg
+  String get highSSurvey => 'assets/icons/features/highS_survey.svg';
+
+  /// File path: assets/icons/features/highS_tariff.svg
+  String get highSTariff => 'assets/icons/features/highS_tariff.svg';
+
   /// File path: assets/icons/features/highS_tuition.svg
   String get highSTuition => 'assets/icons/features/highS_tuition.svg';
 
-  /// File path: assets/icons/features/menu.svg
-  String get menu => 'assets/icons/features/menu.svg';
+  /// File path: assets/icons/features/preS_attendance.svg
+  String get preSAttendance => 'assets/icons/features/preS_attendance.svg';
 
   /// File path: assets/icons/features/preS_bus.svg
   String get preSBus => 'assets/icons/features/preS_bus.svg';
@@ -565,17 +735,17 @@ class $AssetsIconsFeaturesGen {
   /// File path: assets/icons/features/preS_calendar.svg
   String get preSCalendar => 'assets/icons/features/preS_calendar.svg';
 
+  /// File path: assets/icons/features/preS_comment.svg
+  String get preSComment => 'assets/icons/features/preS_comment.svg';
+
   /// File path: assets/icons/features/preS_gallery.svg
   String get preSGallery => 'assets/icons/features/preS_gallery.svg';
 
-  /// File path: assets/icons/features/preS_heartplus.svg
-  String get preSHeartplus => 'assets/icons/features/preS_heartplus.svg';
+  /// File path: assets/icons/features/preS_health.svg
+  String get preSHealth => 'assets/icons/features/preS_health.svg';
 
   /// File path: assets/icons/features/preS_menu.svg
   String get preSMenu => 'assets/icons/features/preS_menu.svg';
-
-  /// File path: assets/icons/features/preS_message.svg
-  String get preSMessage => 'assets/icons/features/preS_message.svg';
 
   /// File path: assets/icons/features/preS_phone-book.svg
   String get preSPhoneBook => 'assets/icons/features/preS_phone-book.svg';
@@ -606,24 +776,25 @@ class $AssetsIconsFeaturesGen {
         evaluation,
         exercises,
         health,
-        highSAlarm,
         highSAttendance,
         highSBus,
-        highSDollar,
+        highSCalendar,
         highSGallery,
         highSInstructionNotebook,
-        highSMessage,
+        highSMenu,
         highSPhoneBook,
         highSRegisterNotebook,
         highSScores,
+        highSSurvey,
+        highSTariff,
         highSTuition,
-        menu,
+        preSAttendance,
         preSBus,
         preSCalendar,
+        preSComment,
         preSGallery,
-        preSHeartplus,
+        preSHealth,
         preSMenu,
-        preSMessage,
         preSPhoneBook,
         preSSurvey,
         preSTariff,
@@ -688,10 +859,6 @@ class $AssetsImagesMainBackgroundGen {
   AssetGenImage get snaHighS =>
       const AssetGenImage('assets/images/main_background/sna_highS.png');
 
-  /// File path: assets/images/main_background/sna_preS.png
-  AssetGenImage get snaPreS =>
-      const AssetGenImage('assets/images/main_background/sna_preS.png');
-
   /// File path: assets/images/main_background/uka_highS.png
   AssetGenImage get ukaHighS =>
       const AssetGenImage('assets/images/main_background/uka_highS.png');
@@ -708,7 +875,6 @@ class $AssetsImagesMainBackgroundGen {
         ischoolPreS,
         sgaPreS,
         snaHighS,
-        snaPreS,
         ukaHighS,
         ukaPreS
       ];

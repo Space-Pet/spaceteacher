@@ -1,12 +1,10 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:iportal2/screens/exercise_notice/widgets/select_popup_sheet/bottom_sheet_select.dart';
 import 'package:iportal2/resources/app_colors.dart';
-
 import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/screens/student_score/widget/select_button/select_button_term/bottom_sheet_select_term.dart';
 
 class SelectTerm extends StatefulWidget {
   const SelectTerm({super.key, required this.onSelectedOptionChanged});
@@ -48,7 +46,7 @@ class _SelectTermState extends State<SelectTerm> {
             ScrollController scrollController,
             double bottomSheetOffset,
           ) =>
-              BottomSheetSelect(
+              BottomSheetSelectTerm(
             optionList: optionList,
             scrollController: scrollController,
             onSelectedOption: updateSelectedOption,

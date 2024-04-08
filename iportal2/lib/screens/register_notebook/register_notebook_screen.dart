@@ -1,75 +1,94 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/screens/attendance/widget/app_bar_attendence.dart';
-import 'package:iportal2/screens/home/widgets/instruction_notebook/instruction_notebook_view.dart';
-import 'package:iportal2/screens/register_notebook/tab_instruction.dart';
-import 'package:iportal2/screens/week_schedule/week_schedule_screen.dart';
+import 'package:iportal2/components/empty_screen.dart';
+import 'package:iportal2/components/select_child.dart';
+import 'package:iportal2/components/select_date.dart';
+import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/register_notebook/bloc/register_notebook_bloc.dart';
+import 'package:iportal2/screens/register_notebook/register_lesson.dart';
+import 'package:repository/repository.dart';
 
-import '../../resources/app_colors.dart';
-import '../../resources/app_decoration.dart';
-
-class RegisterNoteBoookScreen extends StatefulWidget {
+class RegisterNoteBoookScreen extends StatelessWidget {
   const RegisterNoteBoookScreen({super.key});
 
   static const routeName = '/register_notebook';
 
   @override
-  State<RegisterNoteBoookScreen> createState() =>
-      _RegisterNoteBoookScreenState();
-}
-
-class _RegisterNoteBoookScreenState extends State<RegisterNoteBoookScreen> {
-  @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ScreenAppBar(
-            title: 'Sổ đầu bài',
-            canGoback: true,
-            onBack: () {
-              context.pop();
-            },
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: AppRadius.roundedTop28,
-              ),
-              child: Column(
-                children: [
-                  const AppBarAttendance(),
-                  const SelectDate(),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          RegisterLessons(
-                            title: 'Buổi sáng',
-                            lessons: lessons,
-                          ),
-                          const SizedBox(height: 16),
-                          RegisterLessons(
-                            title: 'Buổi chiều',
-                            lessons: lessons,
-                          ),
-                        ],
-                      ),
+    return BlocProvider(
+      create: (context) => RegisterNotebookBloc(
+        context.read<AppFetchApiRepository>(),
+        currentUserBloc: context.read<CurrentUserBloc>(),
+      ),
+      child: BlocBuilder<RegisterNotebookBloc, RegisterNotebookState>(
+        builder: (context, state) {
+          final bloc = context.read<RegisterNotebookBloc>();
+          final weeklyLessonData = state.lessonData;
+          final lessonData = weeklyLessonData.dataList;
+
+          final lessonListW = List.generate(lessonData.length, (index) {
+            final lesson = lessonData[index];
+
+            return RegisterItem(
+              lesson: lesson,
+              noBoder: index == lessonData.length - 1,
+            );
+          });
+
+          return BackGroundContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScreenAppBar(
+                  title: 'Sổ đầu bài',
+                  canGoback: true,
+                  onBack: () {
+                    context.pop();
+                  },
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: AppRadius.roundedTop28,
+                    ),
+                    child: Column(
+                      children: [
+                        const SelectChild(),
+                        const SizedBox(height: 12),
+                        SelectDate(
+                          datePicked: bloc.state.datePicked,
+                          onDatePicked: (date) {
+                            bloc.add(RegisterSelectDate(datePicked: date));
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        Expanded(
+                          child: lessonData.isEmpty
+                              ? const EmptyScreen(
+                                  text: 'Sổ đầu bài trống',
+                                )
+                              : SingleChildScrollView(
+                                  child: Column(
+                                    children: lessonListW,
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }

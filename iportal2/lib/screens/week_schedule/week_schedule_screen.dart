@@ -1,44 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/home/models/lesson_model.dart';
-import 'package:iportal2/screens/home/widgets/instruction_notebook/tab_instruction.dart';
+import 'package:iportal2/screens/home/widgets/instruction_notebook/weekly_tabs.dart';
+import 'package:iportal2/screens/week_schedule/bloc/week_schedule_bloc.dart';
+import 'package:network_data_source/network_data_source.dart';
+import 'package:repository/repository.dart';
 
 class WeekScheduleScreen extends StatelessWidget {
-  const WeekScheduleScreen({super.key});
+  const WeekScheduleScreen({super.key, this.date});
 
   static const routeName = '/week-schedule';
+  final String? date;
+  @override
+  Widget build(BuildContext context) {
+    final userRepository = context.read<UserRepository>();
+    final appFetchApiRepository = context.read<AppFetchApiRepository>();
+    final weekScheduleBloc = WeekScheduleBloc(
+        appFetchApiRepo: appFetchApiRepository,
+        currentUserBloc: context.read<CurrentUserBloc>(),
+        userRepository: userRepository);
+    weekScheduleBloc.add(GetWeekSchedule(
+        txtDate: date != null
+            ? date ?? ''
+            : DateFormat('dd-MM-yyy').format(DateTime.now()).toString()));
+    return BlocProvider.value(
+      value: weekScheduleBloc,
+      child: WeekScheduleView(),
+    );
+  }
+}
+
+class WeekScheduleView extends StatelessWidget {
+  const WeekScheduleView({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const ScreenAppBar(
-            title: 'Kế hoạch tuần',
-          ),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 26, 16, 20),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: AppRadius.roundedTop28,
+    return BlocBuilder<WeekScheduleBloc, WeekScheduleState>(
+      builder: (context, state) {
+        final weekData = state.weekSchedule;
+        return BackGroundContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const ScreenAppBar(
+                title: 'Kế hoạch tuần',
               ),
-              child: Column(
-                children: [
-                  const WeekSelectWidget(),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: TabInstruction(
-                      lessons: weeklyProjects,
-                      isTimeTableView: true,
-                    ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(16, 26, 16, 20),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: AppRadius.roundedTop28,
                   ),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (state.weekScheduleStatus == WeekScheduleStatus.init)
+                        Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      if (state.weekScheduleStatus ==
+                          WeekScheduleStatus.success)
+                        WeekSelectWidget(
+                          weekSchedule: weekData ?? null,
+                        ),
+                      if (weekData != null &&
+                          weekData.data.mainPlan!.isNotEmpty &&
+                          state.weekScheduleStatus ==
+                              WeekScheduleStatus.success)
+                        WeeklyTopic(weekSchedule: weekData),
+                      const SizedBox(height: 16),
+                      if (weekData != null &&
+                          weekData.data.detailPlan!.isNotEmpty &&
+                          state.weekScheduleStatus ==
+                              WeekScheduleStatus.success)
+                        Expanded(
+                          child: WeeklyTabs(
+                            lessons: weekData.data.detailPlan,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class WeeklyTopic extends StatelessWidget {
+  const WeeklyTopic({super.key, this.weekSchedule});
+  final WeekSchedule? weekSchedule;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: ShapeDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment(1.00, -0.06),
+          end: Alignment(-1, 0.06),
+          colors: [Color(0xFFF0F9FF), Color(0xFFE4F4FF)],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+              width: 50,
+              height: 50,
+              padding: const EdgeInsets.all(8),
+              decoration: ShapeDecoration(
+                color: const Color(0xFFDFF2FE),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(90),
+                ),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/topic_week.svg',
+              )),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  weekSchedule?.data.mainPlan?.isNotEmpty ?? false
+                      ? weekSchedule!.data.mainPlan!.first.mainPlanTitle ?? ''
+                      : '',
+                  style: AppTextStyles.normal12(
+                    color: AppColors.gray400,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  weekSchedule?.data.mainPlan?.isNotEmpty ?? false
+                      ? weekSchedule!.data.mainPlan!.first.mainPlanBody ?? ''
+                      : '',
+                  style: AppTextStyles.normal12(
+                      color: AppColors.black, fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
           ),
         ],
@@ -48,7 +165,8 @@ class WeekScheduleScreen extends StatelessWidget {
 }
 
 class WeekSelectWidget extends StatefulWidget {
-  const WeekSelectWidget({super.key});
+  const WeekSelectWidget({super.key, this.weekSchedule});
+  final WeekSchedule? weekSchedule;
 
   @override
   State<WeekSelectWidget> createState() => _WeekSelectWidgetState();
@@ -102,7 +220,10 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: _goBackOneWeek,
+                onTap: () {
+                  context.read<WeekScheduleBloc>().add(GetWeekSchedule(
+                      txtDate: widget.weekSchedule?.txtPreWeek ?? ''));
+                },
                 child: const Padding(
                   padding: EdgeInsets.all(4),
                   child: Icon(
@@ -137,20 +258,25 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
                     );
 
                     if (pickedDate != null) {
-                      String formattedDate = formatDate.format(pickedDate);
+                      String formattedDate =
+                          DateFormat('dd-MM-yyy').format(pickedDate);
                       setState(() {
                         datePicked = formattedDate;
+                        print('object: $datePicked');
+                        context
+                            .read<WeekScheduleBloc>()
+                            .add(GetWeekSchedule(txtDate: datePicked));
                       });
                     } else {}
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Tuần $_currentWeek ',
+                      Text('Tuần ${widget.weekSchedule?.txtWeek} ',
                           style: AppTextStyles.semiBold14(
                               color: AppColors.brand600)),
                       Text(
-                        '(${DateFormat('dd/M/yyyy').format(startOfWeek)} -  ${DateFormat('dd/M/yyyy').format(endOfWeek)})',
+                        '(${widget.weekSchedule?.txtBeginDay} - ${widget.weekSchedule?.txtEndDay})',
                         style: AppTextStyles.normal14(color: AppColors.gray500),
                       ),
                     ],
@@ -158,7 +284,10 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
                 ),
               ),
               GestureDetector(
-                onTap: _goForwardOneWeek,
+                onTap: () {
+                  context.read<WeekScheduleBloc>().add(GetWeekSchedule(
+                      txtDate: widget.weekSchedule?.txtNextWeek ?? ''));
+                },
                 child: const Padding(
                   padding: EdgeInsets.all(4),
                   child: Icon(
@@ -176,122 +305,14 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
   }
 }
 
-class SelectDate extends StatefulWidget {
-  const SelectDate({super.key});
-
-  @override
-  State<SelectDate> createState() => _SelectDateState();
-}
-
-class _SelectDateState extends State<SelectDate> {
-  DateTime now = DateTime.now();
-
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
-  late String datePicked;
-
-  @override
-  void initState() {
-    super.initState();
-    datePicked = formatDate.format(now);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: context,
-          helpText: 'Chọn ngày',
-          cancelText: 'Trở về',
-          confirmText: 'Xong',
-          initialDate: formatDate.parse(datePicked),
-          firstDate: DateTime(now.year, now.month, now.day - 7),
-          lastDate: DateTime(now.year, now.month, now.day + 7),
-          builder: (context, child) {
-            return Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(
-                  primary: AppColors.brand600,
-                  secondary: AppColors.white,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
-
-        if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
-          setState(() {
-            datePicked = formattedDate;
-          });
-        } else {}
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: AppColors.white,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: AppColors.gray300),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          shadows: const [
-            BoxShadow(
-              color: AppColors.gray9000c,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.calendar_month_outlined,
-                    size: 20,
-                    color: AppColors.gray500,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      child: Text(
-                        datePicked,
-                        style: AppTextStyles.normal16(color: AppColors.gray500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 24,
-              color: AppColors.gray900,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 final List<LessonModel> weeklyProjects = [
   LessonModel(
     room: 'P.310',
     id: 1,
     number: 1,
-    name: 'Toán',
+    name: 'Đón trẻ và điểm danh',
     teacherName: 'Nguyễn Minh Nhi',
-    teacherAva:
-        'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
-    description: 'B29: Tính toán với số thập phân',
+    description: 'Cô đón trẻ từ Quý Phụ Huynh và tiến hành điểm danh',
     advice: 'Học sinh chuẩn bị bài kỹ trước khi đến lớp.',
     timeStart: '7:30',
     timeEnd: '8:15',
@@ -303,11 +324,9 @@ final List<LessonModel> weeklyProjects = [
     room: 'P.310',
     id: 2,
     number: 2,
-    name: 'Vật lý',
+    name: 'Ăn sáng',
     teacherName: 'Trần Anh Thư',
-    teacherAva:
-        'https://www.shutterstock.com/image-vector/female-character-portrait-smiling-young-260nw-312909497.jpg',
-    description: 'B32: Sự phụ thuộc của điện trở',
+    description: '',
     advice: '',
     timeStart: '8:15',
     timeEnd: '9:00',
@@ -319,11 +338,10 @@ final List<LessonModel> weeklyProjects = [
     room: 'P.310',
     id: 3,
     number: 3,
-    name: 'Hóa học',
+    name: 'Thực hành mầm non',
     teacherName: 'Võ Hoàng Giang',
-    teacherAva:
-        'https://c8.alamy.com/comp/T5EY8E/female-teacher-avatar-character-vector-illustration-design-T5EY8E.jpg',
-    description: 'Kiểm tra 15p',
+    description:
+        'Cô hướng dẫn trẻ thực hành vệ sinh cá nhân, học cách tự phục vụ',
     advice: 'Học sinh chuẩn bị bài kỹ trước khi đến lớp.',
     timeStart: '9:15',
     timeEnd: '10:00',
@@ -335,10 +353,9 @@ final List<LessonModel> weeklyProjects = [
     id: 4,
     number: 4,
     teacherName: 'Cao Mỹ Nhân',
-    teacherAva:
-        'https://t3.ftcdn.net/jpg/02/00/91/10/360_F_200911053_4ygtfQ75mb72sGYeHDfyl2JF4aiTtT0n.jpg',
-    name: 'Hóa học',
-    description: 'B30: Nước',
+    name: 'Hoạt động vui chơi',
+    description:
+        'Cô dạy trẻ chơi trò chơi vận động, trò chơi xã hội, trò chơi xây dựng',
     advice: '',
     timeStart: '10:00',
     timeEnd: '10:45',
@@ -349,11 +366,10 @@ final List<LessonModel> weeklyProjects = [
     room: 'P.310',
     id: 5,
     number: 5,
-    name: 'Tiếng Anh',
+    name: 'Hoạt động ngoài trời',
     teacherName: 'Lê Trúc My',
-    teacherAva:
-        'https://thumbs.dreamstime.com/z/female-teacher-avatar-character-female-teacher-avatar-character-vector-illustration-design-145742021.jpg',
-    description: 'Kiểm tra 15p',
+    description:
+        'Cô cùng trẻ vui chơi ngoài trời, trò chơi vận động, trò chơi xã hội',
     advice: '',
     timeStart: '10:45',
     timeEnd: '11:30',

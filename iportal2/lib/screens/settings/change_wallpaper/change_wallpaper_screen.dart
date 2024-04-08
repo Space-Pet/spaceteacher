@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/check_box/check_box.dart';
-import 'package:iportal2/screens/settings/widget/setting_app_bar.dart';
 import 'package:iportal2/resources/app_strings.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
 

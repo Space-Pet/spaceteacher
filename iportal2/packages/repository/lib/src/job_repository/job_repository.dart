@@ -24,7 +24,7 @@ extension TypeColorEx on Type {
       case Type.so:
         return Colors.amber;
       case Type.line:
-        return ColorsResource.FF7E13;
+        return ColorsResource.orange13;
       case Type.hireWorker:
         return ColorsResource.lightGray50;
       case Type.none:
@@ -216,7 +216,8 @@ class JobRepository {
       required int pkStockPO,
       required List<Map<String, Object>>? data,
       required String? type}) async {
-    final statusCode = await _jobApi.postListBarcode(pk: pk, data: data, type: type, pkStockPO: pkStockPO);
+    final statusCode = await _jobApi.postListBarcode(
+        pk: pk, data: data, type: type, pkStockPO: pkStockPO);
     return statusCode;
   }
 
@@ -228,9 +229,11 @@ class JobRepository {
       return [];
     }
   }
-  Future<void> complatedTicketPO ({required List pk})async{
+
+  Future<void> complatedTicketPO({required List pk}) async {
     await _jobApi.complatedTicketPO(pk: pk);
   }
+
   Future<void> postCreatePo({required Map<String, Object?> data}) async {
     await _jobApi.postCreatePo(data: data);
   }
@@ -249,17 +252,20 @@ class JobRepository {
 
   Future<int?> postBarcodeStocktaking(
       {required int pk, required List<Map<String, Object>> data}) async {
-   final statusCode = await _jobApi.postBarcodeStocktaking(pk: pk, data: data);
-   return statusCode;
+    final statusCode = await _jobApi.postBarcodeStocktaking(pk: pk, data: data);
+    return statusCode;
   }
 
   Future<List<StockInventory>> getStockInventory() async {
     final data = await _jobApi.getStockInventory();
     return data;
   }
-  Future<void> complatedStep({required int pk, required String pkStockSO})async{
+
+  Future<void> complatedStep(
+      {required int pk, required String pkStockSO}) async {
     await _jobApi.complatedStep(pk: pk, pkStockSO: pkStockSO);
   }
+
   Future<List<BarcodeInfo>> postBarcode(String? cardType, int? pk,
       {required String barcode,
       required int? status,
@@ -282,7 +288,8 @@ class JobRepository {
       {required int type,
       required int pk,
       required List<Map<String, Object>>? data}) async {
-    final statusCode = await _jobApi.postBarcodeDeclaration(type: type, pk: pk, data: data);
+    final statusCode =
+        await _jobApi.postBarcodeDeclaration(type: type, pk: pk, data: data);
     return statusCode;
   }
 
@@ -300,17 +307,6 @@ class JobRepository {
     try {
       final numberStep = await _jobApi.getNumberStep(pk, cardType);
       return numberStep;
-    } catch (e) {
-      throw GetJobListFailure();
-    }
-  }
-
-  Future<NumberStepInventory> getNumberStepInventory(
-      int pk, String cardType, String stock) async {
-    try {
-      final numberStepInventory =
-          await _jobApi.getNumberStepInventory(pk, cardType, stock);
-      return numberStepInventory;
     } catch (e) {
       throw GetJobListFailure();
     }
@@ -463,7 +459,8 @@ class JobRepository {
     final emptyBox = await _jobApi.getLines(pk: pk);
     return emptyBox;
   }
-  Future<List<StatusLine>> getStatusLine({required int pk})async{
+
+  Future<List<StatusLine>> getStatusLine({required int pk}) async {
     final data = await _jobApi.getStatusLine(pk: pk);
     return data;
   }
@@ -761,7 +758,8 @@ class JobRepository {
     final data = await _jobApi.getQuantityScanDeclaration(pk: pk);
     return data;
   }
-  Future<StatusStocktaking> getStatusStocktaking({required int pk})async{
+
+  Future<StatusStocktaking> getStatusStocktaking({required int pk}) async {
     final data = await _jobApi.getStatusStocktaking(pk: pk);
     return data;
   }

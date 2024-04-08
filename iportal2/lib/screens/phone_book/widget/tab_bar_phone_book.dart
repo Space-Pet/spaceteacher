@@ -28,7 +28,6 @@ class TabBarPhoneBook extends StatelessWidget {
                     child: TabBar(
                         labelColor: AppColors.red,
                         unselectedLabelColor: AppColors.gray400,
-                        isScrollable: false,
                         dividerColor: Colors.transparent,
                         labelStyle: const TextStyle(
                           fontSize: 14,
@@ -37,6 +36,12 @@ class TabBarPhoneBook extends StatelessWidget {
                         unselectedLabelStyle: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w400),
                         indicator: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 3,
+                            ),
+                          ],
                           color: AppColors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -49,10 +54,12 @@ class TabBarPhoneBook extends StatelessWidget {
                 child: TabBarView(
               children: [
                 TabBarViewPhoneBook(
+                  title: 'Bạn cùng lớp của lan',
                   phoneBook: phoneBook,
                 ),
                 TabBarViewPhoneBook(
                   phoneBook: phoneBookTeacher,
+                  title: 'Giáo viên đang dạy Lan',
                 )
               ],
             ))
@@ -66,7 +73,6 @@ class TabBarPhoneBook extends StatelessWidget {
     return tabs.map((title) {
       return Tab(
         child: Align(
-          alignment: Alignment.center,
           child: Center(
               child: Text(
             title,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/buttons/buttons.dart';
+import 'package:iportal2/components/dialog/show_dialog.dart';
 import 'package:iportal2/screens/leave/widget/time_select_box.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/leave/widget/time_select_box_end.dart';
 
 class LeaveApplicationScreen extends StatelessWidget {
   const LeaveApplicationScreen({super.key});
@@ -28,16 +28,14 @@ class LeaveApplicationView extends StatefulWidget {
 
 class LeaveApplicationViewState extends State<LeaveApplicationView> {
   bool isFullDay = true;
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now();
+
   late int numsOfDaysOff;
-  TimeOfDay? selectedStartTime;
-  TimeOfDay? selectedEndTime;
+  DateTime selectedStartDate = DateTime.now();
+  DateTime selectedEndDate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
-    numsOfDaysOff = endDate.difference(startDate).inDays + 1;
   }
 
   @override
@@ -115,27 +113,36 @@ class LeaveApplicationViewState extends State<LeaveApplicationView> {
                                   ],
                                 ),
                               ),
-                              TimeSelectBox(
+                              TimeSelectBoxStart(
+                                onDateChanged: (DateTime newDate) {
+                                  setState(() {
+                                    selectedStartDate = newDate;
+                                  });
+                                },
                                 helpText: 'Chọn ngày bắt đầu',
                                 title: 'Từ',
-                                date: DateTime.now().add(Duration(days: 1)),
-                                time: TimeOfDay(hour: 0, minute: 0),
+                                date: selectedStartDate,
+                                dateStart: selectedStartDate,
+                                time: const TimeOfDay(hour: 07, minute: 00),
                                 canSelectTime: !isFullDay,
                               ),
                               const SizedBox(height: 16),
-                              TimeSelectBox(
+                              TimeSelectBoxEnd(
                                 helpText: 'Chọn ngày kết thúc',
                                 title: 'Đến',
-                                date: DateTime.now().add(Duration(days: 1)),
-                                time: TimeOfDay(hour: 23, minute: 59),
+                                date: selectedStartDate,
+                                time: const TimeOfDay(hour: 17, minute: 00),
                                 canSelectTime: !isFullDay,
                               ),
-                              Text(
-                                'Lý do nghỉ',
-                                style: AppTextStyles.custom(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.textNormalColor,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: Text(
+                                  'Lý do nghỉ',
+                                  style: AppTextStyles.custom(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.textNormalColor,
+                                  ),
                                 ),
                               ),
                               Padding(
@@ -171,8 +178,9 @@ class LeaveApplicationViewState extends State<LeaveApplicationView> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
@@ -232,7 +240,27 @@ class LeaveApplicationViewState extends State<LeaveApplicationView> {
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: RoundedButton(
                           onTap: () {
-                            //TODO: Implement submit Leave application function
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ShowDialog(
+                                    child: CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: Color(0xFFECFDF3),
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: Color(0xFFD1FADF),
+                                        child: Icon(
+                                          Icons.done,
+                                          color: AppColors.green600,
+                                        ),
+                                      ),
+                                    ),
+                                    title: 'Đã gửi đơn',
+                                    textConten:
+                                        'Đơn xin nghỉ phép đã được gửi đến GVCN xét duyệt. Vui lòng đợi thông tin phản hồi!',
+                                  );
+                                });
                           },
                           borderRadius: 70,
                           buttonColor: AppColors.primaryRedColor,

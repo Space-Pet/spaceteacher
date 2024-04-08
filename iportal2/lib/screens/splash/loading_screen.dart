@@ -25,23 +25,23 @@ class LoadingScreen extends StatelessWidget {
         listener: (context, state) {
           switch (state.status) {
             case SplashStatus.logined:
-        
-              context.pushReplacement(AppMainLayout());
+              context.pushReplacement(const AppMainLayout());
               break;
 
             case SplashStatus.firstLogin:
               context.pushReplacement(CurvedSplashScreen(
                 screensLength: splashContent.length,
                 screenBuilder: (index) {
+                  final content = splashContent[index];
                   return SplashContent(
-                    title1: splashContent[index]['title1']!,
-                    title2: splashContent[index]['title2']!,
-                    title2Red: splashContent[index]['title2Red']!,
-                    title3: splashContent[index]['title3']!,
-                    title3Red: splashContent[index]['title3Red']!,
-                    image: splashContent[index]['image']!,
-                    text1: splashContent[index]['text1']!,
-                    text2: splashContent[index]['text2'],
+                    title1: content['title1']!,
+                    title2: content['title2']!,
+                    title2Red: content['title2Red']!,
+                    title3: content['title3']!,
+                    title3Red: content['title3Red']!,
+                    image: content['image']!,
+                    text1: content['text1']!,
+                    text2: content['text2'],
                     index: index,
                   );
                 },

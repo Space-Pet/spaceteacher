@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
-import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/repository/user_repository/user_repositories.dart';
 import 'package:teacher/resources/assets.gen.dart';
+import 'package:teacher/resources/i18n/locale_keys.g.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 
@@ -107,7 +107,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'home'.tr(),
+                      text: LocaleKeys.home.tr(),
                     ),
                     state.userInfo.isKinderGarten()
                         ? Tab(
@@ -120,7 +120,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: 'week project'.tr(),
+                            text: LocaleKeys.weeklyProject.tr(),
                           )
                         : Tab(
                             icon: SvgPicture.asset(
@@ -132,7 +132,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: 'schedule'.tr(),
+                            text: LocaleKeys.schedule.tr(),
                           ),
                     Tab(
                       icon: SvgPicture.asset(

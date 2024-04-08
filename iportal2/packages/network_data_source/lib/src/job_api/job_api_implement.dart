@@ -1,12 +1,21 @@
-import 'dart:io';
+// ignore_for_file: avoid_print
 
+import 'dart:io';
 
 import '../../network_data_source.dart';
 
 class JobApi extends AbstractJobApi {
-  JobApi({required AbstractDioClient client}) : _client = client;
+  JobApi({
+    required AbstractDioClient client,
+    required RestApiClient authRestClient,
+    required RestApiClient partnerTokenRestClient,
+  })  : _client = client,
+        _authRestClient = authRestClient,
+        _partnerTokenRestClient = partnerTokenRestClient;
 
   final AbstractDioClient _client;
+  final RestApiClient _authRestClient;
+  final RestApiClient _partnerTokenRestClient;
   Future<String?> getToken() async {
     final token = await _client.getAccessToken();
     return token;
@@ -318,7 +327,6 @@ class JobApi extends AbstractJobApi {
       return statusLine;
     } catch (e) {
       return [];
-      print('loiox');
     }
   }
 
@@ -472,21 +480,6 @@ class JobApi extends AbstractJobApi {
     }
   }
 
-  Future<NumberStepInventory> getNumberStepInventory(
-      int pk, String cardType, String stock) async {
-    try {
-      final data = await _client.doHttpGet(
-          'api/mobile/list_box/?pk=$pk&card_type=$cardType',
-          requestBody: {"stock": stock, "received": "BS"});
-      final numberStepInventoryData = data;
-      final numberStepInventoryInfo =
-          NumberStepInventory.fromMap(numberStepInventoryData);
-      return numberStepInventoryInfo;
-    } catch (e) {
-      throw GetJobListFailure();
-    }
-  }
-
   Future<List<BarcodeInfo>> getBarcodeListForJobKK(
       int? pk, String? cardType) async {
     try {
@@ -568,9 +561,9 @@ class JobApi extends AbstractJobApi {
     try {
       final data = await _client.doHttpGet('api/mobile/get_stock/');
       final dataList = data['data'] as List<dynamic>;
-      final StockInfoList =
+      final stockInfoList =
           dataList.map((item) => StockInfo.fromMap(item)).toList();
-      return StockInfoList;
+      return stockInfoList;
     } catch (e) {
       return [];
     }
@@ -590,9 +583,9 @@ class JobApi extends AbstractJobApi {
       final data =
           await _client.doHttpGet('api/mobile/get_stock/?stock_id=$stockId');
       final dataList = data['data'] as List<dynamic>;
-      final StockInfoList =
+      final stockInfoList =
           dataList.map((item) => StockInfo.fromMap(item)).toList();
-      return StockInfoList;
+      return stockInfoList;
     } catch (e) {
       return [];
     }

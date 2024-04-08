@@ -1,7 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:teacher/model/class_model.dart';
-import 'package:teacher/model/parent_model.dart';
-import 'package:teacher/model/school_model.dart';
 part 'pupil_model.g.dart';
 
 @JsonSerializable()

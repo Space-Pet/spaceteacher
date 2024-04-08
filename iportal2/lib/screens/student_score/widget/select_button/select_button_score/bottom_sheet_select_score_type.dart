@@ -51,7 +51,6 @@ class _BottomSheetSelectScoreTypeState
           controller: widget.scrollController,
           itemBuilder: (context, index) => GestureDetector(
             onTap: () {
-              debugPrint('setState called');
               setState(() {
                 for (var i = 0; i < _items.length; i++) {
                   _items[i].isSelected = false;

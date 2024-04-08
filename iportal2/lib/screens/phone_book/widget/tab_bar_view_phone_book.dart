@@ -7,9 +7,11 @@ import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 
 class TabBarViewPhoneBook extends StatefulWidget {
-  TabBarViewPhoneBook({Key? key, required this.phoneBook});
+  const TabBarViewPhoneBook(
+      {super.key, required this.phoneBook, required this.title});
 
   final List<PhoneBook> phoneBook;
+  final String title;
 
   @override
   State<TabBarViewPhoneBook> createState() => _TabBarViewPhoneBookState();
@@ -43,7 +45,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
       ),
       height: double.infinity,
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
       child: Column(
         children: [
           Row(
@@ -52,7 +54,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
-                  'Bạn cùng lớp của Lan (${widget.phoneBook.length})',
+                  '${widget.title} (${widget.phoneBook.length})',
                   style: AppTextStyles.normal16(
                       color: AppColors.brand600, fontWeight: FontWeight.w600),
                 ),
@@ -62,6 +64,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TitleAndInputText(
+              obscureText: true,
               hintText: 'Tìm kiếm',
               onChanged: (value) {
                 _filteredPhoneBook = widget.phoneBook.where((entry) {
@@ -92,9 +95,21 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              radius: 25,
-                              child: Image.asset(info.image),
+                            // Container(
+                            //   height: 40,
+                            //   width: 40,
+                            //   decoration: BoxDecoration(
+                            //       color: AppColors.white,
+                            //       image: const DecorationImage(
+                            //           fit: BoxFit.cover,
+                            //           image: AssetImage(
+                            //               'assets/images/avatar.png')),
+                            //       borderRadius: BorderRadius.circular(0),
+                            //       border: Border.all(color: AppColors.white)),
+                            // ),
+                            Image.asset(
+                              'assets/images/default-user.png',
+                              width: 40,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 8),
@@ -108,8 +123,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                                   ),
                                   Text(
                                     info.id,
-                                    style: AppTextStyles.normal12(
-                                        fontWeight: FontWeight.w400),
+                                    style: AppTextStyles.normal12(),
                                   )
                                 ],
                               ),

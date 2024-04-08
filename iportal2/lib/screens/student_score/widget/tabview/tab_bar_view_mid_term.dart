@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iportal2/screens/student_score/student_score_screen.dart';
 import 'package:iportal2/screens/student_score/widget/score_card_subject/score_subject_model.dart';
 import 'package:iportal2/screens/student_score/widget/tabview/tab_bar_view_monet.dart';
 import 'package:iportal2/screens/student_score/widget/tabview/tab_bar_view_other.dart';
@@ -12,10 +13,8 @@ class TabBarViewMidTerm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: selectedScoreType == "Điểm MOET"
-          ? const TabViewMonet()
-          : const TabViewOther(),
+    return const SingleChildScrollView(
+      child: TabViewOther(),
     );
   }
 }
@@ -30,7 +29,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 2,
@@ -40,8 +40,9 @@ final List<ScoreSubjectModel> scoreSubjectList = [
     teacherAva:
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
-        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 3,
@@ -52,7 +53,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 4,
@@ -63,7 +65,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 5,
@@ -74,7 +77,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 6,
@@ -85,7 +89,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 7,
@@ -96,7 +101,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 8,
@@ -107,7 +113,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 9,
@@ -118,7 +125,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 10,
@@ -129,7 +137,8 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
   ),
   ScoreSubjectModel(
     id: 11,
@@ -140,7 +149,56 @@ final List<ScoreSubjectModel> scoreSubjectList = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'score',
+  ),
+  ScoreSubjectModel(
+    id: 12,
+    score: "9.0",
+    name: 'Âm nhạc',
+    teacherName: 'Nguyễn Hồng Ân',
+    teacherAva:
+        'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
+    advice:
+        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
+    result: 'Tốt',
+    typeScore: 'level',
+  ),
+  ScoreSubjectModel(
+    id: 13,
+    score: "9.0",
+    name: 'Mỹ thuật',
+    teacherName: 'Nguyễn Hồng Ân',
+    teacherAva:
+        'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
+    advice:
+        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
+    result: 'Tốt',
+    typeScore: 'level',
+  ),
+  ScoreSubjectModel(
+    id: 14,
+    score: "9.0",
+    name: 'Đạo đức',
+    teacherName: 'Nguyễn Hồng Ân',
+    teacherAva:
+        'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
+    advice:
+        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
+    result: 'Không đạt',
+    typeScore: 'level',
+  ),
+  ScoreSubjectModel(
+    id: 15,
+    score: "9.0",
+    name: 'Thể dục',
+    teacherName: 'Nguyễn Hồng Ân',
+    teacherAva:
+        'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
+    advice:
+        'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
+    result: 'Không đạt',
+    typeScore: 'level',
   ),
 ];
 
@@ -154,7 +212,8 @@ final List<ScoreSubjectModel> scoreSubjectListOther = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'IELTS',
   ),
   ScoreSubjectModel(
     id: 2,
@@ -165,6 +224,7 @@ final List<ScoreSubjectModel> scoreSubjectListOther = [
         'https://cdn3.iconfinder.com/data/icons/avatar-91/130/avatar__girl__teacher__female__women-512.png',
     advice:
         'Chữ viêt sạch đẹp, đọc bài lưu loát. Nắm vững kiến thức luyện từ và câu.',
-    result: 'T',
+    result: 'Tốt',
+    typeScore: 'SCIENCE',
   ),
 ];

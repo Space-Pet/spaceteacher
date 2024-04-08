@@ -4,12 +4,15 @@ import 'package:iportal2/resources/app_colors.dart';
 class TabBarFlexible extends StatelessWidget {
   final List<String> tabTitles;
   final List<List<Widget>> tabContent;
+  final double padding;
+  final double tabHeigth;
 
-  const TabBarFlexible({
-    super.key,
-    required this.tabTitles,
-    required this.tabContent,
-  });
+  const TabBarFlexible(
+      {super.key,
+      required this.tabTitles,
+      required this.tabContent,
+      this.tabHeigth = 32,
+      this.padding = 16});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class TabBarFlexible extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(padding),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -29,9 +32,8 @@ class TabBarFlexible extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: TabBar(
-                    labelColor: AppColors.red,
+                    labelColor: AppColors.red90001,
                     unselectedLabelColor: AppColors.gray700,
-                    isScrollable: false,
                     dividerColor: Colors.transparent,
                     labelStyle: const TextStyle(
                       fontSize: 13,
@@ -63,14 +65,16 @@ class TabBarFlexible extends StatelessWidget {
 
   List<Widget> _buildTabs() {
     return tabTitles.map((title) {
-      return Tab(
-        child: Align(
-          alignment: Alignment.center,
-          child: Center(
-              child: Text(
-            title,
-            textAlign: TextAlign.center,
-          )),
+      return SizedBox(
+        height: tabHeigth,
+        child: Tab(
+          child: Align(
+            child: Center(
+                child: Text(
+              title,
+              textAlign: TextAlign.center,
+            )),
+          ),
         ),
       );
     }).toList();

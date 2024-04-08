@@ -1,0 +1,58 @@
+#! /bin/bash
+
+function gen_localization() {
+	dart run easy_localization:generate --source-dir ./assets/i18n --output-dir lib/resources/i18n/
+	dart run easy_localization:generate -f keys -o locale_keys.g.dart --source-dir ./assets/i18n --output-dir lib/resources/i18n/
+}
+
+function run_pub_gen() {
+	flutter pub get
+	dart run build_runner build -d
+	gen_localization
+}
+
+function clean() {
+	run_clean_packages
+	run_clean
+}
+
+function run_clean() {
+	echo "================== Clean =================="
+	flutter clean
+	flutter pub get
+	cd ios
+	rm -rf Pods
+	rm -rf Podfile.lock
+	pod install --repo-update
+	cd ..
+	dart run build_runner build -d
+}
+
+function run_clean_packages() {
+	echo "This app dont have custom packages."
+}
+
+function main() {
+	echo "Choose function to run:"
+	select app in "gen_localization" "run_pub_gen" "clean" ; do
+		case $app in
+			gen_localization)
+				gen_localization
+				break
+				;;
+			run_pub_gen)
+				run_pub_gen
+				break
+				;;
+			clean)
+				clean
+				break
+				;;
+			*)
+				echo "Invalid choice."
+				;;
+		esac
+	done
+}
+
+main

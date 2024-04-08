@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:network_data_source/network_data_source.dart';
 
 class ApplicationItem extends StatelessWidget {
   const ApplicationItem({
@@ -9,7 +12,7 @@ class ApplicationItem extends StatelessWidget {
     required this.application,
   });
 
-  final LeaveApplicationModel application;
+  final LeaveData application;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +30,11 @@ class ApplicationItem extends StatelessWidget {
               color: AppColors.blueGray100,
               borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
-            width: 75,
-            height: 75,
-            child: const Icon(
-              Icons.calendar_month,
-              size: 40,
-              color: Color(0xFF1C274C),
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: SvgPicture.asset(
+                Assets.icons.calendarLeave,
+              ),
             ),
           ),
           const SizedBox(width: 8),
@@ -42,26 +44,37 @@ class ApplicationItem extends StatelessWidget {
               children: [
                 ApplicationHeader(
                   title: application.title,
-                  status: application.status,
+                  status: application,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 10),
+                  padding: const EdgeInsets.only(
+                    top: 2,
+                  ),
                   child: Row(
                     children: [
                       const Icon(
                         Icons.access_time,
-                        size: 12,
+                        size: 14,
+                        color: AppColors.gray400,
                       ),
-                      Text(
-                        DateFormat('dd/MM/yyyy').format(application.startDate).toString(),
-                        style: AppTextStyles.normal12(color: AppColors.gray400),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Text(
+                          DateFormat('dd/MM/yyyy')
+                              .format(application.startDate)
+                              .toString(),
+                          style:
+                              AppTextStyles.normal12(color: AppColors.gray400),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Text(
-                  application.reason,
-                  style: AppTextStyles.normal14(color: AppColors.gray400),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  application.content,
+                  style: AppTextStyles.normal14(color: AppColors.gray600),
                 )
               ],
             ),
@@ -73,9 +86,10 @@ class ApplicationItem extends StatelessWidget {
 }
 
 class ApplicationHeader extends StatelessWidget {
-  const ApplicationHeader({super.key, required this.title, required this.status});
+  const ApplicationHeader(
+      {super.key, required this.title, required this.status});
 
-  final ApplicationStatus status;
+  final LeaveData status;
   final String title;
 
   @override
@@ -89,15 +103,19 @@ class ApplicationHeader extends StatelessWidget {
         ),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: status.isApproved ? AppColors.green100 : AppColors.warning100,
+            color: status.text == 'Đã duyệt'
+                ? AppColors.green100
+                : AppColors.warning100,
             borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
             child: Text(
-              status.getName(),
+              status.text,
               style: AppTextStyles.normal12(
-                color: status.isApproved ? AppColors.green700 : AppColors.warning500,
+                color: status.text == 'Đã duyệt'
+                    ? AppColors.green700
+                    : AppColors.warning500,
               ),
             ),
           ),

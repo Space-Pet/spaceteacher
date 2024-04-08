@@ -13,6 +13,7 @@ class TabBarParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBarFlexible(
+      tabHeigth: 64,
       tabTitles: const ['Thông tin cha mẹ học sinh', 'Thông tin học sinh'],
       tabContent: [
         [
@@ -46,20 +47,13 @@ class TabBarParent extends StatelessWidget {
             content: '0983526182',
             isShowIcon: true,
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomDialogUpdatePhone(
-                    title: 'Chỉnh sửa số điện thoại',
-                    saveButtonTitle: 'Lưu lại',
-                    closeButtonTitle: 'Đóng',
-                    onSavePressed: () {
-                      context.pop();
-                    },
-                    onClosePressed: () {
-                      context.pop();
-                    },
-                  );
+              CustomDialogUpdatePhone.show(
+                context,
+                title: 'Chỉnh sửa số điện thoại',
+                saveButtonTitle: 'Lưu lại',
+                closeButtonTitle: 'Đóng',
+                onSavePressed: (String phone) {
+                  context.pop();
                 },
               );
             },
@@ -122,20 +116,13 @@ class TabBarParent extends StatelessWidget {
             content: '0983526182',
             isShowIcon: true,
             onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomDialogUpdatePhone(
-                    title: 'Chỉnh sửa số điện thoại',
-                    saveButtonTitle: 'Lưu lại',
-                    closeButtonTitle: 'Đóng',
-                    onSavePressed: () {
-                      context.pop();
-                    },
-                    onClosePressed: () {
-                      context.pop();
-                    },
-                  );
+              CustomDialogUpdatePhone.show(
+                context,
+                title: 'Chỉnh sửa số điện thoại',
+                saveButtonTitle: 'Lưu lại',
+                closeButtonTitle: 'Đóng',
+                onSavePressed: (String phone) {
+                  context.pop();
                 },
               );
             },

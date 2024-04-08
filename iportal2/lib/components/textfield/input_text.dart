@@ -3,7 +3,7 @@ import 'package:iportal2/resources/app_colors.dart';
 
 class TitleAndInputText extends StatefulWidget {
   const TitleAndInputText({
-    Key? key,
+    super.key,
     this.paddingTop = 0,
     this.paddingBottom = 0,
     required this.hintText,
@@ -23,8 +23,9 @@ class TitleAndInputText extends StatefulWidget {
     this.labelStyles,
     this.prefixIcon,
     this.onEditComplated,
+    this.fillColor,
     this.prefixIconFallback = const SizedBox(),
-  }) : super(key: key);
+  });
 
   final String hintText;
   final TextStyle? labelStyles;
@@ -42,17 +43,17 @@ class TitleAndInputText extends StatefulWidget {
   final Function()? onSubmit;
   final Function()? onTap;
   final Function()? onEditComplated;
+  final Color? fillColor;
 
   @override
   _TitleAndInputTextState createState() => _TitleAndInputTextState();
 }
 
 class _TitleAndInputTextState extends State<TitleAndInputText> {
-  bool _obscureText = true;
+  bool _obscureText = false;
 
   @override
   Widget build(BuildContext context) {
-    const redColor = Color(0xffCE2D30);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -75,7 +76,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
               widget.onEditComplated!();
             }
           },
-          cursorColor: widget.isValid ? null : redColor,
+          cursorColor: widget.isValid ? null : Colors.black,
           decoration: InputDecoration(
             constraints: const BoxConstraints(
               maxHeight: 50,
@@ -83,34 +84,41 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
             ),
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: widget.isValid ? Colors.grey : redColor),
+              borderSide: BorderSide(
+                  color: widget.isValid ? Colors.grey : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: widget.isValid ? Colors.blue : redColor),
+              borderSide: BorderSide(
+                  color: widget.isValid ? Colors.blue : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             border: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: widget.isValid ? Colors.grey : redColor),
+              borderSide: BorderSide(
+                  color: widget.isValid ? Colors.grey : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             hintText: widget.hintText,
             hintStyle: const TextStyle(color: AppColors.gray500),
             filled: true,
-            fillColor: Colors.white,
-            prefixIconColor: widget.isValid ? null : redColor,
+            fillColor: widget.fillColor ?? Colors.white,
+            prefixIconColor: widget.isValid ? null : Colors.transparent,
             prefixIcon: widget.prefixIcon,
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _obscureText = !_obscureText;
-                });
-              },
-              child: Icon(
-                _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                color: Colors.grey,
-              ),
-            ),
+            suffixIcon: !widget.obscureText
+                ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    child: Icon(
+                      _obscureText
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: Colors.grey,
+                    ),
+                  )
+                : null,
           ),
           obscureText: _obscureText,
         ),

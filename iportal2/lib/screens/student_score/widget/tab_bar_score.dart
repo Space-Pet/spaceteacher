@@ -85,7 +85,7 @@ class _TabBarScore extends State<TabBarScore> {
 
   List<Widget> _buildTabs() {
     return widget.renderedTabs.map((title) {
-      return Container(
+      return SizedBox(
         height: 32,
         child: Tab(
           child: Align(

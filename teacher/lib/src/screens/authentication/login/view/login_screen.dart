@@ -15,6 +15,7 @@ import 'package:teacher/src/utils/dialog_utils.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../../../../resources/i18n/locale_keys.g.dart';
 import '../../../../../resources/resources.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -89,12 +90,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(8),
                   child: Text(
-                    "title_login",
+                    LocaleKeys.titleLogin.tr(),
                     style: context.listHeading.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
                         color: AppColors.white),
-                  ).tr(),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -106,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onChanged: (val) {},
                           controller: userNameController,
                           isRequired: true,
-                          label: const Text("user_name").tr(),
+                          label: const Text(LocaleKeys.userName).tr(),
                         ),
                         const SizedBox(
                           height: 16,
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               isObsecure = !isObsecure;
                             });
                           },
-                          label: const Text("password").tr(),
+                          label: const Text(LocaleKeys.password).tr(),
                         ),
                         const SizedBox(
                           height: 16,
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           width: size.width,
                           child: const Text(
-                            "forgot_domain_school",
+                            LocaleKeys.forgotDomainSchool,
                             style: TextStyle(color: AppColors.white),
                           ).tr(),
                         ),
@@ -155,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                             onTap: () {},
                             child: const Text(
-                              "forgot_password",
+                              LocaleKeys.forgotPassword,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
@@ -164,9 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ).tr(),
                           ),
                         ),
-                        const SizedBox(
-                          height: 8,
-                        ),
+                        const SizedBox(height: 8),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -180,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: passwordController.text));
                               },
                               child: const Text(
-                                "sign_in",
+                                LocaleKeys.signIn,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -189,12 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               width: size.width,
                               alignment: Alignment.center,
-                              child: const Text("or").tr(),
+                              child: const Text(LocaleKeys.or).tr(),
                             ),
                             ElevatedButton(
                               onPressed: () {},
                               child: Text(
-                                "${"sign_in".tr()} ${"qr_code".tr()}",
+                                "${LocaleKeys.signIn.tr()} ${LocaleKeys.qrCode.tr()}",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),

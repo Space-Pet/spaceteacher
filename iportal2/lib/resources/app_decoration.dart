@@ -7,6 +7,8 @@ class AppDecoration {
 }
 
 class AppRadius {
+  static BorderRadius get rounded4 => BorderRadius.circular(4.h);
+
   static BorderRadius get rounded10 => BorderRadius.circular(10.h);
 
   static BorderRadius get rounded14 => BorderRadius.circular(14.h);

@@ -1,5 +1,4 @@
 import 'package:network_data_source/network_data_source.dart';
-import 'package:network_data_source/src/user_api/user_api.dart';
 
 class ChangePasswordFailure implements Exception {}
 
@@ -8,9 +7,17 @@ class GetProfileFailure implements Exception {}
 class UpdataProfileFailure implements Exception {}
 
 class UserApi extends AbstractUserApi {
-  UserApi({required AbstractDioClient client}) : _client = client;
+  UserApi({
+    required AbstractDioClient client,
+    required RestApiClient authRestClient,
+    required RestApiClient partnerTokenRestClient,
+  })  : _client = client,
+        _authRestClient = authRestClient,
+        _partnerTokenRestClient = partnerTokenRestClient;
 
   final AbstractDioClient _client;
+  final RestApiClient _authRestClient;
+  final RestApiClient _partnerTokenRestClient;
 
   Future<bool> changePassword({
     required String oldPassword,
@@ -54,48 +61,37 @@ class UserApi extends AbstractUserApi {
     }
   }
 
-  Future<bool> updateProfile({
-    required String phone,
-    required String position,
-    required String gender,
-  }) async {
+  Future<Map<String, dynamic>?> updateProfile(
+      {required String phone,
+      required String motherName,
+      required String fatherPhone,
+      required String pupil_id}) async {
     try {
       final data = await _client.doHttpPut(
-        url: 'api/user/update-profile',
+        url: '/api/v1/member/pupil/$pupil_id',
         requestBody: {
-          "phone_number": phone,
-          "position": position,
-          "gender": gender,
+          "mother_name": motherName,
+          "phone": phone,
+          "father_phone": fatherPhone,
         },
       );
-      if (data.containsKey('statusCode')) {
-        final statusCode = data['statusCode'];
-        if (statusCode is int) {
-          if (statusCode == 200) {
-            return true;
-          }
-        }
-      }
-      return false;
+      final status = data;
+      return data;
     } catch (e) {
-      print('$e');
-      print('lỗi');
-      throw UpdataProfileFailure();
+      return null;
     }
   }
 
-  Future<ProfileInfo> getProfile() async {
-    try {
-      final data = await _client.doHttpGet('api/user/user-profile');
 
-      if (data.containsKey('data')) {
-        final profileData = data['data'] as Map<String, dynamic>;
-        final profileInfo = ProfileInfo.fromMap(profileData);
-        return profileInfo;
-      } else {
-        throw GetProfileFailure();
-      }
+  Future<StudentData> getProfileStudent({required String pupil_id}) async {
+    try {
+      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupil_id/');
+
+      final profileData = data['data'] as Map<String, dynamic>;
+      final profileInfo = StudentData.fromMap(profileData);
+      return profileInfo;
     } catch (e) {
+      print('error: $e');
       throw GetProfileFailure();
     }
   }

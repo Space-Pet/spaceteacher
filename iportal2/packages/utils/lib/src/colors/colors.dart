@@ -25,8 +25,8 @@ class ColorsResource {
   static const redSecondary = Color(0xFFF60808);
   static const purple = Color(0xFF9747FF);
   static const green = Color(0xFF83D147);
-  static const F89F56 = Color(0xFFF89F56);
-  static const FF7E13 = Color(0xFFFF7E13);
+  static const orange56 = Color(0xFFF89F56);
+  static const orange13 = Color(0xFFFF7E13);
   static const bluebotton = Color(0xFF2486C8);
   static const blueDS = Color(0xFFF0F9FF);
   static const status = Color(0xFFD9F0FF);

@@ -28,6 +28,16 @@ class AppTextStyles {
         fontWeight: FontWeight.w800,
       );
 
+  static TextStyle bold26({
+    Color color = AppColors.gray800,
+  }) =>
+      custom(
+        fontSize: 26,
+        fontWeight: FontWeight.w700,
+        color: color,
+        height: 32 / 26,
+      );
+
   // 12
   static TextStyle normal12({
     Color color = AppColors.black,
@@ -127,4 +137,16 @@ class AppTextStyles {
     double? height,
   }) =>
       normal18(fontWeight: FontWeight.w700, color: color, height: height);
+
+  static TextStyle normal20({
+    Color color = AppColors.black,
+    FontWeight fontWeight = FontWeight.w400,
+    double? height,
+  }) =>
+      GoogleFonts.inter(
+        color: color,
+        fontSize: 20.fSize,
+        fontWeight: fontWeight,
+        height: height,
+      );
 }

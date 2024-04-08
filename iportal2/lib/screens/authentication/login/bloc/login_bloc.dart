@@ -16,7 +16,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     required this.authRepository,
     required this.currentUserBloc,
     required this.userRepository,
-  }) : super(const LoginState(userName: '', password: '', isSaveLoginInfo: false, isSuccess: false, showError: false)) {
+  }) : super(const LoginState(
+            userName: '',
+            password: '',
+            isSaveLoginInfo: false,
+            isSuccess: false,
+            showError: false)) {
     on<LoginUsernameChanged>(_onUserNameChanged);
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<PasswordVisibility>(_onPasswordVisibility);
@@ -28,7 +33,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final CurrentUserBloc currentUserBloc;
   final UserRepository userRepository;
 
-  void _onPasswordVisibility(PasswordVisibility event, Emitter<LoginState> emit) {
+  void _onPasswordVisibility(
+      PasswordVisibility event, Emitter<LoginState> emit) {
     final currentPasswordVisible = state.passwordVisible;
     emit(state.copyWith(passwordVisible: !currentPasswordVisible));
   }
@@ -80,7 +86,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
-      print("error: $e");
+      print("LoginBloc error: $e");
       emit(state.copyWith(status: LoginStatus.failure));
       rethrow;
     }

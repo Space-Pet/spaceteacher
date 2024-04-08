@@ -42,7 +42,6 @@ class CellStock {
 
   factory CellStock.fromMap(Map<String, dynamic> map) {
     final pk = map['pk']?.toString() ?? '';
-    final allocationsList = map['allocations'] as List<dynamic>?;
     final code = map['code'] ?? '';
     // final List<Allocation> allocations = [];
 

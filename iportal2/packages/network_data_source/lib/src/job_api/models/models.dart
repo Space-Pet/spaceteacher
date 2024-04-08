@@ -10,7 +10,6 @@ export '../../job_api/models/note_info.dart';
 export '../../job_api/models/file_info.dart';
 export '../../job_api/models/number_step.dart';
 export '../../job_api/models/count_info.dart';
-export '../../job_api/models/NumberStepInventory.dart';
 export '../../job_api/models/request_ticket_info.dart';
 export '../../job_api/models/empty_box.dart';
 export '../../job_api/models/detail_ticket_so.dart';
