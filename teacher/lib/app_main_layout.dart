@@ -13,7 +13,7 @@ import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/home/view/home_navigator.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
-import 'package:teacher/src/screens/notifications/notifications_screen.dart';
+import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
 import 'package:teacher/src/screens/week_schedule/week_schedule_screen.dart';
 

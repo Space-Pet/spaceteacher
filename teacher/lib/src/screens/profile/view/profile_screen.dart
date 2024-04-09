@@ -39,50 +39,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<ProfileBloc, ProfileState>(
       bloc: bloc,
       builder: (context, state) {
-        return Scaffold(
-          body: BackGroundContainer(
-            child: Column(
-              children: [
-                ProfileAppBar(
-                  studentModel: state.studentModel,
-                  childrenModel: widget.userInfo.children ?? ChildrenModel(),
-                  onBack: () {
-                    context.pop(result: true);
-                  },
-                  role: role,
-                ),
-                Flexible(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+        if (state.status == ProfileStatus.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status == ProfileStatus.loaded) {
+          return Scaffold(
+            body: BackGroundContainer(
+              child: Column(
+                children: [
+                  ProfileAppBar(
+                    studentModel: state.studentModel,
+                    childrenModel: widget.userInfo.children ?? ChildrenModel(),
+                    onBack: () {
+                      context.pop(result: true);
+                    },
+                    role: role,
+                  ),
+                  Flexible(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Image(
+                              image: widget.userInfo.brandLogo(),
+                              height: 100,
+                            ),
+                          ),
+                          if (role == 0)
+                            TabBarStudent(
+                              studentModel: state.studentModel,
+                            ),
+                          if (role == 1) const TabBarParent()
+                        ],
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Image(
-                            image: widget.userInfo.brandLogo(),
-                            height: 100,
-                          ),
-                        ),
-                        if (role == 0)
-                          TabBarStudent(
-                            studentModel: state.studentModel,
-                          ),
-                        if (role == 1) const TabBarParent()
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        } else {
+          return Center(
+            child: Text(state.errorString ?? 'Error'),
+          );
+        }
       },
     );
   }

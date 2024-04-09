@@ -5,6 +5,7 @@ import 'package:core/common/constants/app_locale.dart';
 import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/enviroment.dart';
 import 'package:teacher/resources/resources.dart';
 
 import 'package:teacher/src/services/routes/router_services.dart';
@@ -19,6 +20,7 @@ void main() {
     await EasyLocalization.ensureInitialized();
     HttpOverrides.global = MyHttpOverrides();
     Injector.init();
+    Enviroment.initFlavor(EnviromentFlavor.dev);
     runApp(
       EasyLocalization(
         supportedLocales: const [AppLocale.en, AppLocale.vi],
