@@ -20,7 +20,7 @@ void main() {
     await EasyLocalization.ensureInitialized();
     HttpOverrides.global = MyHttpOverrides();
     Injector.init();
-    Enviroment.initFlavor(EnviromentFlavor.dev);
+    Enviroment. initFlavor(EnviromentFlavor.dev);
     runApp(
       EasyLocalization(
         supportedLocales: const [AppLocale.en, AppLocale.vi],
