@@ -11,12 +11,18 @@ class ConductDetailModel {
   final String? hanhKiemResult;
   @JsonKey(name: 'hanh_kiem_name')
   final String? hanhKiemName;
+  @JsonKey(name: 'hanh_kiem_value')
+  final String? hanhKiemValue;
+  @JsonKey(name: 'hanh_kiem_key')
+  final String? hanhKiemKey;
 
   ConductDetailModel({
     this.itemId,
     this.itemName,
     this.hanhKiemResult,
     this.hanhKiemName,
+    this.hanhKiemKey,
+    this.hanhKiemValue,
   });
 
   factory ConductDetailModel.fromJson(Map<String, dynamic> json) =>
@@ -26,7 +32,7 @@ class ConductDetailModel {
 
   @override
   String toString() {
-    return 'ConductDetailModel{itemId: $itemId, itemName: $itemName, hanhKiemResult: $hanhKiemResult, hanhKiemName: $hanhKiemName}';
+    return 'ConductDetailModel{itemId: $itemId, itemName: $itemName, hanhKiemResult: $hanhKiemResult, hanhKiemName: $hanhKiemName, hanhKiemValue: $hanhKiemValue, hanhKiemKey: $hanhKiemKey}';
   }
 
   ConductDetailModel copyWith({
@@ -34,12 +40,16 @@ class ConductDetailModel {
     String? itemName,
     String? hanhKiemResult,
     String? hanhKiemName,
+    String? hanhKiemValue,
+    String? hanhKiemKey,
   }) {
     return ConductDetailModel(
       itemId: itemId ?? this.itemId,
       itemName: itemName ?? this.itemName,
       hanhKiemResult: hanhKiemResult ?? this.hanhKiemResult,
       hanhKiemName: hanhKiemName ?? this.hanhKiemName,
+      hanhKiemValue: hanhKiemValue ?? this.hanhKiemValue,
+      hanhKiemKey: hanhKiemKey ?? this.hanhKiemKey,
     );
   }
 }

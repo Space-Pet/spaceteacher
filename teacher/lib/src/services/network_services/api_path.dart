@@ -22,5 +22,22 @@ class ApiPath {
   static String getDetailGalleryImage = '${baseUrl}member/gallery/show';
   static String getSchedulesStudent = 'https://apitest-iportal.nhg.vn.api.php';
   static String getHighSchoolScore = 'https://apitest-iportal.nhg.vn.api.php';
-  static String getPrimarySchoolScore = 'https://apitest-iportal.nhg.vn.api.php';
+  static String getPrimarySchoolScore =
+      'https://apitest-iportal.nhg.vn.api.php';
+  static String getEslScore = 'https://apitest-iportal.nhg.vn.api.php';
+  static String getConductPrimarySchool =
+      'https://apitest-iportal.nhg.vn.api.php';
+
+  static String getMenuInWeek = 'https://apitest-iportal.nhg.vn.api.php';
+  static String getHistoryAbsenceStudent =
+      '$baseUrl/member/leave-application/pupil';
+  static String postAbsenceApplication =
+      '$baseUrl/member/leave-application/pupil';
+  static String getRegisterNotebookStudent =
+      'https://apitest-iportal.nhg.vn.api.php';
+  static String getRegisterNotebookTeacher =
+      'https://apitest-iportal.nhg.vn.api.php';
+  static String postRegisterNotebook = 'https://apitest-iportal.nhg.vn.api.php';
+  static String deleteRegisterNotebook =
+      'https://apitest-iportal.nhg.vn.api.php';
 }
