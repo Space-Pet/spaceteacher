@@ -51,3 +51,6 @@ class LoginButtonPressed extends LoginEvent {
   @override
   List<Object> get props => [userName, password];
 }
+
+
+class LoginWith365 extends LoginEvent {}

@@ -45,7 +45,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
               radius: 21,
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
-                imageUrl: '${widget.user.children?.urlImageModel?.mobile}',
+                imageUrl: widget.user.children?.urlImageModel?.mobile ??
+                    widget.user.schoolLogo ??
+                    '',
                 placeholder: (context, url) =>
                     const CupertinoActivityIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -71,7 +73,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                "${widget.user.className}",
+                widget.user.className ?? widget.user.typeText ?? '',
                 style: const TextStyle(color: AppColors.white, fontSize: 12),
               ),
             ],

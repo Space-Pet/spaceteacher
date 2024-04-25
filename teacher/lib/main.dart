@@ -5,6 +5,7 @@ import 'package:core/common/constants/app_locale.dart';
 import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:teacher/enviroment.dart';
 import 'package:teacher/resources/resources.dart';
 
@@ -18,9 +19,10 @@ void main() {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
+    await dotenv.load(fileName: '.env');
     HttpOverrides.global = MyHttpOverrides();
     Injector.init();
-    Enviroment. initFlavor(EnviromentFlavor.dev);
+    Enviroment.initFlavor(EnviromentFlavor.dev);
     runApp(
       EasyLocalization(
         supportedLocales: const [AppLocale.en, AppLocale.vi],

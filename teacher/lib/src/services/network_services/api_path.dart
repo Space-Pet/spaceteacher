@@ -4,6 +4,7 @@ class ApiPath {
   static String baseUrl = Enviroment.apiUrl;
 
   static String login = '${baseUrl}login';
+  static String loginStaff = '${baseUrl}staff-login';
   static String loginWithQR = '${baseUrl}login-QRCode';
   static String logout = '${baseUrl}logout';
   static String getInfoStudent = '${baseUrl}member/pupil/';

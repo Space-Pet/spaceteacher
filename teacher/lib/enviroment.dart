@@ -1,17 +1,21 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 enum EnviromentFlavor { dev, release }
 
 class Enviroment {
+  static String endPointDev = dotenv.env['ENDPOINT_DEV'] ?? "";
+  static String endPointRelease = dotenv.env['ENDPOINT_RELEASE'] ?? "";
   static EnviromentFlavor flavor = EnviromentFlavor.dev;
   static String get apiUrl {
     switch (flavor) {
       case EnviromentFlavor.dev:
-        return 'https://apitest-iportal.nhg.vn/api/v1/';
+        return endPointDev;
 
       case EnviromentFlavor.release:
-        return 'http://api-iportal.local/api/v1/';
+        return endPointRelease;
 
       default:
-        return 'https://apitest-iportal.nhg.vn/api/v1/';
+        return endPointDev;
     }
   }
 

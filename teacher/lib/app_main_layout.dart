@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:core/presentation/common_widget/date_picker/flutter_datetime_picker/src/date_format.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -122,7 +123,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           )
                         : Tab(
                             icon: SvgPicture.asset(
-                              Assets.icons.calendar,
+                              Assets.icons.features.highSScores,
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? AppColors.red
@@ -130,20 +131,33 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: LocaleKeys.schedule.tr(),
+                            text: LocaleKeys.checkGrades.tr(),
                           ),
-                    Tab(
-                      icon: SvgPicture.asset(
-                        Assets.icons.check,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 2
-                              ? AppColors.red
-                              : AppColors.gray400,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      text: 'attendance'.tr(),
-                    ),
+                    state.userInfo.isKinderGarten()
+                        ? Tab(
+                            icon: SvgPicture.asset(
+                              Assets.icons.features.highSBus,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 2
+                                    ? AppColors.red
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            text: LocaleKeys.weeklyProject.tr(),
+                          )
+                        : Tab(
+                            icon: SvgPicture.asset(
+                              Assets.icons.features.highSAttendance,
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 2
+                                    ? AppColors.red
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            text: LocaleKeys.attendance.tr(),
+                          ),
                     Tab(
                       icon: SvgPicture.asset(
                         Assets.icons.noti,
@@ -158,7 +172,8 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                     ),
                     Tab(
                       icon: SvgPicture.asset(
-                        Assets.icons.menu,
+                        Assets.icons.features.moreCircle,
+                        width: 28,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 4
                               ? AppColors.red
@@ -166,7 +181,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'menu'.tr(),
+                      text: LocaleKeys.all.tr(),
                     ),
                   ],
                   onTap: (index) async {
