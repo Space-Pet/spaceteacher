@@ -374,6 +374,9 @@ class $AssetsIconsFeaturesGen {
   /// File path: assets/icons/features/menu.svg
   String get menu => 'assets/icons/features/menu.svg';
 
+  /// File path: assets/icons/features/more-circle.svg
+  String get moreCircle => 'assets/icons/features/more-circle.svg';
+
   /// File path: assets/icons/features/preS_bus.svg
   String get preSBus => 'assets/icons/features/preS_bus.svg';
 
@@ -433,6 +436,7 @@ class $AssetsIconsFeaturesGen {
         highSScores,
         highSTuition,
         menu,
+        moreCircle,
         preSBus,
         preSCalendar,
         preSGallery,

@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.28"
+  aad_oauth:
+    dependency: "direct main"
+    description:
+      name: aad_oauth
+      sha256: "7678046a7b4b5e967d324e7431626343084451e04ac847e382948c8e1286c30e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   adaptive_dialog:
     dependency: transitive
     description:
@@ -384,6 +392,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  dartz:
+    dependency: transitive
+    description:
+      name: dartz
+      sha256: e6acf34ad2e31b1eb00948692468c30ab48ac8250e0f0df661e29f12dd252168
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.1"
   date_format:
     dependency: transitive
     description:
@@ -701,6 +717,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: "9357883bdd153ab78cbf9ffa07656e336b8bbb2b5a3ca596b0b27e119f7c7d77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   flutter_easyloading:
     dependency: transitive
     description:
@@ -2053,10 +2077,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher
-      sha256: "0ecc004c62fd3ed36a2ffcbe0dd9700aee63bd7532d0b642a488b1ec310f492e"
+      sha256: "6ce1e04375be4eed30548f10a315826fd933c1e493206eab82eed01f438c8d2e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.2.5"
+    version: "6.2.6"
   url_launcher_android:
     dependency: transitive
     description:

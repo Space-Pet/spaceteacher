@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:teacher/app_main_layout.dart';
 import 'package:teacher/components/textfield/input_text.dart';
 
@@ -101,7 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: 12, vertical: 12),
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          loginBloc.add(LoginWith365());
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(6),
                           backgroundColor: const Color(0xFF9C292E),

@@ -25,6 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             showError: false)) {
     on<PasswordVisibility>(_onPasswordVisibility);
     on<LoginButtonPressed>(_onSubmitted);
+    on<LoginWith365>(_loginWithOffice365);
   }
 
   final AuthRepository authRepository;
@@ -70,7 +71,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       Log.d('User: $user');
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
-      print("error: $e");
+      Log.e('$e', name: "Login Error AuthRepository -> login()");
+      emit(state.copyWith(status: LoginStatus.failure));
+      rethrow;
+    }
+  }
+
+  Future<void> _loginWithOffice365(
+      LoginWith365 event, Emitter<LoginState> emit) async {
+    try {
+      final UserManagerBloc userManagerBloc =
+          UserManagerBloc(userRepository: userRepository);
+
+      emit(state.copyWith(status: LoginStatus.loading));
+
+      final user = await authRepository.loginWith365();
+
+      await userRepository.saveUserInfo(user ?? UserInfo());
+      await UserManager.instance.loadSession(Injection.get<Settings>());
+      await Injection.get<Settings>().saveIsFirstTime(false);
+      userManagerBloc.add(const UserManagerGetUser());
+
+      Log.d('User: $user');
+      return emit(state.copyWith(status: LoginStatus.success));
+    } catch (e) {
+      Log.e('$e', name: "Login Error AuthRepository -> loginWithOffice365()");
       emit(state.copyWith(status: LoginStatus.failure));
       rethrow;
     }

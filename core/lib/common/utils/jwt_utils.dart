@@ -13,4 +13,12 @@ class JwtUtils {
       return true;
     }
   }
+
+  static Map<String, dynamic> decode(String token) {
+    try {
+      return Jwt.parseJwt(token);
+    } catch (e) {
+      return {};
+    }
+  }
 }

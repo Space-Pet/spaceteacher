@@ -7,7 +7,7 @@ import 'package:teacher/src/screens/authentication/login/view/login_screen.dart'
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
-import 'package:teacher/src/screens/notifications/notifications_screen.dart';
+import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
