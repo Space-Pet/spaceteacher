@@ -6,6 +6,7 @@ import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/feature_item.dart';
+import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 
 class PinFeatures extends StatefulWidget {
@@ -72,33 +73,33 @@ class _PinFeaturesState extends State<PinFeatures> {
         bottomSheetBorderRadius: AppRadius.roundedTop16,
       );
     } else {
-      // switch (feature.id) {
-      //   case 1:
-      //     context.push(const RegisterNoteBoookScreen());
-      //     break;
+      switch (feature.id) {
+        case 1:
+          // context.push(const RegisterNoteBoookScreen());
+          break;
 
-      //   case 3:
-      //     context.push(const BusScreen());
-      //     break;
+        case 3:
+          // context.push(const BusScreen());
+          break;
 
-      //   case 4:
-      //     context.push(const ExerciseScreen());
-      //     break;
+        case 4:
+          context.push(MenuScreen.routeName);
+          break;
 
-      //   case 5:
-      //     context.push(const OnLeaveScreen());
-      //     break;
+        case 5:
+          // context.push(const OnLeaveScreen());
+          break;
 
-      //   case 6:
-      //     context.push(const StudentScoreScreenMain());
-      //     break;
+        case 6:
+          // context.push(const StudentScoreScreenMain());
+          break;
 
-      //   case 9:
-      //     context.push(const PhoneBookScreen());
-      //     break;
+        case 9:
+          // context.push(const PhoneBookScreen());
+          break;
 
-      //   default:
-      // }
+        default:
+      }
     }
   }
 

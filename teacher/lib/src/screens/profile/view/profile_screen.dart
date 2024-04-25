@@ -30,7 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    bloc.add(ProfileGetProfilePupil(pupilId: widget.userInfo.pupilId));
+    bloc.add(ProfileGetProfilePupil(
+        pupilId: widget.userInfo.pupilId ?? widget.userInfo.userId));
     super.initState();
   }
 

@@ -81,7 +81,7 @@ final List<FeatureModel> features = [
     gradientType: FeatureGradient.orange,
   ),
   FeatureModel(
-    id: 2,
+    id: 14,
     name: 'attendance',
     highSIcon: Assets.icons.features.highSAttendance,
     category: FeatureCategory.daily,
@@ -117,7 +117,7 @@ final List<FeatureModel> features = [
   ),
 
   FeatureModel(
-    id: 7,
+    id: 6,
     pinnedDefault: true,
     highSIcon: Assets.icons.features.highSMessage,
     preSIcon: Assets.icons.features.preSMessage,
@@ -128,7 +128,7 @@ final List<FeatureModel> features = [
 
   // STUDY INFO
   FeatureModel(
-    id: 6,
+    id: 13,
     highSIcon: Assets.icons.features.highSScores,
     name: 'check grades',
     gradeLevel: FeatureGradeLevel.highschool,
@@ -164,7 +164,7 @@ final List<FeatureModel> features = [
 
   // Other
   FeatureModel(
-    id: 11,
+    id: 7,
     pinnedDefault: true,
     highSIcon: Assets.icons.features.health,
     preSIcon: Assets.icons.features.preSHeartplus,
