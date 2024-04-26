@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:teacher/components/app_bar/app_bar.dart';
+import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/gallery_model.dart';
 import 'package:teacher/resources/resources.dart';
@@ -15,7 +17,7 @@ class GalleryDetail extends StatefulWidget {
     required this.galleryItem,
   });
   final GalleryModel galleryItem;
-  static const routeName = '/gallery';
+  static const routeName = '/gallery_detail';
   @override
   State<GalleryDetail> createState() => GalleryDetailState();
 }
@@ -27,12 +29,12 @@ class GalleryDetailState extends State<GalleryDetail> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ScreenAppBar(
-            title: widget.galleryItem.name ?? '',
-            canGoback: true,
+          ScreensAppBar(
+            widget.galleryItem.name ?? '',
             onBack: () {
               context.pop();
             },
+            canGoBack: true,
           ),
           Expanded(
             child: Container(
@@ -57,15 +59,24 @@ class GalleryDetailState extends State<GalleryDetail> {
                         children: [
                           Row(
                             children: [
-                              Text(
-                                "${widget.galleryItem.name} ",
-                                style: AppTextStyles.semiBold16(
-                                    color: AppColors.brand600),
+                              Expanded(
+                                flex: 5,
+                                child: Text(
+                                  "${widget.galleryItem.name} ",
+                                  style: AppTextStyles.semiBold16(
+                                      color: AppColors.brand600),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
                               ),
-                              Text(
-                                "(${widget.galleryItem.images?.length})",
-                                style: AppTextStyles.normal14(
-                                    color: AppColors.gray600.withOpacity(0.4)),
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  "(${widget.galleryItem.images?.length})",
+                                  style: AppTextStyles.normal14(
+                                      color:
+                                          AppColors.gray600.withOpacity(0.4)),
+                                ),
                               )
                             ],
                           ),
@@ -73,8 +84,7 @@ class GalleryDetailState extends State<GalleryDetail> {
                             height: 12,
                           ),
                           Text(
-                            widget.galleryItem.galleryNumber.toString() ??
-                                'description',
+                            widget.galleryItem.galleryNumber.toString(),
                             style: AppTextStyles.normal14(
                                 color: AppColors.gray600),
                           ),
@@ -95,7 +105,7 @@ class GalleryDetailState extends State<GalleryDetail> {
                           itemBuilder: (context, index) {
                             return CardGalleryDetail(
                                 index: index,
-                                galleryAll: widget.galleryItem,
+                                galleryModel: widget.galleryItem,
                                 galleryItem: kIsWeb
                                     ? widget.galleryItem.images![index]
                                             .urlImageModel?.web ??

@@ -19,8 +19,8 @@ class ApiPath {
   static String getDetailNotification =
       '${baseUrl}member/announce/notification/';
   static String getListTeacher = '${baseUrl}member/teacher/pupil';
-  static String getListGalleryAlbum = '${baseUrl}member/gallery/pupil';
-  static String getDetailGalleryImage = '${baseUrl}member/gallery/show';
+  static String getListGalleryAlbum = '${baseUrl}staff/gallery/teacher';
+  static String getDetailGalleryImage = '${baseUrl}staff/gallery/show';
   static String getSchedulesStudent = 'https://apitest-iportal.nhg.vn.api.php';
   static String getHighSchoolScore = 'https://apitest-iportal.nhg.vn.api.php';
   static String getPrimarySchoolScore =

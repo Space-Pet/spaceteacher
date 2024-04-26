@@ -1,18 +1,13 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/buttons/rounded_button.dart';
 import 'package:teacher/model/gallery_model.dart';
+
 import 'package:teacher/resources/resources.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:teacher/src/screens/gallery/widget/gallery_appbar.dart';
 
 class GalleryCarousel extends StatefulWidget {
   const GalleryCarousel({
@@ -22,7 +17,7 @@ class GalleryCarousel extends StatefulWidget {
   });
   final GalleryModel galleryItem;
   final int index;
-  static const routeName = '/gallery-carousel';
+  static const routeName = '/gallery_carousel';
   @override
   State<GalleryCarousel> createState() => GalleryCarouselState();
 }
@@ -59,7 +54,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppColors.white,
+                  // color: AppColors.white,
                   borderRadius: AppRadius.roundedTop28,
                 ),
                 child: Column(
@@ -81,17 +76,7 @@ class GalleryCarouselState extends State<GalleryCarousel> {
                               width: double.infinity,
                               height: 250,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
                             ),
-                            // Image.asset(
-                            //   width: double.infinity,
-                            //   height: 250,
-                            //   fit: BoxFit.cover,
-                            // ?? ,
-                            // ),
                           ),
                         ),
                         ButtonGroupGallery(
@@ -132,74 +117,6 @@ class GalleryCarouselState extends State<GalleryCarousel> {
   }
 }
 
-class AppBarGallery extends StatelessWidget {
-  const AppBarGallery({
-    super.key,
-    required this.name,
-  });
-
-  final String name;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(color: AppColors.white),
-      padding: const EdgeInsets.fromLTRB(22, 48, 22, 12),
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: () {
-              context.pop();
-            },
-            child: const Icon(
-              Icons.arrow_back_ios_sharp,
-              size: 18,
-              color: AppColors.black24,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(name, style: AppTextStyles.semiBold18(color: AppColors.black24)),
-        ],
-      ),
-    );
-  }
-}
-
-class GalleryScrollItem extends StatelessWidget {
-  const GalleryScrollItem({
-    super.key,
-    required this.widget,
-    required int selectedIndex,
-    required this.index,
-  }) : _selectedIndex = selectedIndex;
-
-  final GalleryCarousel widget;
-  final int _selectedIndex;
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 54,
-      height: 54,
-      margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-      child: CachedNetworkImage(
-        imageUrl: kIsWeb
-            ? widget.galleryItem.images![index].urlImageModel?.web ?? ""
-            : widget.galleryItem.images![index].urlImageModel?.mobile ?? "",
-        fit: BoxFit.cover,
-        color: index == _selectedIndex
-            ? const Color.fromRGBO(255, 255, 255, 1)
-            : const Color.fromRGBO(255, 255, 255, 0.7),
-        colorBlendMode: BlendMode.modulate,
-      ),
-    );
-  }
-}
-
 class ButtonGroupGallery extends StatelessWidget {
   const ButtonGroupGallery({
     super.key,
@@ -215,26 +132,7 @@ class ButtonGroupGallery extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         RoundedButton(
-          onTap: () async {
-            const testImgUrl =
-                'https://vcdn-vnexpress.vnecdn.net/2020/09/08/hs-tieu-hoc-4175-1599563722.jpg';
-            final dio = Dio();
-
-            final appStorage = await getApplicationDocumentsDirectory();
-            final file = File('${appStorage.path}/$imgName-.jpg');
-
-            final response = await dio.get(
-              testImgUrl,
-              options: Options(
-                responseType: ResponseType.bytes,
-                followRedirects: false,
-                receiveTimeout: const Duration(seconds: 1),
-              ),
-            );
-            final raf = file.openSync(mode: FileMode.write);
-            raf.writeFromSync(response.data);
-            await raf.close();
-          },
+          onTap: () async {},
           margin: const EdgeInsets.only(right: 12),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           borderRadius: 30,
@@ -251,27 +149,16 @@ class ButtonGroupGallery extends StatelessWidget {
               const SizedBox(
                 width: 6,
               ),
-              CircleAvatar(
+              const CircleAvatar(
                 maxRadius: 12,
                 backgroundColor: AppColors.brand600,
-                child: SvgPicture.asset('assets/icons/download.svg'),
+                child: Icon(Icons.download, color: AppColors.white, size: 18),
               )
             ],
           ),
         ),
         RoundedButton(
-          onTap: () async {
-            const testImgUrl =
-                'https://vcdn-vnexpress.vnecdn.net/2020/09/08/hs-tieu-hoc-4175-1599563722.jpg';
-            final url = Uri.parse(testImgUrl);
-            final response = await http.get(url);
-            final bytes = response.bodyBytes;
-
-            final temp = await getTemporaryDirectory();
-            final path = '${temp.path}/image.jpg';
-            File(path).writeAsBytesSync(bytes);
-            // await Share.shareXFiles([XFile(path)], text: "Chia sẻ $imgName");
-          },
+          onTap: () async {},
           margin: const EdgeInsets.only(left: 12),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           borderRadius: 30,
@@ -288,10 +175,10 @@ class ButtonGroupGallery extends StatelessWidget {
               const SizedBox(
                 width: 6,
               ),
-              CircleAvatar(
+              const CircleAvatar(
                 maxRadius: 12,
                 backgroundColor: AppColors.brand600,
-                child: SvgPicture.asset('assets/icons/share.svg'),
+                child: Icon(Icons.share, color: AppColors.white, size: 18),
               )
             ],
           ),

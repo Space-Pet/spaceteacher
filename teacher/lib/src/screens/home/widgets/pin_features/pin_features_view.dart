@@ -1,13 +1,18 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
+import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/feature_item.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
+import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/utils/extension_context.dart';
+import 'package:teacher/src/utils/user_manager.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
@@ -25,7 +30,6 @@ class _PinFeaturesState extends State<PinFeatures> {
   late List<FeatureModel> featuresByGrade;
   late List<FeatureModel> pinnedFeatures;
   late List<FeatureModel> tempPinnedFeatures;
-
   void addBtnAllFeatureByDefault() {
     pinnedFeatures.add(FeatureModel(
       id: 999,
@@ -49,7 +53,7 @@ class _PinFeaturesState extends State<PinFeatures> {
     addBtnAllFeatureByDefault();
   }
 
-  void onTapFeature(FeatureModel feature) {
+  void onTapFeature(FeatureModel feature) async {
     if (feature.category == FeatureCategory.all) {
       showFlexibleBottomSheet(
         minHeight: 0,
@@ -80,6 +84,12 @@ class _PinFeaturesState extends State<PinFeatures> {
 
         case 3:
           // context.push(const BusScreen());
+          final UserInfo userInfo =
+              await UserManager.instance.getUser(Injection.get<Settings>()) ??
+                  UserInfo();
+          // ignore: use_build_context_synchronously
+          context.push(GalleryScreen.routeName,
+              arguments: {'teacherId': 10007548});
           break;
 
         case 4:
@@ -96,6 +106,9 @@ class _PinFeaturesState extends State<PinFeatures> {
 
         case 9:
           // context.push(const PhoneBookScreen());
+          break;
+        case 12:
+          context.push(GalleryScreen.routeName);
           break;
 
         default:

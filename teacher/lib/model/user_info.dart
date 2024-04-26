@@ -38,7 +38,8 @@ class UserInfo {
   final String? email;
   @JsonKey(name: 'father_name')
   final String? fatherName;
-
+  @JsonKey(name: 'teacher_id')
+  final int? teacherId;
   final int? semester;
   final ChildrenModel? children;
   UserInfo(
@@ -59,6 +60,7 @@ class UserInfo {
       this.capDaoTao,
       this.email,
       this.fatherName,
+      this.teacherId,
       this.semester,
       this.children});
 
@@ -89,6 +91,7 @@ class UserInfo {
       TrainingLevel? capDaoTao,
       String? email,
       String? fatherName,
+      int? teacherId,
       int? semester,
       ChildrenModel? children}) {
     return UserInfo(
@@ -109,6 +112,7 @@ class UserInfo {
         capDaoTao: capDaoTao ?? this.capDaoTao,
         email: email ?? this.email,
         fatherName: fatherName ?? this.fatherName,
+        teacherId: teacherId ?? this.teacherId,
         semester: semester ?? this.semester,
         children: children ?? this.children);
   }

@@ -5,25 +5,23 @@ import 'package:teacher/src/services/network_services/api_path.dart';
 import 'package:teacher/src/settings/settings.dart';
 
 abstract class GalleryRepository {
-  Future<GalleryAlbumModel> getListGallery(
-      int? pupilID, int? schoolID, String? schoolBrand);
+  Future<GalleryAlbumModel> getListGallery(int? teacherId, [int page = 1]);
   Future<GalleryModel> getDetailGallery(int? galleryID, int? pupilID);
 }
 
 class GalleryRepositoryImpl implements GalleryRepository {
   @override
-  Future<GalleryAlbumModel> getListGallery(
-      int? pupilID, int? schoolID, String? schoolBrand) async {
+  Future<GalleryAlbumModel> getListGallery(int? teacherId,
+      [int page = 1]) async {
     try {
       final accessToken = await Injection.get<Settings>().getAccessToken();
 
-      final res = await ApiClient(
-          '${ApiPath.getListGalleryAlbum}?pupil_id=$pupilID',
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'School-Id': '$schoolID',
-            'School-Brand': '$schoolBrand'
-          }).get();
+      final res = await ApiClient(ApiPath.getListGalleryAlbum, headers: {
+        'Authorization': 'Bearer $accessToken',
+      }).get({
+        'teacher_id': teacherId,
+        // 'page': page.toInt(),
+      });
 
       if (isNullOrEmpty(res['data'])) return GalleryAlbumModel();
 

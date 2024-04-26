@@ -1,10 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:core/core.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/model/gallery_model.dart';
+import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
+import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
 class CardGallery extends StatelessWidget {
   const CardGallery({
@@ -14,8 +19,8 @@ class CardGallery extends StatelessWidget {
     required this.lastIndex,
   });
   final GalleryModel galleryItem;
-  final num index;
-  final num lastIndex;
+  final int index;
+  final int lastIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -24,48 +29,61 @@ class CardGallery extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push(GalleryDetail(
-          galleryItem: galleryItem,
-        ));
+        context.push(GalleryDetail.routeName, arguments: {
+          'galleryItem': galleryItem,
+        });
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  kIsWeb
-                      ? galleryItem.images![index.toInt()].urlImageModel?.web ??
-                          ""
-                      : galleryItem
-                              .images![index.toInt()].urlImageModel?.mobile ??
-                          "",
+          if (!isNullOrEmpty(galleryItem.images))
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    kIsWeb
+                        ? galleryItem.images![index].urlImageModel?.web ?? ""
+                        : galleryItem.images![index].urlImageModel?.mobile ??
+                            "",
+                  ),
+                  fit: BoxFit.cover,
                 ),
-                fit: BoxFit.cover,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            height: itemW,
-            width: itemW,
-            padding: const EdgeInsets.only(top: 12, right: 12),
-            alignment: Alignment.topRight,
-            child: CircleAvatar(
-              backgroundColor:
-                  galleryItem.isPinned ? AppColors.red900 : AppColors.white,
-              maxRadius: 14,
-              child: SvgPicture.asset(
-                'assets/icons/pin-gallery.svg',
-                colorFilter: ColorFilter.mode(
-                  galleryItem.isPinned ? AppColors.white : AppColors.gray400,
-                  BlendMode.srcIn,
+              height: itemW,
+              width: itemW,
+              padding: const EdgeInsets.only(top: 12, right: 12),
+              alignment: Alignment.topRight,
+              child: CircleAvatar(
+                backgroundColor: AppColors.white,
+                maxRadius: 14,
+                child: SvgPicture.asset(
+                  Assets.icons.pin,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.gray400,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
-          ),
+          if (isNullOrEmpty(galleryItem.images))
+            Container(
+              height: itemW,
+              width: itemW,
+              decoration: const BoxDecoration(
+                color: AppColors.gray100,
+              ),
+              child: DottedBorder(
+                radius: const Radius.circular(10),
+                borderType: BorderType.RRect,
+                child: const Center(
+                  child: Text('No images'),
+                ),
+              ),
+            ),
           const SizedBox(height: 4),
           Text(
-            galleryItem.name,
+            galleryItem.name ?? "",
             style: AppTextStyles.custom(
                 fontSize: 14.fSize,
                 fontWeight: FontWeight.w500,
@@ -77,7 +95,7 @@ class CardGallery extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            '${galleryItem.imgUrlList.length} ảnh',
+            '${galleryItem.images?.length} ảnh',
             style: AppTextStyles.custom(
                 fontSize: 14.fSize,
                 fontWeight: FontWeight.w500,

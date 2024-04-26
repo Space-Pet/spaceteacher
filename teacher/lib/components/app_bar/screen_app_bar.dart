@@ -51,8 +51,11 @@ class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : const SizedBox(),
-      title:
-          Text(title, style: AppTextStyles.semiBold18(color: AppColors.white)),
+      title: Text(
+        title,
+        style: AppTextStyles.semiBold18(color: AppColors.white),
+        overflow: TextOverflow.ellipsis,
+      ),
       actions: [
         if (actionWidget != null) actionWidget! else const SizedBox(),
       ],

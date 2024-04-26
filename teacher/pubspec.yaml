@@ -59,6 +59,8 @@ dependencies:
   timeline_tile: ^2.0.0
   aad_oauth: ^1.0.1
   flutter_dotenv: ^5.1.0
+  pull_to_refresh_flutter3: ^2.0.2
+
   
  
 
