@@ -1,68 +1,68 @@
-// ignore_for_file: one_member_abstracts
+// // ignore_for_file: one_member_abstracts
 
 
-import 'package:dartx/dartx.dart';
-import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:dartx/dartx.dart';
+// import 'package:injectable/injectable.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../di/di.dart';
-import '../../../../presentation/theme/theme_data.dart';
-import 'preferences_key.dart';
 
-part 'impl/preferences_helper.impl.dart';
+// import '../../../../presentation/theme/theme_data.dart';
+// import 'preferences_key.dart';
 
-abstract class PreferencesHelper extends AppPreferenceData {}
+// part 'impl/preferences_helper.impl.dart';
 
-/// Define common local data can be using for both app
-abstract class AppPreferenceData {
-  SupportedTheme getTheme();
+// abstract class PreferencesHelper extends AppPreferenceData {}
 
-  Future<bool?> setTheme(String? data);
+// /// Define common local data can be using for both app
+// abstract class AppPreferenceData {
+//   SupportedTheme getTheme();
 
-  String? getLocalization();
+//   Future<bool?> setTheme(String? data);
 
-  Future<bool?> saveLocalization(String? locale);
+//   String? getLocalization();
 
-  Future<bool?> clearData();
+//   Future<bool?> saveLocalization(String? locale);
 
-  Future<void> markFirstLaunch();
+//   Future<bool?> clearData();
 
-  bool isFirstLaunch();
+//   Future<void> markFirstLaunch();
 
-  /// Token
-  String? get token;
+//   bool isFirstLaunch();
 
-  set token(String? token);
+//   /// Token
+//   String? get token;
 
-  /// Token
-  String? get refreshToken;
+//   set token(String? token);
 
-  set refreshToken(String? token);
+//   /// Token
+//   String? get refreshToken;
 
-  /// App settings
-  // AppSetting? get appSettings;
+//   set refreshToken(String? token);
 
-  // set appSettings(AppSetting? value);
+//   /// App settings
+//   // AppSetting? get appSettings;
 
-  /// Booking settings
-  // List<BookingSetting>? get bookingSettings;
+//   // set appSettings(AppSetting? value);
 
-  // set bookingSettings(List<BookingSetting>? value);
+//   /// Booking settings
+//   // List<BookingSetting>? get bookingSettings;
 
-  /// Notification settings
-  bool? get notificationEnabled;
+//   // set bookingSettings(List<BookingSetting>? value);
 
-  set notificationEnabled(bool? value);
+//   /// Notification settings
+//   bool? get notificationEnabled;
 
-  // Address? getLastBookingAddress();
-  // ServiceItems? getLastBookingServiceItems();
+//   set notificationEnabled(bool? value);
 
-  // Future<bool?> saveLastBookingAddress(Address? address);
-  // Future<bool?> saveLastBookingServiceItems(ServiceItems? serviceItems);
+//   // Address? getLastBookingAddress();
+//   // ServiceItems? getLastBookingServiceItems();
 
-  // Future<bool?> saveInputAddress(Address? inputAddress);
-  // ServiceItems? getInputWorkingTime();
-  // Future<bool?> saveInputWorkingTime(ServiceItems? serviceItems);
-  String? getPartnerId();
-  Future<bool?> savePartnerId(String? id);
-}
+//   // Future<bool?> saveLastBookingAddress(Address? address);
+//   // Future<bool?> saveLastBookingServiceItems(ServiceItems? serviceItems);
+
+//   // Future<bool?> saveInputAddress(Address? inputAddress);
+//   // ServiceItems? getInputWorkingTime();
+//   // Future<bool?> saveInputWorkingTime(ServiceItems? serviceItems);
+//   String? getPartnerId();
+//   Future<bool?> savePartnerId(String? id);
+// }

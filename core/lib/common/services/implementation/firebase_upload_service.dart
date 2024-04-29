@@ -4,7 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
 
-import '../../../di/di.dart';
+// import '../../../di/di.dart';
 import '../auth_service.dart';
 import '../upload_service.dart';
 
@@ -12,7 +12,7 @@ import '../upload_service.dart';
 class FirebaseUploadService extends UploadService {
   @override
   Future<String?> uploadImage(File file, String fileName, String path) async {
-    await injector.get<AuthService>().loginFirebase();
+    // await injector.get<AuthService>().loginFirebase();
     final customFileName = fileName.isNotEmpty == true
         ? '$fileName.${basename(file.path).split('.').last}'
         : basename(file.path);

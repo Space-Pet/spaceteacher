@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:core/presentation/common_widget/export.dart';
-import 'package:dotted_border/dotted_border.dart';
 
 import 'package:flutter/material.dart';
 
@@ -9,11 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/gallery_model.dart';
+
 import 'package:teacher/repository/gallery_repository/gallery_repositories.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_card/card_gallery.dart';
-import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
+
 import 'package:teacher/src/utils/extension_context.dart';
 
 class GalleryScreen extends StatefulWidget {
@@ -127,12 +127,11 @@ class GalleryScreenState extends State<GalleryScreen> {
                                           mainAxisSpacing: 16,
                                           crossAxisSpacing: 8,
                                           childAspectRatio: 3 / 4),
-                                  itemCount: galleryAlbum!.length,
+                                  itemCount: galleryAlbum?.length ?? 0,
                                   itemBuilder: (context, index) {
                                     return CardGallery(
-                                      index: index,
-                                      galleryItem: galleryAlbum[index],
-                                      lastIndex: galleryAlbum.length,
+                                      galleryItem: galleryAlbum?[index] ??
+                                          GalleryModel(),
                                     );
                                   }),
                             ),

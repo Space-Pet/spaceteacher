@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/gallery_model.dart';
@@ -106,13 +104,9 @@ class GalleryDetailState extends State<GalleryDetail> {
                             return CardGalleryDetail(
                                 index: index,
                                 galleryModel: widget.galleryItem,
-                                galleryItem: kIsWeb
-                                    ? widget.galleryItem.images![index]
-                                            .urlImageModel?.web ??
-                                        ""
-                                    : widget.galleryItem.images![index]
-                                            .urlImageModel?.mobile ??
-                                        "",
+                                galleryItem: widget.galleryItem.images![index]
+                                        .urlImageModel?.mobile ??
+                                    "",
                                 lastIndex:
                                     widget.galleryItem.images?.length ?? 0 - 1);
                           },
