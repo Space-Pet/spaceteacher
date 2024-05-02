@@ -2,7 +2,6 @@ export 'utils/common_function.dart';
 export 'utils/date_utils.dart';
 export 'utils/debouncer.dart';
 export 'utils/extensions.dart';
-export 'utils/image_picker.dart';
 export 'utils/jwt_utils.dart';
 export 'utils/log_utils.dart';
 export 'utils/number_format_utils.dart';

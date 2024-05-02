@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/check_box/check_box.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/survey/model/survay.dart';
 import 'package:iportal2/screens/survey/widget/check_box_survay.dart';

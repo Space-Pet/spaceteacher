@@ -8,7 +8,9 @@ class ScheduleFetchData extends ScheduleEvent {
 }
 
 class ScheduleFetchExercise extends ScheduleEvent {
-  ScheduleFetchExercise();
+  ScheduleFetchExercise({required this.datePicked});
+
+  final DateTime datePicked;
 }
 
 class ScheduleSelectDate extends ScheduleEvent {

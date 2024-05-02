@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:local_data_source/local_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'login_event.dart';
@@ -26,6 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginPasswordChanged>(_onPasswordChanged);
     on<PasswordVisibility>(_onPasswordVisibility);
     on<LoginSubmitted>(_onSubmitted);
+    on<LoginQR>(_onLoginQR);
   }
 
   final AuthRepository authRepository;
@@ -64,9 +66,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final userName = state.userName;
       final password = state.password;
-      // [Debug]
-      // final userName = 'ph0723210020';
-      // final password = 'uko7ap';
       emit(state.copyWith(status: LoginStatus.loading));
 
       if (userName.isEmpty || password.isEmpty) {
@@ -80,13 +79,80 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         isSaveLoginInfo: state.isSaveLoginInfo,
       );
 
-      userRepository.saveUser(user);
+      final featuresLocal = await userRepository.getFeatures();
+      final listFeatures = featuresLocal
+          ?.firstWhere(
+            (element) => element.user_key == user.user_key,
+            orElse: () => LocalFeatures(user_key: '', features: []),
+          )
+          .features;
 
-      currentUserBloc.add(CurrentUserUpdated(user: user));
+      final pinnedAlbumIdList = featuresLocal
+          ?.firstWhere(
+            (element) => element.user_key == user.user_key,
+            orElse: () => LocalFeatures(
+              user_key: '',
+              features: [],
+              pinnedAlbumIdList: [],
+            ),
+          )
+          .pinnedAlbumIdList;
 
+      final userWithFeatures = user.copyWith(
+        features: (listFeatures ?? []).isNotEmpty
+            ? listFeatures
+            : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
+        pinnedAlbumIdList: pinnedAlbumIdList,
+      );
+
+      userRepository.saveUser(userWithFeatures);
+      currentUserBloc.add(CurrentUserUpdated(user: userWithFeatures));
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
-      print("LoginBloc error: $e");
+      emit(state.copyWith(status: LoginStatus.failure));
+      rethrow;
+    }
+  }
+
+  void _onLoginQR(LoginQR event, Emitter<LoginState> emit) async {
+    try {
+      emit(state.copyWith(status: LoginStatus.loading));
+      final user = await authRepository.loginQR(
+          qrCode: event.qrCode,
+          deviceId: event.deviceId,
+          model: event.model,
+          platform: event.platform,
+          tokenFirebase: event.tokenFirebase);
+      final featuresLocal = await userRepository.getFeatures();
+      final listFeatures = featuresLocal
+          ?.firstWhere(
+            (element) => element.user_key == user.user_key,
+            orElse: () => LocalFeatures(user_key: '', features: []),
+          )
+          .features;
+
+      final pinnedAlbumIdList = featuresLocal
+          ?.firstWhere(
+            (element) => element.user_key == user.user_key,
+            orElse: () => LocalFeatures(
+              user_key: '',
+              features: [],
+              pinnedAlbumIdList: [],
+            ),
+          )
+          .pinnedAlbumIdList;
+
+      final userWithFeatures = user.copyWith(
+        features: (listFeatures ?? []).isNotEmpty
+            ? listFeatures
+            : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
+        pinnedAlbumIdList: pinnedAlbumIdList,
+      );
+
+      userRepository.saveUser(userWithFeatures);
+      currentUserBloc.add(CurrentUserUpdated(user: userWithFeatures));
+      return emit(state.copyWith(status: LoginStatus.success));
+    } catch (e) {
       emit(state.copyWith(status: LoginStatus.failure));
       rethrow;
     }

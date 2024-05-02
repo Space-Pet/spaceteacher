@@ -1,12 +1,31 @@
 part of 'leave_bloc.dart';
 
-abstract class LeaveEvent extends Equatable{
-  const LeaveEvent();
-  @override 
-  List<Object> get props => [];
+abstract class LeaveEvent {}
+
+class GetLeaves extends LeaveEvent {
+  final int page;
+  GetLeaves({required this.page});
+  List<Object> get props => [page];
 }
-class GetLeaves extends LeaveEvent{}
+class GetLeavesMore extends LeaveEvent {
+  final int page;
+  GetLeavesMore({required this.page});
+  List<Object> get props => [page];
+}
+
 class CurrentUserUpdated extends LeaveEvent {
   CurrentUserUpdated({required this.user});
   final ProfileInfo user;
+}
+
+class PostLeave extends LeaveEvent {
+  final String? content;
+  final String startDate;
+  final String endDate;
+  final int leaveType;
+  PostLeave(
+      {required this.endDate,
+      this.content,
+      required this.leaveType,
+      required this.startDate});
 }

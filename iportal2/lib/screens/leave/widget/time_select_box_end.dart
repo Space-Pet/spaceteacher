@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
 
@@ -16,6 +15,8 @@ class TimeSelectBoxEnd extends StatefulWidget {
     this.dateStart,
     required this.helpText,
     this.canSelectTime = true,
+    required this.onTimeChanged,
+    required this.onDateChanged,
   });
 
   final String title;
@@ -25,6 +26,8 @@ class TimeSelectBoxEnd extends StatefulWidget {
   final TimeOfDay time;
   final String helpText;
   final bool canSelectTime;
+  final Function(DateTime) onTimeChanged;
+  final Function(DateTime) onDateChanged;
 
   @override
   State<TimeSelectBoxEnd> createState() => TimeSelectBoxEndState();
@@ -40,7 +43,7 @@ class TimeSelectBoxEndState extends State<TimeSelectBoxEnd> {
     final TimeOfDay? pickedTime = await showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
+        return SizedBox(
           height: 200,
           child: Column(
             children: [
@@ -68,6 +71,7 @@ class TimeSelectBoxEndState extends State<TimeSelectBoxEnd> {
                       dataTime =
                           '${selectedTime!.hourOfPeriod}:${selectedTime!.minute} ${selectedTime!.period == DayPeriod.am ? 'AM' : 'PM'}';
                     });
+                    widget.onTimeChanged(newDateTime);
                   },
                 ),
               ),
@@ -96,7 +100,7 @@ class TimeSelectBoxEndState extends State<TimeSelectBoxEnd> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime initialDate = widget.date.add(Duration(days: 1));
+    DateTime initialDate = widget.date.add(const Duration(days: 1));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,14 +132,14 @@ class TimeSelectBoxEndState extends State<TimeSelectBoxEnd> {
                       initialEntryMode: DatePickerEntryMode.calendarOnly,
                       cancelText: 'Trở về',
                       confirmText: 'Xong',
-                      initialDate: widget.date.add(Duration(days: 1)),
+                      initialDate: widget.date.add(const Duration(days: 1)),
                       // initialDate: widget.date ==
                       //         DateTime.now().subtract(Duration(days: 1))
                       //     ? widget.date
                       //     : widget.date.add(Duration(days: 2)),
                       firstDate: widget.date ==
-                              DateTime.now().subtract(Duration(days: 1))
-                          ? widget.date.add(Duration(days: 2))
+                              DateTime.now().subtract(const Duration(days: 1))
+                          ? widget.date.add(const Duration(days: 2))
                           : widget.date,
                       lastDate: DateTime(now.year, now.month, now.year + 1),
                       builder: (context, child) {
@@ -155,6 +159,7 @@ class TimeSelectBoxEndState extends State<TimeSelectBoxEnd> {
                       setState(() {
                         datePicked = formattedDate;
                       });
+                      widget.onDateChanged(pickedDate);
                     } else {}
                   },
                   child: Row(

@@ -1,4 +1,4 @@
-import 'package:iportal2/screens/home/models/feature_model.dart';
+import 'package:local_data_source/local_data_source.dart';
 
 final List<FeatureModel> preSFeatures = [
   // Hoạt động hằng ngày
@@ -7,21 +7,21 @@ final List<FeatureModel> preSFeatures = [
     name: 'Nghỉ phép',
     icon: 'preS_calendar',
     category: FeatureCategory.daily,
-    defaultOrder: 2,
+    order: 2,
   ),
   FeatureModel(
     key: FeatureKey.menu,
     name: 'Thực đơn',
     icon: 'preS_menu',
     category: FeatureCategory.daily,
-    defaultOrder: 1,
+    order: 1,
   ),
   FeatureModel(
     key: FeatureKey.bus,
     name: 'Xe đưa rước',
     icon: 'preS_bus',
     category: FeatureCategory.daily,
-    defaultPinned: false,
+    pinned: false,
   ),
 
   // Thông tin học tập
@@ -30,7 +30,7 @@ final List<FeatureModel> preSFeatures = [
     name: 'Nhận xét',
     icon: 'preS_comment',
     category: FeatureCategory.studyInfo,
-    defaultOrder: 3,
+    order: 3,
   ),
 
   // Dịch vụ học đường
@@ -39,21 +39,21 @@ final List<FeatureModel> preSFeatures = [
     name: 'Học phí',
     icon: 'preS_tuition',
     category: FeatureCategory.services,
-    defaultOrder: 6,
+    order: 6,
   ),
   FeatureModel(
     key: FeatureKey.phoneBook,
     name: 'Danh bạ',
     icon: 'preS_phone-book',
     category: FeatureCategory.services,
-    defaultOrder: 7,
+    order: 7,
   ),
   FeatureModel(
     key: FeatureKey.tariff,
     name: 'Biểu phí',
     icon: 'preS_tariff',
     category: FeatureCategory.services,
-    defaultPinned: false,
+    pinned: false,
   ),
 
   // Thông tin khác
@@ -62,14 +62,14 @@ final List<FeatureModel> preSFeatures = [
     name: 'Sức khỏe',
     icon: 'preS_health',
     category: FeatureCategory.other,
-    defaultPinned: false,
+    pinned: false,
   ),
   FeatureModel(
     key: FeatureKey.survey,
     name: 'Khảo sát',
     icon: 'preS_survey',
     category: FeatureCategory.other,
-    defaultOrder: 4,
+    order: 4,
   ),
   FeatureModel(
     key: FeatureKey.gallery,
@@ -77,7 +77,7 @@ final List<FeatureModel> preSFeatures = [
     icon: 'preS_gallery',
     category: FeatureCategory.other,
     // defaultPinned: false,
-    defaultOrder: 5,
+    order: 5,
   ),
 ];
 
@@ -88,7 +88,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Sổ đầu bài',
     icon: 'highS_register-notebook',
     category: FeatureCategory.daily,
-    defaultOrder: 1,
+    order: 1,
     gradientType: FeatureGradient.orange,
   ),
   FeatureModel(
@@ -96,7 +96,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Sổ báo bài',
     icon: 'highS_instruction-notebook',
     category: FeatureCategory.daily,
-    defaultOrder: 2,
+    order: 2,
     gradientType: FeatureGradient.darkblue,
   ),
   FeatureModel(
@@ -104,7 +104,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Xe đưa rước',
     icon: 'highS_bus',
     category: FeatureCategory.daily,
-    defaultOrder: 3,
+    order: 3,
     gradientType: FeatureGradient.lightblue,
   ),
   FeatureModel(
@@ -112,7 +112,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Thực đơn',
     icon: 'highS_menu',
     category: FeatureCategory.daily,
-    defaultPinned: false,
+    pinned: false,
     gradientType: FeatureGradient.orange,
   ),
   FeatureModel(
@@ -120,7 +120,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Nghỉ phép',
     icon: 'highS_attendance',
     category: FeatureCategory.daily,
-    defaultOrder: 5,
+    order: 5,
     gradientType: FeatureGradient.yellow,
   ),
 
@@ -130,7 +130,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Xem điểm',
     icon: 'highS_scores',
     category: FeatureCategory.studyInfo,
-    defaultPinned: false,
+    pinned: false,
     gradientType: FeatureGradient.lightblue,
   ),
 
@@ -140,7 +140,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Học phí',
     icon: 'highS_tuition',
     category: FeatureCategory.services,
-    defaultOrder: 6,
+    order: 6,
     gradientType: FeatureGradient.orange,
   ),
   FeatureModel(
@@ -148,7 +148,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Danh bạ',
     icon: 'highS_phone-book',
     category: FeatureCategory.services,
-    defaultOrder: 7,
+    order: 7,
     gradientType: FeatureGradient.darkblue,
   ),
   FeatureModel(
@@ -156,7 +156,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Biểu phí',
     icon: 'highS_tariff',
     category: FeatureCategory.services,
-    defaultPinned: false,
+    pinned: false,
     gradientType: FeatureGradient.green,
   ),
 
@@ -166,7 +166,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Thư viện ảnh',
     icon: 'highS_gallery',
     category: FeatureCategory.other,
-    defaultPinned: false,
+    pinned: false,
     gradientType: FeatureGradient.yellow,
   ),
   FeatureModel(
@@ -174,7 +174,7 @@ final List<FeatureModel> hihgSFeatures = [
     name: 'Khảo sát',
     icon: 'highS_survey',
     category: FeatureCategory.other,
-    defaultOrder: 4,
+    order: 4,
     gradientType: FeatureGradient.green,
   ),
 ];

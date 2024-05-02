@@ -1,13 +1,11 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/message/chat_room.dart';
 import 'package:iportal2/screens/message/conponents/card_messages.dart';
-import 'package:iportal2/screens/message/models/message.dart';
 
 class ListMessage extends StatelessWidget {
-  final List<MessageChatRoom> chatRooms;
+  final List<Message> chatRooms;
 
   const ListMessage({super.key, required this.chatRooms});
 
@@ -77,7 +75,7 @@ class ListMessage extends StatelessWidget {
           final chat = chatRooms[index];
           return ChatRoomItem(
               onTap: () {
-                context.push(ChatRoomScreen(messageChatRoom: chat));
+                // context.push(ChatRoomScreen(messageChatRoom: chat));
               },
               chatRoom: chat);
         },

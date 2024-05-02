@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/input_text.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
@@ -13,17 +14,18 @@ class CustomDialogUpdatePhone {
     required String saveButtonTitle,
     required String closeButtonTitle,
     Function(String phone)? onSavePressed,
+    String? errMsg,
   }) async {
-    Completer<void> completer = Completer<void>();
     await showDialog(
         context: context,
         builder: (context) {
           double screenWidth = MediaQuery.of(context).size.width;
           String phone = '';
+
           return AlertDialog(
             backgroundColor: AppColors.white,
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Text(
               textAlign: TextAlign.center,
               title,
@@ -49,13 +51,15 @@ class CustomDialogUpdatePhone {
                       child: ElevatedButton(
                         onPressed: onSavePressed != null
                             ? () {
-                                onSavePressed(phone);
-                                Navigator.pop(
-                                    context); 
+                                if (phone.isNotEmpty) {
+                                  onSavePressed(phone);
+                                  context.pop();
+                                }
                               }
                             : null,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.redMenu),
+                          backgroundColor: AppColors.redMenu,
+                        ),
                         child: SizedBox(
                             width: double.infinity,
                             child: Text(

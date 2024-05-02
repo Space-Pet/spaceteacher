@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
+import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/select_child.dart';
+import 'package:iportal2/components/custom_refresh.dart';
+import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/screens/bus/bloc/bus_bloc.dart';
 import 'package:iportal2/screens/bus/bus_card/card_bus_item.dart';
-import 'package:iportal2/screens/bus/models/bus_model.dart';
+import 'package:iportal2/screens/home/widgets/instruction_notebook/instruction_notebook_view.dart';
+import 'package:repository/repository.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});
   static const routeName = '/bus';
+  @override
+  Widget build(BuildContext context) {
+    final currentUser = context.read<CurrentUserBloc>().state.user;
+    return BlocProvider(
+      create: (context) => BusBloc(
+        context.read<AppFetchApiRepository>(),
+        pupilId: currentUser.pupil_id,
+        schoolId: currentUser.school_id,
+        schoolBrand: currentUser.school_brand,
+      ),
+      child: const BusView(),
+    );
+  }
+}
+
+class BusView extends StatelessWidget {
+  const BusView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BackGroundContainer(
@@ -38,21 +62,50 @@ class BusScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  const SelectChild(),
-                  const SizedBox(height: 12),
-                  const SelectDate(),
+                  // SelectChild(),
+                  // const SizedBox(height: 12),
+                  SelectDate(
+                    onDateChanged: (date) => context.read<BusBloc>().add(
+                          BusChangedDate(date: date),
+                        ),
+                  ),
                   const SizedBox(height: 16),
                   Expanded(
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          ...List.generate(
-                              busItemList.length,
-                              (index) => CardBusItem(
-                                  busItem: busItemList[index], index: index))
-                        ],
-                      ),
+                    child: BlocBuilder<BusBloc, BusState>(
+                      builder: (context, state) {
+                        final busSchedules = state.busSchedules;
+                        final isLoading = state.status == BusStatus.loading;
+                        final isEmptyData = busSchedules.isEmpty && !isLoading;
+
+                        return CustomRefresh(
+                          onRefresh: () async {
+                            context.read<BusBloc>().add(BusFetchedSchedules());
+                          },
+                          child: Stack(
+                            children: [
+                              ListView(),
+                              AppSkeleton(
+                                isLoading: isLoading,
+                                skeleton: const InstructrionSkeleton(),
+                                child: isEmptyData
+                                    ? const Center(
+                                        child: EmptyScreen(
+                                            text: 'Chưa có dữ liệu'))
+                                    : ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        cacheExtent: 1000,
+                                        itemCount: busSchedules.length,
+                                        itemBuilder: (context, index) {
+                                          return CardBusItem(
+                                            busSchedule: busSchedules[index],
+                                          );
+                                        },
+                                      ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   )
                 ],
@@ -66,7 +119,9 @@ class BusScreen extends StatelessWidget {
 }
 
 class SelectDate extends StatefulWidget {
-  const SelectDate({super.key});
+  const SelectDate({super.key, required this.onDateChanged});
+
+  final Function(DateTime date) onDateChanged;
 
   @override
   State<SelectDate> createState() => _SelectDateState();
@@ -111,6 +166,7 @@ class _SelectDateState extends State<SelectDate> {
 
         if (pickedDate != null) {
           String formattedDate = formatDate.format(pickedDate);
+          widget.onDateChanged(pickedDate);
           setState(() {
             datePicked = formattedDate;
           });

@@ -6,29 +6,27 @@ import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
 import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/home/home_navigator.dart';
-import 'package:iportal2/screens/home/models/feature_list_model.dart';
-import 'package:iportal2/screens/home/models/feature_model.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/current_pinned_feature.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/list_feature.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
+import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
-import 'package:iportal2/screens/student_score/student_score_screen_main.dart';
+import 'package:iportal2/screens/score/score_screen.dart';
+import 'package:local_data_source/local_data_source.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({
     super.key,
     required this.scrollController,
-    required this.pinnedFeatures,
     required this.listFeature,
     required this.onSavePinned,
     required this.isKinderGarten,
   });
 
   final ScrollController scrollController;
-  final List<FeatureModel> pinnedFeatures;
   final List<FeatureModel> listFeature;
   final bool isKinderGarten;
   final void Function(List<FeatureModel> pinnedFeatures) onSavePinned;
@@ -40,32 +38,26 @@ class BottomSheetFeature extends StatefulWidget {
 class _BottomSheetFeatureState extends State<BottomSheetFeature> {
   bool isUpdatePin = false;
 
-  late List<FeatureModel> tempPinnedFeatures;
+  late List<FeatureModel> tempFeatures;
   late List<FeatureModel> dailyFeatures;
   late List<FeatureModel> studyInfoFeatures;
   late List<FeatureModel> serviceFeatures;
   late List<FeatureModel> otherFeatures;
+  late List<FeatureModel> currentPinnedFeature;
 
-  void onSaved(List<FeatureModel> features) {
-    setState(() {
-      tempPinnedFeatures = features;
-    });
-    widget.onSavePinned(features);
+  void onSaved() {
+    widget.onSavePinned(tempFeatures);
   }
 
   bool compareFeaturesDeeply(
       List<FeatureModel> defaultList, List<FeatureModel> tempList) {
-    if (defaultList.length != tempList.length) {
-      return true;
-    }
-
     for (int i = 0; i < defaultList.length; i++) {
       FeatureModel fDefault = defaultList[i];
       FeatureModel fTemp = tempList[i];
 
       if (fDefault.key != fTemp.key ||
-          fDefault.name != fTemp.name ||
-          fDefault.hasPinned != fTemp.hasPinned) {
+          fDefault.pinned != fTemp.pinned ||
+          fDefault.order != fTemp.order) {
         return true;
       }
     }
@@ -75,28 +67,43 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
   void onTapFeature(FeatureKey key, bool status) {
     if (isUpdatePin) {
       if (status) {
-        if (tempPinnedFeatures.length == 7) {
+        if (currentPinnedFeature.length == 7) {
           SnackBarUtils.showFloatingSnackBar(
               context, 'Chỉ có thể thêm tối đa 7 tính năng yêu thích');
           return;
         }
 
-        final featureAdd =
-            (widget.isKinderGarten ? preSFeatures : hihgSFeatures)
-                .firstWhere((element) => element.key == key)
-                .copyWith(hasPinned: status);
-
-        final newPinnedList = List<FeatureModel>.from(tempPinnedFeatures);
-        newPinnedList.add(featureAdd);
+        final newPinFeature =
+            tempFeatures.firstWhere((element) => element.key == key).copyWith(
+                  pinned: status,
+                  order: currentPinnedFeature.isEmpty
+                      ? 1
+                      : currentPinnedFeature[currentPinnedFeature.length - 1]
+                              .order +
+                          1,
+                );
 
         setState(() {
-          tempPinnedFeatures = newPinnedList;
+          tempFeatures = tempFeatures
+              .map((e) => e.key == key ? newPinFeature : e)
+              .toList();
+          currentPinnedFeature = tempFeatures
+              .where((element) => element.pinned)
+              .toList()
+            ..sort((a, b) => a.order.compareTo(b.order));
         });
       } else {
-        final newPinnedList =
-            tempPinnedFeatures.where((element) => element.key != key).toList();
+        final unPinFeature = tempFeatures
+            .firstWhere((element) => element.key == key)
+            .copyWith(pinned: status);
+
         setState(() {
-          tempPinnedFeatures = newPinnedList;
+          tempFeatures =
+              tempFeatures.map((e) => e.key == key ? unPinFeature : e).toList();
+          currentPinnedFeature = tempFeatures
+              .where((element) => element.pinned)
+              .toList()
+            ..sort((a, b) => a.order.compareTo(b.order));
         });
       }
     } else {
@@ -107,11 +114,6 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: RegisterNoteBoookScreen.routeName);
           break;
-
-        // case FeatureKey.bus:
-        //   homeNavigatorKey.currentContext
-        //       ?.pushNamed(routeName: BusScreen.routeName);
-        //   break;
 
         case FeatureKey.instructionNotebook:
           homeNavigatorKey.currentContext
@@ -125,11 +127,12 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
 
         case FeatureKey.scores:
           homeNavigatorKey.currentContext
-              ?.pushNamed(routeName: StudentScoreScreenMain.routeName);
+              ?.pushNamed(routeName: ScoreScreen.routeName);
           break;
+
         case FeatureKey.comment:
           homeNavigatorKey.currentContext
-              ?.pushNamed(routeName: StudentScoreScreenMain.routeName);
+              ?.pushNamed(routeName: PreScoreScreen.routeName);
           break;
 
         case FeatureKey.phoneBook:
@@ -168,7 +171,12 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
   @override
   void initState() {
     super.initState();
-    tempPinnedFeatures = widget.pinnedFeatures;
+    tempFeatures = widget.listFeature;
+    currentPinnedFeature = tempFeatures
+        .where((element) => element.pinned)
+        .toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+
     dailyFeatures = widget.listFeature
         .where((element) => element.category == FeatureCategory.daily)
         .toList();
@@ -188,8 +196,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
 
   @override
   Widget build(BuildContext context) {
-    final hasUpdated =
-        compareFeaturesDeeply(widget.pinnedFeatures, tempPinnedFeatures);
+    final hasUpdated = compareFeaturesDeeply(widget.listFeature, tempFeatures);
 
     return Material(
       child: Container(
@@ -200,12 +207,12 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CurrentPinnedFeature(
-                listFeature: tempPinnedFeatures,
+                listFeature: currentPinnedFeature,
                 isUpdatePin: isUpdatePin,
                 onSavePinned: onSaved,
                 updatePin: () {
                   setState(() {
-                    isUpdatePin = true;
+                    isUpdatePin = !isUpdatePin;
                   });
                 },
                 removePinned: onTapFeature,
@@ -215,14 +222,14 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
               ListFeature(
                 title: 'Hoạt động hằng ngày',
                 listFeature: dailyFeatures,
-                currentPinnedFeatures: tempPinnedFeatures,
+                currentPinnedFeatures: currentPinnedFeature,
                 isUpdatePin: isUpdatePin,
                 onTapFeature: onTapFeature,
                 isKinderGarten: widget.isKinderGarten,
               ),
               ListFeature(
                 title: 'Thông tin học tập',
-                currentPinnedFeatures: tempPinnedFeatures,
+                currentPinnedFeatures: currentPinnedFeature,
                 isUpdatePin: isUpdatePin,
                 onTapFeature: onTapFeature,
                 listFeature: studyInfoFeatures,
@@ -230,7 +237,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
               ),
               ListFeature(
                 title: 'Dịch vụ học đường',
-                currentPinnedFeatures: tempPinnedFeatures,
+                currentPinnedFeatures: currentPinnedFeature,
                 isUpdatePin: isUpdatePin,
                 onTapFeature: onTapFeature,
                 listFeature: serviceFeatures,
@@ -238,7 +245,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
               ),
               ListFeature(
                 title: 'Thông tin khác',
-                currentPinnedFeatures: tempPinnedFeatures,
+                currentPinnedFeatures: currentPinnedFeature,
                 isUpdatePin: isUpdatePin,
                 onTapFeature: onTapFeature,
                 listFeature: otherFeatures,

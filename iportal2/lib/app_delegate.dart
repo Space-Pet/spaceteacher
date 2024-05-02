@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:core/data/data_source/remote/interceptor/auth_interceptor.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:iportal2/app_config/network_client_setup.dart';
 import 'package:iportal2/app_config/env_config.dart';
 import 'package:iportal2/boostrap.dart';
+import 'package:iportal2/firebase_options.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_client/interceptors/authorize_interceptor.dart';
 import 'package:network_data_source/network_client/interceptors/partner_token_interceptor.dart';
@@ -39,6 +40,9 @@ class AppDelegate {
 
     // Not yet implemented
     // await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     // Not yet implemented
     // await configureDependencies();

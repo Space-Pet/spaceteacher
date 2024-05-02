@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/resources/app_colors.dart';
@@ -35,7 +34,7 @@ class HomeTabsInstruction extends StatelessWidget {
             child: Column(
               children: [
                 SelectDate(
-                  datePicked: bloc.state.datePicked,
+                  datePicked: state.datePicked,
                   onDatePicked: (date) {
                     bloc.add(HomeExerciseSelectDate(
                       datePicked: date,
@@ -81,11 +80,21 @@ class HomeTabsInstruction extends StatelessWidget {
                         : isEmptyDueDate
                             ? const Center(
                                 child: EmptyScreen(text: 'Sổ báo bài trống'))
-                            : SingleChildScrollView(
-                                child: ExerciseItemList(
-                                  isHomeScreenView: true,
-                                  exercise: exercisesDueDate,
-                                  selectedSubject: "Tất cả các môn",
+                            : Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.gray100,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: SingleChildScrollView(
+                                  child: ExerciseItemList(
+                                    isHomeScreenView: true,
+                                    exercise: exercisesDueDate,
+                                  ),
                                 ),
                               ),
                     isEmptyInDay
@@ -96,7 +105,6 @@ class HomeTabsInstruction extends StatelessWidget {
                               exercise: exercisesInDay,
                               isHomeScreenView: true,
                               isTodayView: true,
-                              selectedSubject: "Tất cả các môn",
                             ),
                           ),
                   ]),

@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+25
+version: 1.0.0+31
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -39,7 +39,7 @@ dependencies:
 
   # App Core
   core:
-    path: ../core
+    path: ../core/
   network_data_source:
     path: packages/network_data_source
   repository:
@@ -85,6 +85,15 @@ dependencies:
   expandable: ^5.0.1
   currency_text_input_formatter: ^2.1.11
   skeletons: ^0.0.3
+  device_info_plus: ^9.1.2
+  image_gallery_saver: ^2.0.3
+  qr_code_scanner: ^1.0.1
+  firebase_messaging: ^14.8.1
+  loader_overlay: ^4.0.0
+  custom_refresh_indicator: ^3.1.0
+  getwidget: ^4.0.0
+  expansion_tile_group: ^1.2.4
+  flutter_hooks: ^0.20.5
 
 
 flutter_launcher_icons:
@@ -118,6 +127,7 @@ flutter:
     - assets/images/
     - assets/images/main_background/
     - assets/images/brand_logo/
+    - assets/images/logo_app/
     - assets/icons/
     - assets/icons/features/
   uses-material-design: true

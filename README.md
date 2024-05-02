@@ -52,6 +52,8 @@ $ fluttergen -c pubspec.yaml
 step 1:
 $ bash pub_gen.sh
 step 2:
+$ bash pub_gen.sh 1
+step 3:
 In visual studio code, run and debug chosse name env you want to run
 ```
 
@@ -70,7 +72,7 @@ app partner: $ flutter build ipa --flavor teacherDev --release -t lib/main_dev.d
 # structure of source code
 
 - core (this module is define as an app)
-  - It has create, config for graphql, graphql teacher, AppConfig ...
+  - It has create, config for teacher, AppConfig ...
   - It has bloc base, component , service call api, share modules for iportal and teacher ...
   - It has information config environment. (core/lib/envs.dart)
   - Currently image only gen in iportal app, teacher app => if any picture is used in common, it will be added to core app

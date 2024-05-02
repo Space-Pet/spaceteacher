@@ -38,13 +38,11 @@ class ShowDialog extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       content: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               textAlign: TextAlign.center,
               textConten,
-              style: AppTextStyles.normal14(
-                  color: AppColors.gray500, fontWeight: FontWeight.w400),
+              style: AppTextStyles.normal14(color: AppColors.gray500),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 24),

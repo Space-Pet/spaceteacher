@@ -7,12 +7,13 @@ class TabBarFlexible extends StatelessWidget {
   final double padding;
   final double tabHeigth;
 
-  const TabBarFlexible(
-      {super.key,
-      required this.tabTitles,
-      required this.tabContent,
-      this.tabHeigth = 32,
-      this.padding = 16});
+  const TabBarFlexible({
+    super.key,
+    required this.tabTitles,
+    required this.tabContent,
+    this.tabHeigth = 32,
+    this.padding = 16,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class TabBarFlexible extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(padding),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -32,6 +33,7 @@ class TabBarFlexible extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: TabBar(
+                    
                     labelColor: AppColors.red90001,
                     unselectedLabelColor: AppColors.gray700,
                     dividerColor: Colors.transparent,

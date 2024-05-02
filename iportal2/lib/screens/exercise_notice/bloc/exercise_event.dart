@@ -12,3 +12,9 @@ class ExerciseSelectDate extends ExerciseEvent {
 
   final DateTime datePicked;
 }
+
+class ExerciseSelectSubject extends ExerciseEvent {
+  ExerciseSelectSubject({required this.selectedSubject});
+
+  final String selectedSubject;
+}

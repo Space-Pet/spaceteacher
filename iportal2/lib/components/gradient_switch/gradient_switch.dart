@@ -1,4 +1,3 @@
-import 'package:core/presentation/common_widget/date_picker/flutter_datetime_picker/src/date_format.dart';
 import 'package:flutter/material.dart';
 
 class GradientSwitch extends StatefulWidget {
@@ -7,11 +6,11 @@ class GradientSwitch extends StatefulWidget {
   final LinearGradient gradient;
 
   const GradientSwitch({
-    Key? key,
+    super.key,
     required this.value,
     required this.onChanged,
     required this.gradient,
-  }) : super(key: key);
+  });
 
   @override
   _GradientSwitchState createState() => _GradientSwitchState();
@@ -39,7 +38,7 @@ class _GradientSwitchState extends State<GradientSwitch> {
               duration: const Duration(milliseconds: 150),
               // curve: Curves.decelerate,
               child: Container(
-                padding: EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 width: 20,
                 height: 20,
                 decoration: const BoxDecoration(
@@ -66,7 +65,7 @@ class CustomSwitch extends StatefulWidget {
   final Color inactiveTextColor;
 
   const CustomSwitch(
-      {Key? key,
+      {super.key,
       required this.value,
       this.onChanged,
       this.activeColor,
@@ -74,8 +73,7 @@ class CustomSwitch extends StatefulWidget {
       this.activeText = '',
       this.inactiveText = '',
       this.activeTextColor = Colors.white70,
-      this.inactiveTextColor = Colors.white70})
-      : super(key: key);
+      this.inactiveTextColor = Colors.white70});
 
   @override
   _CustomSwitchState createState() => _CustomSwitchState();

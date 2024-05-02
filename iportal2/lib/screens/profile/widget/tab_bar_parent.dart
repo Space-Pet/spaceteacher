@@ -1,145 +1,219 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
+import 'package:network_data_source/network_data_source.dart';
 
+import '../../../components/custom_dialog_update_phone.dart';
 import '../../../components/tab/tab_bar.dart';
 import '../../../components/tab/tab_content.dart';
-import '../../../components/custom_dialog_update_phone.dart';
 
 class TabBarParent extends StatelessWidget {
   const TabBarParent({
     super.key,
+    required this.parentData,
   });
+
+  static const statusMap = {
+    0: 'Đang học',
+    2: 'Đã nghỉ',
+    7: 'Đã tốt nghiệp',
+    8: 'Bảo lưu',
+  };
+
+  final ParentData parentData;
 
   @override
   Widget build(BuildContext context) {
-    return TabBarFlexible(
-      tabHeigth: 64,
-      tabTitles: const ['Thông tin cha mẹ học sinh', 'Thông tin học sinh'],
-      tabContent: [
+    final parent = parentData.parents;
+
+    final parentsList = // Parents
         [
-          const TabContent(
-            title: 'Họ & tên',
-            content: 'Nguyễn Ngọc Tuyết lan',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Năm sinh',
-            content: '1974',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Nghề nghiệp',
-            content: 'Kinh Doanh',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Cơ quan làm việc',
-            content: 'Công ty TNHH Minh Tâm',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Nơi ở',
-            content: 'Vũng Tàu',
-            isShowIcon: false,
-          ),
-          TabContent(
-            title: 'Điện thoại di động',
-            content: '0983526182',
-            isShowIcon: true,
-            onTap: () {
-              CustomDialogUpdatePhone.show(
-                context,
-                title: 'Chỉnh sửa số điện thoại',
-                saveButtonTitle: 'Lưu lại',
-                closeButtonTitle: 'Đóng',
-                onSavePressed: (String phone) {
-                  context.pop();
-                },
-              );
+      // Father
+      TabContent(
+        title: 'Họ & tên Cha',
+        content: parent.fatherName,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Năm sinh',
+        content: parent.fatherYear,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Nghề nghiệp',
+        content: parent.fatherJobTitle,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Cơ quan làm việc',
+        content: parent.fatherWorkAddress,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Nơi ở',
+        content: parent.fatherAddress,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Điện thoại di động',
+        content: parent.fatherPhone,
+        isShowIcon: true,
+        onTap: () {
+          CustomDialogUpdatePhone.show(
+            context,
+            title: 'Chỉnh sửa số điện thoại',
+            saveButtonTitle: 'Lưu lại',
+            closeButtonTitle: 'Đóng',
+            onSavePressed: (String phone) {
+              context.pop();
             },
-          ),
-          const TabContent(
-            title: 'Email',
-            content: 'lannt@ukavt.com',
-            isShowIcon: false,
-            isShowDottedLine: false,
-          ),
-        ],
-        [
-          const TabContent(
+          );
+        },
+      ),
+      TabContent(
+        title: 'Email',
+        content: parent.fatherEmail,
+        isShowIcon: false,
+        isShowDottedLine: false,
+      ),
+      Container(
+        height: 1,
+        color: AppColors.gray300,
+        margin: const EdgeInsets.symmetric(
+          vertical: 8,
+          horizontal: 20,
+        ),
+      ),
+
+      // Mother
+      TabContent(
+        title: 'Họ & tên Mẹ',
+        content: parent.motherName,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Năm sinh',
+        content: parent.motherYear,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Nghề nghiệp',
+        content: parent.motherJobTitle,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Cơ quan làm việc',
+        content: parent.motherWorkAddress,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Nơi ở',
+        content: parent.motherAddress,
+        isShowIcon: false,
+      ),
+      TabContent(
+        title: 'Điện thoại di động',
+        content: parent.motherPhone,
+        isShowIcon: true,
+        onTap: () {
+          CustomDialogUpdatePhone.show(
+            context,
+            title: 'Chỉnh sửa số điện thoại',
+            saveButtonTitle: 'Lưu lại',
+            closeButtonTitle: 'Đóng',
+            onSavePressed: (String phone) {
+              context.pop();
+            },
+          );
+        },
+      ),
+      TabContent(
+        title: 'Email',
+        content: parent.motherEmail,
+        isShowIcon: false,
+        isShowDottedLine: false,
+      ),
+    ];
+
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      buildWhen: (previous, current) =>
+          previous.studentData != current.studentData,
+      builder: (context, state) {
+        final studentData = state.studentData;
+
+        final profileBloc = context.read<ProfileBloc>();
+
+        final studentList = [
+          TabContent(
             title: 'Trường',
-            content: 'UKA Vũng Tàu',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Lớp',
-            content: '6.1',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Mã học sinh',
-            content: 'UKA2974392',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Mã khách hàng',
-            content: 'UKAVT1234',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Mã định danh',
-            content: '385810196',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Mã khách hàng',
-            content: 'UKAVT1234',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Họ & tên',
-            content: 'Nguyễn Ngọc Tuyết lan',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Ngày sinh',
-            content: '13/11/2015',
-            isShowIcon: false,
-          ),
-          const TabContent(
-            title: 'Địa chỉ ',
-            content: '10/2 đường số 8, Bình Hưng Hoà, Bình Tân, TPHCM',
+            content: studentData.school.name,
             isShowIcon: false,
           ),
           TabContent(
-            title: 'Điện thoại di động',
-            content: '0983526182',
-            isShowIcon: true,
-            onTap: () {
-              CustomDialogUpdatePhone.show(
-                context,
-                title: 'Chỉnh sửa số điện thoại',
-                saveButtonTitle: 'Lưu lại',
-                closeButtonTitle: 'Đóng',
-                onSavePressed: (String phone) {
-                  context.pop();
-                },
-              );
-            },
+            title: 'Lớp',
+            content: studentData.classInfo.name,
+            isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
+            title: 'Mã học sinh',
+            content: studentData.pupil.userKey,
+            isShowIcon: false,
+          ),
+          TabContent(
+            title: 'Mã định danh',
+            content: studentData.pupil.identifier,
+            isShowIcon: false,
+          ),
+          TabContent(
+            title: 'Ngày sinh',
+            content: studentData.pupil.birthday,
+            isShowIcon: false,
+          ),
+          TabContent(
+            title: 'Địa chỉ ',
+            content: studentData.pupil.address,
+            isShowIcon: false,
+          ),
+          TabContent(
+              title: 'Số điện thoại',
+              content: studentData.pupil.phone,
+              isShowIcon: true,
+              onTap: () {
+                CustomDialogUpdatePhone.show(
+                  context,
+                  title: 'Chỉnh sửa số điện thoại',
+                  saveButtonTitle: 'Lưu lại',
+                  closeButtonTitle: 'Đóng',
+                  errMsg: state.message,
+                  onSavePressed: (String phone) {
+                    profileBloc.add(UpdateProfileStudent(
+                      phone: phone,
+                      motherName: studentData.parent.motherName,
+                      fatherPhone: studentData.parent.fatherPhone,
+                      context: context,
+                    ));
+                  },
+                );
+              }),
+          TabContent(
             title: 'Email',
-            content: 'lannt@ukavt.com',
+            content: studentData.pupil.email,
             isShowIcon: false,
           ),
-          const TabContent(
+          TabContent(
             title: 'Tình trạng học sinh',
-            content: 'UKA Vũng Tàu',
+            content: statusMap[studentData.pupil.status]?.toString() ?? '',
             isShowIcon: false,
-            isShowDottedLine: false,
           ),
-        ],
-      ],
+        ];
+
+        return TabBarFlexible(
+          tabTitles: const ['Cha mẹ học sinh', 'Thông tin học sinh'],
+          tabContent: [parentsList, studentList],
+        );
+      },
     );
   }
 }

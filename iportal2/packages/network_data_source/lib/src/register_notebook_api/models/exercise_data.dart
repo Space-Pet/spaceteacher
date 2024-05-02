@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class ExerciseData {
@@ -9,7 +8,6 @@ class ExerciseData {
   ExerciseData({required this.exerciseDataList});
 
   factory ExerciseData.fromMap(Map<String, dynamic> map) {
-    debugPrint('map exercise data $map');
     if (map['data'] == null) {
       return ExerciseData(exerciseDataList: []);
     }
@@ -143,4 +141,25 @@ class ExerciseItem {
   @override
   String toString() =>
       'ExerciseItem(lessonId: $lessonId, lessonName: $lessonName, subjectId: $subjectId, subjectName: $subjectName, lessonNote: $lessonNote, danDoBaoBai: $danDoBaoBai, fileBaoBai: $fileBaoBai, fileBaoBaiDomain: $fileBaoBaiDomain, linkBaoBai: $linkBaoBai, hanNopBaoBai: $hanNopBaoBai, teacherId: $teacherId, teacherName: $teacherName, tietNum: $tietNum, className: $className, classId: $classId,classId: $lessonStatus)';
+
+  static empty() {
+    return ExerciseItem(
+      lessonId: '',
+      lessonName: '',
+      subjectId: '',
+      subjectName: '',
+      lessonNote: '',
+      danDoBaoBai: '',
+      fileBaoBai: '',
+      fileBaoBaiDomain: '',
+      linkBaoBai: '',
+      hanNopBaoBai: '',
+      teacherId: '',
+      teacherName: '',
+      tietNum: '',
+      className: '',
+      classId: '',
+      lessonStatus: '',
+    );
+  }
 }

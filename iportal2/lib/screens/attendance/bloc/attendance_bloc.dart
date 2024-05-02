@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
@@ -23,7 +24,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   void _onGetAttendanceDay(
       GetAttendanceDay event, Emitter<AttendanceState> emit) async {
     try {
-      emit(state.copyWith(attendanceStatus: AttendanceStatus.init));
+      emit(state.copyWith(attendanceStatus: AttendanceStatus.init, date: DateTime.now()));
       final data = await appFetchApiRepo.getAttendanceDay(
           date: event.date,
           pupilId: currentUserBloc.state.user.pupil_id,
@@ -31,7 +32,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.success, attendanceday: data));
+          attendanceStatus: AttendanceStatus.success, attendanceday: data, date: event.selectDate));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }
@@ -40,7 +41,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   void _onGetAttendanceWeek(
       GetAttendanceWeek event, Emitter<AttendanceState> emit) async {
     try {
-      emit(state.copyWith(attendanceStatus: AttendanceStatus.init));
+      emit(state.copyWith(attendanceStatus: AttendanceStatus.initWeek, ));
       final data = await appFetchApiRepo.getAttendanceWeek(
           pupilId: currentUserBloc.state.user.pupil_id,
           classId: currentUserBloc.state.user.children.class_id,
@@ -49,7 +50,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           startDate: event.startDate,
           endDate: event.endDate);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.success, attendanceWeek: data));
+          attendanceStatus: AttendanceStatus.successMonth, attendanceWeek: data));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }
@@ -58,7 +59,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   void _onGetAttendanceMonth(
       GetAttendanceMonth event, Emitter<AttendanceState> emit) async {
     try {
-      emit(state.copyWith(attendanceStatus: AttendanceStatus.init));
+      emit(state.copyWith(attendanceStatus: AttendanceStatus.initMonth));
       final data = await appFetchApiRepo.getAttendanceMonth(
           pupilId: currentUserBloc.state.user.pupil_id,
           classId: currentUserBloc.state.user.children.class_id,
@@ -67,7 +68,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           startDate: event.startDate,
           endDate: event.endDate);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.success, attendanceMonth: data));
+          attendanceStatus: AttendanceStatus.successMonth, attendanceMonth: data));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }

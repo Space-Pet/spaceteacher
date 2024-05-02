@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/screens/message/message_screen.dart';
-import 'package:iportal2/screens/profile/profile_screen.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
+import 'package:iportal2/screens/home/bloc/home_bloc.dart';
+import 'package:iportal2/screens/message/message_screen.dart';
+import 'package:iportal2/screens/profile/profile_screen.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -16,10 +14,10 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CurrentUserBloc, CurrentUserState>(
+    return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        final urlImage = state.user.children.url_image.mobile;
-        final hasNoImage = urlImage.isEmpty;
+        final userData = state.userData;
+        final urlImage = userData.avatar.mobile;
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -40,40 +38,24 @@ class HomeAppBar extends StatelessWidget {
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    state.user.children.url_image.mobile)),
+                                image: NetworkImage(urlImage)),
                             shape: BoxShape.circle,
                             color: AppColors.white,
                             border:
                                 Border.all(color: AppColors.white, width: 2)),
                       ),
-                      // Container(
-                      //   height: 42,
-                      //   width: 42,
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     border: Border.all(
-                      //       color: hasNoImage
-                      //           ? Colors.transparent
-                      //           : AppColors.white,
-                      //     ),
-                      //   ),
-                      //   child: SvgPicture.asset(
-                      //     Assets.icons.defaultAva,
-                      //   ),
-                      // ),
                       const SizedBox(width: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            state.user.name,
+                            userData.pupil.name,
                             style: AppTextStyles.semiBold12(
                               color: AppColors.white,
                             ),
                           ),
                           Text(
-                            'Lớp ${state.user.class_name}',
+                            'Lớp ${userData.classInfo.name}',
                             style: AppTextStyles.normal12(
                               color: AppColors.white,
                             ),

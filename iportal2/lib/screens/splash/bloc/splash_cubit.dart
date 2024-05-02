@@ -29,8 +29,7 @@ class SplashCubit extends Cubit<SplashState> {
     final box = await Hive.openBox('boxFistTime');
     bool isFistTime = box.get('boxFistTime', defaultValue: true);
     final isLogin = await checkLoggedIn();
-
-    print('isLogin: ${isLogin.toString()}');
+    
     if (isFistTime) {
       emit(state.copyWith(status: SplashStatus.firstLogin));
     } else {

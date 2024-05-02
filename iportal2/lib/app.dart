@@ -124,8 +124,8 @@ class CustomMaterialLocalizationsDelegate
       }
 
       // READ ONLY HERE
-      mediumDateFormat = intl.DateFormat("LLLL, y", 'vi_VN'); //
-      yearMonthFormat = intl.DateFormat("y", 'vi_VN'); //
+      mediumDateFormat = intl.DateFormat("dd LLLL, y", 'vi_VN'); //
+      yearMonthFormat = intl.DateFormat("LLLL, y", 'vi_VN'); //
 
       intl.NumberFormat decimalFormat;
       intl.NumberFormat twoDigitZeroPaddedFormat;

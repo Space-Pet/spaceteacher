@@ -1,15 +1,21 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/message/models/message.dart';
-import 'package:iportal2/screens/message/models/new_message.dart';
 
 class ChatRoomItem extends StatelessWidget {
-  final MessageChatRoom? chatRoom;
-  final NewMessages? newMessages;
+  final Message? chatRoom;
+  final PhoneBookStudent? newMessages;
   final VoidCallback onTap;
 
-  const ChatRoomItem(
-      {super.key, this.chatRoom, this.newMessages, required this.onTap});
+  const ChatRoomItem({
+    super.key,
+    this.chatRoom,
+    this.newMessages,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +27,6 @@ class ChatRoomItem extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            // boxShadow: const [
-            //   BoxShadow(
-            //     color: AppColors.gray100,
-            //     offset: Offset(0, 5),
-            //   ),
-            // ],
             color: AppColors.gray50,
             borderRadius: BorderRadius.circular(10),
           ),
@@ -36,20 +36,25 @@ class ChatRoomItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Container(
-                  //   height: 40,
-                  //   width: 40,
-                  //   decoration: BoxDecoration(
-                  //       color: AppColors.white,
-                  //       image: const DecorationImage(
-                  //           fit: BoxFit.cover,
-                  //           image: AssetImage('assets/images/avatar.png')),
-                  //       borderRadius: BorderRadius.circular(20),
-                  //       border: Border.all(color: AppColors.white)),
-                  // ),
-                  Image.asset(
-                    'assets/images/default-user.png',
+                  Container(
+                    height: 40,
                     width: 40,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                          chatRoom != null
+                              ? chatRoom!.avatarUrl
+                              : newMessages!.urlImage.mobile,
+                        ),
+                      ),
+                      shape: BoxShape.circle,
+                      color: AppColors.white,
+                      border: Border.all(
+                        color: AppColors.white,
+                        width: 2,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
@@ -57,15 +62,15 @@ class ChatRoomItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          chatRoom != null ? chatRoom!.name : newMessages!.name,
+                          chatRoom != null
+                              ? chatRoom!.fullName
+                              : newMessages!.fullName,
                           style: AppTextStyles.normal14(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          chatRoom != null
-                              ? chatRoom!.lastMessage
-                              : newMessages!.description,
+                          'Lớp ${chatRoom != null ? chatRoom!.content : newMessages!.className}',
                           style: AppTextStyles.normal12(
                             fontWeight: chatRoom?.unRead != null
                                 ? FontWeight.w600
@@ -79,15 +84,35 @@ class ChatRoomItem extends StatelessWidget {
                 ],
               ),
               if (chatRoom != null)
-                Column(
-                  children: [
-                    Row(
+                Container(
+                  color: Colors.white,
+                  child: PopupMenuButton<int>(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          chatRoom!.lastTime,
-                          style: AppTextStyles.normal12(
-                            color: AppColors.gray500,
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              DateFormat('hh:mm')
+                                  .format(chatRoom!.createAt)
+                                  .toString(),
+                              style: AppTextStyles.normal12(
+                                color: AppColors.gray500,
+                              ),
+                            ),
+                            if (chatRoom?.unRead != 0)
+                              CircleAvatar(
+                                backgroundColor: AppColors.blue500,
+                                radius: 12,
+                                child: Text(
+                                  chatRoom!.unRead.toString(),
+                                  style: AppTextStyles.normal12(
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
                         const Icon(
                           Icons.more_vert_outlined,
@@ -95,18 +120,43 @@ class ChatRoomItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (chatRoom!.unRead != null)
-                      CircleAvatar(
-                        backgroundColor: AppColors.blue500,
-                        radius: 12,
-                        child: Text(
-                          chatRoom!.unRead.toString(),
-                          style: AppTextStyles.normal12(
-                            color: AppColors.white,
+                    onSelected: (value) {
+                      if (value == 0) {
+                      } else if (value == 1) {}
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<int>>[
+                      PopupMenuItem<int>(
+                        value: 0,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(Assets.icons.pin),
+                            const Text('Ghim'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<int>(
+                        value: 1,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(Assets.icons.trash),
+                            const Text('Xoá tin nhắn'),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<int>(
+                        value: 1,
+                        child: Center(
+                          child: Text(
+                            'Huỷ',
+                            style: AppTextStyles.bold14(color: AppColors.red),
                           ),
                         ),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
@@ -21,12 +22,16 @@ class WeekScheduleBloc extends Bloc<WeekScheduleEvent, WeekScheduleState> {
 
   void _onGetWeekSchedule(
       GetWeekSchedule event, Emitter<WeekScheduleState> emitter) async {
-    emit(state.copyWith(weekScheduleStatus: WeekScheduleStatus.init));
+    emitter(state.copyWith(
+        weekScheduleStatus: WeekScheduleStatus.init, date: DateTime.now()));
     final data = await appFetchApiRepo.getWeekSchedule(
       userKey: currentUserBloc.state.user.user_key,
+      // userKey: '02590220094',
       txtDate: event.txtDate,
     );
-    emit(state.copyWith(
-        weekScheduleStatus: WeekScheduleStatus.success, weekSchedule: data));
+    emitter(state.copyWith(
+        weekScheduleStatus: WeekScheduleStatus.success,
+        weekSchedule: data,
+        date: event.date));
   }
 }

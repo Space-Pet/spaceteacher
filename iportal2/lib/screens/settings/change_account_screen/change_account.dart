@@ -48,6 +48,7 @@ class ChangeAccountScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
+                        padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         itemCount: 2,
                         itemBuilder: (BuildContext context, int index) {
@@ -116,9 +117,7 @@ class ChangeAccountScreen extends StatelessWidget {
                                                     child: Text(
                                                       '6.1',
                                                       style: AppTextStyles
-                                                          .normal12(
-                                                        
-                                                      ),
+                                                          .normal12(),
                                                     ),
                                                   ),
                                                 ],

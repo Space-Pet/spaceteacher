@@ -9,6 +9,7 @@ import 'package:iportal2/resources/app_strings.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/authentication/forgot_password/view/forgot_password_screen.dart';
+import 'package:iportal2/screens/authentication/login_qr/login_qr.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:repository/repository.dart';
 
@@ -98,6 +99,18 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 40, left: 8, right: 12),
+                  child: IconButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      icon: const Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 34,
+                        color: AppColors.white,
+                      )),
+                ),
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -183,7 +196,7 @@ class _LoginViewState extends State<LoginView> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 16, bottom: 16),
-                                  child: Text(   
+                                  child: Text(
                                     AppStrings.login,
                                     style: AppTextStyles.semiBold16(
                                       color: AppColors.white,
@@ -219,34 +232,40 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ]),
                         ),
-                        Container(
-                          width: double.infinity,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFFF8F8FB),
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(color: Color(0xFFEAECF0)),
-                              borderRadius: BorderRadius.circular(60),
+                        GestureDetector(
+                          onTap: () {
+                            context.push(const LoginQRScreen());
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ShapeDecoration(
+                              color: const Color(0xFFF8F8FB),
+                              shape: RoundedRectangleBorder(
+                                side:
+                                    const BorderSide(color: Color(0xFFEAECF0)),
+                                borderRadius: BorderRadius.circular(60),
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 15, bottom: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/icons/qrcode.png'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: Text(
-                                      AppStrings.qrCode,
-                                      style: AppTextStyles.semiBold14(
-                                        color: AppColors.gray800,
+                            child: Center(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 15, bottom: 15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset('assets/icons/qrcode.png'),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        AppStrings.qrCode,
+                                        style: AppTextStyles.semiBold14(
+                                          color: AppColors.gray800,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -254,7 +273,7 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Text(
-                            'iPortal version 1.0.0 (24) - 20240220',
+                            'iPortal version 1.0.0 (31) - 20240220',
                             style: AppTextStyles.normal12(
                               color: AppColors.gray400,
                             ),

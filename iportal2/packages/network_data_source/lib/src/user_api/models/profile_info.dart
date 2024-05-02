@@ -24,8 +24,10 @@ class ProfileInfo {
   final String school_brand;
   final int semester;
   final Children children;
-  final TrainingLevel cap_dao_tao;
-  
+  final TrainingLevel? cap_dao_tao;
+  final List<FeatureModel>? features;
+  final List<int> pinnedAlbumIdList;
+
   ProfileInfo({
     required this.name,
     required this.user_key,
@@ -44,7 +46,9 @@ class ProfileInfo {
     required this.school_brand,
     required this.semester,
     required this.children,
-    required this.cap_dao_tao,
+    this.cap_dao_tao,
+    this.features = const [],
+    this.pinnedAlbumIdList = const [],
   });
 
   ProfileInfo copyWith({
@@ -66,6 +70,9 @@ class ProfileInfo {
     int? semester,
     Children? children,
     TrainingLevel? cap_dao_tao,
+    List<FeatureModel>? features,
+    List<int>? pinnedAlbumIdList,
+
   }) {
     return ProfileInfo(
       name: name ?? this.name,
@@ -86,6 +93,8 @@ class ProfileInfo {
       semester: semester ?? this.semester,
       children: children ?? this.children,
       cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
+      features: features ?? this.features,
+      pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
     );
   }
 
@@ -98,7 +107,7 @@ class ProfileInfo {
   // 'C_005', 'Trung học phổ thông
 
   bool isKinderGarten() {
-    return ['C_001', 'C_002'].contains(cap_dao_tao.id);
+    return ['C_001', 'C_002'].contains(cap_dao_tao?.id);
   }
 
   // school_brand
@@ -107,10 +116,6 @@ class ProfileInfo {
   // sna -> SNA
   // iec -> IEC
   // iSchool -> Ischool
-
-  bool isUK() {
-    return school_brand == 'uka';
-  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -131,33 +136,41 @@ class ProfileInfo {
       'school_brand': school_brand,
       'semester': semester,
       'children': children.toMap(),
-      'cap_dao_tao': cap_dao_tao.toMap(),
+      'cap_dao_tao': cap_dao_tao?.toMap(),
     };
   }
 
-  factory ProfileInfo.fromMap(Map<String, dynamic> map) {
-    return ProfileInfo(
-      name: map['name'] as String,
-      user_key: map['user_key'] as String,
-      user_id: map['user_id'].toInt() as int,
-      school_id: map['school_id'].toInt() as int,
-      pupil_id: map['pupil_id'].toInt() as int,
-      type: map['type'].toInt() as int,
-      type_text: map['type_text'] as String,
-      parent_id: map['parent_id'].toInt() as int,
-      parent_name: map['parent_name'] as String,
-      father_name: map['father_name'] as String,
-      learn_year: map['learn_year'] as String,
-      class_name: map['class_name'] as String,
-      school_name: map['school_name'] as String,
-      school_logo: map['school_logo'] as String,
-      school_brand: map['school_brand'] as String,
-      semester: map['semester'].toInt() as int,
-      children: Children.fromMap(map['children'] as Map<String, dynamic>),
-      cap_dao_tao:
-          TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>),
-    );
-  }
+ factory ProfileInfo.fromMap(Map<String, dynamic> map) {
+  final childrenData = map['children'];
+  final children = childrenData is List
+      ? Children.fromMap(childrenData.first as Map<String, dynamic>)
+      : Children.fromMap(childrenData as Map<String, dynamic>);
+  
+  // Kiểm tra và gán giá trị cho các trường có thể null
+  return ProfileInfo(
+    name: map['name'] as String? ?? '',
+    user_key: map['user_key'] as String? ?? '',
+    user_id: map['user_id']?.toInt() as int? ?? 0,
+    school_id: map['school_id']?.toInt() as int? ?? 0,
+    pupil_id: map['pupil_id']?.toInt() as int? ?? 0,
+    type: map['type']?.toInt() as int? ?? 0,
+    type_text: map['type_text'] as String? ?? '',
+    parent_id: map['parent_id']?.toInt() as int? ?? 0,
+    parent_name: map['parent_name'] as String? ?? '',
+    father_name: map['father_name'] as String? ?? '',
+    learn_year: map['learn_year'] as String? ?? '',
+    class_name: map['class_name'] as String? ?? '',
+    school_name: map['school_name'] as String? ?? '',
+    school_logo: map['school_logo'] as String? ?? '',
+    school_brand: map['school_brand'] as String? ?? '',
+    semester: map['semester']?.toInt() as int? ?? 0,
+    children: children,
+    cap_dao_tao: map['cap_dao_tao'] != null
+        ? TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>)
+        : null,
+  );
+}
+
 
   String toJson() => json.encode(toMap());
 
@@ -229,6 +242,8 @@ class ProfileInfo {
       semester: localProfile.semester,
       children: Children.fromLocal(localProfile.children),
       cap_dao_tao: TrainingLevel.fromLocal(localProfile.cap_dao_tao),
+      features: localProfile.features ?? [],
+      pinnedAlbumIdList: localProfile.pinnedAlbumIdList ?? [],
     );
   }
 
@@ -413,6 +428,7 @@ class UrlImage {
 class TrainingLevel {
   final String id;
   final String name;
+  
   TrainingLevel({
     required this.id,
     required this.name,

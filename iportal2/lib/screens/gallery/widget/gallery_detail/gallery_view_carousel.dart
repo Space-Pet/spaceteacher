@@ -1,16 +1,22 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:core/common/services/permission_service.dart';
+import 'package:core/common/utils/snackbar.dart';
+import 'package:core/data/models/models.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/gallery/widget/gallery_card/gallery_model.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:http/http.dart' as http;
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
+import 'package:share_plus/share_plus.dart';
 
 class GalleryCarousel extends StatefulWidget {
   const GalleryCarousel({
@@ -18,7 +24,7 @@ class GalleryCarousel extends StatefulWidget {
     required this.galleryItem,
     required this.index,
   });
-  final GalleryModel galleryItem;
+  final Gallery galleryItem;
   final int index;
   static const routeName = '/gallery-carousel';
   @override
@@ -27,11 +33,16 @@ class GalleryCarousel extends StatefulWidget {
 
 class GalleryCarouselState extends State<GalleryCarousel> {
   int _selectedIndex = 0;
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.index;
+    double initPosition = 4 + _selectedIndex * (54);
+    _scrollController = ScrollController(
+      initialScrollOffset: initPosition,
+    );
   }
 
   Future<void> handleSelectIndex(int index) async {
@@ -39,16 +50,27 @@ class GalleryCarouselState extends State<GalleryCarousel> {
       setState(() {
         _selectedIndex = index;
       });
+
+      double newPosition = 4 + _selectedIndex * (54);
+      if (newPosition < _scrollController.position.maxScrollExtent) {
+        _scrollController.animateTo(
+          newPosition,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
+    final imgUrl = widget.galleryItem.galleryImages[_selectedIndex].images.web;
+
+    final thisW = BackGroundContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppBarGallery(name: widget.galleryItem.name),
+          AppBarGallery(name: widget.galleryItem.galleryName),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -68,37 +90,43 @@ class GalleryCarouselState extends State<GalleryCarousel> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
                           child: Center(
-                            child: Image.asset(
-                              width: double.infinity,
-                              height: 250,
-                              fit: BoxFit.cover,
-                              widget.galleryItem.imgUrlList[_selectedIndex],
+                              child: Container(
+                            height: 300,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(imgUrl)),
+                              color: AppColors.white,
                             ),
-                          ),
+                          )),
                         ),
                         ButtonGroupGallery(
-                            imgName:
-                                '${widget.galleryItem.name}-$_selectedIndex',
-                            imgUrl:
-                                widget.galleryItem.imgUrlList[_selectedIndex])
+                            imgName: widget
+                                .galleryItem.galleryImages[_selectedIndex].name,
+                            imgUrl: widget.galleryItem
+                                .galleryImages[_selectedIndex].images.web)
                       ],
                     ),
                     SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
+                      controller: _scrollController,
                       child: Row(
                         children: [
                           ...List.generate(
-                              widget.galleryItem.imgUrlList.length,
-                              (index) => GestureDetector(
-                                    onTap: () {
-                                      handleSelectIndex(index);
-                                    },
-                                    child: GalleryScrollItem(
-                                        index: index,
-                                        widget: widget,
-                                        selectedIndex: _selectedIndex),
-                                  ))
+                              widget.galleryItem.galleryImages.length, (index) {
+                            return GestureDetector(
+                              onTap: () {
+                                handleSelectIndex(index);
+                              },
+                              child: GalleryScrollItem(
+                                index: index,
+                                widget: widget,
+                                selectedIndex: _selectedIndex,
+                              ),
+                            );
+                          })
                         ],
                       ),
                     )
@@ -110,6 +138,10 @@ class GalleryCarouselState extends State<GalleryCarousel> {
         ],
       ),
     );
+
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //     (_) => Scrollable.ensureVisible(_key[4].currentContext!));
+    return thisW;
   }
 }
 
@@ -139,14 +171,18 @@ class AppBarGallery extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Text(name, style: AppTextStyles.semiBold18(color: AppColors.black24)),
+          Expanded(
+            child: Text(name,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.semiBold18(color: AppColors.black24)),
+          ),
         ],
       ),
     );
   }
 }
 
-class GalleryScrollItem extends StatelessWidget {
+class GalleryScrollItem extends StatefulWidget {
   const GalleryScrollItem({
     super.key,
     required this.widget,
@@ -159,21 +195,35 @@ class GalleryScrollItem extends StatelessWidget {
   final int index;
 
   @override
+  State<GalleryScrollItem> createState() => _GalleryScrollItemState();
+}
+
+class _GalleryScrollItemState extends State<GalleryScrollItem> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 54,
       height: 54,
       margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+      decoration: BoxDecoration(
+        borderRadius: AppRadius.rounded10,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(widget
+              .widget.galleryItem.galleryImages[widget.index].images.mobile),
+        ),
       ),
-      child: Image.asset(
-        fit: BoxFit.cover,
-        widget.galleryItem.imgUrlList[index],
-        color: index == _selectedIndex
-            ? const Color.fromRGBO(255, 255, 255, 1)
-            : const Color.fromRGBO(255, 255, 255, 0.7),
-        colorBlendMode: BlendMode.modulate,
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.index == widget._selectedIndex
+              ? const Color.fromRGBO(255, 255, 255, 0)
+              : const Color.fromRGBO(255, 255, 255, 0.5),
+        ),
       ),
     );
   }
@@ -195,24 +245,44 @@ class ButtonGroupGallery extends StatelessWidget {
       children: [
         RoundedButton(
           onTap: () async {
-            const testImgUrl =
-                'https://vcdn-vnexpress.vnecdn.net/2020/09/08/hs-tieu-hoc-4175-1599563722.jpg';
-            final dio = Dio();
+            PermissionStatus result = PermissionStatus.denied;
 
-            final appStorage = await getApplicationDocumentsDirectory();
-            final file = File('${appStorage.path}/$imgName-.jpg');
+            if (Platform.isAndroid) {
+              DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+              AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
 
-            final response = await dio.get(
-              testImgUrl,
-              options: Options(
-                responseType: ResponseType.bytes,
-                followRedirects: false,
-                receiveTimeout: const Duration(seconds: 1),
-              ),
-            );
-            final raf = file.openSync(mode: FileMode.write);
-            raf.writeFromSync(response.data);
-            await raf.close();
+              if (androidInfo.version.sdkInt >= 33) {
+                result = await Permission.photos.request();
+              } else {
+                result = await Permission.storage.request();
+              }
+            } else {
+              result = await Permission.storage.request();
+            }
+
+            if (result.isGranted) {
+              context.loaderOverlay.show();
+
+              var response = await Dio().get(
+                imgUrl,
+                options: Options(responseType: ResponseType.bytes),
+              );
+
+              final res = await ImageGallerySaver.saveImage(
+                Uint8List.fromList(response.data),
+                quality: 100,
+                name: imgName,
+              );
+              if (res['isSuccess'] = true) {
+                SnackBarUtils.showFloatingSnackBar(
+                    context, 'Lưu ảnh thành công');
+              } else {
+                SnackBarUtils.showFloatingSnackBar(
+                    context, 'Lưu ảnh thất bại, vui lòng thử lại sau');
+              }
+
+              context.loaderOverlay.hide();
+            }
           },
           margin: const EdgeInsets.only(right: 12),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -240,16 +310,21 @@ class ButtonGroupGallery extends StatelessWidget {
         ),
         RoundedButton(
           onTap: () async {
-            const testImgUrl =
-                'https://vcdn-vnexpress.vnecdn.net/2020/09/08/hs-tieu-hoc-4175-1599563722.jpg';
-            final url = Uri.parse(testImgUrl);
+            context.loaderOverlay.show();
+
+            final url = Uri.parse(imgUrl);
             final response = await http.get(url);
             final bytes = response.bodyBytes;
 
             final temp = await getTemporaryDirectory();
-            final path = '${temp.path}/image.jpg';
+            final path = '${temp.path}/$imgName.jpg';
             File(path).writeAsBytesSync(bytes);
-            await Share.shareXFiles([XFile(path)], text: "Chia sẻ $imgName");
+            final List<XFile> listFile = [];
+            final file = XFile(path);
+            listFile.add(file);
+
+            context.loaderOverlay.hide();
+            await Share.shareXFiles(listFile);
           },
           margin: const EdgeInsets.only(left: 12),
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),

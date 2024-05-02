@@ -23,6 +23,18 @@ class UserRepository {
     return ProfileInfo.fromLocalUser(localProfile: localUser);
   }
 
+  Future<List<LocalFeatures>?> getFeatures() async {
+    final localFeatures = await _userLocalStorage.getFeaturesLocal();
+
+    if (localFeatures == null) return null;
+
+    return localFeatures;
+  }
+
+  Future updatePinnedAlbum(List<int> pinnedAlbumIdList, String userKey) async {
+    await _userLocalStorage.updatePinnedAlbum(pinnedAlbumIdList, userKey);
+  }
+
   Future saveUser(ProfileInfo user) async {
     final localUser = LocalProfile(
       name: user.name,
@@ -60,7 +72,11 @@ class UserRepository {
         ),
       ),
       cap_dao_tao: LocalTrainingLevel(
-          id: user.cap_dao_tao.id, name: user.cap_dao_tao.name),
+        id: user.cap_dao_tao?.id ?? '',
+        name: user.cap_dao_tao?.name ?? '',
+      ),
+      features: user.features,
+      pinnedAlbumIdList: user.pinnedAlbumIdList,
     );
 
     await _userLocalStorage.saveUser(localUser);
@@ -68,10 +84,11 @@ class UserRepository {
 
   Future clearLocalUser() => _userLocalStorage.clearUser();
 
-  Future<bool> changePassword(
-      {required String oldPassword,
-      required String newPassword,
-      required String confirmPassword}) async {
+  Future<bool> changePassword({
+    required String oldPassword,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
     try {
       bool isSuccess = await _userApi.changePassword(
         oldPassword: oldPassword,
@@ -95,7 +112,7 @@ class UserRepository {
       required String fatherPhone,
       required String pupil_id}) async {
     try {
-     final data = await _userApi.updateProfile(
+      final data = await _userApi.updateProfile(
           phone: phone,
           fatherPhone: fatherPhone,
           motherName: motherName,
@@ -111,7 +128,16 @@ class UserRepository {
       final resProfile = await _userApi.getProfileStudent(pupil_id: pupil_id);
       return resProfile;
     } catch (e) {
-      throw GetProfileFailure();
+      throw GetStudentInfoFailure();
+    }
+  }
+
+  Future<ParentData> getProfileParent({required String pupilId}) async {
+    try {
+      final res = await _userApi.getProfileParent(pupilId: pupilId);
+      return res;
+    } catch (e) {
+      throw GetStudentInfoFailure();
     }
   }
 

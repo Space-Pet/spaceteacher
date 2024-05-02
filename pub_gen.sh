@@ -14,7 +14,12 @@ if [[ $# -eq 0 ]]; then
 	# Run on all folders if no argument is provided
 	run_pub_gen core
 	run_pub_gen iportal2
+	run_pub_gen iportal2/packages/local_data_source
 	run_pub_gen teacher
+elif [[ $# -eq 1 ]]; then
+	run_pub_gen iportal2/packages/local_data_source
+	run_pub_gen network_data_source
+	run_pub_gen repository
 else
 	# Check if the provided argument is a valid folder name
 	folder=$1

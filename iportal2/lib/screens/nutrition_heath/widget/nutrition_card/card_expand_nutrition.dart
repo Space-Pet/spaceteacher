@@ -1,8 +1,8 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/nutrition_model.dart';
 import 'package:iportal2/resources/resources.dart';
 
 class CardExpandNutrition extends StatelessWidget {
@@ -12,7 +12,7 @@ class CardExpandNutrition extends StatelessWidget {
     required this.nutritionItem,
   });
 
-  final NutritionModel nutritionItem;
+  final DataNutrition nutritionItem;
   final bool isTimeTableView;
 
   @override
@@ -53,7 +53,7 @@ class BMIGroup extends StatelessWidget {
     required this.nutritionItem,
   });
 
-  final NutritionModel nutritionItem;
+  final DataNutrition nutritionItem;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class BMIGroup extends StatelessWidget {
                   width: 8,
                 ),
                 Text(
-                  nutritionItem.bmi,
+                  nutritionItem.bmi.toString(),
                   style: AppTextStyles.bold16(color: AppColors.lightBlue600),
                 ),
               ],
@@ -99,7 +99,7 @@ class BMIGroup extends StatelessWidget {
               ),
             ),
             child: Text(
-              nutritionItem.result,
+              nutritionItem.ketLuan,
               textAlign: TextAlign.left,
               style: AppTextStyles.semiBold14(color: AppColors.brand600),
             ),
@@ -116,7 +116,7 @@ class WeightGroup extends StatelessWidget {
     required this.nutritionItem,
   });
 
-  final NutritionModel nutritionItem;
+  final DataNutrition nutritionItem;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +151,7 @@ class WeightGroup extends StatelessWidget {
               height: 6,
             ),
             Text(
-              nutritionItem.weight,
+              nutritionItem.weight.toString(),
               style: AppTextStyles.semiBold14(color: AppColors.black24),
             )
           ],
@@ -167,7 +167,7 @@ class HeightGroup extends StatelessWidget {
     required this.nutritionItem,
   });
 
-  final NutritionModel nutritionItem;
+  final DataNutrition nutritionItem;
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +202,7 @@ class HeightGroup extends StatelessWidget {
               height: 6,
             ),
             Text(
-              nutritionItem.height,
+              nutritionItem.height.toString(),
               style: AppTextStyles.semiBold14(color: AppColors.black24),
             )
           ],

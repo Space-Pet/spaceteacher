@@ -12,6 +12,7 @@ class TimeSelectBoxStart extends StatefulWidget {
     required this.date,
     required this.time,
     required this.onDateChanged,
+    required this.onTimeChanged,
     this.dateStart,
     required this.helpText,
     this.canSelectTime = true,
@@ -21,6 +22,7 @@ class TimeSelectBoxStart extends StatefulWidget {
   final DateTime date;
   final DateTime? dateStart;
   final Function(DateTime) onDateChanged;
+  final Function(DateTime) onTimeChanged;
   final TimeOfDay time;
   final String helpText;
   final bool canSelectTime;
@@ -68,6 +70,7 @@ class TimeSelectBoxStartState extends State<TimeSelectBoxStart> {
                       dataTime =
                           '${selectedTime!.hourOfPeriod}:${selectedTime!.minute} ${selectedTime!.period == DayPeriod.am ? 'AM' : 'PM'}';
                     });
+                      widget.onTimeChanged(newDateTime);
                   },
                 ),
               ),

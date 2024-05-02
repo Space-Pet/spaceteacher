@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/splash/bloc/splash_cubit.dart';
-import 'package:iportal2/resources/app_colors.dart';
 import 'package:repository/repository.dart';
 import '../../resources/app_strings.dart';
 

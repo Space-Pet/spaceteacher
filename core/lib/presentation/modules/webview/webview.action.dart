@@ -26,4 +26,8 @@ extension WebviewAction on _WebViewScreenState {
       );
     }
   }
+  
+  void loadHtmlString() {
+    _controller.loadHtmlString(widget.params?.html ?? '');
+  }
 }

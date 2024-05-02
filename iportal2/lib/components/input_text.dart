@@ -59,7 +59,7 @@ class TitleAndInputText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const redColor = Color(0xffCE2D30);
+    const redColor = Color(0xFFD0D5DD);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -88,18 +88,17 @@ class TitleAndInputText extends StatelessWidget {
             ),
             contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: isValid ? AppColors.gray300 : redColor),
+              borderSide:
+                  BorderSide(color: isValid ? AppColors.gray300 : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: isValid ? Colors.blue : redColor),
+              borderSide: BorderSide(color: isValid ? Colors.blue : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: isValid ? AppColors.gray300 : redColor),
+              borderSide:
+                  BorderSide(color: isValid ? AppColors.gray300 : redColor),
               borderRadius: BorderRadius.circular(8),
             ),
             hintText: hintText,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
 

@@ -1,11 +1,8 @@
 import 'dart:convert';
-import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-import '../constants.dart';
 
 class CommonFunction {
   static void hideKeyBoard(BuildContext context) {
@@ -148,26 +145,5 @@ class CommonFunction {
       res = oldNumbers.length > newNumbers.length ? 1 : -1;
     }
     return res;
-  }
-
-  static Future<void> navigateToStore(String role) async {
-    var storeUrl = '';
-
-    if (role == RoleType.iportal) {
-      if (Platform.isIOS) {
-        storeUrl = UrlConstants.urlAppStoreiportal;
-      } else if (Platform.isAndroid) {
-        storeUrl = UrlConstants.urlPlayStoreiportal;
-      }
-    } else {
-      if (Platform.isIOS) {
-        storeUrl = UrlConstants.urlAppStoreteacher;
-      } else if (Platform.isAndroid) {
-        storeUrl = UrlConstants.urlPlayStoreteacher;
-      }
-    }
-    if (await canLaunchUrlString(storeUrl)) {
-      await launchUrlString(storeUrl);
-    }
   }
 }

@@ -26,6 +26,8 @@ class LoadingScreen extends StatelessWidget {
           switch (state.status) {
             case SplashStatus.logined:
               context.pushReplacement(const AppMainLayout());
+              // context.pushReplacement(const LoginScreen());
+
               break;
 
             case SplashStatus.firstLogin:

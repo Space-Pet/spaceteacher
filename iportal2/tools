@@ -52,4 +52,9 @@ function main() {
 	done
 }
 
-main
+# if no arguments are passed, run the main function
+if [ $# -eq 0 ]; then
+	main
+else
+	$@
+fi

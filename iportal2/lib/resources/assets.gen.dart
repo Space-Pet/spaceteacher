@@ -72,6 +72,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chevron-right.svg
   String get chevronRight => 'assets/icons/chevron-right.svg';
 
+  /// File path: assets/icons/chevron-up-black.svg
+  String get chevronUpBlack => 'assets/icons/chevron-up-black.svg';
+
+  /// File path: assets/icons/chevron-up.svg
+  String get chevronUp => 'assets/icons/chevron-up.svg';
+
+  /// File path: assets/icons/cirrcle_logo.svg
+  String get cirrcleLogo => 'assets/icons/cirrcle_logo.svg';
+
   /// File path: assets/icons/clock-noti.svg
   String get clockNoti => 'assets/icons/clock-noti.svg';
 
@@ -102,11 +111,20 @@ class $AssetsIconsGen {
   /// File path: assets/icons/emoji-normal.svg
   String get emojiNormal => 'assets/icons/emoji-normal.svg';
 
+  /// File path: assets/icons/emoji.svg
+  String get emoji => 'assets/icons/emoji.svg';
+
+  /// File path: assets/icons/empty.svg
+  String get empty => 'assets/icons/empty.svg';
+
   /// File path: assets/icons/exercise.svg
   String get exercise => 'assets/icons/exercise.svg';
 
   /// File path: assets/icons/failed-noti.svg
   String get failedNoti => 'assets/icons/failed-noti.svg';
+
+  /// File path: assets/icons/faq.svg
+  String get faq => 'assets/icons/faq.svg';
 
   $AssetsIconsFeaturesGen get features => const $AssetsIconsFeaturesGen();
 
@@ -118,6 +136,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/global.svg
   String get global => 'assets/icons/global.svg';
+
+  /// File path: assets/icons/home-none-noti.svg
+  String get homeNoneNoti => 'assets/icons/home-none-noti.svg';
 
   /// File path: assets/icons/home-noti-white.svg
   String get homeNotiWhite => 'assets/icons/home-noti-white.svg';
@@ -168,6 +189,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/phone-book.svg
   String get phoneBook => 'assets/icons/phone-book.svg';
 
+  /// File path: assets/icons/phone-call-bus.svg
+  String get phoneCallBus => 'assets/icons/phone-call-bus.svg';
+
   /// File path: assets/icons/phone.png
   AssetGenImage get phone => const AssetGenImage('assets/icons/phone.png');
 
@@ -186,11 +210,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/report.svg
   String get report => 'assets/icons/report.svg';
 
+  /// File path: assets/icons/reset.svg
+  String get reset => 'assets/icons/reset.svg';
+
   /// File path: assets/icons/scores.svg
   String get scores => 'assets/icons/scores.svg';
 
   /// File path: assets/icons/scores_active.svg
   String get scoresActive => 'assets/icons/scores_active.svg';
+
+  /// File path: assets/icons/send-message-bus.svg
+  String get sendMessageBus => 'assets/icons/send-message-bus.svg';
 
   /// File path: assets/icons/send.svg
   String get send => 'assets/icons/send.svg';
@@ -250,6 +280,9 @@ class $AssetsIconsGen {
         chevronDown,
         chevronLeft,
         chevronRight,
+        chevronUpBlack,
+        chevronUp,
+        cirrcleLogo,
         clockNoti,
         clockTime,
         closeGrayCircle,
@@ -260,11 +293,15 @@ class $AssetsIconsGen {
         e,
         editProfile,
         emojiNormal,
+        emoji,
+        empty,
         exercise,
         failedNoti,
+        faq,
         file,
         fileMessage,
         global,
+        homeNoneNoti,
         homeNotiWhite,
         home,
         imageTeacher,
@@ -281,14 +318,17 @@ class $AssetsIconsGen {
         nutriWeight,
         paperclip,
         phoneBook,
+        phoneCallBus,
         phone,
         pinGallery,
         pin,
         qrcode,
         readIndicatorNoti,
         report,
+        reset,
         scores,
         scoresActive,
+        sendMessageBus,
         send,
         sendMessage,
         setting,
@@ -309,14 +349,6 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/Login.png
   AssetGenImage get login => const AssetGenImage('assets/images/Login.png');
-
-  /// File path: assets/images/ateendance-pink.png
-  AssetGenImage get ateendancePink =>
-      const AssetGenImage('assets/images/ateendance-pink.png');
-
-  /// File path: assets/images/attendance-blue.png
-  AssetGenImage get attendanceBlue =>
-      const AssetGenImage('assets/images/attendance-blue.png');
 
   /// File path: assets/images/avatar.png
   AssetGenImage get avatar => const AssetGenImage('assets/images/avatar.png');
@@ -348,6 +380,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/dinner.png
   AssetGenImage get dinner => const AssetGenImage('assets/images/dinner.png');
+
+  /// File path: assets/images/domain.png
+  AssetGenImage get domain => const AssetGenImage('assets/images/domain.png');
 
   /// File path: assets/images/e.png
   AssetGenImage get e => const AssetGenImage('assets/images/e.png');
@@ -539,6 +574,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/logoUK.png
   AssetGenImage get logoUK => const AssetGenImage('assets/images/logoUK.png');
 
+  $AssetsImagesLogoAppGen get logoApp => const $AssetsImagesLogoAppGen();
+
   /// File path: assets/images/lunch.png
   AssetGenImage get lunch => const AssetGenImage('assets/images/lunch.png');
 
@@ -587,8 +624,6 @@ class $AssetsImagesGen {
   /// List of all assets
   List<dynamic> get values => [
         login,
-        ateendancePink,
-        attendanceBlue,
         avatar,
         backgroundDashb,
         backgroundNoti,
@@ -597,6 +632,7 @@ class $AssetsImagesGen {
         calendar,
         defaultUser,
         dinner,
+        domain,
         e,
         en,
         example1,
@@ -759,6 +795,9 @@ class $AssetsIconsFeaturesGen {
   /// File path: assets/icons/features/preS_tuition.svg
   String get preSTuition => 'assets/icons/features/preS_tuition.svg';
 
+  /// File path: assets/icons/features/report.svg
+  String get report => 'assets/icons/features/report.svg';
+
   /// File path: assets/icons/features/schedule-time.svg
   String get scheduleTime => 'assets/icons/features/schedule-time.svg';
 
@@ -799,6 +838,7 @@ class $AssetsIconsFeaturesGen {
         preSSurvey,
         preSTariff,
         preSTuition,
+        report,
         scheduleTime,
         survey,
         teacher
@@ -830,6 +870,21 @@ class $AssetsImagesBrandLogoGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [iSchool, iec, sga, sna, uka];
+}
+
+class $AssetsImagesLogoAppGen {
+  const $AssetsImagesLogoAppGen();
+
+  /// File path: assets/images/logo_app/circle-logo.png
+  AssetGenImage get circleLogo =>
+      const AssetGenImage('assets/images/logo_app/circle-logo.png');
+
+  /// File path: assets/images/logo_app/ic_launcher.png
+  AssetGenImage get icLauncher =>
+      const AssetGenImage('assets/images/logo_app/ic_launcher.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [circleLogo, icLauncher];
 }
 
 class $AssetsImagesMainBackgroundGen {

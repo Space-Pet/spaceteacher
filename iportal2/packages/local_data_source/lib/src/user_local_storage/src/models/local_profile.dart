@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:local_data_source/src/user_local_storage/src/models/local_user_features.dart';
 
 import 'local_training_level.dart';
 import 'local_children.dart';
@@ -47,6 +48,10 @@ class LocalProfile {
   final LocalChildren children;
   @HiveField(18)
   final LocalTrainingLevel cap_dao_tao;
+  @HiveField(19)
+  final List<FeatureModel>? features;
+  @HiveField(20)
+  final List<int>? pinnedAlbumIdList;
 
   LocalProfile({
     required this.name,
@@ -67,6 +72,8 @@ class LocalProfile {
     required this.semester,
     required this.children,
     required this.cap_dao_tao,
+    this.features,
+    this.pinnedAlbumIdList,
   });
 
   LocalProfile copyWith({
@@ -88,6 +95,8 @@ class LocalProfile {
     int? semester,
     LocalChildren? children,
     LocalTrainingLevel? cap_dao_tao,
+    List<FeatureModel>? features,
+    List<int>? pinnedAlbumIdList,
   }) {
     return LocalProfile(
       name: name ?? this.name,
@@ -108,6 +117,8 @@ class LocalProfile {
       semester: semester ?? this.semester,
       children: children ?? this.children,
       cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
+      features: features ?? this.features,
+      pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
     );
   }
 

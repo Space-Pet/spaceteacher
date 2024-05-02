@@ -1,11 +1,5 @@
 import 'package:network_data_source/network_data_source.dart';
 
-class ChangePasswordFailure implements Exception {}
-
-class GetProfileFailure implements Exception {}
-
-class UpdataProfileFailure implements Exception {}
-
 class UserApi extends AbstractUserApi {
   UserApi({
     required AbstractDioClient client,
@@ -51,10 +45,6 @@ class UserApi extends AbstractUserApi {
   /// Chuyển sang author
   Future logOut() async {
     try {
-      // final data = await _client.doHttpPost(
-      //   url: '',
-      // );
-      // print('thai $data');
       await _client.clearToken();
     } catch (e) {
       throw LogOutFailure();
@@ -82,17 +72,33 @@ class UserApi extends AbstractUserApi {
     }
   }
 
-
   Future<StudentData> getProfileStudent({required String pupil_id}) async {
     try {
-      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupil_id/');
-
-      final profileData = data['data'] as Map<String, dynamic>;
-      final profileInfo = StudentData.fromMap(profileData);
-      return profileInfo;
+      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupil_id');
+      final studentInfo = StudentData.fromMap(data['data']);
+      return studentInfo;
     } catch (e) {
-      print('error: $e');
-      throw GetProfileFailure();
+      throw GetStudentInfoFailure();
+    }
+  }
+
+  Future<ParentData> getProfileParent({required String pupilId}) async {
+    try {
+      final data =
+          await _client.doHttpGet('/api/v1/member/pupil/$pupilId/parent');
+      print(data);
+      final parentInfo = ParentData.fromMap(data['data']);
+      return parentInfo;
+    } catch (e) {
+      throw GetParentInfoFailure();
     }
   }
 }
+
+class ChangePasswordFailure implements Exception {}
+
+class GetStudentInfoFailure implements Exception {}
+
+class GetParentInfoFailure implements Exception {}
+
+class UpdataProfileFailure implements Exception {}

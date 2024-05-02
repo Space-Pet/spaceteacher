@@ -34,7 +34,7 @@ class _SwitchSettingState extends State<SwitchSetting> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 0),
+                padding: const EdgeInsets.only(left: 10),
                 child: Row(
                   children: [
                     SvgPicture.asset(

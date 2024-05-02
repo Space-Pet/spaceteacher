@@ -48,3 +48,5 @@ app.*.map.json
 .flutter-plugins-dependencies
 
 lib/di/di.config.dart
+
+**/*.freezed.dart

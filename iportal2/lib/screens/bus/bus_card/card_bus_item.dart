@@ -2,22 +2,16 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iportal2/screens/bus/models/bus_model.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:repository/repository.dart';
 
-class CardBusItem extends StatefulWidget {
+class CardBusItem extends StatelessWidget {
   const CardBusItem({
     super.key,
-    required this.busItem,
-    required this.index,
+    required this.busSchedule,
   });
-  final BusItemModel busItem;
-  final num index;
-  @override
-  State<CardBusItem> createState() => _CardBusItemState();
-}
+  final BusSchedule busSchedule;
 
-class _CardBusItemState extends State<CardBusItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,20 +41,21 @@ class _CardBusItemState extends State<CardBusItem> {
           child: Row(
             children: [
               Container(
-                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                  decoration: BoxDecoration(
-                      color: widget.index == 0
-                          ? AppColors.green400
-                          : AppColors.green100,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(20))),
-                  child: Text(
-                    widget.busItem.title,
-                    style: AppTextStyles.semiBold12(
-                        color: widget.index == 0
-                            ? AppColors.white
-                            : AppColors.black24),
-                  )),
+                padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                decoration: BoxDecoration(
+                    color: busSchedule.isPickup
+                        ? AppColors.green100
+                        : AppColors.green400,
+                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                child: Text(
+                  busSchedule.title(),
+                  style: AppTextStyles.semiBold12(
+                    color: busSchedule.isPickup
+                        ? AppColors.black24
+                        : AppColors.white,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -70,57 +65,23 @@ class _CardBusItemState extends State<CardBusItem> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Tuyến',
-                        softWrap: true,
-                        style: AppTextStyles.normal14(
-                          color: AppColors.gray600,
-                        )),
-                    Text(widget.busItem.route,
-                        softWrap: true,
-                        style: AppTextStyles.semiBold14(
-                          color: AppColors.gray600,
-                        )),
-                  ],
+                child: _Item(
+                  label: 'Tuyến',
+                  value: '${busSchedule.route.routeId}',
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 5),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: DottedLine(
-                    dashLength: 2,
-                    dashColor: AppColors.gray300,
-                  ),
-                ),
+                child: _Divider(),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Biển số xe',
-                        softWrap: true,
-                        style: AppTextStyles.normal14(
-                          color: AppColors.gray600,
-                        )),
-                    Text(widget.busItem.busId,
-                        softWrap: true,
-                        style: AppTextStyles.semiBold14(
-                          color: AppColors.gray600,
-                        )),
-                  ],
+                child: _Item(
+                  label: 'Biển số xe',
+                  value: busSchedule.driverInfo.numberPlate,
                 ),
               ),
-              const SizedBox(
-                width: double.infinity,
-                child: DottedLine(
-                  dashLength: 2,
-                  dashColor: AppColors.gray300,
-                ),
-              ),
+              const _Divider(),
             ],
           ),
         ),
@@ -132,160 +93,64 @@ class _CardBusItemState extends State<CardBusItem> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Tuyến',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.route,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Tuyến',
+                      value: '${busSchedule.route.routeId}',
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DottedLine(
-                        dashLength: 2,
-                        dashColor: AppColors.gray300,
-                      ),
-                    ),
+                    child: _Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Biển số xe',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.busId,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Biển số xe',
+                      value: busSchedule.driverInfo.numberPlate,
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DottedLine(
-                        dashLength: 2,
-                        dashColor: AppColors.gray300,
-                      ),
-                    ),
+                    child: _Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Ngày',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.date,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Ngày',
+                      value: busSchedule.attendanceDateString(),
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DottedLine(
-                        dashLength: 2,
-                        dashColor: AppColors.gray300,
-                      ),
-                    ),
+                    child: _Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Loại tuyến',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.routeType,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Loại tuyến',
+                      value: busSchedule.scheduleType.text,
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DottedLine(
-                        dashLength: 2,
-                        dashColor: AppColors.gray300,
-                      ),
-                    ),
+                    child: _Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Điểm đón',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.pickupLocation,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Điểm đón',
+                      value: busSchedule.pickupLocation(),
                     ),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 5),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: DottedLine(
-                        dashLength: 2,
-                        dashColor: AppColors.gray300,
-                      ),
-                    ),
+                    child: _Divider(),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Thời gian dự kiến đón',
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                        Text(widget.busItem.estimatedTime,
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
+                    child: _Item(
+                      label: 'Thời gian dự kiến đón',
+                      value: busSchedule.estimatedTime(),
                     ),
                   ),
                   const SizedBox(
@@ -328,7 +193,7 @@ class _CardBusItemState extends State<CardBusItem> {
                               height: 6,
                             ),
                             Text(
-                              widget.busItem.teacherName,
+                              busSchedule.teacher.teacherName,
                               softWrap: true,
                               style: AppTextStyles.normal14(
                                 color: AppColors.gray600,
@@ -382,7 +247,7 @@ class _CardBusItemState extends State<CardBusItem> {
                         const SizedBox(
                           height: 6,
                         ),
-                        Text(widget.busItem.driverName,
+                        Text(busSchedule.driverInfo.driverName,
                             softWrap: true,
                             style: AppTextStyles.normal14(
                               color: AppColors.gray600,
@@ -396,6 +261,55 @@ class _CardBusItemState extends State<CardBusItem> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  const _Divider();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: double.infinity,
+      child: DottedLine(
+        dashLength: 2,
+        dashColor: AppColors.gray300,
+      ),
+    );
+  }
+}
+
+class _Item extends StatelessWidget {
+  const _Item({
+    // ignore: unused_element
+    super.key,
+    required this.label,
+    required this.value,
+  });
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          softWrap: true,
+          style: AppTextStyles.normal14(
+            color: AppColors.gray600,
+          ),
+        ),
+        Text(
+          value,
+          softWrap: true,
+          style: AppTextStyles.semiBold14(
+            color: AppColors.gray600,
+          ),
+        ),
+      ],
     );
   }
 }

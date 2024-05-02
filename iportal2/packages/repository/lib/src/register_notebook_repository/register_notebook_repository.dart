@@ -1,3 +1,4 @@
+import 'package:core/data/models/models.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class RegisterNotebookRepository {
@@ -16,7 +17,7 @@ class RegisterNotebookRepository {
   }) =>
       _registerNoteBook.getExercise(userKey, txtDate);
 
-  Future<ScoreResData> getScore({
+  Future<ScoreModel> getScore({
     required String userKey,
     required String txtTerm,
     required String txtYear,

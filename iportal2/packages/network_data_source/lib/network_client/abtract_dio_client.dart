@@ -300,11 +300,13 @@ class RestApiClient {
     required String url,
     Json? requestBody,
     Json? queryParameters,
+    Json? headers,
   }) async {
     Response response = await dio.post(
       url,
       data: requestBody,
       queryParameters: queryParameters,
+      options: headers != null ? Options(headers: headers) : null,
     );
 
     return response.data as Json;

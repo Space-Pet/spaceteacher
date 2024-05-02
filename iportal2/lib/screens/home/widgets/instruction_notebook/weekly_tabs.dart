@@ -1,8 +1,7 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:network_data_source/network_data_source.dart';
 
 class WeeklyTabs extends StatelessWidget {
   const WeeklyTabs({
@@ -14,137 +13,48 @@ class WeeklyTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final listTab = List.generate((lessons ?? []).length, (index) {
+      return TabDayOfWeek(
+        date: lessons?[index].planmnNgay.substring(0, 5) ?? '',
+        dayOfW: 'Thứ ${index + 2}',
+      );
+    });
+
+    final listTabContent = List.generate(
+        (lessons ?? []).length,
+        (index) => SingleChildScrollView(
+              child: Column(
+                children: tabView(index),
+              ),
+            ));
+
     return DefaultTabController(
-        length: 5,
+        length: (lessons ?? []).length,
         child: Column(
           children: [
             TabBar(
-                padding: const EdgeInsets.all(0),
-                labelPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                labelColor: AppColors.brand600,
-                tabAlignment: TabAlignment.fill,
-                unselectedLabelColor: AppColors.gray500,
-                dividerColor: AppColors.gray200,
-                labelStyle: AppTextStyles.semiBold14(color: AppColors.brand600),
-                unselectedLabelStyle:
-                    AppTextStyles.normal14(color: AppColors.gray500),
-                indicator: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(6),
-                    topRight: Radius.circular(6),
-                  ),
-                  color: AppColors.gray100,
+              padding: const EdgeInsets.all(0),
+              labelPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+              labelColor: AppColors.brand600,
+              tabAlignment: TabAlignment.fill,
+              unselectedLabelColor: AppColors.gray500,
+              dividerColor: AppColors.gray200,
+              labelStyle: AppTextStyles.semiBold14(color: AppColors.brand600),
+              unselectedLabelStyle:
+                  AppTextStyles.normal14(color: AppColors.gray500),
+              indicator: const BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(6),
+                  topRight: Radius.circular(6),
                 ),
-                tabs: [
-                  Tab(
-                    child: Align(
-                      child: Column(
-                        children: [
-                          Text('Thứ 2'),
-                          SizedBox(height: 4),
-                          Text(
-                            lessons?[0].planmnNgay.substring(0,
-                                    (lessons?[4].planmnNgay.length ?? 0) - 5) ??
-                                '',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Align(
-                      child: Column(
-                        children: [
-                          Text('Thứ 3'),
-                          SizedBox(height: 4),
-                          Text(
-                            lessons?[1].planmnNgay.substring(0,
-                                    (lessons?[4].planmnNgay.length ?? 0) - 5) ??
-                                '',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Align(
-                      child: Column(
-                        children: [
-                          Text('Thứ 4'),
-                          SizedBox(height: 4),
-                          Text(
-                            lessons?[2].planmnNgay.substring(0,
-                                    (lessons?[4].planmnNgay.length ?? 0) - 5) ??
-                                '',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Align(
-                      child: Column(
-                        children: [
-                          Text('Thứ 5'),
-                          SizedBox(height: 4),
-                          Text(
-                            lessons?[3].planmnNgay.substring(0,
-                                    (lessons?[4].planmnNgay.length ?? 0) - 5) ??
-                                '',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Tab(
-                    child: Align(
-                      child: Column(
-                        children: [
-                          Text('Thứ 6'),
-                          SizedBox(height: 4),
-                          Text(
-                            lessons?[4].planmnNgay.substring(0,
-                                    (lessons?[4].planmnNgay.length ?? 0) - 5) ??
-                                '',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ]),
+                color: AppColors.gray100,
+              ),
+              tabs: listTab,
+            ),
             Expanded(
-              child: TabBarView(children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: tabView(0),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: tabView(1),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: tabView(2),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: tabView(3),
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: tabView(4),
-                  ),
-                ),
-              ]),
+              child: TabBarView(
+                children: listTabContent,
+              ),
             ),
           ],
         ));
@@ -155,16 +65,12 @@ class WeeklyTabs extends StatelessWidget {
         (innerIndex) {
       final lesson = lessons?[index].planmnDataInWeek[innerIndex];
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          borderRadius: index == (lessons?.length ?? 0) - 1
-              ? AppRadius.roundedBottom12
-              : const BorderRadius.all(Radius.zero),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.zero),
           color: AppColors.gray100,
           border: Border(
-            bottom: index == (lessons?.length ?? 0) - 1
-                ? BorderSide.none
-                : const BorderSide(color: AppColors.gray300),
+            bottom: BorderSide(color: AppColors.gray300),
           ),
         ),
         child: Row(
@@ -172,21 +78,19 @@ class WeeklyTabs extends StatelessWidget {
           children: [
             Container(
                 padding: const EdgeInsets.only(top: 6),
-                width: 96,
-                child: Row(
-                  children: [
-                    Text(
-                      lesson?.planTime ?? '',
-                      style: AppTextStyles.normal12(color: AppColors.black24),
-                    )
-                  ],
+                width: 100,
+                child: Text(
+                  lesson?.planTime ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTextStyles.normal12(color: AppColors.black24),
                 )),
             Expanded(
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: 4,
-                    height: 60,
+                    height: 50,
                     decoration: BoxDecoration(
                         color: AppColors.brand600,
                         borderRadius: BorderRadius.circular(14)),
@@ -196,15 +100,18 @@ class WeeklyTabs extends StatelessWidget {
                       child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 4),
                       Text(
                         lesson?.planContent ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style:
                             AppTextStyles.semiBold14(color: AppColors.black24),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         lesson?.planContentDetail ?? '',
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.normal12(color: AppColors.gray61),
                       ),
@@ -217,5 +124,35 @@ class WeeklyTabs extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class TabDayOfWeek extends StatelessWidget {
+  const TabDayOfWeek({
+    super.key,
+    required this.dayOfW,
+    required this.date,
+  });
+
+  final String dayOfW;
+  final String date;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: Align(
+        child: Column(
+          children: [
+            Text(dayOfW,
+                style: AppTextStyles.semiBold14(color: AppColors.brand600)),
+            const SizedBox(height: 4),
+            Text(
+              date,
+              style: AppTextStyles.normal14(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

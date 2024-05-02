@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
@@ -8,11 +9,13 @@ import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
+import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
+import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
+import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
-import 'package:iportal2/screens/student_score/student_score_screen_main.dart';
 
 class CustomRouter {
   static PageRouteBuilder transitionAnimation({
@@ -21,6 +24,7 @@ class CustomRouter {
   }) {
     return PageRouteBuilder(
       settings: RouteSettings(name: routeName),
+      transitionDuration: const Duration(milliseconds: 150),
       pageBuilder: (c, a1, a2) => child,
       transitionsBuilder: (c, anim, a2, child) => SlideTransition(
         position: Tween<Offset>(
@@ -34,6 +38,9 @@ class CustomRouter {
 
   static PageRouteBuilder<dynamic>? onGenerateRoute(RouteSettings? settings) {
     switch (settings!.name) {
+      case DomainScreen.routeName:
+        return transitionAnimation(
+            child: const DomainScreen(), routeName: DomainScreen.routeName);
       case LoginScreen.routeName:
         return transitionAnimation(
           routeName: LoginScreen.routeName,
@@ -102,10 +109,25 @@ class CustomRouter {
         return transitionAnimation(
             child: const NutritionScreen(),
             routeName: NutritionScreen.routeName);
-      case StudentScoreScreenMain.routeName:
+
+      case ScoreScreen.routeName:
         return transitionAnimation(
-            child: const StudentScoreScreenMain(),
-            routeName: StudentScoreScreenMain.routeName);
+          child: const ScoreScreen(),
+          routeName: ScoreScreen.routeName,
+        );
+
+      case PreScoreScreen.routeName:
+        return transitionAnimation(
+          child: const PreScoreScreen(),
+          routeName: PreScoreScreen.routeName,
+        );
+
+      case NotiDetailScreen.routeName:
+        return transitionAnimation(
+          child: const NotiDetailScreen(id: 0),
+          routeName: NotiDetailScreen.routeName,
+        );
+
       default:
         assert(false, 'Need to implement ${settings.name}');
         return null;

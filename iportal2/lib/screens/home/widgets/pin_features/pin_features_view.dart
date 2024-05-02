@@ -1,39 +1,42 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
 import 'package:iportal2/screens/gallery/gallery_screen.dart';
-import 'package:iportal2/screens/home/models/feature_list_model.dart';
-import 'package:iportal2/screens/home/models/feature_model.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/feature_item.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
+import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
-import 'package:iportal2/screens/student_score/student_score_screen_main.dart';
+import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/survey/survay_screen.dart';
+import 'package:local_data_source/local_data_source.dart';
+import 'package:repository/repository.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
     super.key,
     required this.isKinderGarten,
+    required this.userFeatures,
   });
 
   final bool isKinderGarten;
+  final List<FeatureModel> userFeatures;
 
   @override
   State<PinFeatures> createState() => _PinFeaturesState();
 }
 
 class _PinFeaturesState extends State<PinFeatures> {
-  late List<FeatureModel> featuresByGrade;
   late List<FeatureModel> pinnedFeatures;
-  late List<FeatureModel> tempPinnedFeatures;
 
   void addBtnAllFeatureByDefault() {
     pinnedFeatures.add(FeatureModel(
@@ -41,19 +44,30 @@ class _PinFeaturesState extends State<PinFeatures> {
       name: 'Tất cả',
       icon: 'dots',
       category: FeatureCategory.all,
-      defaultOrder: 8,
+      order: 8,
     ));
   }
 
-  void onSavePinned(List<FeatureModel> newPinnedFeatures) async {
+  void onSavePinned(List<FeatureModel> newListFeatures) async {
+    final userBloc = context.read<CurrentUserBloc>();
+    final userRepository = context.read<UserRepository>();
+
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
-      pinnedFeatures = newPinnedFeatures;
-      tempPinnedFeatures = List<FeatureModel>.from(pinnedFeatures);
+      pinnedFeatures = newListFeatures
+          .where((element) => element.pinned)
+          .toList()
+        ..sort((a, b) => a.order.compareTo(b.order));
     });
 
     addBtnAllFeatureByDefault();
+
+    final newUserFeatures = userBloc.state.user.copyWith(
+      features: newListFeatures,
+    );
+    userRepository.saveUser(newUserFeatures);
+    userBloc.add(CurrentUserUpdated(user: newUserFeatures));
   }
 
   void onTapFeature(FeatureModel feature) {
@@ -71,8 +85,7 @@ class _PinFeaturesState extends State<PinFeatures> {
             BottomSheetFeature(
           scrollController: scrollController,
           onSavePinned: onSavePinned,
-          pinnedFeatures: tempPinnedFeatures,
-          listFeature: featuresByGrade,
+          listFeature: widget.userFeatures,
           isKinderGarten: widget.isKinderGarten,
         ),
         anchors: [0, 1],
@@ -101,10 +114,10 @@ class _PinFeaturesState extends State<PinFeatures> {
           break;
 
         case FeatureKey.scores:
-          context.push(const StudentScoreScreenMain());
+          context.push(const ScoreScreen());
           break;
         case FeatureKey.comment:
-          context.push(const StudentScoreScreenMain());
+          context.push(const PreScoreScreen());
           break;
 
         case FeatureKey.phoneBook:
@@ -134,14 +147,11 @@ class _PinFeaturesState extends State<PinFeatures> {
   @override
   void initState() {
     super.initState();
-    featuresByGrade = widget.isKinderGarten ? preSFeatures : hihgSFeatures;
+    pinnedFeatures = widget.userFeatures
+        .where((element) => element.pinned)
+        .toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
 
-    pinnedFeatures =
-        featuresByGrade.where((element) => element.defaultPinned).toList();
-
-    pinnedFeatures.sort(((a, b) => a.defaultOrder.compareTo(b.defaultOrder)));
-
-    tempPinnedFeatures = List<FeatureModel>.from(pinnedFeatures);
     addBtnAllFeatureByDefault();
   }
 

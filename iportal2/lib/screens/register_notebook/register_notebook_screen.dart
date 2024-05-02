@@ -7,7 +7,6 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/components/select_child.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/register_notebook/bloc/register_notebook_bloc.dart';
@@ -54,14 +53,15 @@ class RegisterNoteBoookScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.all(12),
+                    padding:
+                        const EdgeInsets.only(top: 12, left: 12, right: 12),
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: AppRadius.roundedTop28,
                     ),
                     child: Column(
                       children: [
-                        const SelectChild(),
+                        //  SelectChild(),
                         const SizedBox(height: 12),
                         SelectDate(
                           datePicked: bloc.state.datePicked,

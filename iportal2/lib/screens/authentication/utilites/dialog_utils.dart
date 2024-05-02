@@ -10,8 +10,7 @@ class LoadingDialog extends StatelessWidget {
         builder: (_) => LoadingDialog(key: key),
       ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
 
-  static void hide(BuildContext context) =>
-      context.pop();
+  static void hide(BuildContext context) => context.pop();
 
   const LoadingDialog({super.key});
 

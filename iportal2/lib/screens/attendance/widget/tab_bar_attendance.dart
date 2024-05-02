@@ -1,118 +1,66 @@
+import 'package:core/data/models/models.dart';
+import 'package:core/presentation/screens/attendance/tab_bar_attendance.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/screens/attendance/bloc/attendance_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/screens/attendance/widget/tab_bar_view_day.dart';
 import 'package:iportal2/screens/attendance/widget/tab_bar_view_week.dart';
-import 'package:iportal2/screens/home/models/attendance_model.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/utils/utils_export.dart';
-import 'package:network_data_source/network_data_source.dart';
+
+import '../bloc/attendance_bloc.dart';
 
 class TabBarAttendance extends StatelessWidget {
   TabBarAttendance(
       {super.key,
       this.stateAttendance,
       this.attendanceWeek,
+      this.selectDate,
       this.attendanceMonth});
   final List<AttendanceDay>? stateAttendance;
   final AttendanceWeek? attendanceWeek;
   final AttendanceWeek? attendanceMonth;
+  final DateTime? selectDate;
   final List<String> tabs = ['Theo ngày', 'Theo tuần', 'Theo tháng'];
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        child: DefaultTabController(
-      length: tabs.length,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(0),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.blackTransparent,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: TabBar(
-                  onTap: (index) {
-                    // if (index == 1) {
-                    //   context.read<AttendanceBloc>().add(GetAttendanceWeek(
-                    //       endDate: '2024-03-28', startDate: '2024-01-01'));
-                    // }
-                  },
-                  labelColor: AppColors.red,
-                  unselectedLabelColor: AppColors.gray400,
-                  dividerColor: Colors.transparent,
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  unselectedLabelStyle: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
-                  indicator: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 3,
-                      ),
-                    ],
-                  ),
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
-                  tabs: _buildTabs(),
+    return CTabBarAttendance(
+      stateAttendance: stateAttendance,
+      attendanceWeek: attendanceWeek,
+      attendanceMonth: attendanceMonth,
+      selectDate: selectDate,
+      cTabBarViewDay: TabBarViewDay(
+        selectDate: selectDate,
+        lessons: stateAttendance,
+        getAttendanceDay: (formattedDate, date) {
+          context.read<AttendanceBloc>().add(
+                GetAttendanceDay(
+                  date: formattedDate,
+                  selectDate: date,
                 ),
-              ),
-            ),
-          ),
-          if (stateAttendance == [] || stateAttendance == null)
-            Flexible(
-                child: TabBarView(
-              children: [
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ],
-            )),
-          if (stateAttendance != [] || stateAttendance != null)
-            Flexible(
-                child: TabBarView(
-              children: [
-                TabBarViewDay(
-                  lessons: stateAttendance,
-                ),
-                TabBarViewWeek(
-                  attendanceWeek: attendanceWeek,
-                ),
-                TabBarViewWeek(
-                  attendanceWeek: attendanceMonth,
-                  isWeek: false,
-                ),
-              ],
-            ))
-        ],
+              );
+        },
       ),
-    ));
-  }
-
-  List<Widget> _buildTabs() {
-    return tabs.map((title) {
-      return Tab(
-        child: Align(
-          child: Center(
-              child: Text(
-            title,
-            textAlign: TextAlign.center,
-          )),
-        ),
-      );
-    }).toList();
+      cTabBarViewWeek: TabBarViewWeek(
+        attendanceWeek: attendanceWeek,
+        getAttendanceWeek: (endDate, startDate) {
+          context.read<AttendanceBloc>().add(
+                GetAttendanceWeek(
+                  endDate: endDate,
+                  startDate: startDate,
+                ),
+              );
+        },
+      ),
+      cTabBarViewMonth: TabBarViewWeek(
+        attendanceWeek: attendanceMonth,
+        isWeek: false,
+        getAttendanceMonth: (endDate, startDate) {
+          context.read<AttendanceBloc>().add(
+                GetAttendanceMonth(
+                  endDate: endDate,
+                  startDate: startDate,
+                ),
+              );
+        },
+      ),
+    );
   }
 }

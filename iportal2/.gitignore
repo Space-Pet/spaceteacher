@@ -47,5 +47,9 @@ app.*.map.json
 
 # ignore all .g.dart files
 **/*.g.dart
+**/*.freezed.dart
 
 pubspec.lock
+
+# ignore all build/ directories
+**/build/

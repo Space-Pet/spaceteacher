@@ -2,34 +2,74 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_strings.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/app_main_layout.dart';
-import 'package:iportal2/screens/authentication/forgot_password/view/forgot_password_screen.dart';
+import 'package:iportal2/screens/authentication/change_password/bloc/change_password_bloc.dart';
+import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/components/input_text.dart';
 import 'package:repository/repository.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   static const routeName = '/changePassword';
-  const ChangePasswordScreen({super.key});
-
+  const ChangePasswordScreen(
+      {super.key, required this.numberPhone, required this.type});
+  final String numberPhone;
+  final String type;
   @override
   Widget build(BuildContext context) {
-    return const ChangePasswordView();
+    final authRepository = context.read<AuthRepository>();
+    return BlocProvider(
+      create: (context) => ChangePasswordBloc(authRepository: authRepository),
+      child: BlocListener<ChangePasswordBloc, ChangePasswordState>(
+        listenWhen: (previous, current) {
+          return previous.changePasswordStatus != current.changePasswordStatus;
+        },
+        listener: (context, state) {
+          if (state.changePasswordStatus == ChangePasswordStatus.loading) {
+            LoadingDialog.show(context);
+          } else if (state.changePasswordStatus == ChangePasswordStatus.error) {
+            LoadingDialog.hide(context);
+            Fluttertoast.showToast(
+                msg: state.message!,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: AppColors.black,
+                textColor: AppColors.white);
+          } else if (state.changePasswordStatus ==
+              ChangePasswordStatus.success) {
+            LoadingDialog.hide(context);
+            context.pushReplacement(const LoginScreen());
+            Fluttertoast.showToast(
+                msg: 'Đổi mật khẩu thành công',
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: AppColors.green,
+                textColor: AppColors.white);
+          }
+        },
+        child: ChangePasswordView(
+          type: type,
+          numberPhone: numberPhone,
+        ),
+      ),
+    );
   }
 }
 
 class ChangePasswordView extends StatefulWidget {
-  const ChangePasswordView({super.key});
-
+  const ChangePasswordView(
+      {super.key, required this.numberPhone, required this.type});
+  final String numberPhone;
+  final String type;
   @override
   State<ChangePasswordView> createState() => _ChangePasswordViewState();
 }
 
 class _ChangePasswordViewState extends State<ChangePasswordView> {
+  TextEditingController password = TextEditingController();
+  TextEditingController passwordConfirmation = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -125,7 +165,9 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                           title: 'title',
                           hintText: 'Mật khẩu mới',
                           prefixIcon: Assets.icons.lock.image(),
-                          onChanged: (value) {}),
+                          onChanged: (value) {
+                            password.text = value;
+                          }),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
@@ -133,12 +175,20 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                           title: 'title',
                           hintText: 'Xác nhận mật khẩu',
                           prefixIcon: Assets.icons.lock.image(),
-                          onChanged: (value) {}),
+                          onChanged: (value) {
+                            passwordConfirmation.text = value;
+                          }),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.read<ChangePasswordBloc>().add(ChangePassword(
+                              numberPhone: widget.numberPhone,
+                              password: password.text,
+                              passwordConfirmation: passwordConfirmation.text,
+                              type: widget.type));
+                        },
                         child: Container(
                             alignment: Alignment.center,
                             width: double.infinity,

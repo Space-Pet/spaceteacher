@@ -1,19 +1,38 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:core/common/services/permission_service.dart';
+import 'package:core/common/utils/snackbar.dart';
+import 'package:core/data/models/models.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_card/gallery_model.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/card_gallery_detail.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class GalleryDetail extends StatefulWidget {
   const GalleryDetail({
     super.key,
     required this.galleryItem,
+    this.isFromHomeScreen = false,
   });
-  final GalleryModel galleryItem;
+  final Gallery galleryItem;
+  final bool isFromHomeScreen;
   static const routeName = '/gallery';
+
   @override
   State<GalleryDetail> createState() => GalleryDetailState();
 }
@@ -26,10 +45,16 @@ class GalleryDetailState extends State<GalleryDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScreenAppBar(
-            title: widget.galleryItem.name,
+            title:
+                '${widget.galleryItem.galleryName} (${widget.galleryItem.galleryImages.length})',
             canGoback: true,
             onBack: () {
               context.pop();
+              // if (widget.isFromHomeScreen) {
+              //   context.pushReplacement(const GalleryScreen());
+              // } else {
+              //   context.pop();
+              // }
             },
           ),
           Expanded(
@@ -43,64 +68,167 @@ class GalleryDetailState extends State<GalleryDetail> {
                 ),
               ),
               child: Container(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: AppRadius.roundedTop28,
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Row(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RoundedButton(
+                          onTap: () async {
+                            PermissionStatus result = PermissionStatus.denied;
+
+                            if (Platform.isAndroid) {
+                              DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+                              AndroidDeviceInfo androidInfo =
+                                  await deviceInfo.androidInfo;
+
+                              if (androidInfo.version.sdkInt >= 33) {
+                                result = await Permission.photos.request();
+                              } else {
+                                result = await Permission.storage.request();
+                              }
+                            } else {
+                              result = await Permission.storage.request();
+                            }
+
+                            if (result.isGranted) {
+                              context.loaderOverlay.show();
+                              final listImg = widget.galleryItem.galleryImages
+                                  .where((element) =>
+                                      element.images.web.isNotEmpty)
+                                  .toList();
+
+                              var succedd = 0;
+
+                              for (var item in listImg) {
+                                var response = await Dio().get(
+                                  item.images.web,
+                                  options:
+                                      Options(responseType: ResponseType.bytes),
+                                );
+
+                                final res = await ImageGallerySaver.saveImage(
+                                  Uint8List.fromList(response.data),
+                                  quality: 100,
+                                  name: item.name,
+                                );
+
+                                if (res['isSuccess'] = true) {
+                                  succedd++;
+                                }
+                              }
+
+                              SnackBarUtils.showFloatingSnackBar(context,
+                                  'Đã lưu thành công $succedd/${listImg.length} ảnh');
+
+                              context.loaderOverlay.hide();
+                            }
+                          },
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          borderRadius: 30,
+                          border: Border.all(
+                            color: AppColors.gray300,
+                          ),
+                          buttonColor: AppColors.white,
+                          child: Row(
                             children: [
                               Text(
-                                "${widget.galleryItem.name} ",
-                                style: AppTextStyles.semiBold16(
+                                'Lưu toàn bộ ảnh',
+                                style: AppTextStyles.normal16(
                                     color: AppColors.brand600),
                               ),
-                              Text(
-                                "(${widget.galleryItem.imgUrlList.length})",
-                                style: AppTextStyles.normal14(
-                                    color: AppColors.gray600.withOpacity(0.4)),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              CircleAvatar(
+                                maxRadius: 12,
+                                backgroundColor: AppColors.brand600,
+                                child: SvgPicture.asset(
+                                    'assets/icons/download.svg'),
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 12,
+                        ),
+                        RoundedButton(
+                          onTap: () async {
+                            context.loaderOverlay.show();
+                            final listImg = widget.galleryItem.galleryImages
+                                .where(
+                                    (element) => element.images.web.isNotEmpty)
+                                .toList();
+                            final List<XFile> listFile = [];
+                            final temp = await getTemporaryDirectory();
+
+                            for (var item in listImg) {
+                              final url = Uri.parse(item.images.web);
+                              final response = await http.get(url);
+                              final bytes = response.bodyBytes;
+                              final path = '${temp.path}/${item.name}.jpg';
+
+                              File(path).writeAsBytesSync(bytes);
+                              final file = XFile(path);
+                              listFile.add(file);
+                            }
+
+                            context.loaderOverlay.hide();
+                            await Share.shareXFiles(listFile);
+                          },
+                          margin: const EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          borderRadius: 30,
+                          border: Border.all(
+                            color: AppColors.gray300,
                           ),
-                          Text(
-                            widget.galleryItem.description,
-                            style: AppTextStyles.normal14(
-                                color: AppColors.gray600),
+                          buttonColor: AppColors.white,
+                          child: Row(
+                            children: [
+                              Text(
+                                'Chia sẻ',
+                                style: AppTextStyles.normal16(
+                                    color: AppColors.brand600),
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              CircleAvatar(
+                                maxRadius: 12,
+                                backgroundColor: AppColors.brand600,
+                                child:
+                                    SvgPicture.asset('assets/icons/share.svg'),
+                              )
+                            ],
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: GridView.builder(
+                        padding: EdgeInsets.zero,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 6,
+                                mainAxisSpacing: 6),
+                        itemCount: widget.galleryItem.galleryImages.length,
+                        itemBuilder: (context, index) {
+                          return CardGalleryDetail(
+                              index: index,
+                              galleryAll: widget.galleryItem,
+                              galleryItem: widget.galleryItem
+                                  .galleryImages[index].images.mobile,
+                              lastIndex: galleryList.length - 1);
+                        },
+                        physics: const AlwaysScrollableScrollPhysics(),
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        child: GridView.builder(
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 6,
-                                  mainAxisSpacing: 6),
-                          itemCount: widget.galleryItem.imgUrlList.length,
-                          itemBuilder: (context, index) {
-                            return CardGalleryDetail(
-                                index: index,
-                                galleryAll: widget.galleryItem,
-                                galleryItem:
-                                    widget.galleryItem.imgUrlList[index],
-                                lastIndex: galleryList.length - 1);
-                          },
-                          physics: const AlwaysScrollableScrollPhysics(),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

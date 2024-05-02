@@ -1,5 +1,5 @@
+import 'package:core/data/models/models.dart';
 import 'package:network_data_source/network_data_source.dart';
-import 'package:network_data_source/src/register_notebook_api/models/exercise_data.dart';
 
 class GetRegisterNoteBookFailure implements Exception {}
 
@@ -44,13 +44,12 @@ class RegisterNoteBookApi extends AbstractRegisterNotebookApi {
     }
   }
 
-  Future<ScoreResData> getScore(
+  Future<ScoreModel> getScore(
       String userKey, String txtTerm, String txtYear) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
           '/api.php?act=show_score&user_key=$userKey&txt_hoc_ky=$txtTerm&txt_learn_year=$txtYear');
-      print('datadadadada 1 $data');
-      final scoreRes = ScoreResData.fromMap(data);
+      final scoreRes = ScoreModel.fromMap(data);
 
       return scoreRes;
     } catch (e) {

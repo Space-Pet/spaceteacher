@@ -3,14 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:iportal2/resources/resources.dart';
 
 class SelectDate extends StatefulWidget {
-  const SelectDate({
-    super.key,
-    this.onDatePicked,
-    this.datePicked,
-  });
+  const SelectDate(
+      {super.key, this.onDatePicked, this.datePicked, this.selectDate});
 
   final Function(DateTime date)? onDatePicked;
   final DateTime? datePicked;
+  final DateTime? selectDate;
 
   @override
   State<SelectDate> createState() => _SelectDateState();
@@ -20,7 +18,6 @@ class _SelectDateState extends State<SelectDate> {
   DateTime now = DateTime.now();
 
   DateFormat formatDate = DateFormat("EEEE, dd/MM/yyyy", 'vi_VN');
-  DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
   late String datePickedFormat;
 
   @override
@@ -42,7 +39,7 @@ class _SelectDateState extends State<SelectDate> {
           helpText: 'Chọn ngày',
           cancelText: 'Trở về',
           confirmText: 'Xong',
-          initialDate: formatDate.parse(datePickedFormat),
+          initialDate: widget.selectDate ?? formatDate.parse(datePickedFormat),
           firstDate: DateTime(now.year - 1, now.month),
           lastDate: DateTime(now.year + 1, now.month),
           initialEntryMode: DatePickerEntryMode.calendarOnly,

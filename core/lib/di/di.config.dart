@@ -35,9 +35,9 @@ Future<_i1.GetIt> $initGetIt(
     environmentFilter,
   );
   final appModule = _$AppModule();
-  gh.singleton<_i3.LocalDataManager>(() => _i3.LocalDataManager());
+  gh.singleton<_i3.LocalDataManager>(_i3.LocalDataManager());
   gh.factory<_i4.PreferencesHelper>(() => _i4.PreferencesHelperImpl());
-  gh.singleton<_i5.ServicesRepository>(() => _i6.ServicesRepositoryImpl());
+  gh.singleton<_i5.ServicesRepository>(_i6.ServicesRepositoryImpl());
   await gh.factoryAsync<_i7.SharedPreferences>(
     () => appModule.sharedPreferences,
     preResolve: true,

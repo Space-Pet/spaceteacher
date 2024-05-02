@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/components/custom_loading_logo.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/attendance/attendance_screen.dart';
@@ -10,6 +11,7 @@ import 'package:iportal2/screens/home/home_navigator.dart';
 import 'package:iportal2/screens/notifications/notifications_screen.dart';
 import 'package:iportal2/screens/schedule/schedule_screen.dart';
 import 'package:iportal2/screens/week_schedule/week_schedule_screen.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AppMainLayout extends StatefulWidget {
   const AppMainLayout({
@@ -68,137 +70,147 @@ class _AppMainLayoutState extends State<AppMainLayout>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) {
-        if (_selectedIndex != 0) {
-          tabBarController.animateTo(0);
-          setState(() {
-            _selectedIndex = 0;
-          });
-        }
-
-        if (_selectedIndex == 0 && homeNavigatorKey.currentContext != null) {
-          if (Navigator.canPop(homeNavigatorKey.currentContext!)) {
-            homeNavigatorKey.currentContext?.pop();
-          }
-        }
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayColor: AppColors.gray100.withOpacity(0.7),
+      overlayWidgetBuilder: (_) {
+        //ignored progress for the moment
+        return const Center(
+          child: LoadingWithBrand(),
+        );
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: BlocBuilder<CurrentUserBloc, CurrentUserState>(
-          builder: (context, state) {
-            return TabBarView(
-              controller: tabBarController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: state.user.isKinderGarten()
-                  ? widgetOptionKinderGarten
-                  : widgetOptions,
-            );
-          },
-        ),
-        bottomNavigationBar: BlocBuilder<CurrentUserBloc, CurrentUserState>(
-          builder: (context, state) {
-            return Container(
-              height: 82.v,
-              decoration: BoxDecoration(
-                  color: AppColors.white, boxShadow: [homeBoxShadow()]),
-              child: TabBar(
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (_selectedIndex != 0) {
+            tabBarController.animateTo(0);
+            setState(() {
+              _selectedIndex = 0;
+            });
+          }
+
+          if (_selectedIndex == 0 && homeNavigatorKey.currentContext != null) {
+            if (Navigator.canPop(homeNavigatorKey.currentContext!)) {
+              homeNavigatorKey.currentContext?.pop();
+            }
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: BlocBuilder<CurrentUserBloc, CurrentUserState>(
+            builder: (context, state) {
+              return TabBarView(
                 controller: tabBarController,
-                padding: EdgeInsets.zero,
-                labelPadding: EdgeInsets.zero,
-                labelColor: AppColors.brand500,
-                unselectedLabelColor: AppColors.gray400,
-                indicator: const BoxDecoration(),
-                labelStyle: AppTextStyles.semiBold12(),
-                tabs: [
-                  Tab(
-                    icon: SvgPicture.asset(
-                      'assets/icons/home.svg',
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 0
-                            ? AppColors.brand500
-                            : AppColors.gray400,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
-                    text: 'Trang chủ',
-                  ),
-                  state.user.isKinderGarten()
-                      ? Tab(
-                          icon: SvgPicture.asset(
-                            'assets/icons/calendar.svg',
-                            colorFilter: ColorFilter.mode(
-                              _selectedIndex == 1
-                                  ? AppColors.brand500
-                                  : AppColors.gray400,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
-                          text: 'Kế hoạch tuần',
-                        )
-                      : Tab(
-                          icon: SvgPicture.asset(
-                            'assets/icons/calendar.svg',
-                            colorFilter: ColorFilter.mode(
-                              _selectedIndex == 1
-                                  ? AppColors.brand500
-                                  : AppColors.gray400,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
-                          text: 'Thời khóa biểu',
+                physics: const NeverScrollableScrollPhysics(),
+                children: state.user.isKinderGarten()
+                    ? widgetOptionKinderGarten
+                    : widgetOptions,
+              );
+            },
+          ),
+          bottomNavigationBar: BlocBuilder<CurrentUserBloc, CurrentUserState>(
+            builder: (context, state) {
+              return Container(
+                height: 82.v,
+                decoration: BoxDecoration(
+                    color: AppColors.white, boxShadow: [homeBoxShadow()]),
+                child: TabBar(
+                  controller: tabBarController,
+                  padding: EdgeInsets.zero,
+                  labelPadding: EdgeInsets.zero,
+                  labelColor: AppColors.brand500,
+                  unselectedLabelColor: AppColors.gray400,
+                  indicator: const BoxDecoration(),
+                  labelStyle: AppTextStyles.semiBold12(),
+                  tabs: [
+                    Tab(
+                      icon: SvgPicture.asset(
+                        'assets/icons/home.svg',
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 0
+                              ? AppColors.brand500
+                              : AppColors.gray400,
+                          BlendMode.srcIn,
                         ),
-                  Tab(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 12.h),
-                      child: Column(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/check.svg',
-                            colorFilter: ColorFilter.mode(
-                              _selectedIndex == 2
-                                  ? AppColors.brand500
-                                  : AppColors.gray400,
-                              BlendMode.srcIn,
+                      ),
+                      iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                      text: 'Trang chủ',
+                    ),
+                    state.user.isKinderGarten()
+                        ? Tab(
+                            icon: SvgPicture.asset(
+                              'assets/icons/calendar.svg',
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 1
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Điểm danh',
-                            style: AppTextStyles.semiBold12(
-                              color: _selectedIndex == 2
-                                  ? AppColors.brand500
-                                  : AppColors.gray400,
-                            ),
+                            iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            text: 'Kế hoạch tuần',
                           )
-                        ],
+                        : Tab(
+                            icon: SvgPicture.asset(
+                              'assets/icons/calendar.svg',
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 1
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            text: 'Thời khóa biểu',
+                          ),
+                    Tab(
+                      child: Container(
+                        padding: EdgeInsets.only(left: 12.h),
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/check.svg',
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 2
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Điểm danh',
+                              style: AppTextStyles.semiBold12(
+                                color: _selectedIndex == 2
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Tab(
-                    icon: SvgPicture.asset(
-                      'assets/icons/noti.svg',
-                      colorFilter: ColorFilter.mode(
-                        _selectedIndex == 3
-                            ? AppColors.brand500
-                            : AppColors.gray400,
-                        BlendMode.srcIn,
+                    Tab(
+                      icon: SvgPicture.asset(
+                        'assets/icons/noti.svg',
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 3
+                              ? AppColors.brand500
+                              : AppColors.gray400,
+                          BlendMode.srcIn,
+                        ),
                       ),
+                      iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                      text: 'Thông báo',
                     ),
-                    iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
-                    text: 'Thông báo',
-                  ),
-                ],
-                onTap: (index) async {
-                  _onItemTapped(index);
-                },
-              ),
-            );
-          },
+                  ],
+                  onTap: (index) async {
+                    _onItemTapped(index);
+                  },
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

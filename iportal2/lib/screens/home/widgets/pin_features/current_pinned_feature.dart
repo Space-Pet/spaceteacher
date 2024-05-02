@@ -2,9 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
-import 'package:iportal2/screens/home/models/feature_model.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/feature_item.dart';
 import 'package:iportal2/resources/resources.dart';
+import 'package:local_data_source/local_data_source.dart';
 
 class CurrentPinnedFeature extends StatelessWidget {
   const CurrentPinnedFeature({
@@ -24,7 +24,7 @@ class CurrentPinnedFeature extends StatelessWidget {
   final bool isKinderGarten;
   final void Function() updatePin;
   final void Function(FeatureKey key, bool status) removePinned;
-  final void Function(List<FeatureModel> pinnedFeatures) onSavePinned;
+  final void Function() onSavePinned;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class CurrentPinnedFeature extends StatelessWidget {
       return index == 7
           ? GestureDetector(
               onTap: () {
-                onSavePinned(listFeature);
+                onSavePinned();
               },
               child: SavedButton(w: w, hasUpdated: hasUpdated),
             )
@@ -73,12 +73,21 @@ class CurrentPinnedFeature extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                    child: Text(
-                      'Danh mục được ghim',
-                      textAlign: TextAlign.left,
-                      style: AppTextStyles.semiBold16(
-                          color: AppColors.blueGray800),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 12, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Danh mục được ghim',
+                          textAlign: TextAlign.left,
+                          style: AppTextStyles.semiBold16(
+                              color: AppColors.blueGray800),
+                        ),
+                        InkWell(
+                            onTap: updatePin,
+                            child: SvgPicture.asset(
+                                'assets/icons/chevron-up-black.svg'))
+                      ],
                     ),
                   ),
                   Expanded(
@@ -95,9 +104,7 @@ class CurrentPinnedFeature extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                      onTap: () {
-                        updatePin();
-                      },
+                      onTap: updatePin,
                       child: SvgPicture.asset('assets/icons/pin.svg')),
                 ],
               ),

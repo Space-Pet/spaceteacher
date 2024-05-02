@@ -1,7 +1,7 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/gallery/widget/gallery_card/gallery_model.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
 
 class CardGalleryDetail extends StatelessWidget {
@@ -13,7 +13,7 @@ class CardGalleryDetail extends StatelessWidget {
     required this.lastIndex,
   });
   final String galleryItem;
-  final GalleryModel galleryAll;
+  final Gallery galleryAll;
   final int index;
   final num lastIndex;
 
@@ -27,18 +27,23 @@ class CardGalleryDetail extends StatelessWidget {
           galleryItem: galleryAll,
         ));
       },
-      child: Container(
-        height: w / 3,
-        width: w / 3,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(
-                galleryItem,
+      child: galleryItem.isNotEmpty
+          ? Container(
+              height: w / 3,
+              width: w / 3,
+              decoration: BoxDecoration(
+                borderRadius: AppRadius.rounded4,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(galleryItem),
+                ),
               ),
-              fit: BoxFit.cover),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-        ),
-      ),
+            )
+          : Image.asset(
+              'assets/images/example1.png',
+              fit: BoxFit.cover,
+              height: w / 3,
+            ),
     );
   }
 }

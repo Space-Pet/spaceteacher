@@ -158,7 +158,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                       });
                     },
                     child: SvgPicture.asset(
-                      'assets/icons/${isExpanded ? 'minus' : 'chevron-down'}.svg',
+                      'assets/icons/${isExpanded ? 'chevron-up-black' : 'chevron-down'}.svg',
                     ),
                   ),
                 ],

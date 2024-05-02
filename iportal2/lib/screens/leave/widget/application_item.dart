@@ -1,10 +1,9 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/resources/resources.dart';
-import 'package:network_data_source/network_data_source.dart';
 
 class ApplicationItem extends StatelessWidget {
   const ApplicationItem({

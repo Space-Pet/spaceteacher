@@ -7,8 +7,9 @@ abstract class AttendanceEvent extends Equatable {
 }
 
 class GetAttendanceDay extends AttendanceEvent {
-  const GetAttendanceDay({required this.date});
+  const GetAttendanceDay({required this.date, required this.selectDate});
   final String date;
+  final DateTime selectDate;
 }
 
 class GetAttendanceWeek extends AttendanceEvent {

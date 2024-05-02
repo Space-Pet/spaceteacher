@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -32,9 +33,8 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       ScheduleFetchExercise event, Emitter<ScheduleState> emit) async {
     final exerciseDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-      // txtDate: '18-03-2024',
-      // userKey: '0563230098',
+      txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
+      // userKey: '0723210020',
     );
 
     emit(

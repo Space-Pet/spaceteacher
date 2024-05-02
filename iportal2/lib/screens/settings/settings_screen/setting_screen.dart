@@ -14,7 +14,10 @@ import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
+import 'package:iportal2/screens/settings/faq/faq_screen.dart';
+import 'package:iportal2/screens/settings/respond_comment/respond_comment_screen.dart';
 import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
+import 'package:iportal2/screens/settings/user_manual/user_manual_screen.dart';
 import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
 import 'package:repository/repository.dart';
 
@@ -93,13 +96,25 @@ class _SettingScreenState extends State<SettingScreen> {
                         text: AppStrings.feedback,
                         iconAsset: Assets.icons.message,
                         showDottedLine: true,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(const RespondCommentScreen());
+                        },
                       ),
                       SwitchSetting(
                         showDottedLine: true,
                         text: AppStrings.userManual,
                         iconAsset: Assets.icons.userManual,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push(const UserManualScreen());
+                        },
+                      ),
+                      SwitchSetting(
+                        showDottedLine: true,
+                        text: 'FAQ',
+                        iconAsset: Assets.icons.faq,
+                        onPressed: () {
+                          context.push(const FaqScreen());
+                        },
                       ),
                       SwitchSetting(
                         showDottedLine: true,
@@ -163,7 +178,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         },
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 1),
+                        padding: const EdgeInsets.only(left: 10, right: 10),
                         child:
                             BlocBuilder<SettingScreenBloc, SettingScreenState>(
                           builder: (context, state) {
@@ -171,9 +186,9 @@ class _SettingScreenState extends State<SettingScreen> {
                               onTap: () {
                                 ShowDialogLogout.show(
                                   context,
-                                  textConten: '',
-                                  title: 'Bạn muốn đăng xuất?',
-                                  onTapConfirm: () {
+                                  text:
+                                      'Bạn có chắc chắn muốn đăng xuất không?',
+                                  onLogout: () {
                                     context
                                         .read<SettingScreenBloc>()
                                         .add(SettingScreenLoggedOut());

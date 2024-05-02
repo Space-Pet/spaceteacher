@@ -5,12 +5,11 @@ import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/resources/app_text_styles.dart';
 
 class ShowDialogLogout {
-  static Future<void> show(BuildContext context,
-      {Widget? child,
-      required String title,
-      Function()? onTap,
-      Function()? onTapConfirm,
-      required String textConten}) async {
+  static Future<void> show(
+    BuildContext context, {
+    required String text,
+    required Function() onLogout,
+  }) async {
     Completer<void> completer = Completer<void>();
     await showDialog(
         context: context,
@@ -18,14 +17,12 @@ class ShowDialogLogout {
           return AlertDialog(
             title: Column(
               children: [
-                if (child != null) child!,
                 Padding(
                   padding: const EdgeInsets.only(top: 24),
                   child: Text(
-                    title,
+                    text,
                     textAlign: TextAlign.center,
-                    style: AppTextStyles.normal18(
-                        fontWeight: FontWeight.w600, height: 0.09),
+                    style: AppTextStyles.normal18(fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
@@ -34,13 +31,8 @@ class ShowDialogLogout {
             content: SingleChildScrollView(
               child: Column(
                 children: [
-                  Text(
-                    textAlign: TextAlign.center,
-                    textConten,
-                    style: AppTextStyles.normal14(color: AppColors.gray500),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 24),
+                    padding: const EdgeInsets.only(top: 12),
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
@@ -49,31 +41,31 @@ class ShowDialogLogout {
                           const BorderSide(color: AppColors.gray400),
                         ),
                       ),
-                      onPressed: onTap ?? () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                       child: const SizedBox(
                           width: double.infinity,
                           child: Text(
                             style: TextStyle(color: AppColors.black),
-                            'Đóng',
+                            'Hủy',
                             textAlign: TextAlign.center,
                           )),
                     ),
                   ),
-                  if (onTapConfirm != null)
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color?>(AppColors.red900),
-                      ),
-                      onPressed: onTapConfirm ?? () => Navigator.pop(context),
-                      child: const SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            style: TextStyle(color: AppColors.white),
-                            'Đồng ý',
-                            textAlign: TextAlign.center,
-                          )),
+                  const SizedBox(height: 4),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color?>(AppColors.red900),
                     ),
+                    onPressed: onLogout,
+                    child: const SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          style: TextStyle(color: AppColors.white),
+                          'Đăng xuất',
+                          textAlign: TextAlign.center,
+                        )),
+                  ),
                 ],
               ),
             ),

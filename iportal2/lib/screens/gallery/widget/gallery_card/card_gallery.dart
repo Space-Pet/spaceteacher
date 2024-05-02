@@ -1,8 +1,7 @@
+import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/screens/gallery/widget/gallery_card/gallery_model.dart';
 import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 
@@ -10,17 +9,21 @@ class CardGallery extends StatelessWidget {
   const CardGallery({
     super.key,
     required this.galleryItem,
-    required this.index,
-    required this.lastIndex,
+    required this.onUpdatePinAlbum,
+    required this.isPinned,
   });
-  final GalleryModel galleryItem;
-  final num index;
-  final num lastIndex;
+  final Gallery galleryItem;
+  final Function() onUpdatePinAlbum;
+  final bool isPinned;
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final itemW = (screenWidth - 40) / 2;
+
+    final imgUrl = galleryItem.galleryImages.isNotEmpty
+        ? galleryItem.galleryImages[0].images.mobile
+        : '';
 
     return GestureDetector(
       onTap: () {
@@ -33,51 +36,62 @@ class CardGallery extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
+              borderRadius: AppRadius.rounded10,
               image: DecorationImage(
-                image: AssetImage(galleryItem.imgUrl),
                 fit: BoxFit.cover,
+                image: NetworkImage(imgUrl),
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             height: itemW,
             width: itemW,
             padding: const EdgeInsets.only(top: 12, right: 12),
             alignment: Alignment.topRight,
-            child: CircleAvatar(
-              backgroundColor:
-                  galleryItem.isPinned ? AppColors.red900 : AppColors.white,
-              maxRadius: 14,
-              child: SvgPicture.asset(
-                'assets/icons/pin-gallery.svg',
-                colorFilter: ColorFilter.mode(
-                  galleryItem.isPinned ? AppColors.white : AppColors.gray400,
-                  BlendMode.srcIn,
+            child: InkWell(
+              onTap: onUpdatePinAlbum,
+              child: CircleAvatar(
+                backgroundColor: isPinned ? AppColors.red900 : AppColors.white,
+                maxRadius: 14,
+                child: SvgPicture.asset(
+                  'assets/icons/pin-gallery.svg',
+                  colorFilter: ColorFilter.mode(
+                    isPinned ? AppColors.white : AppColors.gray400,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            galleryItem.name,
-            style: AppTextStyles.custom(
-                fontSize: 14.fSize,
-                fontWeight: FontWeight.w500,
-                height: 20 / 14,
-                color: AppColors.gray600),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            '${galleryItem.imgUrlList.length} ảnh',
-            style: AppTextStyles.custom(
-                fontSize: 14.fSize,
-                fontWeight: FontWeight.w500,
-                color: AppColors.gray600.withOpacity(0.4)),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.left,
+          Padding(
+            padding: const EdgeInsets.only(top: 6.0, left: 4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  galleryItem.galleryName,
+                  style: AppTextStyles.custom(
+                    fontSize: 14.fSize,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.gray600,
+                    height: 1,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${galleryItem.galleryImages.length} ảnh',
+                  style: AppTextStyles.custom(
+                    fontSize: 14.fSize,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.gray600.withOpacity(0.4),
+                    height: 1,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
           ),
         ],
       ),

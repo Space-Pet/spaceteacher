@@ -1,8 +1,8 @@
+import 'package:core/data/models/models.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/card_expand_nutrition.dart';
-import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/nutrition_model.dart';
 import 'package:iportal2/resources/resources.dart';
 
 class CardNutrition extends StatefulWidget {
@@ -14,7 +14,7 @@ class CardNutrition extends StatefulWidget {
     required this.isExpanded,
     required this.onExpansionChanged,
   });
-  final NutritionModel nutritionItem;
+  final DataNutrition nutritionItem;
   final num index;
   final num lastIndex;
   final bool isExpanded;
@@ -47,7 +47,7 @@ class _CardNutritionState extends State<CardNutrition> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.nutritionItem.dateRecord,
+                  widget.nutritionItem.month,
                   style: widget.isExpanded
                       ? AppTextStyles.semiBold14(
                           color: AppColors.gray600,

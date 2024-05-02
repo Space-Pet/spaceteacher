@@ -17,6 +17,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       : super(
           ExerciseState(
             subjectList: const [],
+            tempData: ExerciseData.empty(),
             exerciseDataList: ExerciseData.empty(),
           ),
         ) {
@@ -24,6 +25,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     add(ExerciseFetchData());
 
     on<ExerciseSelectDate>(_onSelectDate);
+    on<ExerciseSelectSubject>(_onSelectSubject);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -32,32 +34,67 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
 
   _onFetchDueDateExercises(
       ExerciseFetchData event, Emitter<ExerciseState> emit) async {
+    emit(state.copyWith(status: ExerciseStatus.loading));
+
     final exerciseDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.user.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-      // userKey: '0563230098',
+      // userKey: '0723210020',
     );
 
     emit(
       state.copyWith(
-        subjectList: exerciseDataList.getSubjectList(),
+        subjectList: exerciseDataList.exerciseDataList.isEmpty
+            ? []
+            : exerciseDataList.exerciseDataList
+                .map((e) => e.subjectName)
+                .toList(),
         exerciseDataList: exerciseDataList,
+        tempData: exerciseDataList,
+        status: ExerciseStatus.loaded,
       ),
     );
   }
 
   _onSelectDate(ExerciseSelectDate event, Emitter<ExerciseState> emit) async {
+    emit(state.copyWith(status: ExerciseStatus.loading));
+
     final exerciseDataList = await appFetchApiRepo.getExercises(
-      // userKey: '0563230098',
+      // userKey: '0723210020',
       userKey: currentUserBloc.state.user.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
     );
 
     emit(
       state.copyWith(
-        subjectList: exerciseDataList.getSubjectList(),
+        subjectList: exerciseDataList.exerciseDataList.isEmpty
+            ? []
+            : exerciseDataList.exerciseDataList
+                .map((e) => e.subjectName)
+                .toList(),
         exerciseDataList: exerciseDataList,
+        tempData: exerciseDataList,
+        selectedSubject: 'Tất cả các môn',
+        status: ExerciseStatus.loaded,
       ),
     );
+  }
+
+  _onSelectSubject(ExerciseSelectSubject event, Emitter<ExerciseState> emit) {
+    emit(state.copyWith(selectedSubject: event.selectedSubject));
+
+    if (event.selectedSubject == 'Tất cả các môn') {
+      emit(state.copyWith(
+        tempData: state.exerciseDataList,
+      ));
+    } else {
+      final filterData = state.exerciseDataList.exerciseDataList
+          .where((element) => element.subjectName == event.selectedSubject)
+          .toList();
+
+      emit(state.copyWith(
+        tempData: ExerciseData(exerciseDataList: filterData),
+      ));
+    }
   }
 }

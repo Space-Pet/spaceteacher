@@ -9,8 +9,10 @@ import 'package:otp_text_field/style.dart';
 import 'dart:async';
 
 class SendOTPScreen extends StatefulWidget {
-  const SendOTPScreen({super.key});
-
+  const SendOTPScreen(
+      {super.key, required this.numberPhone, required this.type});
+  final String numberPhone;
+  final String type;
   @override
   State<SendOTPScreen> createState() => _SendOTPScreenState();
 }
@@ -24,7 +26,7 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
   @override
   void initState() {
     super.initState();
-    _counter = 300; // 5 phút = 5 * 60 giây
+    _counter = 300;
     _startTimer();
   }
 
@@ -41,7 +43,10 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
   }
 
   bool _isOtpValid(String otp) {
-    return otp.length == _otpLength;
+    if (otp.length != _otpLength) {
+      return false;
+    }
+    return otp == '1111';
   }
 
   @override
@@ -80,7 +85,7 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
                   onPressed: () {
                     context.pop();
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.keyboard_arrow_left,
                     size: 34,
                     color: AppColors.white,
@@ -144,11 +149,14 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
                     GestureDetector(
                       onTap: _isOtpValid(_otpController.text)
                           ? () {
-                              context.push(ChangePasswordScreen());
+                              context.pushReplacement(ChangePasswordScreen(
+                                numberPhone: widget.numberPhone,
+                                type: widget.type,
+                              ));
                             }
                           : () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text('Mã OTP không hợp lệ'),
                                 ),
                               );
