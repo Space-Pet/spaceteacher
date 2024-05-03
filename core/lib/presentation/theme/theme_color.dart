@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
-import '../../di/di.dart';
+import '../../src/src.dart';
 
-ThemeColor get themeColor => injector.get<ThemeColor>();
+ThemeColor get themeColor => Injection.get<ThemeColor>();
 
 abstract class ThemeColor {
   /// iportal App

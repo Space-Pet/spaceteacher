@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:core/core.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,12 +15,8 @@ class CardGallery extends StatelessWidget {
   const CardGallery({
     super.key,
     required this.galleryItem,
-    required this.index,
-    required this.lastIndex,
   });
   final GalleryModel galleryItem;
-  final int index;
-  final int lastIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +37,7 @@ class CardGallery extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: CachedNetworkImageProvider(
-                    kIsWeb
-                        ? galleryItem.images![index].urlImageModel?.web ?? ""
-                        : galleryItem.images![index].urlImageModel?.mobile ??
-                            "",
+                    galleryItem.images?.first.urlImageModel?.mobile ?? "",
                   ),
                   fit: BoxFit.cover,
                 ),

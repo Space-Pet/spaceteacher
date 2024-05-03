@@ -1,4 +1,4 @@
-import '../../../di/di.dart';
+// import '../../../di/di.dart';
 import '../local/preferences_helper/preferences_helper.dart';
 
 mixin DataRepository {
@@ -6,5 +6,5 @@ mixin DataRepository {
   //     injector.get<AppApiService>().graphQLClient,
   //     );
 
-  late final preferenceHelper = injector.get<PreferencesHelper>();
+  // late final preferenceHelper = injector.get<PreferencesHelper>();
 }
