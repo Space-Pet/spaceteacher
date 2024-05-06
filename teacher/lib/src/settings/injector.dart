@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:teacher/repository/auth_repository/auth_repositories.dart';
+import 'package:teacher/repository/bus_repository/bus_repositories.dart';
 import 'package:teacher/repository/evaluation_repository/evaluation_repositories.dart';
 import 'package:teacher/repository/gallery_repository/gallery_repositories.dart';
 import 'package:teacher/repository/notification_repository/notification_repositories.dart';
@@ -16,5 +17,6 @@ class Injector {
     Injection.put<EvaluationRepository>(EvaluationRepositoryImp());
     Injection.put<NotificationRepository>(NotificationRepositoryImp());
     Injection.put<GalleryRepository>(GalleryRepositoryImpl());
+    Injection.put<BusRepository>(BusRepositoryImpl());
   }
 }
