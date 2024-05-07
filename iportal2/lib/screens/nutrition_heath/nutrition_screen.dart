@@ -5,7 +5,7 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/nutrition_heath/bloc/nutrition_bloc.dart';
 import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/card_nutrition.dart';
 import 'package:iportal2/utils/utils_export.dart';
@@ -36,7 +36,7 @@ class NutritionScreenState extends State<NutritionScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double calculatedHeight = screenHeight - 72 - 184 - 34;
+    double calculatedHeight = screenHeight / 1.4;
     return BlocProvider(
       create: (context) => NutritionBloc(
           userRepository: context.read<UserRepository>(),

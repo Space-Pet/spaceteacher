@@ -15,9 +15,10 @@ class GetComment extends PreScoreEvent {
 
 class GetListReportStudent extends PreScoreEvent {
   final String learnYear;
-  GetListReportStudent({required this.learnYear});
+  final int semester;
+  GetListReportStudent({required this.learnYear, required this.semester});
   @override
-  List<Object> get props => [learnYear];
+  List<Object> get props => [learnYear, semester];
 }
 
 class GetReportStudent extends PreScoreEvent {

@@ -1,3 +1,6 @@
+import 'package:core/resources/app_strings.dart';
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,9 +11,7 @@ import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/dialog/dialog_change_password.dart';
 import 'package:iportal2/components/dialog/dialog_languages.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/assets.gen.dart';
+import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
@@ -46,7 +47,7 @@ class _SettingScreenState extends State<SettingScreen> {
           if (state.logoutStatus.isSuccess) {
             Navigator.pushAndRemoveUntil(
               mainNavKey.currentContext!,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              MaterialPageRoute(builder: (context) => const DomainScreen()),
               (route) => false,
             );
           }
@@ -91,14 +92,6 @@ class _SettingScreenState extends State<SettingScreen> {
                           iconAsset: Assets.icons.bell,
                           showDottedLine: true,
                         ),
-                      ),
-                      SwitchSetting(
-                        text: AppStrings.feedback,
-                        iconAsset: Assets.icons.message,
-                        showDottedLine: true,
-                        onPressed: () {
-                          context.push(const RespondCommentScreen());
-                        },
                       ),
                       SwitchSetting(
                         showDottedLine: true,

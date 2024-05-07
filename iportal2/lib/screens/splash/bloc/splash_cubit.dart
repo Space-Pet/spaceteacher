@@ -14,6 +14,7 @@ class SplashCubit extends Cubit<SplashState> {
       : super(const SplashState()) {
     appStartLoading();
   }
+
   final AuthRepository authRepository;
   final UserRepository userRepository;
   final CurrentUserBloc currentUserBloc;
@@ -29,7 +30,7 @@ class SplashCubit extends Cubit<SplashState> {
     final box = await Hive.openBox('boxFistTime');
     bool isFistTime = box.get('boxFistTime', defaultValue: true);
     final isLogin = await checkLoggedIn();
-    
+
     if (isFistTime) {
       emit(state.copyWith(status: SplashStatus.firstLogin));
     } else {

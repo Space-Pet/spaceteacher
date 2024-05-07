@@ -21,24 +21,21 @@ class ApiPath {
   static String getListTeacher = '${baseUrl}member/teacher/pupil';
   static String getListGalleryAlbum = '${baseUrl}staff/gallery/teacher';
   static String getDetailGalleryImage = '${baseUrl}staff/gallery/show';
-  static String getSchedulesStudent = 'https://apitest-iportal.nhg.vn.api.php';
-  static String getHighSchoolScore = 'https://apitest-iportal.nhg.vn.api.php';
-  static String getPrimarySchoolScore =
-      'https://apitest-iportal.nhg.vn.api.php';
-  static String getEslScore = 'https://apitest-iportal.nhg.vn.api.php';
-  static String getConductPrimarySchool =
-      'https://apitest-iportal.nhg.vn.api.php';
+  static String getSchedulesStudent = 'https://test-iportal.nhg.vn.api.php';
+  static String getHighSchoolScore = 'https://test-iportal.nhg.vn.api.php';
+  static String getPrimarySchoolScore = 'https://test-iportal.nhg.vn.api.php';
+  static String getEslScore = 'https://test-iportal.nhg.vn.api.php';
+  static String getConductPrimarySchool = 'https://test-iportal.nhg.vn.api.php';
 
-  static String getMenuInWeek = 'https://apitest-iportal.nhg.vn.api.php';
+  static String getMenuInWeek = 'https://test-iportal.nhg.vn.api.php';
   static String getHistoryAbsenceStudent =
       '$baseUrl/member/leave-application/pupil';
   static String postAbsenceApplication =
       '$baseUrl/member/leave-application/pupil';
   static String getRegisterNotebookStudent =
-      'https://apitest-iportal.nhg.vn.api.php';
+      'https://test-iportal.nhg.vn.api.php';
   static String getRegisterNotebookTeacher =
-      'https://apitest-iportal.nhg.vn.api.php';
-  static String postRegisterNotebook = 'https://apitest-iportal.nhg.vn.api.php';
-  static String deleteRegisterNotebook =
-      'https://apitest-iportal.nhg.vn.api.php';
+      'https://test-iportal.nhg.vn.api.php';
+  static String postRegisterNotebook = 'https://test-iportal.nhg.vn.api.php';
+  static String deleteRegisterNotebook = 'https://test-iportal.nhg.vn.api.php';
 }

@@ -31,10 +31,17 @@ class ApiClient with TokenManagementMixin {
           if (token.isNotEmpty) {
             dio.options.headers['Authorization'] = 'Bearer $token';
           }
-          //===============================================================================
+          //====================================================================
           final log = StringBuffer();
-          log.write(
-              '--> ${!isNullOrEmpty(options.method) ? options.method.toUpperCase() : 'METHOD'} ${"${options.baseUrl}${options.path}"}\nHEADERS: ');
+          final method = !isNullOrEmpty(options.method)
+              ? options.method.toUpperCase()
+              : 'METHOD';
+
+          final url = !isNullOrEmpty(options.path)
+              ? '${options.baseUrl}${options.path}'
+              : 'URL';
+          log.write('--> $method $url\nHEADERS: ');
+
           options.headers.forEach((k, v) => log.write('$k: $v; '));
           if (!isNullOrEmpty(options.queryParameters)) {
             log.write('\nPARAMS: ');
@@ -61,17 +68,21 @@ class ApiClient with TokenManagementMixin {
               log.write('\nBODY: Cannot convert to JSON');
             }
           }
-          log.write(
-              "\n--> END ${!isNullOrEmpty(options.method) ? options.method.toUpperCase() : 'METHOD'}");
+          log.write('\n--> END $method');
           Log.d(log.toString());
 
           handler.next(options);
         },
         onResponse: (res, handler) {
           final log = StringBuffer();
-          log.write(
-              "<-- ${res.statusCode} ${!isNullOrEmpty(res.requestOptions.path) ? '${res.requestOptions.baseUrl}${res.requestOptions.path}' : 'URL'}");
-          log.write('\nHEADERS: ');
+          final statusCode = res.statusCode;
+          final url = !isNullOrEmpty(res.requestOptions.path)
+              ? '${res.requestOptions.baseUrl}${res.requestOptions.path}'
+              : 'URL';
+
+          log
+            ..write('<-- $statusCode $url')
+            ..write('\nHEADERS: ');
           res.headers.forEach((k, v) => log.write('$k: $v; '));
           if (!isNullOrEmpty(res.data)) {
             try {
@@ -129,16 +140,16 @@ class ApiClient with TokenManagementMixin {
                   break;
               }
               break;
-            case DioErrorType.cancel:
+            case DioExceptionType.cancel:
               break;
-            case DioErrorType.unknown:
+            case DioExceptionType.unknown:
               Log.e('${NoInternetConnectionException(err.requestOptions)}',
                   name: '$err');
               throw NoInternetConnectionException(err.requestOptions);
-            case DioErrorType.badCertificate:
+            case DioExceptionType.badCertificate:
               // TODO: Handle this case.
               break;
-            case DioErrorType.connectionError:
+            case DioExceptionType.connectionError:
               // TODO: Handle this case.
               break;
           }
@@ -156,17 +167,17 @@ class ApiClient with TokenManagementMixin {
     }
   }
 
-  Future<dynamic> get([Map<String, dynamic>? params]) async =>
-      await _callApi(ApiMethod.get, body: params ?? {});
+  Future<dynamic> get([Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.get, body: params ?? {});
 
-  Future<dynamic> post(dynamic body, [Map<String, dynamic>? params]) async =>
-      await _callApi(ApiMethod.post, body: body, params: params);
+  Future<dynamic> post(dynamic body, [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.post, body: body, params: params);
 
-  Future<dynamic> put(dynamic body, [Map<String, dynamic>? params]) async =>
-      await _callApi(ApiMethod.put, body: body, params: params);
+  Future<dynamic> put(dynamic body, [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.put, body: body, params: params);
 
-  Future<dynamic> delete(dynamic body, [Map<String, dynamic>? params]) async =>
-      await _callApi(ApiMethod.delete, body: body, params: params);
+  Future<dynamic> delete(dynamic body, [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.delete, body: body, params: params);
 
   ApiMethod getMethod(String methodString) {
     switch (methodString) {

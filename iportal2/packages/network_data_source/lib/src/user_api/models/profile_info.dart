@@ -4,8 +4,6 @@ import 'dart:convert';
 
 import 'package:local_data_source/local_data_source.dart';
 
-enum SchoolBrand { uka, sga, sna, iec, ischool }
-
 class ProfileInfo {
   final String name;
   final String user_key;
@@ -27,6 +25,7 @@ class ProfileInfo {
   final TrainingLevel? cap_dao_tao;
   final List<FeatureModel>? features;
   final List<int> pinnedAlbumIdList;
+  final SchoolBrand background;
 
   ProfileInfo({
     required this.name,
@@ -49,6 +48,7 @@ class ProfileInfo {
     this.cap_dao_tao,
     this.features = const [],
     this.pinnedAlbumIdList = const [],
+    this.background = SchoolBrand.uka,
   });
 
   ProfileInfo copyWith({
@@ -72,7 +72,7 @@ class ProfileInfo {
     TrainingLevel? cap_dao_tao,
     List<FeatureModel>? features,
     List<int>? pinnedAlbumIdList,
-
+    SchoolBrand? background,
   }) {
     return ProfileInfo(
       name: name ?? this.name,
@@ -95,6 +95,7 @@ class ProfileInfo {
       cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
       features: features ?? this.features,
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
+      background: background ?? this.background,
     );
   }
 
@@ -140,37 +141,36 @@ class ProfileInfo {
     };
   }
 
- factory ProfileInfo.fromMap(Map<String, dynamic> map) {
-  final childrenData = map['children'];
-  final children = childrenData is List
-      ? Children.fromMap(childrenData.first as Map<String, dynamic>)
-      : Children.fromMap(childrenData as Map<String, dynamic>);
-  
-  // Kiểm tra và gán giá trị cho các trường có thể null
-  return ProfileInfo(
-    name: map['name'] as String? ?? '',
-    user_key: map['user_key'] as String? ?? '',
-    user_id: map['user_id']?.toInt() as int? ?? 0,
-    school_id: map['school_id']?.toInt() as int? ?? 0,
-    pupil_id: map['pupil_id']?.toInt() as int? ?? 0,
-    type: map['type']?.toInt() as int? ?? 0,
-    type_text: map['type_text'] as String? ?? '',
-    parent_id: map['parent_id']?.toInt() as int? ?? 0,
-    parent_name: map['parent_name'] as String? ?? '',
-    father_name: map['father_name'] as String? ?? '',
-    learn_year: map['learn_year'] as String? ?? '',
-    class_name: map['class_name'] as String? ?? '',
-    school_name: map['school_name'] as String? ?? '',
-    school_logo: map['school_logo'] as String? ?? '',
-    school_brand: map['school_brand'] as String? ?? '',
-    semester: map['semester']?.toInt() as int? ?? 0,
-    children: children,
-    cap_dao_tao: map['cap_dao_tao'] != null
-        ? TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>)
-        : null,
-  );
-}
+  factory ProfileInfo.fromMap(Map<String, dynamic> map) {
+    final childrenData = map['children'];
+    final children = childrenData is List
+        ? Children.fromMap(childrenData.first as Map<String, dynamic>)
+        : Children.fromMap(childrenData as Map<String, dynamic>);
 
+    // Kiểm tra và gán giá trị cho các trường có thể null
+    return ProfileInfo(
+      name: map['name'] as String? ?? '',
+      user_key: map['user_key'] as String? ?? '',
+      user_id: map['user_id']?.toInt() as int? ?? 0,
+      school_id: map['school_id']?.toInt() as int? ?? 0,
+      pupil_id: map['pupil_id']?.toInt() as int? ?? 0,
+      type: map['type']?.toInt() as int? ?? 0,
+      type_text: map['type_text'] as String? ?? '',
+      parent_id: map['parent_id']?.toInt() as int? ?? 0,
+      parent_name: map['parent_name'] as String? ?? '',
+      father_name: map['father_name'] as String? ?? '',
+      learn_year: map['learn_year'] as String? ?? '',
+      class_name: map['class_name'] as String? ?? '',
+      school_name: map['school_name'] as String? ?? '',
+      school_logo: map['school_logo'] as String? ?? '',
+      school_brand: map['school_brand'] as String? ?? '',
+      semester: map['semester']?.toInt() as int? ?? 0,
+      children: children,
+      cap_dao_tao: map['cap_dao_tao'] != null
+          ? TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>)
+          : null,
+    );
+  }
 
   String toJson() => json.encode(toMap());
 
@@ -244,6 +244,7 @@ class ProfileInfo {
       cap_dao_tao: TrainingLevel.fromLocal(localProfile.cap_dao_tao),
       features: localProfile.features ?? [],
       pinnedAlbumIdList: localProfile.pinnedAlbumIdList ?? [],
+      background: localProfile.background ?? SchoolBrand.uka,
     );
   }
 
@@ -428,7 +429,7 @@ class UrlImage {
 class TrainingLevel {
   final String id;
   final String name;
-  
+
   TrainingLevel({
     required this.id,
     required this.name,

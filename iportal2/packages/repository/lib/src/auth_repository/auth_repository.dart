@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
+import 'package:repository/src/models/phone_number_verification_info.dart';
 
 class AuthRepository {
   AuthRepository({
@@ -28,8 +31,10 @@ class AuthRepository {
     return data;
   }
 
-  Future<String> checkNumberPhone(
-      {required String numberPhone, required String type}) async {
+  Future<String> checkNumberPhone({
+    required String numberPhone,
+    required String type,
+  }) async {
     final data =
         await _authApi.checkNumberPhone(numberPhone: numberPhone, type: type);
     return data;
@@ -84,5 +89,81 @@ class AuthRepository {
   Future<bool> initApp() async {
     await _authApi.getToken();
     return _authApi.isLogin;
+  }
+
+  Future<PhoneNumberVerificationInfo?> sendOTP(String phoneNumber) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final verificationCompleter = Completer<PhoneNumberVerificationInfo>();
+    await auth.verifyPhoneNumber(
+      phoneNumber: '+84${phoneNumber.substring(1)}',
+      verificationCompleted: (PhoneAuthCredential credential) {
+        log("sendOTP - OTP Sent successfully");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        log("sendOTP - OTP Sent Failed");
+        throw e;
+      },
+      codeSent: (verificationId, forceResendingToken) {
+        log("sendOTP - OTP Sent success: forceResendingToken - $forceResendingToken");
+        verificationCompleter.complete(PhoneNumberVerificationInfo(
+          forceResendingToken: forceResendingToken,
+          verificationId: verificationId,
+        ));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        log("sendOTP - codeAutoRetrievalTimeout");
+      },
+    );
+    log("sendOTP - OTP Sent to +84${phoneNumber.substring(1)}");
+    return await verificationCompleter.future;
+  }
+
+  Future<PhoneNumberVerificationInfo?> resendOTP(
+    String phoneNumber,
+    int? forceResendingToken,
+  ) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final verificationCompleter = Completer<PhoneNumberVerificationInfo>();
+    await auth.verifyPhoneNumber(
+      forceResendingToken: forceResendingToken,
+      phoneNumber: '+84${phoneNumber.substring(1)}',
+      verificationCompleted: (PhoneAuthCredential credential) {
+        log("sendOTP - OTP Sent successfully");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        log("sendOTP - OTP Sent Failed");
+        throw e;
+      },
+      codeSent: (verificationId, forceResendingToken) {
+        log("sendOTP - OTP Sent success: forceResendingToken - $forceResendingToken");
+        verificationCompleter.complete(PhoneNumberVerificationInfo(
+          forceResendingToken: forceResendingToken,
+          verificationId: verificationId,
+        ));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        log("sendOTP - codeAutoRetrievalTimeout");
+      },
+    );
+    log("sendOTP - OTP Sent to +84${phoneNumber.substring(1)}");
+    return await verificationCompleter.future;
+  }
+
+  Future verifyOTP(String verificationId, String otp) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otp,
+      );
+
+      FirebaseAuth auth = FirebaseAuth.instance;
+
+      await auth.signInWithCredential(credential);
+      log("verifyOTP - OTP Verified");
+      await auth.signOut();
+    } catch (e) {
+      log("verifyOTP - OTP Verification Failed");
+      throw Exception();
+    }
   }
 }

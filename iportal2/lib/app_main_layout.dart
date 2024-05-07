@@ -5,7 +5,7 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/custom_loading_logo.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/attendance/attendance_screen.dart';
 import 'package:iportal2/screens/home/home_navigator.dart';
 import 'package:iportal2/screens/notifications/notifications_screen.dart';
@@ -55,7 +55,9 @@ class _AppMainLayoutState extends State<AppMainLayout>
   }
 
   Future<void> _onItemTapped(int index) async {
-    if (index == 0 && homeNavigatorKey.currentContext != null) {
+    if (index == 0 &&
+        index == _selectedIndex &&
+        homeNavigatorKey.currentContext != null) {
       if (Navigator.canPop(homeNavigatorKey.currentContext!)) {
         homeNavigatorKey.currentContext?.pop();
       }

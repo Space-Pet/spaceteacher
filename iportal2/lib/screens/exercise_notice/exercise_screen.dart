@@ -1,3 +1,6 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_decoration.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,7 +16,6 @@ import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dropdown/dropdown_subject.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/exercise_notice/bloc/exercise_bloc.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
 import 'package:repository/repository.dart';

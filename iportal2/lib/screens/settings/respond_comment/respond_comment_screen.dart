@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class RespondCommentScreen extends StatefulWidget {
   const RespondCommentScreen({super.key});

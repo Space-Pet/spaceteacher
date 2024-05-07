@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 import 'package:iportal2/screens/profile/widget/profile_app_bar.dart';
 import 'package:iportal2/screens/profile/widget/tab_bar_parent.dart';
@@ -16,7 +15,6 @@ class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
     super.key,
   });
-  final int role = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +30,17 @@ class ProfileScreen extends StatelessWidget {
 
           return BlocBuilder<CurrentUserBloc, CurrentUserState>(
             builder: (context, state) {
+              final isParent = state.user.type == ProfileType.parent.value;
+
               return BackGroundContainer(
                 child: Column(
                   children: [
                     ProfileAppBar(
                       user: userData,
+                      isParent: isParent,
                       onBack: () {
                         context.pop();
                       },
-                      role: role,
                     ),
                     Flexible(
                       child: Container(
@@ -59,14 +59,9 @@ class ProfileScreen extends StatelessWidget {
                               image: state.user.brandLogo(),
                               height: 100,
                             ),
-                            if (role == 0)
-                              TabBarStudent(
-                                studentData: userData,
-                              ),
-                            if (role == 1)
-                              TabBarParent(
-                                parentData: parentData,
-                              )
+                            isParent
+                                ? TabBarParent(parentData: parentData)
+                                : TabBarStudent(studentData: userData)
                           ],
                         ),
                       ),

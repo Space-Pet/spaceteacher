@@ -43,7 +43,7 @@ class ScoreModel {
       ScoreModel.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-  DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
+  DateFormat formatDateDrill = DateFormat('dd-MM-yyyy', 'vi_VN');
 
   String getInitTime() {
     return formatDateDrill.format(DateTime.now());

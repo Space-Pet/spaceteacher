@@ -53,16 +53,16 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyAXIwCps0l8BBOznrpAHwzp194MFZy6tHY',
     appId: '1:1035888198980:android:7986ee65da80db61b5c311',
     messagingSenderId: '1035888198980',
-    projectId: 'iportal-mobile-test',
+    projectId: 'iportmal-obile-test',
     storageBucket: 'iportal-mobile-test.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDIju1MpeeMiujo_PYKkJ90kbR-8m_-mCY',
-    appId: '1:1035888198980:ios:61f062b1a43ecf64b5c311',
+    appId: '1:1035888198980:ios:337dcb4ec6e9a0ddb5c311',
     messagingSenderId: '1035888198980',
     projectId: 'iportal-mobile-test',
     storageBucket: 'iportal-mobile-test.appspot.com',
-    iosBundleId: 'com.aegona.iportal2',
+    iosBundleId: 'com.nhg.iportal2.test',
   );
 }

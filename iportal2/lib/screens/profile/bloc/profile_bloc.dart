@@ -1,8 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:core/common/utils/snackbar.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
@@ -28,7 +24,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<GetProfileParent>(_onGetProfileParent);
 
     on<CurrentUserUpdated>(_onUpdateUser);
-    on<UpdateProfileStudent>(_onUpdateProfileStudent);
+
+    on<UpdatePhone>(_updatePhone);
+    on<CancelUpdatePhone>(_cancelUpdatePhone);
+    on<UpdateStudentPhone>(_onUpdateStudentPhone);
+    on<UpdateParentPhone>(_onUpdateParentPhone);
   }
 
   final UserRepository userRepository;
@@ -43,11 +43,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     ));
   }
 
-  void _onUpdateProfileStudent(
-      UpdateProfileStudent event, Emitter<ProfileState> emit) async {
+  void _onUpdateStudentPhone(
+      UpdateStudentPhone event, Emitter<ProfileState> emit) async {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.initUpdate));
-      final data = await userRepository.updateProfileStudent(
+      final data = await userRepository.updateStudentPhone(
           phone: event.phone,
           motherName: event.motherName,
           fatherPhone: event.fatherPhone,
@@ -55,13 +55,58 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
       if (data!['code'] == 200) {
         add(const GetProfileStudent());
-        SnackBarUtils.showFloatingSnackBar(
-            event.context, 'Cập nhật số điện thoại thành công');
+        emit(state.copyWith(
+          profileStatus: ProfileStatus.successUpdate,
+          phoneUpdate: '',
+          errMessage: '',
+        ));
       } else {
         emit(state.copyWith(
-            profileStatus: ProfileStatus.fail, message: data['message']));
-        SnackBarUtils.showFloatingSnackBar(event.context,
-            'Cập nhật số điện thoại thất bại, vui lòng thử lại sau');
+            profileStatus: ProfileStatus.fail, errMessage: data['message']));
+      }
+    } catch (e) {
+      emit(state.copyWith(profileStatus: ProfileStatus.error));
+    }
+  }
+
+  void _onUpdateParentPhone(
+      UpdateParentPhone event, Emitter<ProfileState> emit) async {
+    try {
+      emit(state.copyWith(profileStatus: ProfileStatus.initUpdate));
+      final parent = state.parentData.parents;
+
+      final body = {
+        "father_mobile_phone":
+            event.isFather ? event.phone : parent.fatherPhone,
+        "mother_mobile_phone":
+            event.isFather ? parent.motherPhone : event.phone,
+        "mother_name": parent.motherName,
+        "parent_id": parent.parentId,
+        "father_year": parent.fatherYear,
+        "father_job": parent.fatherJob,
+        "father_address": parent.fatherAddress,
+        "father_work_address": parent.fatherAddress,
+        "father_email": parent.fatherEmail,
+        "mother_year": parent.motherYear,
+        "mother_job": parent.motherJob,
+        "mother_address": parent.motherAddress,
+        "mother_work_address": parent.motherWorkAddress,
+        "mother_email": parent.motherEmail,
+      };
+
+      final data = await userRepository.updateParentPhone(
+          body, currentUserBloc.state.user.pupil_id.toString());
+
+      if (data!['code'] == 200) {
+        add(const GetProfileParent());
+        emit(state.copyWith(
+          profileStatus: ProfileStatus.successUpdate,
+          phoneUpdate: '',
+          errMessage: '',
+        ));
+      } else {
+        emit(state.copyWith(
+            profileStatus: ProfileStatus.fail, errMessage: data['message']));
       }
     } catch (e) {
       emit(state.copyWith(profileStatus: ProfileStatus.error));
@@ -116,5 +161,25 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } catch (e) {
       print('err: $e');
     }
+  }
+
+  void _updatePhone(
+    UpdatePhone event,
+    Emitter<ProfileState> emit,
+  ) {
+    emit(state.copyWith(phoneUpdate: event.newPhoneNum));
+
+    if (event.newPhoneNum.length > 10) {
+      emit(state.copyWith(errMessage: 'Số điện thoại không hợp lệ'));
+    } else {
+      emit(state.copyWith(errMessage: ''));
+    }
+  }
+
+  void _cancelUpdatePhone(
+    CancelUpdatePhone event,
+    Emitter<ProfileState> emit,
+  ) {
+    emit(state.copyWith(phoneUpdate: '', errMessage: ''));
   }
 }

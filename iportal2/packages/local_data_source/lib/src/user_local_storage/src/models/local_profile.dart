@@ -5,10 +5,42 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:local_data_source/src/user_local_storage/src/models/local_user_features.dart';
 
-import 'local_training_level.dart';
 import 'local_children.dart';
+import 'local_training_level.dart';
 
 part 'local_profile.g.dart';
+
+extension SchoolBrandExtension on SchoolBrand {
+  String get value {
+    switch (this) {
+      case SchoolBrand.uka:
+        return 'uka';
+      case SchoolBrand.sga:
+        return 'sga';
+      case SchoolBrand.sna:
+        return 'sna';
+      case SchoolBrand.iec:
+        return 'iec';
+      case SchoolBrand.ischool:
+        return 'ischool';
+    }
+  }
+
+  String get assetPath {
+    switch (this) {
+      case SchoolBrand.uka:
+        return 'assets/icons/brandBackground/uka.svg';
+      case SchoolBrand.sga:
+        return 'assets/icons/brandBackground/sga.svg';
+      case SchoolBrand.sna:
+        return 'assets/icons/brandBackground/sna.svg';
+      case SchoolBrand.iec:
+        return 'assets/icons/brandBackground/iec.svg';
+      case SchoolBrand.ischool:
+        return 'assets/icons/brandBackground/ischool.svg';
+    }
+  }
+}
 
 @HiveType(typeId: 3)
 class LocalProfile {
@@ -52,6 +84,8 @@ class LocalProfile {
   final List<FeatureModel>? features;
   @HiveField(20)
   final List<int>? pinnedAlbumIdList;
+  @HiveField(21)
+  final SchoolBrand? background;
 
   LocalProfile({
     required this.name,
@@ -74,6 +108,7 @@ class LocalProfile {
     required this.cap_dao_tao,
     this.features,
     this.pinnedAlbumIdList,
+    this.background,
   });
 
   LocalProfile copyWith({
@@ -97,6 +132,7 @@ class LocalProfile {
     LocalTrainingLevel? cap_dao_tao,
     List<FeatureModel>? features,
     List<int>? pinnedAlbumIdList,
+    SchoolBrand? background,
   }) {
     return LocalProfile(
       name: name ?? this.name,
@@ -119,6 +155,7 @@ class LocalProfile {
       cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
       features: features ?? this.features,
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
+      background: background ?? this.background,
     );
   }
 
@@ -165,7 +202,8 @@ class LocalProfile {
       semester: map['semester'].toInt() as int,
       children: LocalChildren.fromMap(map['children'] as Map<String, dynamic>),
       cap_dao_tao: LocalTrainingLevel.fromMap(
-          map['cap_dao_tao'] as Map<String, dynamic>),
+        map['cap_dao_tao'] as Map<String, dynamic>,
+      ),
     );
   }
 

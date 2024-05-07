@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/components/dialog/dialog_view_exercise.dart';
+import 'package:core/resources/resources.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class RegisterItem extends StatelessWidget {
@@ -46,7 +46,7 @@ class RegisterItem extends StatelessWidget {
                     onTap: () {
                       showDialog(
                         context: context,
-                        builder: (_) => DialogScaleAnimated(
+                        builder: (_) => DialogViewExercise(
                           title: 'Nhận xét',
                           content: lesson.lessonNote ?? '',
                         ),

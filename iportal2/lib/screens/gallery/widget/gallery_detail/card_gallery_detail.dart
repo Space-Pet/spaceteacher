@@ -1,7 +1,7 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
 
 class CardGalleryDetail extends StatelessWidget {

@@ -99,7 +99,9 @@ class _SelectDateState extends State<SelectDate> {
                   Expanded(
                     child: SizedBox(
                       child: Text(
-                        datePickedFormat,
+                        DateFormat('dd/MM/yyyy')
+                                .format(widget.selectDate ?? DateTime.now()) ??
+                            datePickedFormat,
                         style: AppTextStyles.normal16(color: AppColors.gray500),
                       ),
                     ),

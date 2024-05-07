@@ -1,6 +1,6 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
+
 
 class StudentEvaluationItem extends StatelessWidget {
   const StudentEvaluationItem({

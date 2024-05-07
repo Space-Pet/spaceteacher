@@ -1,8 +1,7 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/profile/profile_screen.dart';

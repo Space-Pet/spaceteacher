@@ -1,12 +1,11 @@
+
 import '../../core.dart';
-import '../../presentation/theme/theme_color.dart';
 
 export 'package:get_it/get_it.dart';
 
 class Injection {
   static void init() {
     put(UserSecureStorage());
-    put(ThemeColor);
   }
 
   static T get<T extends Object>() {

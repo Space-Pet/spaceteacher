@@ -6,7 +6,6 @@ import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 
-// import 'package:network_data_source/src/register_notebook_api/models/exercise_data.dart';
 part 'score_event.dart';
 part 'score_state.dart';
 
@@ -43,7 +42,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
     );
-    
+
     emit(
       state.copyWith(
         yearList: scoreData.listYear,

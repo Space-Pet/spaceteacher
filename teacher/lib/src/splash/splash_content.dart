@@ -133,8 +133,8 @@ final splashContent = [
     'title2Red': ' nhà trường',
     'title3': 'và',
     'title3Red': ' gia đình',
-    'text1': 'Gửi thông báo, tin nhắn và báo cáo đến phụ',
-    'text2': 'huynh và học sinh để tối ưu hóa giao tiếp.',
+    'text1': 'Gửi thông báo, tin nhắn và báo cáo đến Cha',
+    'text2': 'mẹ và học sinh để tối ưu hóa giao tiếp.',
     'image': Assets.images.splash.splashScreen2.path,
   },
   {

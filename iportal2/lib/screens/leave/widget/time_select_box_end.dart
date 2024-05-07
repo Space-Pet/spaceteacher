@@ -1,9 +1,9 @@
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
 
 class TimeSelectBoxEnd extends StatefulWidget {
   const TimeSelectBoxEnd({

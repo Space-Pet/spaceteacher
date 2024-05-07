@@ -1,7 +1,6 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/feature_item.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:local_data_source/local_data_source.dart';
 
 class ListFeature extends StatelessWidget {

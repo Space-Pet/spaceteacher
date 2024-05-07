@@ -1,17 +1,20 @@
+import 'package:core/core.dart';
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_strings.dart';
+import 'package:core/resources/app_text_styles.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/input_text.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
+
 import 'package:iportal2/screens/authentication/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:iportal2/screens/authentication/send_opt/view/send_otp_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
 
-enum UserType { parent, pupil }
+import '../models/models.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
@@ -21,7 +24,7 @@ class ForgotPasswordScreen extends StatelessWidget {
     final authRepository = context.read<AuthRepository>();
     TextEditingController phoneNumberController =
         TextEditingController(); // Khai báo ở mức trên của class
-    UserType selectedType = UserType.parent;
+
     return BlocProvider(
       create: (context) => ForgotPasswordBloc(authRepository: authRepository),
       child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
@@ -44,8 +47,8 @@ class ForgotPasswordScreen extends StatelessWidget {
             LoadingDialog.hide(context);
             context.pushReplacement(
               SendOTPScreen(
-                numberPhone: phoneNumberController.text,
-                type: selectedType.name,
+                phoneNumber: phoneNumberController.text,
+                userType: state.userType.name,
               ),
             );
           }
@@ -53,7 +56,6 @@ class ForgotPasswordScreen extends StatelessWidget {
         child: ForgotPasswordView(
           phoneNumberController:
               phoneNumberController, // Truyền controller vào widget con
-          selectedType: selectedType,
         ),
       ),
     );
@@ -61,16 +63,15 @@ class ForgotPasswordScreen extends StatelessWidget {
 }
 
 class ForgotPasswordView extends StatelessWidget {
-  ForgotPasswordView(
-      {super.key,
-      required this.phoneNumberController,
-      required this.selectedType});
+  ForgotPasswordView({
+    super.key,
+    required this.phoneNumberController,
+  });
   final TextEditingController phoneNumberController;
-  UserType selectedType;
-  final List<String> tabs = ['Cha mẹ học sinh', 'Học sinh'];
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
+    final bloc = context.read<ForgotPasswordBloc>();
 
     return GestureDetector(
       onTap: () {
@@ -170,11 +171,9 @@ class ForgotPasswordView extends StatelessWidget {
                                     const EdgeInsets.symmetric(horizontal: -15),
                                 tabs: _buildTabs(),
                                 onTap: (index) {
-                                  if (index == 0) {
-                                    selectedType = UserType.parent;
-                                  } else {
-                                    selectedType = UserType.pupil;
-                                  }
+                                  bloc.add(
+                                    ForgotPasswordChangedTab(index: index),
+                                  );
                                 },
                               ),
                             ),
@@ -186,49 +185,56 @@ class ForgotPasswordView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 25),
                     child: TitleAndInputText(
-                        isValid: isValidPhoneNumber(phoneNumberController.text),
-                        title: 'title',
-                        textInputType: false,
-                        hintText: AppStrings.enterPhone,
-                        prefixIcon: Assets.icons.phone.image(),
-                        onChanged: (value) {
-                          phoneNumberController.text = value;
-                        }),
+                      isValid:
+                          Validations.phoneNumber(phoneNumberController.text),
+                      title: 'title',
+                      textInputType: false,
+                      hintText: AppStrings.enterPhone,
+                      prefixIcon: Assets.icons.phone.image(),
+                      onChanged: (value) {
+                        phoneNumberController.text = value;
+                      },
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      if (isValidPhoneNumber(phoneNumberController.text)) {
-                        context.read<ForgotPasswordBloc>().add(CheckNumberPhone(
+                      if (Validations.phoneNumber(phoneNumberController.text)) {
+                        bloc.add(
+                          CheckNumberPhone(
                             numnberPhone: phoneNumberController.text,
-                            type: selectedType.name));
+                          ),
+                        );
                       } else {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Số điện thoại chưa đúng'),
-                        ));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Số điện thoại chưa đúng'),
+                          ),
+                        );
                       }
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: ShapeDecoration(
-                            color: AppColors.primaryRedColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(60),
+                        alignment: Alignment.center,
+                        width: double.infinity,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: ShapeDecoration(
+                          color: AppColors.primaryRedColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(60),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16, bottom: 16),
+                          child: Text(
+                            AppStrings.next,
+                            style: AppTextStyles.semiBold16(
+                              color: Colors.white,
                             ),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 16, bottom: 16),
-                            child: Text(
-                              AppStrings.next,
-                              style:
-                                  AppTextStyles.semiBold16(color: Colors.white),
-                            ),
-                          )),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -241,21 +247,17 @@ class ForgotPasswordView extends StatelessWidget {
   }
 
   List<Widget> _buildTabs() {
-    return tabs.map((title) {
+    return UserType.values.map((type) {
       return Tab(
         child: Align(
           child: Center(
-              child: Text(
-            title,
-            textAlign: TextAlign.center,
-          )),
+            child: Text(
+              type.label,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
       );
     }).toList();
   }
-}
-
-bool isValidPhoneNumber(String input) {
-  final RegExp phoneRegex = RegExp(r'^[0-9]{10}$');
-  return phoneRegex.hasMatch(input);
 }

@@ -68,5 +68,9 @@
     "userManual" : "User manual",
     "feedback": "Feedback",
     "turnOffNotifications": "Turn off notifications",
-    "accountManagement": "Account management"
+    "accountManagement": "Account management",
+    "generalInformation": "General information",
+    "classLeader": "Class leader",
+    "teacherId": "Teacher Id",
+    "mainSubject": "Main subject"
 }

@@ -1,3 +1,4 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -8,8 +9,7 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
+
 import 'package:iportal2/screens/bus/bloc/bus_bloc.dart';
 import 'package:iportal2/screens/bus/bus_card/card_bus_item.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/instruction_notebook_view.dart';
@@ -155,7 +155,7 @@ class _SelectDateState extends State<SelectDate> {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: const ColorScheme.light(
-                  primary: AppColors.brand600,
+                  primary: AppColors.brand600,          
                   secondary: AppColors.white,
                 ),
               ),

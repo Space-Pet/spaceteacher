@@ -1,14 +1,16 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
+
 import 'package:iportal2/screens/menu/bloc/menu_bloc.dart';
 import 'package:iportal2/screens/menu/widgets/tab_menu.dart';
 import 'package:repository/repository.dart';
@@ -57,6 +59,8 @@ class _MenuViewState extends State<MenuView> {
           menu.data?.where((item) => item.thucDonNgay == currentDate).toList();
       final date = state.date;
       print('day: ${menu.txtBeginDay}');
+      final screenHeight = MediaQuery.of(context).size.height;
+      final desiredHeight = screenHeight * 1;
       return BackGroundContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,9 +85,6 @@ class _MenuViewState extends State<MenuView> {
                 ),
                 child: Column(
                   children: [
-                    // SelectChild(),
-                    const SizedBox(height: 12),
-
                     Expanded(
                       child: AppSkeleton(
                         skeleton: SizedBox(
@@ -126,23 +127,42 @@ class _MenuViewState extends State<MenuView> {
                               ),
                             )),
                         isLoading: isLoading,
-                        child: Column(
-                          children: [
-                            MenuSelectWidget(
-                              date: date ?? DateTime.now(),
-                              weekSchedule: menu,
-                            ),
-                            const SizedBox(height: 8),
-                            if (menu.data != null)
-                              TabMenu(dataMenu: menu.data ?? []),
-                            if (menu.data == null)
-                              const Expanded(
-                                child: Center(
-                                  child: EmptyScreen(
-                                      text: 'Bạn chưa thực đơn mới'),
+                        child: CustomRefresh(
+                          onRefresh: () async {
+                            context.read<MenuBloc>().add(GetMenu(
+                                  txtDate: DateFormat('dd-MM-yyyy')
+                                      .format(DateTime.now()),
+                                  date: DateTime.now(),
+                                ));
+                          },
+                          child: Stack(
+                            children: [
+                              SingleChildScrollView(
+                                child: SizedBox(
+                                  height: desiredHeight,
+                                  width: double.infinity,
+                                  child: Column(
+                                    children: [
+                                      MenuSelectWidget(
+                                        date: date ?? DateTime.now(),
+                                        weekSchedule: menu,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      if (menu.data != null)
+                                        TabMenu(dataMenu: menu.data ?? []),
+                                      if (menu.data == null)
+                                        const Expanded(
+                                          child: Center(
+                                            child: EmptyScreen(
+                                                text: 'Bạn chưa thực đơn mới'),
+                                          ),
+                                        )
+                                    ],
+                                  ),
                                 ),
-                              )
-                          ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )

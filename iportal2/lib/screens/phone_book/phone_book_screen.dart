@@ -1,3 +1,4 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,6 @@ import 'package:iportal2/screens/phone_book/widget/tab_bar_phone_book.dart';
 import 'package:repository/repository.dart';
 import 'package:skeletons/skeletons.dart';
 
-import '../../resources/app_colors.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   const PhoneBookScreen({super.key});

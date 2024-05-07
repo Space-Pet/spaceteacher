@@ -1,10 +1,10 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/components/textfield/input_text.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:iportal2/resources/assets.gen.dart';
+
 
 class TabBarViewPhoneBook extends StatefulWidget {
   const TabBarViewPhoneBook({

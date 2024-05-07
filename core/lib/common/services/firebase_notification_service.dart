@@ -1,68 +1,123 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 
-import '../../data/models/notification_model.dart';
-import '../config.dart';
+import '../components/notification/show_notification.dart';
 
 class FirebaseNotificationService {
   FirebaseNotificationService._();
 
   static final shared = FirebaseNotificationService._();
 
-  static final foregroundNotificationController =
-      StreamController<NotificationModel>.broadcast();
+  static FirebaseOptions? _options;
 
-  Stream<NotificationModel> get onReceiveForegroundNotification {
-    return foregroundNotificationController.stream;
-  }
+  static ShowingNotification? _showingNotification;
 
-  Future<void> initialize() async {
-    if (Config.instance.appConfig.developmentMode) {
-      // [TODO]: implement logger
+  Future<void> initialize({
+    FirebaseOptions? options,
+    required ShowingNotification showingNotification,
+  }) async {
+    final messaging = FirebaseMessaging.instance;
+
+    final settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    _options = options;
+
+    _showingNotification = showingNotification;
+
+    await _showingNotification!.initial();
+
+    await iosConfiguration();
+
+    if (kDebugMode) {
+      print('Permission granted: ${settings.authorizationStatus}');
     }
 
-    // [TODO]: implement foreground notification settings and loggers
+    final fcmToken = await messaging.getToken();
 
-    // [DOING]: handle permission observer
-    await FirebaseMessaging.instance.requestPermission();
+    log('FirebaseNotificationService - init - fcmToken: $fcmToken');
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showingNotification.showNotification(
+        message.toShowingData(),
+        message.data,
+      );
+      ShowingNotification.onReceiveNotification(message.data);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      ShowingNotification.onHandleNotification(message.data);
+      ShowingNotification.onReceiveNotification(message.data);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
-  Future<void> setUserId(String userId) async {
-    if (kIsWeb) {
-      return;
+  set notiOpened(
+    Function(Map<String, dynamic>? data) onHandleNotification,
+  ) {
+    ShowingNotification.onHandleNotification = onHandleNotification;
+  }
+
+  set notiReceived(
+    Function(Map<String, dynamic>? data) onReceived,
+  ) {
+    ShowingNotification.onReceiveNotification = onReceived;
+  }
+
+  void handleNotification(Map<String, dynamic>? data) {
+    ShowingNotification.onHandleNotification(data);
+  }
+
+  void onReceiveNotification(Map<String, dynamic>? data) {
+    ShowingNotification.onReceiveNotification(data);
+  }
+
+  static Future<void> iosConfiguration() async {
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
+  static Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message,
+  ) async {
+    await Firebase.initializeApp(options: _options);
+
+    await _showingNotification?.initial();
+
+    _showingNotification?.showNotification(
+      message.toShowingData(),
+      message.data,
+    );
+  }
+}
+
+extension RemoteMessageX on RemoteMessage {
+  NotificationShowingData? toShowingData() {
+    if (notification == null) {
+      return null;
     }
-    throw UnimplementedError();
-  }
 
-  Future<void> setLanguage(String languageCode) async {
-    if (kIsWeb) {
-      return;
-    }
-    throw UnimplementedError();
-  }
-
-  Future<void> removeUserId() async {
-    if (kIsWeb) {
-      return;
-    }
-    throw UnimplementedError();
-  }
-
-  static Future<Map<String, dynamic>> setTags(Map<String, dynamic> tags) {
-    throw UnimplementedError();
-  }
-
-  Future<Map<String, dynamic>> deleteTags(List<String> keys) {
-    throw UnimplementedError();
-  }
-
-  void onNotificationOpened() {
-    throw UnimplementedError();
-  }
-
-  void onNotificationReceived() {
-    throw UnimplementedError();
+    return NotificationShowingData(
+      notiHashCode: notification!.hashCode,
+      isAndroid: notification!.android != null,
+      title: notification!.title,
+      body: notification!.body,
+    );
   }
 }

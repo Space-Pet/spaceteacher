@@ -95,6 +95,7 @@ class AuthApi extends AbstractAuthApi {
       final dataToken = data['data'] as Map<String, dynamic>;
       final loginInfo = LoginInfo.fromMap(dataToken);
       _client.updateAccessToken(loginInfo.access_token);
+      
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
 

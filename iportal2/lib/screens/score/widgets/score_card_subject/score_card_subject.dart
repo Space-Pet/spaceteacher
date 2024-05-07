@@ -2,7 +2,7 @@ import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/screens/score/widgets/score_card_subject/card_expand_score.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class CardScoreSubject extends StatefulWidget {
   const CardScoreSubject({

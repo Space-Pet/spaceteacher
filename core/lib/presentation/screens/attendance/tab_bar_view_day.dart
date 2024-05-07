@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import '../../../data/models/models.dart';
 import '../../../resources/resources.dart';
@@ -30,7 +31,14 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
     final lessonsWExpanded =
         List.generate(widget.lessons?.length ?? 0, (index) {
       final lesson = widget.lessons?[index];
-      Color colorAttendance = AppColors.amberA200;
+      var colorAttendance = AppColors.amberA200;
+      var title = '';
+      switch (lesson?.attendanceType) {
+        case ('so_lan'):
+          title = 'Lần';
+        case ('tiet_hoc'):
+          title = 'Tiết';
+      }
       switch (lesson?.status) {
         case ('Có mặt'):
           colorAttendance = AppColors.green600;
@@ -64,13 +72,15 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Tiết ${lesson?.numberOfClassPeriod}',
+                        '$title ${lesson?.numberOfClassPeriod}',
                         style: AppTextStyles.normal14(color: AppColors.black24),
                       ),
-                      Text(
-                        lesson?.roomTitle ?? '',
-                        style: AppTextStyles.normal12(color: AppColors.gray500),
-                      )
+                      if (lesson?.attendanceType != 'so_lan')
+                        Text(
+                          lesson?.roomTitle ?? '',
+                          style:
+                              AppTextStyles.normal12(color: AppColors.gray500),
+                        )
                     ],
                   ),
                 ),
@@ -91,14 +101,26 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Text(
-                                lesson?.subjectName ?? '',
-                                style: AppTextStyles.semiBold14(
-                                    color: AppColors.black24),
+                            if (lesson?.attendanceType == 'so_lan')
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  'Giờ điểm danh - ${DateFormat('HH:mm').format(DateTime.parse(lesson!.date))}',
+                                  style: AppTextStyles.semiBold14(
+                                      color: AppColors.black24),
+                                ),
                               ),
-                            ),
+                            if (lesson?.attendanceType != 'so_lan')
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Text(
+                                  lesson?.subjectName ?? '',
+                                  style: AppTextStyles.semiBold14(
+                                      color: AppColors.black24),
+                                ),
+                              ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Text(

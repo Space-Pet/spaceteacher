@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/screens/score/bloc/score_bloc.dart';
 import 'package:iportal2/screens/score/widgets/evaluation_item.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class StudentEvaluation extends StatelessWidget {
   const StudentEvaluation({
@@ -171,7 +171,10 @@ class StudentEvaluation extends StatelessWidget {
                           ],
                         ),
                         child: Text(
-                            primaryConduct.nhanXetChungCuaGvcn[0].hanhKiemValue,
+                            primaryConduct.nhanXetChungCuaGvcn.isEmpty
+                                ? ''
+                                : primaryConduct
+                                    .nhanXetChungCuaGvcn[0].hanhKiemValue,
                             style: AppTextStyles.normal14(
                               color: AppColors.gray600,
                             ))),

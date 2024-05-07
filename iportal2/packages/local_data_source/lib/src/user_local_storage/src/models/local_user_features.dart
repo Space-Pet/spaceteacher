@@ -1,7 +1,24 @@
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'local_user_features.g.dart';
+
+@HiveType(typeId: 12)
+enum SchoolBrand {
+  @HiveField(0)
+  uka,
+
+  @HiveField(1)
+  sga,
+
+  @HiveField(2)
+  sna,
+
+  @HiveField(3)
+  iec,
+  
+  @HiveField(4)
+  ischool,
+}
 
 @HiveType(typeId: 9)
 enum FeatureCategory {

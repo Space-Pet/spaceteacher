@@ -301,10 +301,11 @@ class RestApiClient {
     Json? requestBody,
     Json? queryParameters,
     Json? headers,
+    List<Map<String, dynamic>>? data,
   }) async {
     Response response = await dio.post(
       url,
-      data: requestBody,
+      data: requestBody ?? data,
       queryParameters: queryParameters,
       options: headers != null ? Options(headers: headers) : null,
     );

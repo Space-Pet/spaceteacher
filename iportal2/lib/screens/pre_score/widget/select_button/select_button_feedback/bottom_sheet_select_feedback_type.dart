@@ -1,5 +1,5 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/resources.dart';
 
 // Step 1: Define a model for list items
 class ListItem<T> {

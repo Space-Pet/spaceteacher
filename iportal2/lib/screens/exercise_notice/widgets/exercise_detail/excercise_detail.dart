@@ -1,10 +1,12 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_decoration.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/home/models/lesson_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -1,4 +1,5 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,9 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
-import 'package:iportal2/resources/app_colors.dart';
 
-import 'package:iportal2/resources/app_text_styles.dart';
 
 class SelectFeedBackType extends StatefulWidget {
   const SelectFeedBackType(
@@ -50,8 +49,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
   int getWeekNumber(DateTime date) {
     print('object: $date');
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
-    final firstDayOfYear = DateTime(firstDayOfWeek.year);
+    final firstDayOfYear = DateTime(firstDayOfWeek.year, 1, 1);
     final daysOffset = firstDayOfYear.weekday;
     final daysOfYear = firstDayOfWeek.difference(firstDayOfYear).inDays + 1;
     return week = ((daysOfYear - daysOffset) / 7).ceil();

@@ -127,10 +127,8 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String txtDate,
   }) async {
     try {
-      final token = await _client.getAccessToken();
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=weeklyplan&user_key=$userKey&txt_date=$txtDate',
-          headers: {'Parter-Token': token});
+          '/api.php?act=weeklyplan&user_key=$userKey&txt_date=$txtDate');
       final weekSchedule = WeekSchedule.fromJson(data);
       return weekSchedule;
     } catch (e) {
@@ -195,7 +193,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       required String schoolBrand}) async {
     try {
       final data = await _client.doHttpGet(
-          '/api/v1/member/attendance/pupil?pupil_id=$pupilId&class_id=$classId&date=$date',
+          '/api/v1/member/attendance/pupil?pupil_id=$pupilId&class_id=$classId&date=$date&attendance_type=so_lan',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
 
       final dataList = data['data'] as List<dynamic>;
@@ -395,13 +393,13 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<List<ListReportStudent>> getListReportStudent(
       {required int pupilId,
-      required,
+      required int semester,
       required int schoolId,
       required String schoolBrand,
       required String learnYear}) async {
     try {
       final data = await _authRestClient.doHttpGet(
-          '/api/v1/member/bieu-mau-danh-gia/completed?pupil_id=$pupilId&learn_year=$learnYear',
+          '/api/v1/member/bieu-mau-danh-gia/completed?pupil_id=$pupilId&learn_year=$learnYear&semester=$semester',
           headers: {"School-Id": schoolId, "School-Brand": schoolBrand});
       final dataList = data['data']['data'] as List<dynamic>?;
       return dataList?.map((e) => ListReportStudent.fromJson(e)).toList() ?? [];
@@ -425,6 +423,47 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       print('errror: $e');
       throw GetReportStudentFailure();
+    }
+  }
+
+  Future<List<SurveyData>> getSurvay() async {
+    try {
+      final data =
+          await _authRestClient.doHttpGet('/api/v1/member/survey/question');
+      final jsonData = data['data'] as List<dynamic>;
+      return jsonData.map((e) => SurveyData.fromJson(e)).toList();
+    } catch (e) {
+      print('error: $e');
+      return [];
+    }
+  }
+
+  Future<void> postSurvey(
+      {required List<Map<String, dynamic>> listSurvey}) async {
+    try {
+      List<Map<String, dynamic>> requestBody = [];
+      for (var survey in listSurvey) {
+        Map<String, dynamic> item = {
+          "CAU_HOI_ID": survey['cauHoiId'],
+          "KHAO_SAT_ID": 1
+        };
+        if (survey.containsKey('cauTraLoiId')) {
+          item["MUC_DO_HAI_LONG"] = survey['cauTraLoiId'];
+        }
+        if (survey.containsKey('traLoiKhac')) {
+          item["TRA_LOI_KHAC"] = survey['traLoiKhac'];
+        }
+        requestBody.add(item);
+      }
+      print('d: ${requestBody}');
+      final data = await _authRestClient.doHttpPost(
+        url: '/api/v1/member/survey/question',
+        data: requestBody,
+      );
+      print('jiji: ${requestBody}');
+      print('ok: $data');
+    } catch (e) {
+      print('error');
     }
   }
 }

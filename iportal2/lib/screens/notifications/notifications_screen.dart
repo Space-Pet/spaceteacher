@@ -1,3 +1,4 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,7 +9,6 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/notifications/bloc/notification_bloc.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:repository/repository.dart';

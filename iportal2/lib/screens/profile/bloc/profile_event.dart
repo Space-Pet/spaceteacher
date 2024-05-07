@@ -23,15 +23,31 @@ class CurrentUserUpdated extends ProfileEvent {
   final ProfileInfo user;
 }
 
-class UpdateProfileStudent extends ProfileEvent {
-  const UpdateProfileStudent({
+class UpdatePhone extends ProfileEvent {
+  const UpdatePhone({required this.newPhoneNum});
+  final String newPhoneNum;
+}
+
+class CancelUpdatePhone extends ProfileEvent {
+  const CancelUpdatePhone();
+}
+
+class UpdateStudentPhone extends ProfileEvent {
+  const UpdateStudentPhone({
     required this.phone,
     required this.motherName,
     required this.fatherPhone,
-    required this.context,
   });
   final String phone;
   final String motherName;
   final String fatherPhone;
-  final BuildContext context;
+}
+
+class UpdateParentPhone extends ProfileEvent {
+  const UpdateParentPhone({
+    required this.phone,
+    this.isFather = true,
+  });
+  final String phone;
+  final bool isFather;
 }

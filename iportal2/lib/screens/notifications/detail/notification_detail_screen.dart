@@ -1,10 +1,10 @@
 import 'package:core/presentation/modules/webview/webview_screen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/screens/notifications/detail/bloc/noti_detail_bloc.dart';
 import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';

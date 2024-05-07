@@ -1,9 +1,9 @@
+import 'package:core/resources/resources.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/feature_item.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:local_data_source/local_data_source.dart';
 
 class CurrentPinnedFeature extends StatelessWidget {

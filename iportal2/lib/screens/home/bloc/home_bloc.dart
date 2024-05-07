@@ -27,10 +27,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           datePicked: DateTime.now(),
         )) {
     on<HomeFetchExercise>(_onFetchExercise);
-    add(HomeFetchExercise());
+    // add(HomeFetchExercise());
 
     on<HomeFetchNotificationData>(_onFetchNotifications);
-    // add(HomeFetchNotificationData());
+    add(HomeFetchNotificationData());
 
     on<HomeFetchAlbumData>(_onFetchAlbumData);
     add(HomeFetchAlbumData());
@@ -68,7 +68,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<String?> _onUpdateProfileStudent(
       UpdateProfile event, Emitter<HomeState> emit) async {
     emit(state.copyWith(profileStatus: HomeStatus.loading));
-    final data = await userRepository.updateProfileStudent(
+    final data = await userRepository.updateStudentPhone(
         phone: event.phone,
         motherName: event.motherName,
         fatherPhone: event.fatherPhone,

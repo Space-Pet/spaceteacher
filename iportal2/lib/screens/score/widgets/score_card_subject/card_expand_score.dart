@@ -1,6 +1,6 @@
 import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class CardExpandScore extends StatelessWidget {
   const CardExpandScore({

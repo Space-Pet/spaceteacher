@@ -51,11 +51,12 @@ class UserApi extends AbstractUserApi {
     }
   }
 
-  Future<Map<String, dynamic>?> updateProfile(
-      {required String phone,
-      required String motherName,
-      required String fatherPhone,
-      required String pupil_id}) async {
+  Future<Map<String, dynamic>?> updateStudentPhone({
+    required String phone,
+    required String motherName,
+    required String fatherPhone,
+    required String pupil_id,
+  }) async {
     try {
       final data = await _client.doHttpPut(
         url: '/api/v1/member/pupil/$pupil_id',
@@ -65,7 +66,19 @@ class UserApi extends AbstractUserApi {
           "father_phone": fatherPhone,
         },
       );
-      final status = data;
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> updateParentPhone(
+      Map<String, dynamic> body, String pupilId) async {
+    try {
+      final data = await _client.doHttpPut(
+        url: '/api/v1/member/pupil/$pupilId/parent',
+        requestBody: body,
+      );
       return data;
     } catch (e) {
       return null;

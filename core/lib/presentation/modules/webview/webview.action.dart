@@ -14,18 +14,6 @@ extension WebviewAction on _WebViewScreenState {
   }
 
   Uri? get uri => Uri.tryParse(url ?? '');
-
-  void loadData() {
-    if (url == null) {
-      _controller.loadRequest(
-        Uri.dataFromString(
-          CommonFunction.wrapStyleHtmlContent(widget.params?.html ?? ''),
-          mimeType: 'text/html',
-          encoding: Encoding.getByName('utf-8'),
-        ),
-      );
-    }
-  }
   
   void loadHtmlString() {
     _controller.loadHtmlString(widget.params?.html ?? '');

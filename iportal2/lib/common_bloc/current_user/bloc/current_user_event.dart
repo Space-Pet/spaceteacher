@@ -6,3 +6,8 @@ class CurrentUserUpdated extends CurrentUserEvent {
   CurrentUserUpdated({required this.user});
   final ProfileInfo user;
 }
+
+class BackGroundUpdatedState extends CurrentUserEvent {
+  BackGroundUpdatedState({required this.bg});
+  final SchoolBrand bg;
+}

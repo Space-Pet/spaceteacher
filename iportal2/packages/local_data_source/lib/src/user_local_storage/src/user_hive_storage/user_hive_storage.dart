@@ -23,6 +23,8 @@ class UserHiveStorage implements UserLocalStorage {
     Hive.registerAdapter(FeatureCategoryAdapter());
     Hive.registerAdapter(FeatureGradientAdapter());
     Hive.registerAdapter(LocalFeaturesAdapter());
+    Hive.registerAdapter(SchoolBrandAdapter());
+
 
     _userBox = await Hive.openBox<LocalProfile>(userBoxName);
     _featuresBox = await Hive.openBox<List>(featuresBoxName);

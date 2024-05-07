@@ -1,9 +1,9 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/resources/app_decoration.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
@@ -17,7 +17,7 @@ import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
-import 'package:iportal2/screens/survey/survay_screen.dart';
+import 'package:iportal2/screens/survey/survey_screen.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:repository/repository.dart';
 

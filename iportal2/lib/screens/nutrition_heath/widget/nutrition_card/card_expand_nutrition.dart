@@ -1,9 +1,9 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iportal2/resources/resources.dart';
 
 class CardExpandNutrition extends StatelessWidget {
   const CardExpandNutrition({

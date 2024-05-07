@@ -1,9 +1,9 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/phone_book/widget/tab_bar_view_phone_book.dart';
 
-import '../../../resources/app_colors.dart';
 
 class TabBarPhoneBook extends StatelessWidget {
   TabBarPhoneBook({

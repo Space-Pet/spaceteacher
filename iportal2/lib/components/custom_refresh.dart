@@ -1,7 +1,7 @@
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:core/resources/app_colors.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 
 class CustomRefresh extends StatefulWidget {

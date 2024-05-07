@@ -4,7 +4,15 @@ abstract class ForgotPasswordEvent {}
 
 class CheckNumberPhone extends ForgotPasswordEvent {
   final String numnberPhone;
-  final String type;
-  CheckNumberPhone({required this.numnberPhone, required this.type});
-  List<Object> get props => [numnberPhone, type];
+  CheckNumberPhone({
+    required this.numnberPhone,
+  });
+}
+
+class ForgotPasswordChangedTab extends ForgotPasswordEvent {
+  final int index;
+
+  ForgotPasswordChangedTab({
+    required this.index,
+  });
 }

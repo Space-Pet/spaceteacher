@@ -1,10 +1,9 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/utils/utils_export.dart';

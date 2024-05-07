@@ -1,7 +1,7 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
+
 
 class SplashContent extends StatelessWidget {
   final String title1;
@@ -142,8 +142,8 @@ final splashContent = [
     'title2Red': ' nhà trường',
     'title3': 'và',
     'title3Red': ' gia đình',
-    'text1': 'Gửi thông báo, tin nhắn và báo cáo đến phụ',
-    'text2': 'huynh và học sinh để tối ưu hóa giao tiếp.',
+    'text1': 'Gửi thông báo, tin nhắn và báo cáo đến cha',
+    'text2': 'mẹ và học sinh để tối ưu hóa giao tiếp.',
     'image': 'assets/images/image2.png',
   },
   {

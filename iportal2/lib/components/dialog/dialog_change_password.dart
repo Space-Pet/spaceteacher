@@ -1,11 +1,11 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/textfield/input_text.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 
 class DialogChangePassword extends StatefulWidget {
-  const DialogChangePassword({super.key, 
+  const DialogChangePassword({
+    super.key,
     this.onSavePressed,
     this.onClosePressed,
   });
@@ -82,7 +82,6 @@ class _DialogChangePasswordState extends State<DialogChangePassword> {
                     hintText: 'Nhập lại mật khẩu mới',
                     onChanged: (value) {},
                     prefixIcon: Assets.icons.lock.image(),
-                    obscureText: true,
                     onTap: () {
                       setState(() {
                         _isInputFocused = true;

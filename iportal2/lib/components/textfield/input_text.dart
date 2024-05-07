@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:core/resources/app_colors.dart';
 
 class TitleAndInputText extends StatefulWidget {
   const TitleAndInputText({
@@ -99,7 +99,10 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
               borderRadius: BorderRadius.circular(8),
             ),
             hintText: widget.hintText,
-            hintStyle: const TextStyle(color: AppColors.gray500),
+            hintStyle: const TextStyle(
+                color: AppColors.gray500,
+                fontSize: 15,
+                fontWeight: FontWeight.normal),
             filled: true,
             fillColor: widget.fillColor ?? Colors.white,
             prefixIconColor: widget.isValid ? null : Colors.transparent,

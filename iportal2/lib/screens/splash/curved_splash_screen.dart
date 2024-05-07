@@ -1,13 +1,13 @@
+import 'package:core/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/resources/resources.dart';
-import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
+import 'package:core/resources/resources.dart';
+import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/splash/bloc/splash_cubit.dart';
 import 'package:repository/repository.dart';
-import '../../resources/app_strings.dart';
 
 class CurvedSplashScreen extends StatelessWidget {
   const CurvedSplashScreen({
@@ -142,10 +142,10 @@ class _CurvedSplashViewState extends State<CurvedSplashView> {
             textColor: widget.textColor,
             backgroundColor: widget.backgroundColor,
             onPressedChange: () {
-              context.pushReplacement(const LoginScreen());
+              context.pushReplacement(const DomainScreen());
             },
             skip: () {
-              context.pushReplacement(const LoginScreen());
+              context.pushReplacement(const DomainScreen());
             },
             next: () {
               if (_pageController.page! < 2) {
@@ -199,37 +199,32 @@ class CurvedSheet extends StatelessWidget {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            if (currentPage != 0) {
+                        SizedBox(
+                          width: 110,
+                          child: TextButton(
+                            onPressed: () {
                               skip();
-                            }
-                          },
-                          child: Text(skipText,
-                              style: AppTextStyles.normal18(
-                                color: AppColors.gray400
-                                    .withOpacity(currentPage == 0 ? 0.5 : 1),
-                              )),
+                            },
+                            child: Text(skipText,
+                                style: AppTextStyles.normal18(
+                                  color: AppColors.gray400,
+                                )),
+                          ),
                         ),
                         Row(children: getSplashDots(totalPages, currentPage)),
-                        TextButton(
-                            onPressed: () {
-                              next();
-                            },
-                            child: Text.rich(
-                              TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '$nextText  ',
-                                    // style: AppTextStyles.textSmallRedNormal
-                                  ),
-                                ],
-                              ),
-                              style: AppTextStyles.semiBold18(
-                                color: AppColors.gray500,
-                              ),
-                              textAlign: TextAlign.center,
-                            )),
+                        SizedBox(
+                          width: 110,
+                          child: TextButton(
+                              onPressed: () {
+                                next();
+                              },
+                              child: Text(
+                                nextText,
+                                style: AppTextStyles.semiBold18(
+                                  color: AppColors.gray500,
+                                ),
+                              )),
+                        ),
                       ],
                     )
                   : Align(

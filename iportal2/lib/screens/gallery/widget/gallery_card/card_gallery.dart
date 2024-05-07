@@ -1,8 +1,11 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_decoration.dart';
+import 'package:core/resources/app_size.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 
 class CardGallery extends StatelessWidget {

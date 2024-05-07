@@ -13,9 +13,11 @@ class ScoreFilter extends StatefulWidget {
   const ScoreFilter({
     super.key,
     this.selectedOption,
+    required this.onUpdateTerm,
   });
 
   final ViewScoreSelectedParam? selectedOption;
+  final Function(String) onUpdateTerm;
 
   @override
   State<ScoreFilter> createState() => _ScoreFilterState();
@@ -49,6 +51,7 @@ class _ScoreFilterState extends State<ScoreFilter> {
         selectedTerm: updateValue,
       );
     });
+    widget.onUpdateTerm(updateValue); // Gọi hàm callback onUpdateTerm
   }
 
   void onUpdateScoreType(String value) {}

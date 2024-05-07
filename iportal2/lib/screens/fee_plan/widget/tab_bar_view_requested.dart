@@ -1,7 +1,7 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/screens/fee_plan/models/tariff_model.dart';
 import 'package:intl/intl.dart';
 

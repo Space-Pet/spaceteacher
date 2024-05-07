@@ -1,104 +1,167 @@
+import 'package:core/resources/app_strings.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/check_box/check_box.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 
-import '../../../resources/app_colors.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:local_data_source/local_data_source.dart';
+import 'package:repository/repository.dart';
+
 import '../../../resources/assets.gen.dart';
 
-class ChangeWallpaperScreen extends StatefulWidget {
+class ChangeWallpaperScreen extends StatelessWidget {
   const ChangeWallpaperScreen({super.key});
 
   @override
-  State<ChangeWallpaperScreen> createState() => _ChangeWallpaperScreenState();
-}
-
-class _ChangeWallpaperScreenState extends State<ChangeWallpaperScreen> {
-  List<bool> checkboxStates = List.generate(
-    1,
-    (index) => false,
-  );
-
-  @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        children: [
-          ScreenAppBar(
-            canGoback: true,
-            onBack: () {
-              context.pop();
+    return BlocBuilder<CurrentUserBloc, CurrentUserState>(
+      builder: (context, state) {
+        final bgState = state.background;
+        final bloc = context.read<CurrentUserBloc>();
+        final userRepository = context.read<UserRepository>();
+
+        final listOption = List.generate(backGroundItems.length, (index) {
+          final it = backGroundItems[index];
+          return InkWell(
+            onTap: () {
+              bloc.add(BackGroundUpdatedState(bg: it.schoolBrand));
             },
-            title: AppStrings.changeWallpaper,
-          ),
-          Flexible(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16, right: 16, top: 22, bottom: 22),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        itemCount: 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CheckBoxItem(
-                            title: 'Nền UKA',
-                            isChecked: checkboxStates[index],
-                            svgAssetPath: Assets.icons.wallpaper,
-                            onTap: (isChecked) {
-                              setState(() {
-                                checkboxStates[index] = isChecked;
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  AppColors.redMenu),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                ),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Text(
-                                'Cập nhật',
-                                style: AppTextStyles.normal16(
-                                    fontWeight: FontWeight.w600,
-                                    height: 0.09,
-                                    color: AppColors.white),
-                              ),
-                            ))),
-                  ],
-                ),
-              ),
+            child: CheckBoxItem(
+              title: it.title,
+              svgAssetPath: it.svgAssetPath,
+              isChecked: it.schoolBrand == bgState,
             ),
+          );
+        });
+
+        return BackGroundContainer(
+          child: Column(
+            children: [
+              ScreenAppBar(
+                canGoback: true,
+                onBack: () {
+                  context.pop();
+                },
+                title: AppStrings.changeWallpaper,
+              ),
+              Flexible(
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 16, right: 16, top: 22, bottom: 22),
+                    child: Column(
+                      children: [
+                        Expanded(child: Column(children: listOption)),
+                        SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  context.loaderOverlay.show();
+
+                                  final newUser = state.user.copyWith(
+                                    background: bgState,
+                                  );
+
+                                  userRepository.saveUser(newUser);
+                                  bloc.add(CurrentUserUpdated(user: newUser));
+
+                                  context.loaderOverlay.hide();
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text('Cập nhật thành công!'),
+                                  ));
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          AppColors.redMenu),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    'Cập nhật',
+                                    style: AppTextStyles.normal16(
+                                        fontWeight: FontWeight.w600,
+                                        height: 0.09,
+                                        color: AppColors.white),
+                                  ),
+                                ))),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
+
+class BackGroundItem {
+  final String title;
+  final String svgAssetPath;
+  final bool isChecked;
+  final SchoolBrand schoolBrand;
+
+  BackGroundItem({
+    required this.title,
+    required this.svgAssetPath,
+    required this.isChecked,
+    required this.schoolBrand,
+  });
+}
+
+List<BackGroundItem> backGroundItems = [
+  BackGroundItem(
+    schoolBrand: SchoolBrand.uka,
+    title: 'Nền UKA',
+    svgAssetPath: Assets.icons.brandBackground.uka,
+    isChecked: false,
+  ),
+  BackGroundItem(
+    schoolBrand: SchoolBrand.ischool,
+    title: 'Nền iSchool',
+    svgAssetPath: Assets.icons.brandBackground.ischool,
+    isChecked: false,
+  ),
+  BackGroundItem(
+    schoolBrand: SchoolBrand.sga,
+    title: 'Nền SGA',
+    svgAssetPath: Assets.icons.brandBackground.sga,
+    isChecked: false,
+  ),
+  BackGroundItem(
+    schoolBrand: SchoolBrand.sna,
+    title: 'Nền SNA',
+    svgAssetPath: Assets.icons.brandBackground.sna,
+    isChecked: false,
+  ),
+  BackGroundItem(
+    schoolBrand: SchoolBrand.iec,
+    title: 'Nền IEC',
+    svgAssetPath: Assets.icons.brandBackground.iec,
+    isChecked: false,
+  ),
+];

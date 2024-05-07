@@ -1,9 +1,7 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:iportal2/screens/menu/detail_menu_screen.dart';
+import 'package:iportal2/screens/menu/widgets/menu_component.dart';
 
 class TabMenu extends StatelessWidget {
   TabMenu({super.key, required this.dataMenu});
@@ -79,7 +77,12 @@ class TabMenu extends StatelessWidget {
         padding: const EdgeInsets.only(top: 10, bottom: 8),
         child: GestureDetector(
           onTap: () {
-            context.push(DetailMenuScreen(item: menu));
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => ShowPopupMenu(
+                item: menu,
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -90,7 +93,7 @@ class TabMenu extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 14),
+                  padding: const EdgeInsets.all(8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -100,14 +103,12 @@ class TabMenu extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: AppColors.brand600),
                       ),
-                      IconButton(
-                          onPressed: () {
-                            context.push(DetailMenuScreen(item: menu));
-                          },
-                          icon: const Icon(
-                            Icons.keyboard_arrow_right,
-                            size: 30,
-                          ))
+                      Text(
+                        'Xem hình ảnh',
+                        style: AppTextStyles.normal14(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.brand600),
+                      ),
                     ],
                   ),
                 ),
@@ -123,27 +124,16 @@ class TabMenu extends StatelessWidget {
                           flex: 2,
                           child: Padding(
                               padding: const EdgeInsets.only(left: 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Icon(
-                                    Icons.done,
-                                    color: AppColors.green600,
-                                    size: 14,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 1 / 2,
+                                  child: Text(
+                                    menu.title,
+                                    style: AppTextStyles.normal12(),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          1 /
-                                          2,
-                                      child: Text(
-                                        menu.title,
-                                        style: AppTextStyles.normal12(),
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               )),
                         ),
                         Expanded(

@@ -1,10 +1,10 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_tariff.dart';
 
 class FeePlanScreen extends StatelessWidget {

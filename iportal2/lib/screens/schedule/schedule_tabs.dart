@@ -1,12 +1,10 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_decoration.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 
-class ScheduleTabs extends StatelessWidget {
+class ScheduleTabs extends StatefulWidget {
   const ScheduleTabs({
     super.key,
     this.lessons,
@@ -19,13 +17,41 @@ class ScheduleTabs extends StatelessWidget {
   final Function(DateTime date, int tietNum) onViewExercise;
 
   @override
+  State<ScheduleTabs> createState() => _ScheduleTabsState();
+}
+
+class _ScheduleTabsState extends State<ScheduleTabs>
+    with SingleTickerProviderStateMixin {
+  late TabController tabBarController;
+
+  @override
+  void initState() {
+    super.initState();
+    final startOfWeek = widget.datePicked
+        .subtract(Duration(days: widget.datePicked.weekday - 1));
+    final days = widget.datePicked.difference(startOfWeek).inDays;
+
+    tabBarController = TabController(
+      length: (widget.lessons ?? []).length,
+      vsync: this,
+      initialIndex: days,
+    );
+  }
+
+  Future<void> _onItemTapped(int index) async {
+    tabBarController.animateTo(index);
+  }
+
+  @override
   Widget build(BuildContext context) {
     DateFormat formatDate = DateFormat("dd/MM");
 
-    final startOfWeek =
-        datePicked.subtract(Duration(days: datePicked.weekday - 1));
+    final startOfWeek = widget.datePicked
+        .subtract(Duration(days: widget.datePicked.weekday - 1));
 
-    final listTab = List.generate((lessons ?? []).length, (index) {
+    final days = widget.datePicked.difference(startOfWeek).inDays;
+
+    final listTab = List.generate((widget.lessons ?? []).length, (index) {
       final date = startOfWeek.add(Duration(days: index));
 
       return TabDayOfWeek(
@@ -35,18 +61,25 @@ class ScheduleTabs extends StatelessWidget {
     });
 
     final listTabContent = List.generate(
-        (lessons ?? []).length,
+        (widget.lessons ?? []).length,
         (index) => SingleChildScrollView(
               child: Column(
                 children: tabView(index, startOfWeek),
               ),
             ));
 
+    // _onItemTapped(days);
+
     return DefaultTabController(
-        length: (lessons ?? []).length,
+        length: (widget.lessons ?? []).length,
         child: Column(
           children: [
             TabBar(
+              controller: tabBarController,
+              onTap: (index) async {
+                _onItemTapped(index);
+              },
+              tabs: listTab,
               padding: const EdgeInsets.all(0),
               labelPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
               labelColor: AppColors.brand600,
@@ -63,10 +96,10 @@ class ScheduleTabs extends StatelessWidget {
                 ),
                 color: AppColors.gray100,
               ),
-              tabs: listTab,
             ),
             Expanded(
               child: TabBarView(
+                controller: tabBarController,
                 children: listTabContent,
               ),
             ),
@@ -75,17 +108,18 @@ class ScheduleTabs extends StatelessWidget {
   }
 
   List<Container> tabView(int index, DateTime startOfWeek) {
-    return List.generate(lessons?[index].dateSubject.length ?? 0, (innerIndex) {
-      final lesson = lessons?[index].dateSubject[innerIndex];
+    return List.generate(widget.lessons?[index].dateSubject.length ?? 0,
+        (innerIndex) {
+      final lesson = widget.lessons?[index].dateSubject[innerIndex];
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          borderRadius: index == (lessons?.length ?? 0) - 1
+          borderRadius: index == (widget.lessons?.length ?? 0) - 1
               ? AppRadius.roundedBottom12
               : const BorderRadius.all(Radius.zero),
           color: AppColors.gray100,
           border: Border(
-            bottom: index == (lessons?.length ?? 0) - 1
+            bottom: index == (widget.lessons?.length ?? 0) - 1
                 ? BorderSide.none
                 : const BorderSide(color: AppColors.gray300),
           ),
@@ -148,7 +182,7 @@ class ScheduleTabs extends StatelessWidget {
                   if (lesson?.subjectId != null)
                     InkWell(
                       onTap: () {
-                        onViewExercise(
+                        widget.onViewExercise(
                           startOfWeek.add(Duration(days: index)),
                           lesson?.tietNum ?? 0,
                         );

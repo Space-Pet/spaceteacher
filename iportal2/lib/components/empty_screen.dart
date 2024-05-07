@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class EmptyScreen extends StatelessWidget {
   const EmptyScreen({super.key, required this.text});

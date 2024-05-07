@@ -9,7 +9,7 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/home/models/lesson_model.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/weekly_tabs.dart';
 import 'package:iportal2/screens/week_schedule/bloc/week_schedule_bloc.dart';
@@ -166,10 +166,14 @@ class WeekScheduleView extends StatelessWidget {
                                       if (weekData == null ||
                                           weekData.data.detailPlan!.isEmpty)
                                         const Expanded(
-                                          child: Center(
-                                            child: EmptyScreen(
-                                                text:
-                                                    'Bạn chưa có kế hoạch tuần'),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 200),
+                                            child: Center(
+                                              child: EmptyScreen(
+                                                  text:
+                                                      'Bạn chưa có kế hoạch tuần'),
+                                            ),
                                           ),
                                         )
                                     ],
@@ -383,7 +387,7 @@ final List<LessonModel> weeklyProjects = [
     number: 1,
     name: 'Đón trẻ và điểm danh',
     teacherName: 'Nguyễn Minh Nhi',
-    description: 'Cô đón trẻ từ Quý Phụ Huynh và tiến hành điểm danh',
+    description: 'Cô đón trẻ từ Quý Cha mẹ học sinh và tiến hành điểm danh',
     advice: 'Học sinh chuẩn bị bài kỹ trước khi đến lớp.',
     timeStart: '7:30',
     timeEnd: '8:15',

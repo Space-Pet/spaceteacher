@@ -140,4 +140,6 @@ class AppColors {
 
   static const Color ellipse818 = Color(0xFF29B11D);
   static const Color green50 = Color(0xFF6CDAA6);
+  static const Color purple300 = Color(0xFFBDB4FE);
+  static const Color purple50 = Color(0xFFF4F3FF);
 }

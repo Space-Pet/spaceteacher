@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class TitleAndInputText extends StatelessWidget {
   const TitleAndInputText({
@@ -59,7 +59,7 @@ class TitleAndInputText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const redColor = Color(0xFFD0D5DD);
+    const redColor = AppColors.redMenu;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

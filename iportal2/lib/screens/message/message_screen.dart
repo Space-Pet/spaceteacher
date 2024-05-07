@@ -1,4 +1,6 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -6,8 +8,6 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/screens/message/list_new_messages.dart';
 import 'package:iportal2/screens/message/widgets/list_message.dart';

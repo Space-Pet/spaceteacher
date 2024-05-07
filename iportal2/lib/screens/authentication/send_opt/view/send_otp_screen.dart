@@ -1,28 +1,91 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_strings.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/authentication/change_password/view/change_password.dart';
+import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
+import 'package:iportal2/utils/utils_export.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:repository/repository.dart';
 import 'dart:async';
 
-class SendOTPScreen extends StatefulWidget {
-  const SendOTPScreen(
-      {super.key, required this.numberPhone, required this.type});
-  final String numberPhone;
-  final String type;
+import '../bloc/send_otp_bloc.dart';
+
+class SendOTPScreen extends StatelessWidget {
+  const SendOTPScreen({
+    super.key,
+    required this.phoneNumber,
+    required this.userType,
+  });
+  final String phoneNumber;
+  final String userType;
+
   @override
-  State<SendOTPScreen> createState() => _SendOTPScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SendOtpBloc(
+        phoneNumber: phoneNumber,
+        authRepository: RepositoryProvider.of<AuthRepository>(context),
+      )..add(SendOtpRequested()),
+      child: BlocListener<SendOtpBloc, SendOtpState>(
+        listener: (context, state) {
+          switch (state.status) {
+            case SendOtpStatus.success:
+              LoadingDialog.hide(context);
+              context.pushReplacement(ChangePasswordScreen(
+                numberPhone: phoneNumber,
+                type: userType,
+              ));
+              break;
+            case SendOtpStatus.loading:
+              LoadingDialog.show(context);
+              break;
+            case SendOtpStatus.error:
+              LoadingDialog.hide(context);
+              Fluttertoast.showToast(
+                  msg: 'Lỗi không xác định. Vui lòng thử lại sau.',
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: AppColors.black,
+                  textColor: AppColors.white);
+              break;
+            default:
+          }
+        },
+        listenWhen: (previous, current) => previous.status != current.status,
+        child: SendOTPView(
+          phoneNumber: phoneNumber,
+          userType: userType,
+        ),
+      ),
+    );
+  }
 }
 
-class _SendOTPScreenState extends State<SendOTPScreen> {
+class SendOTPView extends StatefulWidget {
+  const SendOTPView({
+    super.key,
+    required this.phoneNumber,
+    required this.userType,
+  });
+
+  final String phoneNumber;
+  final String userType;
+
+  @override
+  State<SendOTPView> createState() => _SendOTPViewState();
+}
+
+class _SendOTPViewState extends State<SendOTPView> {
   late int _counter;
   late Timer _timer;
   final TextEditingController _otpController = TextEditingController();
 
-  final int _otpLength = 4;
+  final int _otpLength = 6;
   @override
   void initState() {
     super.initState();
@@ -43,10 +106,7 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
   }
 
   bool _isOtpValid(String otp) {
-    if (otp.length != _otpLength) {
-      return false;
-    }
-    return otp == '1111';
+    return otp.length == _otpLength;
   }
 
   @override
@@ -58,6 +118,7 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<SendOtpBloc>();
     double screenHeight = MediaQuery.of(context).size.height;
     int minutes = (_counter ~/ 60);
     int seconds = _counter % 60;
@@ -137,6 +198,7 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
                     OTPTextField(
                       width: MediaQuery.of(context).size.width,
                       fieldWidth: 60,
+                      length: _otpLength,
                       style: const TextStyle(fontSize: 30),
                       textFieldAlignment: MainAxisAlignment.spaceAround,
                       fieldStyle: FieldStyle.box,
@@ -147,20 +209,17 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
                       },
                     ),
                     GestureDetector(
-                      onTap: _isOtpValid(_otpController.text)
-                          ? () {
-                              context.pushReplacement(ChangePasswordScreen(
-                                numberPhone: widget.numberPhone,
-                                type: widget.type,
-                              ));
-                            }
-                          : () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Mã OTP không hợp lệ'),
-                                ),
-                              );
-                            },
+                      onTap: () {
+                        if (_isOtpValid(_otpController.text)) {
+                          bloc.add(SendOtpVerified(otp: _otpController.text));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Mã OTP không hợp lệ'),
+                            ),
+                          );
+                        }
+                      },
                       child: Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: Container(
@@ -196,14 +255,19 @@ class _SendOTPScreenState extends State<SendOTPScreen> {
                         ),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 12),
-                      child: Text(
-                        AppStrings.resendOTP,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.blueForgorPassword,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: GestureDetector(
+                        onTap: () {
+                          bloc.add(SendOtpResent());
+                        },
+                        child: const Text(
+                          AppStrings.resendOTP,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.blueForgorPassword,
+                          ),
                         ),
                       ),
                     ),

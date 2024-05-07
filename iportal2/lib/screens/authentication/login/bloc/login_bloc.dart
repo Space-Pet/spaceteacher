@@ -98,15 +98,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           )
           .pinnedAlbumIdList;
 
-      final userWithFeatures = user.copyWith(
+      final bgSchoolBrand = SchoolBrand.values
+          .firstWhere((element) => element.value == user.school_brand);
+
+      final userLocal = user.copyWith(
         features: (listFeatures ?? []).isNotEmpty
             ? listFeatures
             : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
         pinnedAlbumIdList: pinnedAlbumIdList,
+        background: bgSchoolBrand,
       );
 
-      userRepository.saveUser(userWithFeatures);
-      currentUserBloc.add(CurrentUserUpdated(user: userWithFeatures));
+      userRepository.saveUser(userLocal);
+      currentUserBloc.add(CurrentUserUpdated(user: userLocal));
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
       emit(state.copyWith(status: LoginStatus.failure));
@@ -118,11 +122,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       emit(state.copyWith(status: LoginStatus.loading));
       final user = await authRepository.loginQR(
-          qrCode: event.qrCode,
-          deviceId: event.deviceId,
-          model: event.model,
-          platform: event.platform,
-          tokenFirebase: event.tokenFirebase);
+        qrCode: event.qrCode,
+        deviceId: event.deviceId,
+        model: event.model,
+        platform: event.platform,
+        tokenFirebase: event.tokenFirebase,
+      );
       final featuresLocal = await userRepository.getFeatures();
       final listFeatures = featuresLocal
           ?.firstWhere(
@@ -142,15 +147,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           )
           .pinnedAlbumIdList;
 
-      final userWithFeatures = user.copyWith(
+      final bgSchoolBrand = SchoolBrand.values
+          .firstWhere((element) => element.value == user.school_brand);
+
+      final userLocal = user.copyWith(
         features: (listFeatures ?? []).isNotEmpty
             ? listFeatures
             : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
         pinnedAlbumIdList: pinnedAlbumIdList,
+        background: bgSchoolBrand,
       );
 
-      userRepository.saveUser(userWithFeatures);
-      currentUserBloc.add(CurrentUserUpdated(user: userWithFeatures));
+      userRepository.saveUser(userLocal);
+      currentUserBloc.add(CurrentUserUpdated(user: userLocal));
       return emit(state.copyWith(status: LoginStatus.success));
     } catch (e) {
       emit(state.copyWith(status: LoginStatus.failure));

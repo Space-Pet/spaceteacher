@@ -10,7 +10,7 @@ import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dropdown/dropdown.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/score/bloc/score_bloc.dart';
 import 'package:iportal2/screens/score/widgets/esl/esl_view.dart';
 import 'package:iportal2/screens/score/widgets/moet/moet_view.dart';

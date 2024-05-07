@@ -1,4 +1,5 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -10,7 +11,6 @@ import 'package:iportal2/components/buttons/buttons.dart';
 import 'package:iportal2/screens/leave/bloc/leave_bloc.dart';
 import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/widget/application_item.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:repository/repository.dart';
 import 'package:skeletons/skeletons.dart';
 

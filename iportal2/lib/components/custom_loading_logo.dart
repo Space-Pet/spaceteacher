@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:core/resources/app_colors.dart';
 import 'package:iportal2/resources/assets.gen.dart';
 
 class LoadingWithBrand extends StatelessWidget {

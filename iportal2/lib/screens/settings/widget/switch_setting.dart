@@ -1,8 +1,9 @@
+import 'package:core/resources/resources.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
+
 
 class SwitchSetting extends StatefulWidget {
   SwitchSetting(
@@ -54,17 +55,14 @@ class _SwitchSettingState extends State<SwitchSetting> {
               ),
               if (widget.onPressed == null)
                 Transform.scale(
-                  scale: 0.7,
-                  child: Switch.adaptive(
+                  scale: 0.6,
+                  child: CupertinoSwitch(
                     value: isSwitched,
                     onChanged: (value) {
                       setState(() {
                         isSwitched = value;
                       });
                     },
-                    activeTrackColor: AppColors.green,
-                    activeColor: AppColors.white,
-                    inactiveThumbColor: AppColors.white,
                   ),
                 ),
               if (widget.onPressed != null)

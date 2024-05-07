@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:core/resources/app_colors.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -10,7 +11,6 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/app_main_layout.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/dialog/show_dialog.dart';
-import 'package:iportal2/resources/app_colors.dart';
 import 'package:iportal2/screens/authentication/login/bloc/login_bloc.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -90,6 +90,7 @@ class _LoginQRViewState extends State<LoginQRView> {
   bool isCameraRunning = false;
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
+
   @override
   void initState() {
     super.initState();
@@ -109,13 +110,9 @@ class _LoginQRViewState extends State<LoginQRView> {
 
   Future<void> getFCMToken() async {
     final firebaseMessaging = FirebaseMessaging.instance;
-    if (Platform.isAndroid) {
-      fcmToken = await firebaseMessaging.getToken();
-      print('fcm: $fcmToken');
-    } else if (Platform.isIOS) {
-      fcmToken = await firebaseMessaging.getAPNSToken();
-      print('fcmios: $fcmToken');
-    }
+    fcmToken = await firebaseMessaging.getToken();
+
+    print(fcmToken);
   }
 
   Future<void> initPlatformState() async {
@@ -200,7 +197,7 @@ class _LoginQRViewState extends State<LoginQRView> {
         result = scanData;
       });
       if (result != null) {
-        //_stopCamera();
+        _stopCamera();
         final deviceId = await _getDeviceId();
         final platform = Platform.isAndroid ? 'Android' : 'iOS';
         context.read<LoginBloc>().add(LoginQR(

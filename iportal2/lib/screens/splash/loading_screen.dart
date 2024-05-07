@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/app_main_layout.dart';
+import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/splash/bloc/splash_cubit.dart';
 import 'package:iportal2/screens/splash/curved_splash_screen.dart';
@@ -26,8 +27,6 @@ class LoadingScreen extends StatelessWidget {
           switch (state.status) {
             case SplashStatus.logined:
               context.pushReplacement(const AppMainLayout());
-              // context.pushReplacement(const LoginScreen());
-
               break;
 
             case SplashStatus.firstLogin:
@@ -51,7 +50,7 @@ class LoadingScreen extends StatelessWidget {
               break;
 
             case SplashStatus.unLogined:
-              context.pushReplacement(const LoginScreen());
+              context.pushReplacement(const DomainScreen());
               break;
             default:
           }

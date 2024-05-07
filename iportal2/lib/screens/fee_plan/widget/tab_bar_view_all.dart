@@ -1,8 +1,9 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/dialog/show_dialog.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/fee_plan/models/tariff_model.dart';
 
 class TabBarViewAll extends StatefulWidget {

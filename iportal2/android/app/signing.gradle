@@ -1,0 +1,16 @@
+android {
+    signingConfigs {
+        iportal {
+            storeFile file(IPORTAL_STORE_FILE)
+            storePassword IPORTAL_STORE_PASSWORD
+            keyAlias IPORTAL_KEY_ALIAS
+            keyPassword IPORTAL_KEY_PASSWORD
+        }
+        iportalDebug {
+            storeFile file(DEBUG_STORE_FILE)
+            storePassword DEBUG_STORE_PASSWORD
+            keyAlias DEBUG_KEY_ALIAS
+            keyPassword DEBUG_KEY_PASSWORD
+        }
+    }
+}

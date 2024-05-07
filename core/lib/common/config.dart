@@ -22,20 +22,14 @@ class AppConfig {
   bool developmentMode;
   String appName;
   String baseApiLayer;
-  String baseGraphQLUrl;
-  String graphqlSocketUrl;
   AppType app;
-  String graphqlApiKey;
 
   AppConfig(
     this.envName,
     this.developmentMode,
     this.appName,
     this.baseApiLayer,
-    this.baseGraphQLUrl,
-    this.graphqlSocketUrl,
     this.app,
-    this.graphqlApiKey,
   );
 
   AppConfig.from(Map<String, dynamic> env)
@@ -43,10 +37,8 @@ class AppConfig {
         developmentMode = env[Env.developmentMode],
         appName = env[Env.appName],
         baseApiLayer = env[Env.baseApiLayer],
-        baseGraphQLUrl = env[Env.baseGraphQLUrl],
-        app = env[Env.app],
-        graphqlApiKey = env[Env.graphqlApiKey],
-        graphqlSocketUrl = env[Env.graphqlSocketUtl];
+        app = env[Env.app]
+        ;
 
   bool get isiportalApp {
     return app == AppType.iportal2;

@@ -5,51 +5,5 @@ class Env {
   static const developmentMode = 'developmentMode';
   static const appName = 'appName';
   static const baseApiLayer = 'baseApiLayer';
-  static const baseGraphQLUrl = 'baseGraphQLUrl';
-  static const graphqlSocketUtl = 'graphqlSocketUtl';
   static const app = 'app';
-  static const graphqlApiKey = 'graphqlApiKey';
-
-  static final Map<String, dynamic> iPortal2Dev = {
-    environment: 'WOW Development',
-    developmentMode: true,
-    appName: 'WOW Dev',
-    baseApiLayer: '',
-    baseGraphQLUrl: '',
-    graphqlSocketUtl: '',
-    app: AppType.iportal2,
-    graphqlApiKey:
-        'fm2ss367h1206socg73lqbd4aa5cb82b8deobissoob6mnm8r36necrpm4ho1rd',
-  };
-
-  static final Map<String, dynamic> iPortal2Prod = {
-    environment: 'WOW Production',
-    developmentMode: false,
-    appName: 'WOW Services',
-    baseApiLayer: '',
-    baseGraphQLUrl: 'https://controller.fixmeapp.vn/v1/graphql',
-    graphqlSocketUtl: 'wss://controller.fixmeapp.vn/v1/graphql',
-    app: AppType.iportal2,
-    graphqlApiKey:
-        'fm2ss367h1206socg73lqbd4aa5cb82b8deobissoob6mnm8r36necrpm4ho1rd',
-  };
-
-  static final Map<String, dynamic> devteacher = {
-    environment: 'Teacher Development',
-    developmentMode: true,
-    appName: 'Teacher Dev',
-    baseApiLayer: '',
-    baseGraphQLUrl: 'https://test-controller.fixmeapp.vn/v1/graphql',
-    app: AppType.teacher,
-  };
-
-  static final Map<String, dynamic> prodteacher = {
-    environment: 'Teacher Production',
-    developmentMode: false,
-    appName: 'Teacher',
-    baseApiLayer: '',
-    baseGraphQLUrl: 'https://controller.fixmeapp.vn/v1/graphql',
-
-    app: AppType.teacher,
-  };
 }

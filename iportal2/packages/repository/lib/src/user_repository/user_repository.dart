@@ -77,6 +77,7 @@ class UserRepository {
       ),
       features: user.features,
       pinnedAlbumIdList: user.pinnedAlbumIdList,
+      background: user.background,
     );
 
     await _userLocalStorage.saveUser(localUser);
@@ -106,17 +107,27 @@ class UserRepository {
     }
   }
 
-  Future<Map<String, dynamic>?> updateProfileStudent(
+  Future<Map<String, dynamic>?> updateStudentPhone(
       {required String phone,
       required String motherName,
       required String fatherPhone,
       required String pupil_id}) async {
     try {
-      final data = await _userApi.updateProfile(
+      final data = await _userApi.updateStudentPhone(
           phone: phone,
           fatherPhone: fatherPhone,
           motherName: motherName,
           pupil_id: pupil_id);
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> updateParentPhone(
+      Map<String, dynamic> body, String pupilId) async {
+    try {
+      final data = await _userApi.updateParentPhone(body, pupilId);
       return data;
     } catch (e) {
       return null;

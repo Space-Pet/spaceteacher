@@ -1,7 +1,7 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/message/conponents/card_messages.dart';
 
 class ListMessage extends StatelessWidget {

@@ -1,3 +1,7 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_strings.dart';
+import 'package:core/resources/app_text_styles.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,9 +9,6 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/app_main_layout.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/input_text.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/authentication/forgot_password/view/forgot_password_screen.dart';
 import 'package:iportal2/screens/authentication/login_qr/login_qr.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';

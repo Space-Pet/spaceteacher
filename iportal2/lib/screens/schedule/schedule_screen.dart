@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/components/dialog/dialog_view_exercise.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/schedule/bloc/schedule_bloc.dart';
 import 'package:iportal2/screens/schedule/schedule_tabs.dart';
 import 'package:iportal2/screens/schedule/select_week.dart';
@@ -43,6 +44,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
           onViewExercise(DateTime date, int tietNum) {
             bloc.add(ScheduleFetchExercise(datePicked: date));
+            DateFormat formatDate = DateFormat("yyyy-MM-dd");
 
             showDialog(
               context: context,
@@ -55,12 +57,14 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   final exercise = isEmptyExercise
                       ? null
                       : exerciseData.firstWhere(
-                          (element) => int.parse(element.tietNum) == tietNum,
+                          (element) =>
+                              int.parse(element.tietNum) == tietNum &&
+                              formatDate.format(date) == element.hanNopBaoBai,
                           orElse: () => ExerciseItem.empty());
 
                   final fileName = getFileName(exercise?.fileBaoBai ?? '');
 
-                  return DialogScaleAnimated(
+                  return DialogViewExercise(
                     title: 'Báo bài hôm nay',
                     content: fileName,
                     isLink: true,

@@ -1,16 +1,19 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:iportal2/screens/pre_score/widget/tab_bar/tab_bar_view_comment.dart';
 import 'package:iportal2/screens/pre_score/widget/tab_bar/tav_bar_view_report.dart';
 
 class TabBarPreScore extends StatelessWidget {
-  TabBarPreScore({super.key, this.comment, this.endDate, this.startDate});
+  TabBarPreScore(
+      {this.comment, this.endDate, this.startDate, required this.state});
   final List<String> tabs = ['Nhận xét', 'Báo cáo học tập'];
   final List<Comment>? comment;
   final DateTime? endDate;
   final DateTime? startDate;
+  final PreScoreState state;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -66,11 +69,13 @@ class TabBarPreScore extends StatelessWidget {
                 children: [
                   comment!.isNotEmpty
                       ? TabBarViewComment(
+                          state: state,
                           comment: comment?.first,
                           endDate: endDate,
                           startDate: startDate,
                         )
-                      : const Expanded(
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 150),
                           child: Center(
                             child: EmptyScreen(text: 'Bạn chưa có nhận xét'),
                           ),

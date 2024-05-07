@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class ShaDowBoxContainer extends StatelessWidget {
   final Widget child;

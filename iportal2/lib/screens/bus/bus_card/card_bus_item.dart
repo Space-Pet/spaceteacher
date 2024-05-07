@@ -1,8 +1,9 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_text_styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:repository/repository.dart';
 
 class CardBusItem extends StatelessWidget {

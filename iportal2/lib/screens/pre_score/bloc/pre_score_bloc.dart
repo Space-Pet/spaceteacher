@@ -50,6 +50,7 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
         pupilId: currentUserBloc.state.user.pupil_id,
         schoolId: currentUserBloc.state.user.school_id,
         schoolBrand: currentUserBloc.state.user.school_brand,
+        semester: event.semester,
         learnYear: event.learnYear);
     emit(state.copyWith(
         preScoreStatus: PreScoreStatus.successListReport,

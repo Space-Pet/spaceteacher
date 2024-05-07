@@ -1,9 +1,8 @@
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileBottomSheet extends StatefulWidget {

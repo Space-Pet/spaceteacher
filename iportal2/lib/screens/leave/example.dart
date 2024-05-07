@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:iportal2/resources/app_colors.dart';
 
 const kPageTitle = 'Settings';
 const kLabels = [" Profile", "counts"];

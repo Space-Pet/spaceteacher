@@ -1,3 +1,5 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +10,6 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:iportal2/resources/resources.dart';
 import 'package:iportal2/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_card/card_gallery.dart';
 import 'package:repository/repository.dart';

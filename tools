@@ -2,7 +2,8 @@
 function run_clean_packages() {
 	echo "================== Clean $1 =================="
 	cd $1
-	./tools run_clean
+	# run tools script in package
+	./tools clean
 	cd ../
 }
 
@@ -15,9 +16,9 @@ function run_clean_core() {
 	cd ../
 }
 
-function run_clean(){
+function clean(){
 	echo "Choose app need to clean:"
-	select app in "iportal2" "teacher" "core" "defailt - all"; do
+	select app in "iportal2" "teacher" "core" "default - all"; do
 		case $app in
 			iportal2)
 				run_clean_packages iportal2
@@ -32,9 +33,9 @@ function run_clean(){
 				break
 				;;
 			*)
+				run_clean_core
 				run_clean_packages iportal2
 				run_clean_packages teacher
-				run_clean_core
 				break
 				;;
 		esac
@@ -44,7 +45,7 @@ function run_clean(){
 function pod_reset_cache() {
 	echo "================== Reset pod cache =================="
 	echo "Choose app need to reset pod cache:"
-	select app in "iportal2" "teacher"; do
+	select app in "iportal2" "teacher" "exit"; do
 		case $app in
 			iportal2)
 				cd iportal2
@@ -52,6 +53,9 @@ function pod_reset_cache() {
 				;;
 			teacher)
 				cd teacher
+				break
+				;;
+			exit)
 				break
 				;;
 			*)
@@ -70,7 +74,7 @@ function pod_reset_cache() {
 
 function build_apk() {
 	echo "================== Build APK =================="
-	echo "Choose app need to build APK:"
+	echo "Choose app need to build APK (Default: all):"
 	select app in "iportal2" "teacher"; do
 		case $app in
 			iportal2)
@@ -82,7 +86,10 @@ function build_apk() {
 				break
 				;;
 			*)
-				echo "Invalid choice."
+				cd iportal2
+				cd ../teacher
+				cd ../
+				break
 				;;
 		esac
 	done
@@ -94,7 +101,7 @@ function build_apk() {
 
 function activate_script(){
 	cd $1
-	chmod +x tools
+	chmod +x ./tools
 	cd ..
 }
 
@@ -122,40 +129,74 @@ function activate_tools_script(){
 	done
 }
 
-function menu() {
-	echo "================== Menu =================="
-	echo "1. Activate tools scripts"
-	echo "2. Build APK"
-	echo "3. Clean"
-	echo "4. Reset pod cache"
-	echo "0. Exit"
+function help() {
+	echo """Command line tool for generate code, build, and deploy Flutter apps.
+Usage: 
+	$ ./tools [Command]
+
+(Note: before running the script, make sure you have the permission to run the script.
+To active permission, run: chmod +x ./tools)
+
+or:
+	$ bash tools [Command]
+	
+If no [Command] is passed, the script will run in interactive mode.
+	
+Commands:
+	activate_tools_script:		(No implemented) Activate tools script in a package
+	build_apk:			(No implemented) Build APK for a package
+	clean:				Clean a package
+	reset_pod_cache:		(No implemented) Reset pod cache for a package
+	help:				Show this help message
+	
+In interactive mode, pass the number for choice.
+	
+Note: Each directory have its own tools script. You can cd to the directory and run ./tools to run the script independently.
+"""
 }
 
 function main() {
 	while true; do
-		menu
-		read -p "Enter your choice: " choice
-		case $choice in
-			1)
-				activate_tools_script
-				;;
-			2)
-				build_apk
-				;;
-			3)
-				run_clean
-				;;
-			4)
-				pod_reset_cache
-				;;
-			0)
-				break
-				;;
-			*)
-				echo "Invalid choice."
-				;;
-		esac
+		echo "Running tools scripts (interactive mode)"
+		select choice in "Activate tools scripts" "Build APK" "Clean" "Pub gen" "Reset pod cache" "Help" "Exit"; do
+			case $choice in
+				"Activate tools scripts")
+					activate_tools_script
+					break
+					;;
+				"Build APK")
+					build_apk
+					break
+					;;
+				"Clean")
+					clean
+					break
+					;;
+				"Pub gen")
+					clean
+					break
+					;;
+				"Reset pod cache")
+					pod_reset_cache
+					break
+					;;
+				"Help")
+					help
+					;;
+				"Exit")
+					exit 0
+					;;
+				*)
+					echo "Invalid choice."
+					;;
+			esac
+		done
 	done
 }
-# execute main function
-main
+
+# if no arguments are passed, run the main function
+if [ $# -eq 0 ]; then
+	main
+else
+	$@
+fi

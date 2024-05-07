@@ -24,9 +24,10 @@ class Schedule {
         }
       }
     }
+
     return Schedule(
       tkbDateApply: map['tkb_date_apply'],
-      tkbClass: map['tkb_class'],
+      tkbClass: map['tkb_class'] ?? '',
       tkbData: tkbData,
     );
   }

@@ -4,6 +4,7 @@ analyzer:
   errors:
     # allow having TODOs in the code
     todo: ignore
+    invalid_annotation_target: ignore
   exclude:
     # exclude files
     - lib/generated_plugin_registrant.dart

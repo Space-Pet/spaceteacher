@@ -1,5 +1,4 @@
 import 'package:dartx/dartx.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../utils.dart';
@@ -114,14 +113,6 @@ extension DoubleExt on double? {
 }
 
 extension DateTimeConverter on int? {
-  String toFullDateTime() {
-    if (this == null) {
-      return '';
-    }
-    final dt = DateTime.fromMillisecondsSinceEpoch(this!);
-    return dt.serverToNormalFullFormat();
-  }
-
   String toCurrencyString({bool isWithSymbol = true}) {
     return NumberFormat.currency(
       locale: 'Vi',
@@ -130,16 +121,6 @@ extension DateTimeConverter on int? {
     ).format(
       this ?? 0,
     );
-  }
-}
-
-extension DateConverter on String? {
-  String toDisplayNormalDate(BuildContext context) {
-    if (this == null || this?.isEmpty == true) {
-      return '';
-    }
-    final dt = DateTime.parse(this!);
-    return dt.serverToNormalDateFormat(context);
   }
 }
 

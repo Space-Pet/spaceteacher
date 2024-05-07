@@ -249,7 +249,7 @@ class AppFetchApiRepository {
 
   Future<List<ListReportStudent>> getListReportStudent(
       {required int pupilId,
-      required,
+      required int semester,
       required int schoolId,
       required String schoolBrand,
       required String learnYear}) async {
@@ -257,6 +257,7 @@ class AppFetchApiRepository {
         pupilId: pupilId,
         schoolId: schoolId,
         schoolBrand: schoolBrand,
+        semester: semester,
         learnYear: learnYear);
     return data;
   }
@@ -269,5 +270,15 @@ class AppFetchApiRepository {
     final data = await _appFetchApi.getReportStudent(
         id: id, pupilId: pupilId, schoolId: schoolId, schoolBrand: schoolBrand);
     return data;
+  }
+
+  Future<List<SurveyData>> getSurvay() async {
+    final data = await _appFetchApi.getSurvay();
+    return data;
+  }
+
+  Future<void> postSurvey(
+      {required List<Map<String, dynamic>> listSurvey}) async {
+    _appFetchApi.postSurvey(listSurvey: listSurvey);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
@@ -14,6 +15,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
           ),
         ) {
     on<CurrentUserUpdated>(_onUpdateUser);
+    on<BackGroundUpdatedState>(updateBg);
   }
 
   final UserRepository userRepository;
@@ -24,6 +26,16 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   ) async {
     emit(state.copyWith(
       user: event.user,
+      background: event.user.background,
+    ));
+  }
+
+  void updateBg(
+    BackGroundUpdatedState event,
+    Emitter<CurrentUserState> emit,
+  ) async {
+    emit(state.copyWith(
+      background: event.bg,
     ));
   }
 }

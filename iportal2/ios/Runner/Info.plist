@@ -22,6 +22,17 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-1035888198980-ios-337dcb4ec6e9a0ddb5c311</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -37,9 +48,9 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Cho phép truy cập vào Ảnh</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Cho phép truy cập vào Ảnh</string>
+	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Cho phép truy cập vào Ảnh</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>

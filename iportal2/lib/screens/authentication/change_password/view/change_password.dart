@@ -1,12 +1,11 @@
+import 'package:core/resources/app_colors.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_strings.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/authentication/change_password/bloc/change_password_bloc.dart';
-import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
+import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/components/input_text.dart';
 import 'package:repository/repository.dart';
@@ -40,7 +39,7 @@ class ChangePasswordScreen extends StatelessWidget {
           } else if (state.changePasswordStatus ==
               ChangePasswordStatus.success) {
             LoadingDialog.hide(context);
-            context.pushReplacement(const LoginScreen());
+            context.pushReplacement(const DomainScreen());
             Fluttertoast.showToast(
                 msg: 'Đổi mật khẩu thành công',
                 toastLength: Toast.LENGTH_LONG,
@@ -199,10 +198,10 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                                 borderRadius: BorderRadius.circular(60),
                               ),
                             ),
-                            child: const Padding(
+                            child:  const Padding(
                               padding: EdgeInsets.only(top: 17, bottom: 17),
                               child: Text(
-                                AppStrings.confirm,
+                                'Xác nhận',
                                 style: TextStyle(
                                   color: AppColors.white,
                                   fontSize: 16,

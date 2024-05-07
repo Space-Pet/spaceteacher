@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iportal2/components/dialog/dialog_update_phone.dart';
+import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
+import 'package:iportal2/components/tab/tab_bar.dart';
+import 'package:iportal2/components/tab/tab_content.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
-
-import '../../../components/custom_dialog_update_phone.dart';
-import '../../../components/tab/tab_bar.dart';
-import '../../../components/tab/tab_content.dart';
 
 class TabBarStudent extends StatelessWidget {
   const TabBarStudent({
@@ -26,93 +26,79 @@ class TabBarStudent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
-        final profileBloc = context.read<ProfileBloc>();
+        final profileBloc = BlocProvider.of<ProfileBloc>(context);
+
         return TabBarFlexible(
           tabTitles: const ['Thông tin học sinh', 'Cha mẹ học sinh'],
           tabContent: [
             [
-              TabContent(
+              RowContent(
                 title: 'Trường',
                 content: studentData.school.name,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Lớp',
                 content: studentData.classInfo.name,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Mã học sinh',
                 content: studentData.pupil.userKey,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
+                title: 'Mã khách hàng',
+                content: studentData.pupil.customerId.toString(),
+              ),
+              RowContent(
                 title: 'Mã định danh',
                 content: studentData.pupil.identifier,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Ngày sinh',
                 content: studentData.pupil.birthday,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Địa chỉ ',
                 content: studentData.pupil.address,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                   title: 'Số điện thoại',
                   content: studentData.pupil.phone,
-                  isShowIcon: true,
+                  isEditPhone: true,
                   onTap: () {
-                    CustomDialogUpdatePhone.show(
-                      context,
-                      title: 'Chỉnh sửa số điện thoại',
-                      saveButtonTitle: 'Lưu lại',
-                      closeButtonTitle: 'Đóng',
-                      errMsg: state.message,
-                      onSavePressed: (String phone) {
-                        profileBloc.add(UpdateProfileStudent(
-                          phone: phone,
-                          motherName: studentData.parent.motherName,
-                          fatherPhone: studentData.parent.fatherPhone,
-                          context: context,
-                        ));
-                      },
+                    showDialog(
+                      context: context,
+                      builder: (_) => DialogScaleAnimated(
+                          dialogContent: PhoneUpdate(
+                        bloc: profileBloc,
+                      )),
                     );
                   }),
-              TabContent(
+              RowContent(
                 title: 'Email',
                 content: studentData.pupil.email,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Tình trạng học sinh',
                 content: statusMap[studentData.pupil.status]?.toString() ?? '',
-                isShowIcon: false,
+                isShowDottedLine: false,
               ),
             ],
             [
-              TabContent(
+              RowContent(
                 title: 'Họ & tên cha',
                 content: studentData.parent.fatherName,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Số điện thoại cha',
                 content: studentData.parent.fatherPhone,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Họ & tên mẹ',
                 content: studentData.parent.motherName,
-                isShowIcon: false,
               ),
-              TabContent(
+              RowContent(
                 title: 'Số điện thoại mẹ',
                 content: studentData.parent.motherPhone,
-                isShowIcon: false,
                 isShowDottedLine: false,
               ),
             ],

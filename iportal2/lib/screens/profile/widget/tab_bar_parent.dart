@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/resources.dart';
+import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
+import 'package:iportal2/components/dialog/dialog_update_phone.dart';
+import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
 
-import '../../../components/custom_dialog_update_phone.dart';
 import '../../../components/tab/tab_bar.dart';
 import '../../../components/tab/tab_content.dart';
 
@@ -31,51 +31,44 @@ class TabBarParent extends StatelessWidget {
     final parentsList = // Parents
         [
       // Father
-      TabContent(
+      RowContent(
         title: 'Họ & tên Cha',
         content: parent.fatherName,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Năm sinh',
         content: parent.fatherYear,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Nghề nghiệp',
         content: parent.fatherJobTitle,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Cơ quan làm việc',
         content: parent.fatherWorkAddress,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Nơi ở',
         content: parent.fatherAddress,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Điện thoại di động',
         content: parent.fatherPhone,
-        isShowIcon: true,
+        isEditPhone: true,
         onTap: () {
-          CustomDialogUpdatePhone.show(
-            context,
-            title: 'Chỉnh sửa số điện thoại',
-            saveButtonTitle: 'Lưu lại',
-            closeButtonTitle: 'Đóng',
-            onSavePressed: (String phone) {
-              context.pop();
-            },
+          showDialog(
+            context: context,
+            builder: (_) => DialogScaleAnimated(
+                dialogContent: PhoneUpdate(
+              bloc: context.read<ProfileBloc>(),
+              isParent: true,
+            )),
           );
         },
       ),
-      TabContent(
+      RowContent(
         title: 'Email',
         content: parent.fatherEmail,
-        isShowIcon: false,
         isShowDottedLine: false,
       ),
       Container(
@@ -88,51 +81,45 @@ class TabBarParent extends StatelessWidget {
       ),
 
       // Mother
-      TabContent(
+      RowContent(
         title: 'Họ & tên Mẹ',
         content: parent.motherName,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Năm sinh',
         content: parent.motherYear,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Nghề nghiệp',
         content: parent.motherJobTitle,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Cơ quan làm việc',
         content: parent.motherWorkAddress,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Nơi ở',
         content: parent.motherAddress,
-        isShowIcon: false,
       ),
-      TabContent(
+      RowContent(
         title: 'Điện thoại di động',
         content: parent.motherPhone,
-        isShowIcon: true,
+        isEditPhone: true,
         onTap: () {
-          CustomDialogUpdatePhone.show(
-            context,
-            title: 'Chỉnh sửa số điện thoại',
-            saveButtonTitle: 'Lưu lại',
-            closeButtonTitle: 'Đóng',
-            onSavePressed: (String phone) {
-              context.pop();
-            },
+          showDialog(
+            context: context,
+            builder: (_) => DialogScaleAnimated(
+                dialogContent: PhoneUpdate(
+              bloc: context.read<ProfileBloc>(),
+              isParent: true,
+              isFather: false,
+            )),
           );
         },
       ),
-      TabContent(
+      RowContent(
         title: 'Email',
         content: parent.motherEmail,
-        isShowIcon: false,
         isShowDottedLine: false,
       ),
     ];
@@ -143,69 +130,44 @@ class TabBarParent extends StatelessWidget {
       builder: (context, state) {
         final studentData = state.studentData;
 
-        final profileBloc = context.read<ProfileBloc>();
-
         final studentList = [
-          TabContent(
+          RowContent(
             title: 'Trường',
             content: studentData.school.name,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Lớp',
             content: studentData.classInfo.name,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Mã học sinh',
             content: studentData.pupil.userKey,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Mã định danh',
             content: studentData.pupil.identifier,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Ngày sinh',
             content: studentData.pupil.birthday,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Địa chỉ ',
             content: studentData.pupil.address,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
               title: 'Số điện thoại',
               content: studentData.pupil.phone,
-              isShowIcon: true,
-              onTap: () {
-                CustomDialogUpdatePhone.show(
-                  context,
-                  title: 'Chỉnh sửa số điện thoại',
-                  saveButtonTitle: 'Lưu lại',
-                  closeButtonTitle: 'Đóng',
-                  errMsg: state.message,
-                  onSavePressed: (String phone) {
-                    profileBloc.add(UpdateProfileStudent(
-                      phone: phone,
-                      motherName: studentData.parent.motherName,
-                      fatherPhone: studentData.parent.fatherPhone,
-                      context: context,
-                    ));
-                  },
-                );
-              }),
-          TabContent(
+              isEditPhone: true,
+              onTap: () {}),
+          RowContent(
             title: 'Email',
             content: studentData.pupil.email,
-            isShowIcon: false,
           ),
-          TabContent(
+          RowContent(
             title: 'Tình trạng học sinh',
+            isShowDottedLine: false,
             content: statusMap[studentData.pupil.status]?.toString() ?? '',
-            isShowIcon: false,
           ),
         ];
 

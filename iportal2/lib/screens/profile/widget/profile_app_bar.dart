@@ -1,16 +1,20 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
 import 'package:iportal2/screens/settings/settings_screen/setting_screen.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class ProfileAppBar extends StatefulWidget {
   final VoidCallback? onBack;
-  final int role;
   final StudentData user;
-  const ProfileAppBar(
-      {super.key, this.onBack, required this.role, required this.user});
+  final bool isParent;
+
+  const ProfileAppBar({
+    super.key,
+    this.onBack,
+    required this.user,
+    required this.isParent,
+  });
 
   @override
   _ProfileAppBarState createState() => _ProfileAppBarState();
@@ -62,7 +66,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                       ),
                     ),
                     Text(
-                      userData.classInfo.name,
+                      'Lớp ${userData.classInfo.name}',
                       style: AppTextStyles.normal12(
                         color: AppColors.white,
                       ),

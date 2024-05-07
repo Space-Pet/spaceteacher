@@ -70,11 +70,6 @@ class AppDelegate {
       authRestClient: authRestClient,
       partnerTokenRestClient: partnerTokenRestClient,
     );
-    final jobApi = JobApi(
-      client: networkClient,
-      authRestClient: authRestClient,
-      partnerTokenRestClient: partnerTokenRestClient,
-    );
 
     final registerNoteBookApi = RegisterNoteBookApi(
       client: networkClient,
@@ -98,7 +93,6 @@ class AppDelegate {
       authApi: authApi,
       authLocalStorage: authLocalStorage,
       userApi: userApi,
-      jobApi: jobApi,
       registerNoteBookApi: registerNoteBookApi,
       appFetchApi: appFetchApi,
       userLocalStorage: userLocalStorage,

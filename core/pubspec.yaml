@@ -12,7 +12,6 @@ dependencies:
     sdk: flutter
 
   #network
-  retrofit: ^4.1.0 #ns
   dio: ^5.4.1
 
   #base
@@ -34,33 +33,27 @@ dependencies:
   #localization
   easy_localization: ^3.0.5
 
+  #Firebase
+  firebase_core: ^2.30.1
+  firebase_messaging: ^14.9.1
+
   #utils
   logger: ^2.0.2+1 #ns
   pedantic: ^1.11.1 #ns
   date_format: ^2.0.2 #ns
-  connectivity_plus: ^5.0.2
   permission_handler: ^11.3.0 #ns
-  image_picker: ^1.0.1 #ns
   extended_image: ^8.1.1 #ns
   image_editor: ^1.0.0 #ns
   uuid: ^4.3.3 #ns
   timeago: ^3.1.0 #ns
   mime: ^1.0.2 #ns
-  video_thumbnail: ^0.5.3 #ns
   video_player: ^2.4.5 #ns
   chewie: ^1.3.3 #ns
-  geocoding: ^2.0.4
   webview_flutter: ^4.7.0
   sprintf: ^7.0.0
 
-  # firebase
-  firebase_core: ^2.15.1
-  firebase_auth: ^4.1.3
-  firebase_storage: ^11.0.6 #ns
   tab_indicator_styler: ^2.0.0
-  firebase_messaging: ^14.1.1
   pin_code_fields: ^8.0.1
-  firebase_core_platform_interface: ^5.0.0
 
   #Hive
   hive: ^2.0.4
@@ -69,13 +62,12 @@ dependencies:
   pull_to_refresh: ^2.0.0
   enum_to_string: ^2.0.1
   jwt_decode: ^0.3.1
-  flutter_local_notifications: ^16.3.2
+  flutter_local_notifications: ^17.1.2
   keyboard_actions: ^4.0.0
 
   #JSON
   json_annotation: ^4.8.1
   universal_html: ^2.0.8
-  photo_view: ^0.14.0
   country_code_picker: ^3.0.0
   phone_numbers_parser: ^8.1.3
   flutter_multi_formatter: ^2.5.1
@@ -95,10 +87,9 @@ dependencies:
   carousel_slider: ^4.1.1
   dots_indicator: ^3.0.0
   flutter_rating_bar: ^4.0.1
-  flutter_html: ^3.0.0-alpha.3
   uni_links: ^0.5.1
   shimmer: ^3.0.0
-  device_info_plus: ^9.0.2
+  device_info_plus: ^10.1.0
   clipboard: ^0.1.3
   shake: ^2.2.0
   quiver: ^3.2.1
@@ -109,7 +100,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.0.4 #ns
-  retrofit_generator: ^8.1.0 #ns
   hive_generator: ^2.0.0
   json_serializable: ^6.2.0
   injectable_generator:

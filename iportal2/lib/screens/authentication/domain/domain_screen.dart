@@ -1,9 +1,8 @@
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/resources/app_colors.dart';
-import 'package:iportal2/resources/app_text_styles.dart';
-import 'package:iportal2/resources/assets.gen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 
 class DomainScreen extends StatefulWidget {
@@ -38,7 +37,7 @@ class _DomainScreenState extends State<DomainScreen> {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: Assets.images.domain.provider(),
+                  image: Assets.images.image4.provider(),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -54,7 +53,7 @@ class _DomainScreenState extends State<DomainScreen> {
                   left: 14,
                   right: 14,
                 ),
-                height: screenHeight / 2.5,
+                height: screenHeight / 2.3,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -83,32 +82,53 @@ class _DomainScreenState extends State<DomainScreen> {
                             left: 10,
                             right: 10,
                           ),
-                          child: TextField(
-                            controller: _textFieldController,
-                            onChanged: (value) {
-                              setState(() {
-                                isDomainEntered = value.isNotEmpty;
-                              });
-                            },
-                            maxLines: null,
-                            decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(8),
-                              filled: true,
-                              fillColor: AppColors.skyLighter,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: AppColors.gray300,
+                          child: Container(
+                            height: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: AppColors.gray300)),
+                            child: TextField(
+                              controller: _textFieldController,
+                              onChanged: (value) {
+                                setState(() {
+                                  isDomainEntered = value.isNotEmpty;
+                                });
+                              },
+                              maxLines: null,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(8),
+                                filled: true,
+                                fillColor: AppColors.white,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: AppColors.white,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                borderRadius: BorderRadius.circular(10),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: AppColors.white,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                hintStyle: AppTextStyles.normal14(
+                                  color: AppColors.gray79,
+                                ),
+                                hintText:
+                                    'Nhập đường dẫn website iPortal của đơn vị',
                               ),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText:
-                                  'Nhập đường dẫn website iPortal của đơn vị',
                             ),
                           ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 4, 8, 0),
+                          child: Text(
+                              'Vui lòng liên hện IT trường nếu như bạn quên đường dẫn website iPortal',
+                              style: AppTextStyles.normal12()),
                         ),
                       ],
                     ),
@@ -120,13 +140,6 @@ class _DomainScreenState extends State<DomainScreen> {
                       ),
                       child: Column(
                         children: [
-                          Text(
-                            textAlign: TextAlign.center,
-                            'Vui lòng liên hện IT trường nếu như bạn quên đường dẫn website iPortal',
-                            style: AppTextStyles.normal14(
-                              
-                            ),
-                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 15),
                             child: GestureDetector(

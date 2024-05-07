@@ -1,5 +1,6 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:iportal2/components/home_shadow_box.dart';
 
 class TabBarFlexible extends StatelessWidget {
   final List<String> tabTitles;
@@ -33,19 +34,15 @@ class TabBarFlexible extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: TabBar(
-                    
                     labelColor: AppColors.red90001,
                     unselectedLabelColor: AppColors.gray700,
                     dividerColor: Colors.transparent,
-                    labelStyle: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    unselectedLabelStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w400),
+                    labelStyle: AppTextStyles.semiBold14(),
+                    unselectedLabelStyle: AppTextStyles.normal14(),
                     indicator: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
+                      boxShadow: [homeBoxShadow()],
                     ),
                     indicatorPadding:
                         const EdgeInsets.symmetric(horizontal: -15),

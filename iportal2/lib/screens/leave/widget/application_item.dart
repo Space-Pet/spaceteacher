@@ -1,9 +1,10 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/assets.gen.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/resources/resources.dart';
+
 
 class ApplicationItem extends StatelessWidget {
   const ApplicationItem({

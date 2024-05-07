@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/resources/app_colors.dart';
+import 'package:core/resources/app_colors.dart';
 
 class DetailMenuScreen extends StatelessWidget {
   const DetailMenuScreen({super.key, required this.item});
