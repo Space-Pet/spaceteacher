@@ -159,10 +159,24 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                               )
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset(Assets.icons.send),
-                          )
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(
+                                  Assets.icons.features.highSScores,
+                                  color: AppColors.blueForgorPassword,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              GestureDetector(
+                                onTap: () {},
+                                child: SvgPicture.asset(Assets.icons.send),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

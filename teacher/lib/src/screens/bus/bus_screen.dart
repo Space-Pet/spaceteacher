@@ -1,17 +1,25 @@
+import 'dart:math';
+
 import 'package:core/core.dart';
+import 'package:core/presentation/common_widget/custom_cupertino_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/components/date_picker_horizontal.dart';
 import 'package:teacher/components/empty_screen.dart';
+import 'package:teacher/components/skeletons/instruction_sekeletons.dart';
 import 'package:teacher/repository/bus_repository/bus_repositories.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/src/screens/bus/bus_card/card_bus_item.dart';
 import 'package:teacher/src/utils/extension_context.dart';
+import 'package:teacher/src/utils/extension_date_time.dart';
+import 'package:weekly_date_picker/weekly_date_picker.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});
@@ -19,17 +27,33 @@ class BusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => BusBloc(
-        busRepository: Injection.get<BusRepository>(),
-      ),
-      child: BusView(),
+      create: (context) =>
+          BusBloc(busRepository: Injection.get<BusRepository>()),
+      child: const BusView(),
     );
   }
 }
 
-class BusView extends StatelessWidget {
-  BusView({super.key});
+class BusView extends StatefulWidget {
+  const BusView({super.key});
+
+  @override
+  State<BusView> createState() => _BusViewState();
+}
+
+class _BusViewState extends State<BusView> {
   final _controller = RefreshController();
+  final _pageController = PageController();
+  DateTime _selectedDay = DateTime.now();
+  String _endDate = '';
+
+  @override
+  void initState() {
+    _endDate = DateFormat('dd/MM')
+        .format(_selectedDay.copyWith(month: _selectedDay.month + 1));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BackGroundContainer(
@@ -37,7 +61,7 @@ class BusView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ScreenAppBar(
-            title: 'Xe đưa rước',
+            title: 'Lịch xe đưa rước',
             canGoback: true,
             onBack: () {
               context.pop();
@@ -56,12 +80,82 @@ class BusView extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // SelectChild(),
-                  // const SizedBox(height: 12),
-                  SelectDate(
-                    onDateChanged: (date) => context.read<BusBloc>().add(
-                          BusChangedDate(date: date),
+                  Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 7,
+                    decoration: BoxDecoration(
+                      color: AppColors.gray200,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                _pageController.previousPage(
+                                    duration: Durations.medium4,
+                                    curve: Curves.linear);
+                              },
+                              icon: const Icon(Icons.chevron_left),
+                            ),
+                            Text(
+                              'Tuần ${_selectedDay.weekOfYear} '
+                              '(${DateFormat('dd/MM').format(_selectedDay)} - $_endDate)',
+                              style: AppTextStyles.bold16(),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                _pageController.nextPage(
+                                    duration: Durations.medium4,
+                                    curve: Curves.linear);
+                              },
+                              icon: const Icon(Icons.chevron_right),
+                            ),
+                          ],
                         ),
+                        DatePickerHorizontal(
+                          pageController: _pageController,
+                          selectedDay: _selectedDay,
+                          changeDay: (value) => setState(() {
+                            _selectedDay = value;
+                            _endDate = DateFormat('dd/MM').format(_selectedDay
+                                .copyWith(month: _selectedDay.month + 1));
+
+                            context.read<BusBloc>().add(
+                                  BusFetchedSchedules(
+                                    startDate: DateFormat('yyyy-MM-dd')
+                                        .format(_selectedDay),
+                                    endDate: DateFormat('yyyy-MM-dd').format(
+                                        _selectedDay.copyWith(
+                                            month: _selectedDay.month + 1)),
+                                    schoolBrand: 'ischool',
+                                    schoolId: 104,
+                                  ),
+                                );
+                          }),
+                          enableWeeknumberText: false,
+                          weeknumberColor: AppColors.blueForgorPassword,
+                          weeknumberTextColor: AppColors.gray400,
+                          backgroundColor: AppColors.gray200,
+                          weekdayTextColor: const Color(0xFF8A8A8A),
+                          digitsColor: AppColors.gray400,
+                          selectedDigitBackgroundColor:
+                              AppColors.blueForgorPassword,
+                          weekdays: const [
+                            "T2",
+                            "T3",
+                            "T4",
+                            "T5",
+                            "T6",
+                            "T7",
+                            "CN"
+                          ],
+                          daysInWeek: 7,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Expanded(
@@ -73,11 +167,7 @@ class BusView extends StatelessWidget {
 
                         return SmartRefresher(
                           controller: _controller,
-                          onRefresh: () async {
-                            context
-                                .read<BusBloc>()
-                                .add(const BusFetchedSchedules());
-                          },
+                          onRefresh: () async {},
                           child: Stack(
                             children: [
                               ListView(),

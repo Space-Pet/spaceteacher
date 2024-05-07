@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:teacher/model/bus_model.dart';
 import 'package:teacher/model/bus_route_model.dart';
 import 'package:teacher/model/bus_schedule_model.dart';
 import 'package:teacher/src/services/network_services/api_path.dart';
@@ -8,7 +9,11 @@ abstract class BusRepository {
   Future<List<BusRoutesModel>> getListBusRoute(
       {int? schoolId, String? schoolBrand});
   Future<BusScheduleModel> getListBusSchedule(
-      {int? schoolId, String? schoolBrand, String? startDate, String? endDate});
+      {int? schoolId,
+      String? schoolBrand,
+      String? startDate,
+      String? endDate,
+      int? routeId});
 }
 
 class BusRepositoryImpl extends BusRepository {
@@ -36,6 +41,7 @@ class BusRepositoryImpl extends BusRepository {
   Future<BusScheduleModel> getListBusSchedule(
       {String? startDate,
       String? endDate,
+      int? routeId,
       int? schoolId,
       String? schoolBrand}) async {
     final String accessToken =
@@ -50,8 +56,13 @@ class BusRepositoryImpl extends BusRepository {
     ).get({
       'start_date': startDate,
       'end_date': endDate,
+      'route_id': routeId,
     });
-    if (isNullOrEmpty(res['data'])) return BusScheduleModel();
+    if (isNullOrEmpty(res['data']['data'])) {
+      return BusScheduleModel(
+        listBusSchedule: <BusModel>[],
+      );
+    }
 
     return BusScheduleModel.fromJson(res['data']);
   }

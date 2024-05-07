@@ -11,7 +11,7 @@ class AppBarPhoneBook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 18, left: 16),
+       padding: const EdgeInsets.fromLTRB(22, 48, 22, 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

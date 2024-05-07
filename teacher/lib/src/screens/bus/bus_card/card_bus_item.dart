@@ -2,6 +2,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:teacher/model/bus_model.dart';
 import 'package:teacher/resources/resources.dart';
 
 class CardBusItem extends StatelessWidget {
@@ -9,7 +10,7 @@ class CardBusItem extends StatelessWidget {
     super.key,
     required this.busSchedule,
   });
-  final BusSchedule busSchedule;
+  final BusModel busSchedule;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +42,12 @@ class CardBusItem extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                decoration: BoxDecoration(
-                    color: busSchedule.isPickup
-                        ? AppColors.green100
-                        : AppColors.green400,
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
+                decoration: const BoxDecoration(
+                    color: AppColors.green100,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: Text(
-                  busSchedule.title(),
-                  style: AppTextStyles.semiBold12(
-                    color: busSchedule.isPickup
-                        ? AppColors.black24
-                        : AppColors.white,
-                  ),
+                  busSchedule.busId.toString(),
+                  style: AppTextStyles.semiBold12(color: AppColors.black24),
                 ),
               ),
             ],
@@ -66,7 +61,7 @@ class CardBusItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: _Item(
                   label: 'Tuyến',
-                  value: '${busSchedule.route.routeId}',
+                  value: '${busSchedule.routeId}',
                 ),
               ),
               const Padding(
@@ -77,7 +72,7 @@ class CardBusItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: _Item(
                   label: 'Biển số xe',
-                  value: busSchedule.driverInfo.numberPlate,
+                  value: busSchedule.numberPlate ?? "",
                 ),
               ),
               const _Divider(),
@@ -94,7 +89,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Tuyến',
-                      value: '${busSchedule.route.routeId}',
+                      value: '${busSchedule.routeId}',
                     ),
                   ),
                   const Padding(
@@ -105,7 +100,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Biển số xe',
-                      value: busSchedule.driverInfo.numberPlate,
+                      value: busSchedule.numberPlate ?? "",
                     ),
                   ),
                   const Padding(
@@ -116,7 +111,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Ngày',
-                      value: busSchedule.attendanceDateString(),
+                      value: busSchedule.departureTime ?? "",
                     ),
                   ),
                   const Padding(
@@ -127,7 +122,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Loại tuyến',
-                      value: busSchedule.scheduleType.text,
+                      value: busSchedule.scheduleType.toString(),
                     ),
                   ),
                   const Padding(
@@ -138,7 +133,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Điểm đón',
-                      value: busSchedule.pickupLocation(),
+                      value: "${busSchedule.routeId} ${busSchedule.routeName}",
                     ),
                   ),
                   const Padding(
@@ -149,7 +144,7 @@ class CardBusItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: _Item(
                       label: 'Thời gian dự kiến đón',
-                      value: busSchedule.estimatedTime(),
+                      value: busSchedule.departureTime ?? "",
                     ),
                   ),
                   const SizedBox(
@@ -192,7 +187,7 @@ class CardBusItem extends StatelessWidget {
                               height: 6,
                             ),
                             Text(
-                              busSchedule.teacher.teacherName,
+                              '${busSchedule.teacherId}',
                               softWrap: true,
                               style: AppTextStyles.normal14(
                                 color: AppColors.gray600,
@@ -246,7 +241,7 @@ class CardBusItem extends StatelessWidget {
                         const SizedBox(
                           height: 6,
                         ),
-                        Text(busSchedule.driverInfo.driverName,
+                        Text(busSchedule.subDriver ?? "",
                             softWrap: true,
                             style: AppTextStyles.normal14(
                               color: AppColors.gray600,

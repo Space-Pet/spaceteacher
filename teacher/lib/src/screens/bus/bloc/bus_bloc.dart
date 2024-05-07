@@ -20,14 +20,20 @@ class BusBloc extends Bloc<BusEvent, BusState> {
   _onFetchSchedules(BusFetchedSchedules event, Emitter<BusState> emit) async {
     emit(state.copyWith(status: BusStatus.loading));
 
-    final busSchedules = await busRepository.getListBusSchedule(
-      startDate: event.startDate,
-      endDate: event.endDate,
-      schoolBrand: event.schoolBrand,
-      schoolId: event.schoolId,
-    );
-    emit(state.copyWith(
-        busSchedules: busSchedules.listBusSchedule, status: BusStatus.success));
+    try {
+      final busSchedules = await busRepository.getListBusSchedule(
+        startDate: event.startDate,
+        endDate: event.endDate,
+        schoolBrand: event.schoolBrand,
+        schoolId: event.schoolId,
+        routeId: event.routeId,
+      );
+      emit(state.copyWith(
+          busSchedules: busSchedules.listBusSchedule,
+          status: BusStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: BusStatus.failure));
+    }
   }
 
   // _onChangedDate(BusChangedDate event, Emitter<BusState> emit) {

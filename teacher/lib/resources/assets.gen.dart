@@ -124,6 +124,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/lock_password.svg
   String get lockPassword => 'assets/icons/lock_password.svg';
 
+  /// File path: assets/icons/logo_teacher.svg
+  String get logoTeacher => 'assets/icons/logo_teacher.svg';
+
   /// File path: assets/icons/logout.svg
   String get logout => 'assets/icons/logout.svg';
 
@@ -215,6 +218,7 @@ class $AssetsIconsGen {
         imageTeacher,
         lock,
         lockPassword,
+        logoTeacher,
         logout,
         menu,
         message,

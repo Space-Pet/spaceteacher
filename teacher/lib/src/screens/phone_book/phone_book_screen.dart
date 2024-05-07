@@ -1,14 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/phone_book/model/list_phone_book.dart';
+import 'package:teacher/src/screens/phone_book/widget/app_bar_phone_book.dart';
 import 'package:teacher/src/screens/phone_book/widget/tab_bar_phone_book.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+// import 'package:teacher/src/utils/extension_context.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   const PhoneBookScreen({super.key});
@@ -46,11 +50,11 @@ class PhoneBookView extends StatelessWidget {
         child: Column(
           children: [
             ScreenAppBar(
-              title: 'Danh bạ',
-              canGoback: true,
+              title: 'danh bạ',
               onBack: () {
                 context.pop();
               },
+              canGoback: true,
             ),
             Flexible(
               child: Container(
@@ -115,7 +119,7 @@ class PhoneBookView extends StatelessWidget {
                           ),
                         ),
                         child: TabBarPhoneBook(
-                          currentUserBloc: currentUserBloc,
+                          // currentUserBloc: currentUserBloc,
                           phoneBookTeacher: phoneBookTeacher,
                           phoneBookStudent: phoneBook,
                         ),

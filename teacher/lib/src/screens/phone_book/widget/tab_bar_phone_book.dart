@@ -8,17 +8,17 @@ class TabBarPhoneBook extends StatelessWidget {
     super.key,
     this.phoneBookStudent,
     this.phoneBookTeacher,
-    required this.currentUserBloc,
+    // required this.currentUserBloc,
   });
 
-  final List<String> tabs = ['Học sinh', 'Phụ huynh'];
+  final List<String> tabs = ['Học sinh', 'Phụ huynh', 'Giáo viên'];
   final List<PhoneBookStudent>? phoneBookStudent;
   final List<PhoneBookTeacher>? phoneBookTeacher;
-  final CurrentUserBloc currentUserBloc;
+  // final CurrentUserBloc currentUserBloc;
 
   @override
   Widget build(BuildContext context) {
-    final fullName = currentUserBloc.state.user.name;
+    const fullName = 'Hạ Trang'; //currentUserBloc.state.user.fullName ?? '
 
     final nameParts = fullName.split(' ');
 

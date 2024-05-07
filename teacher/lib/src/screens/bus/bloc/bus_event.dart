@@ -12,15 +12,18 @@ class BusFetchedSchedules extends BusEvent {
   final String endDate;
   final String schoolBrand;
   final int schoolId;
+  final int routeId;
 
   const BusFetchedSchedules({
     this.startDate = '',
     this.endDate = '',
     this.schoolBrand = '',
     this.schoolId = 0,
+    this.routeId = 0,
   });
   @override
-  List<Object> get props => [startDate, endDate, schoolBrand, schoolId];
+  List<Object> get props =>
+      [startDate, endDate, schoolBrand, schoolId, routeId];
 }
 
 class BusChangedDate extends BusEvent {

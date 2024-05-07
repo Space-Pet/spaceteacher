@@ -5,6 +5,7 @@ import 'package:teacher/model/menu.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
+import 'package:teacher/src/screens/bus/bus_screen.dart';
 import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
@@ -12,6 +13,7 @@ import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
+import 'package:teacher/src/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
@@ -223,6 +225,17 @@ class AppRouter {
             galleryItem: galleryItem ?? GalleryModel(),
             index: index ?? 0,
           ),
+        );
+      case PhoneBookScreen.routeName:
+        return transitionAnimation(
+          routeName: PhoneBookScreen.routeName,
+          child: const PhoneBookScreen(),
+        );
+
+      case BusScreen.routeName:
+        return transitionAnimation(
+          routeName: BusScreen.routeName,
+          child: const BusScreen(),
         );
 
       default:
