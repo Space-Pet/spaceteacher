@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/model/gallery_model.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
@@ -50,8 +49,7 @@ class CardGallery extends StatelessWidget {
               child: CircleAvatar(
                 backgroundColor: AppColors.white,
                 maxRadius: 14,
-                child: SvgPicture.asset(
-                  Assets.icons.pin,
+                child: Assets.icons.pin.svg(
                   colorFilter: const ColorFilter.mode(
                     AppColors.gray400,
                     BlendMode.srcIn,

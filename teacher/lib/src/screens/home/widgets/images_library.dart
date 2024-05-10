@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/components/buttons/rounded_button.dart';
 
 import 'package:teacher/components/home_shadow_box.dart';
@@ -27,8 +26,7 @@ class ImagesLibrary extends StatelessWidget {
                   CircleAvatar(
                     maxRadius: 13,
                     backgroundColor: AppColors.red,
-                    child: SvgPicture.asset(
-                      Assets.icons.file,
+                    child: Assets.icons.file.svg(
                       width: 14,
                       height: 14,
                     ),

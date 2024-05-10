@@ -1,9 +1,6 @@
-import 'dart:math';
 
 import 'package:core/core.dart';
-import 'package:core/presentation/common_widget/custom_cupertino_date_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -19,7 +16,6 @@ import 'package:teacher/src/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/src/screens/bus/bus_card/card_bus_item.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 import 'package:teacher/src/utils/extension_date_time.dart';
-import 'package:weekly_date_picker/weekly_date_picker.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});

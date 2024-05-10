@@ -35,8 +35,8 @@ class _PinFeaturesState extends State<PinFeatures> {
     pinnedFeatures.add(FeatureModel(
       id: 999,
       hasPinned: true,
-      highSIcon: Assets.icons.features.dots,
-      preSIcon: Assets.icons.features.dots,
+      highSIcon: Assets.icons.features.dots.path,
+      preSIcon: Assets.icons.features.dots.path,
       name: 'all'.tr(),
       category: FeatureCategory.all,
       gradientType: FeatureGradient.gray,

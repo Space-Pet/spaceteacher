@@ -1,9 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/resources/assets.gen.dart';
-
 
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
@@ -98,10 +96,11 @@ class CurrentPinnedFeature extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                      onTap: () {
-                        updatePin();
-                      },
-                      child: SvgPicture.asset(Assets.icons.pin)),
+                    onTap: () {
+                      updatePin();
+                    },
+                    child: Assets.icons.pin.svg(),
+                  ),
                 ],
               ),
             ),

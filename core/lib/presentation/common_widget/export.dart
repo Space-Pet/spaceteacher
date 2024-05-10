@@ -2,6 +2,7 @@ export 'add_new_item.dart';
 export 'after_layout.dart';
 export 'banner_widget.dart';
 export 'bottom_button_container.dart';
+export 'circle_progress_bar/w_circle_progress_bar.dart';
 export 'custom_bottom_navigation_bar.dart';
 export 'custom_cupertino_date_picker.dart';
 export 'custom_scroll_behavior.dart';

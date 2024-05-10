@@ -1,6 +1,5 @@
 
 import 'package:intl/intl.dart';
-import 'package:weekly_date_picker/weekly_date_picker.dart';
 
 
 extension DateTimeExtension on DateTime {

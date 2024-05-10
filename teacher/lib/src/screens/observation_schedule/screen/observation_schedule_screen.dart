@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
@@ -97,10 +94,8 @@ class _ObservationScheduleState extends State<ObservationSchedule> {
                                 color: AppColors.gray400,
                               ),
                             ),
-                            child: SvgPicture.asset(
-                              Assets.icons.filter,
-                              color: AppColors.gray500,
-                            ),
+                            child: Assets.icons.filter
+                                .svg(color: AppColors.gray500),
                           ),
                         ),
                       ],

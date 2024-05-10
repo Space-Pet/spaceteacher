@@ -51,6 +51,8 @@ dev_dependencies:
   
 flutter_gen:
   output: lib/resources/
+  integrations:
+    flutter_svg: true
 
 flutter:
   uses-material-design: true
