@@ -29,7 +29,7 @@ class ApiClient with TokenManagementMixin {
         onRequest: (options, handler) async {
           final token = await getAccessToken();
           if (token.isNotEmpty) {
-            dio.options.headers['Authorization'] = 'Bearer $token';
+            options.headers['Authorization'] = 'Bearer $token';
           }
           //====================================================================
           final log = StringBuffer();

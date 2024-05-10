@@ -105,6 +105,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/file.svg
   String get file => 'assets/icons/file.svg';
 
+  /// File path: assets/icons/filter.svg
+  String get filter => 'assets/icons/filter.svg';
+
   /// File path: assets/icons/global.svg
   String get global => 'assets/icons/global.svg';
 
@@ -166,6 +169,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/report.svg
   String get report => 'assets/icons/report.svg';
 
+  /// File path: assets/icons/search.svg
+  String get search => 'assets/icons/search.svg';
+
   /// File path: assets/icons/send.svg
   String get send => 'assets/icons/send.svg';
 
@@ -212,6 +218,7 @@ class $AssetsIconsGen {
         empty,
         exercise,
         file,
+        filter,
         global,
         homeNotiWhite,
         home,
@@ -232,6 +239,7 @@ class $AssetsIconsGen {
         pin,
         qrcode,
         report,
+        search,
         send,
         setting,
         tablet,

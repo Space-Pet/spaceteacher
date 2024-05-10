@@ -12,6 +12,7 @@ import 'package:teacher/resources/i18n/locale_keys.g.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/home/view/home_navigator.dart';
+import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
@@ -34,7 +35,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
   int _selectedIndex = 0;
   final bloc = UserManagerBloc(userRepository: Injection.get<UserRepository>());
   final List<Widget> widgetOptionKinderGarten = [
-    HomeNavigator(),
+    const HomeScreen(),
     const WeekScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
@@ -42,7 +43,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
   ];
 
   final List<Widget> widgetOptions = <Widget>[
-    HomeNavigator(),
+    const HomeScreen(),
     const ScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),

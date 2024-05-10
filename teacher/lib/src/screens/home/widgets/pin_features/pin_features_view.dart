@@ -1,8 +1,8 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
-import 'package:core/core.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/model/user_info.dart';
+
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bus_screen.dart';
@@ -11,10 +11,9 @@ import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/bottom_sheet_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/feature_item.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
-import 'package:teacher/src/screens/phone_book/phone_book_screen.dart';
-import 'package:teacher/src/settings/settings.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/observation_schedule_screen.dart';
+
 import 'package:teacher/src/utils/extension_context.dart';
-import 'package:teacher/src/utils/user_manager.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
@@ -82,7 +81,7 @@ class _PinFeaturesState extends State<PinFeatures> {
       switch (feature.id) {
         case 1:
           // context.push(const RegisterNoteBoookScreen());
-          context.push(PhoneBookScreen.routeName);
+
           break;
 
         case 3:
@@ -101,6 +100,7 @@ class _PinFeaturesState extends State<PinFeatures> {
 
         case 5:
           // context.push(const OnLeaveScreen());
+          context.push(ObservationSchedule.routeName);
           break;
 
         case 6:
@@ -108,7 +108,6 @@ class _PinFeaturesState extends State<PinFeatures> {
           break;
 
         case 9:
-          context.push(PhoneBookScreen.routeName);
           break;
         case 12:
           context.push(GalleryScreen.routeName);
