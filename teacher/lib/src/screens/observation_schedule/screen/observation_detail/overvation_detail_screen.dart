@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/components/app_bar/screen_app_bar.dart';
 
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/components/dialog/dilaog_yes_no.dart';
 
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
@@ -144,7 +145,19 @@ class _ObservationDetailScreenState extends State<ObservationDetailScreen> {
                             return const HourAssessmentScreen();
                           });
                     } else {
-                      context.pop();
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return DialogYesNo(
+                            title: 'Mở lớp dự giờ thành công',
+                            content: 'Giáo viên Anh Văn - Nguyễn Tấn Lộc',
+                            typeDialog: 3,
+                            yesText: "Xác nhận",
+                            noText: "Đóng",
+                            subjectModel: widget.data.subjectModel,
+                          );
+                        },
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

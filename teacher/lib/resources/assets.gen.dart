@@ -139,6 +139,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home.svg
   SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
 
+  /// File path: assets/icons/icon_success.svg
+  SvgGenImage get iconSuccess =>
+      const SvgGenImage('assets/icons/icon_success.svg');
+
   /// File path: assets/icons/image-teacher.png
   AssetGenImage get imageTeacher =>
       const AssetGenImage('assets/icons/image-teacher.png');
@@ -246,6 +250,7 @@ class $AssetsIconsGen {
         global,
         homeNotiWhite,
         home,
+        iconSuccess,
         imageTeacher,
         lock,
         lockPassword,

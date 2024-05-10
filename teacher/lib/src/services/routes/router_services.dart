@@ -14,6 +14,7 @@ import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/create_observation/create_observation_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_submit_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';
@@ -162,6 +163,11 @@ class AppRouter {
             teacher: teacher ?? "",
             date: date ?? "",
           ),
+        );
+
+      case CreateObservationScreen.routeName:
+        return _getPage(
+          const CreateObservationScreen(),
         );
     }
     return _getPage(

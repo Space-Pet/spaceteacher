@@ -5,6 +5,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/create_observation/create_observation_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/card_observation.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/filter_observation.dart';
@@ -160,7 +161,11 @@ class _ObservationScheduleState extends State<ObservationSchedule> {
                 color: Colors.transparent,
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push(
+                        CreateObservationScreen.routeName,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.observationStatusMyObsBG,
                       minimumSize: const Size(double.infinity, 50),
