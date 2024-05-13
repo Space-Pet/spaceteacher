@@ -9,6 +9,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/menu/widgets/app_bar_menu.dart';
 import 'package:teacher/src/screens/menu/widgets/menu_component.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -21,6 +22,10 @@ class MenuScreen extends StatelessWidget {
         children: [
           ScreenAppBar(
             title: 'menu'.tr(),
+            canGoback: true,
+            onBack: () {
+              context.pop();
+            },
           ),
           Flexible(
             child: Container(

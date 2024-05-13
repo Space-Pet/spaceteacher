@@ -2,7 +2,6 @@ import 'package:core/core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
 
@@ -11,7 +10,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/i18n/locale_keys.g.dart';
 import 'package:teacher/resources/resources.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
-import 'package:teacher/src/screens/home/view/home_navigator.dart';
+import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
@@ -34,7 +33,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
   int _selectedIndex = 0;
   final bloc = UserManagerBloc(userRepository: Injection.get<UserRepository>());
   final List<Widget> widgetOptionKinderGarten = [
-    HomeNavigator(),
+    const HomeScreen(),
     const WeekScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
@@ -42,7 +41,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
   ];
 
   final List<Widget> widgetOptions = <Widget>[
-    HomeNavigator(),
+    const HomeScreen(),
     const ScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
@@ -96,8 +95,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                   tabs: [
                     Tab(
                       height: 92.v,
-                      icon: SvgPicture.asset(
-                        Assets.icons.home,
+                      icon: Assets.icons.home.svg(
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 0
                               ? AppColors.red
@@ -109,8 +107,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                     ),
                     state.userInfo.isKinderGarten()
                         ? Tab(
-                            icon: SvgPicture.asset(
-                              Assets.icons.calendar,
+                            icon: Assets.icons.calendar.svg(
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? AppColors.red
@@ -121,8 +118,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                             text: LocaleKeys.weeklyProject.tr(),
                           )
                         : Tab(
-                            icon: SvgPicture.asset(
-                              Assets.icons.features.highSScores,
+                            icon: Assets.icons.features.highSScores.svg(
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
                                     ? AppColors.red
@@ -134,8 +130,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                           ),
                     state.userInfo.isKinderGarten()
                         ? Tab(
-                            icon: SvgPicture.asset(
-                              Assets.icons.features.highSBus,
+                            icon: Assets.icons.features.highSBus.svg(
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 2
                                     ? AppColors.red
@@ -146,8 +141,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                             text: LocaleKeys.weeklyProject.tr(),
                           )
                         : Tab(
-                            icon: SvgPicture.asset(
-                              Assets.icons.features.highSAttendance,
+                            icon: Assets.icons.features.highSAttendance.svg(
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 2
                                     ? AppColors.red
@@ -158,8 +152,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                             text: LocaleKeys.attendance.tr(),
                           ),
                     Tab(
-                      icon: SvgPicture.asset(
-                        Assets.icons.noti,
+                      icon: Assets.icons.noti.svg(
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 3
                               ? AppColors.red
@@ -170,8 +163,7 @@ class _AppMainLayoutState extends State<AppMainLayout> {
                       text: 'noti'.tr(),
                     ),
                     Tab(
-                      icon: SvgPicture.asset(
-                        Assets.icons.features.moreCircle,
+                      icon: Assets.icons.features.moreCircle.svg(
                         width: 28,
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 4

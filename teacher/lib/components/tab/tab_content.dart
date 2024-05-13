@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_line/dotted_line.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
 
@@ -59,8 +58,7 @@ class TabContent extends StatelessWidget {
                   onTap: onTap,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: SvgPicture.asset(
-                      Assets.icons.editProfile,
+                    child: Assets.icons.editProfile.svg(
                       height: 24,
                       width: 24,
                     ),

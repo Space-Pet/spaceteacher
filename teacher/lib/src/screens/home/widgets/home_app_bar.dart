@@ -79,13 +79,16 @@ class _HomeAppBarState extends State<HomeAppBar> {
             ],
           ),
           const Spacer(),
-          CircleAvatar(
-            backgroundColor: AppColors.whiteOpacity.withOpacity(0.3),
-            radius: 20,
+          GestureDetector(
+            onTap: () {},
             child: CircleAvatar(
-              radius: 13,
-              backgroundColor: Colors.transparent,
-              child: Assets.images.noti.image(),
+              backgroundColor: AppColors.whiteOpacity.withOpacity(0.3),
+              radius: 20,
+              child: CircleAvatar(
+                radius: 13,
+                backgroundColor: Colors.transparent,
+                child: Assets.images.noti.image(),
+              ),
             ),
           ),
         ],

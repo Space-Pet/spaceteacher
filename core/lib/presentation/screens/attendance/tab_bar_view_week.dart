@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../../data/models/models.dart';
-import '../../../resources/assets.gen.dart';
+
 import '../../../resources/resources.dart';
 import '../../extentions/date_formatter.dart';
 
@@ -100,19 +100,19 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
 
   @override
   Widget build(BuildContext context) {
-    List<Items> currentWeekData = widget.attendanceWeek?.absentData.items ?? [];
+    final currentWeekData = widget.attendanceWeek?.absentData.items ?? [];
 
-    List<Map<String, dynamic>> dataListAttendance = [];
+    final dataListAttendance = <Map<String, dynamic>>[];
 
     for (final attendance in currentWeekData) {
-      bool isFirstDay = true;
+      var isFirstDay = true;
 
       if (isFirstDay) {
         dataListAttendance.add({'day': attendance.date});
         isFirstDay = false;
       }
-      for (var itemData in attendance.data ?? []) {
-        final Map<String, dynamic> dayData = {
+      for (final itemData in attendance.data ?? []) {
+        final dayData = <String, dynamic>{
           'description': itemData.subjectName,
           'isAbsent': itemData.description
         };

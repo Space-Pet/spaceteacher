@@ -36,6 +36,10 @@ dependencies:
   aad_oauth: ^1.0.1
   flutter_dotenv: ^5.1.0
   pull_to_refresh_flutter3: ^2.0.2
+  skeletons: ^0.0.3
+  expandable: ^5.0.1
+  intl: ^0.18.1
+  weekly_date_picker: ^1.4.2
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +51,8 @@ dev_dependencies:
   
 flutter_gen:
   output: lib/resources/
+  integrations:
+    flutter_svg: true
 
 flutter:
   uses-material-design: true

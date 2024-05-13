@@ -5,6 +5,7 @@ import 'package:teacher/model/menu.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
+import 'package:teacher/src/screens/bus/bus_screen.dart';
 import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
@@ -12,6 +13,14 @@ import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/create_observation/create_observation_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_submit_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/observation_schedule_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/widgets/filter_observation.dart';
+
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 import 'package:teacher/src/screens/schedule/schedule_screen.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
@@ -83,6 +92,83 @@ class AppRouter {
             skipText: skipText ?? 'Skip',
           ),
         );
+      case ObservationSchedule.routeName:
+        return _getPage(
+          const ObservationSchedule(),
+        );
+      case BusScreen.routeName:
+        return _getPage(
+          const BusScreen(),
+        );
+      case MenuScreen.routeName:
+        return _getPage(
+          const MenuScreen(),
+        );
+      case FilterObservation.routeName:
+        return _getPage(
+          const FilterObservation(),
+        );
+      case ObservationDetailScreen.routeName:
+        final args = settings.arguments as Map?;
+        MockSubjectData? data;
+        int? typeObservation;
+        if (args != null) {
+          data = args['data'];
+          typeObservation = args['typeObservation'];
+        }
+        return _getPage(
+          ObservationDetailScreen(
+            data: data ?? MockSubjectData(),
+            typeObservation: typeObservation ?? 0,
+          ),
+        );
+      case HourAssessmentScreen.routeName:
+        return _getPage(
+          const HourAssessmentScreen(),
+        );
+      case HourAssessmentSubmitScreen.routeName:
+        final args = settings.arguments as Map?;
+        double? valuePercent;
+        String? name;
+        String? subject;
+        String? classRoom;
+        double? valuePercentPrepareLessons;
+        double? valuePercentSpeak;
+        double? valuePercentGroupDiscussion;
+        String? evaluation;
+        String? teacher;
+        String? date;
+        if (args != null) {
+          valuePercent = args['valuePercent'];
+          name = args['name'];
+          subject = args['subject'];
+          classRoom = args['classRoom'];
+          valuePercentPrepareLessons = args['valuePercentPrepareLessons'];
+          valuePercentSpeak = args['valuePercentSpeak'];
+          valuePercentGroupDiscussion = args['valuePercentGroupDiscussion'];
+          evaluation = args['evaluation'];
+          teacher = args['teacher'];
+          date = args['date'];
+        }
+        return _getPage(
+          HourAssessmentSubmitScreen(
+            valuePercent: valuePercent ?? 0,
+            name: name ?? "",
+            subject: subject ?? "",
+            classRoom: classRoom ?? "",
+            valuePercentPrepareLessons: valuePercentPrepareLessons ?? 0,
+            valuePercentSpeak: valuePercentSpeak ?? 0,
+            valuePercentGroupDiscussion: valuePercentGroupDiscussion ?? 0,
+            evaluation: evaluation ?? "",
+            teacher: teacher ?? "",
+            date: date ?? "",
+          ),
+        );
+
+      case CreateObservationScreen.routeName:
+        return _getPage(
+          const CreateObservationScreen(),
+        );
     }
     return _getPage(
       const AppMainLayout(),
@@ -105,8 +191,12 @@ class AppRouter {
   PageRouteBuilder transitionAnimation({
     required Widget child,
     required String routeName,
+    bool? fullscreenDialog,
+    bool? maintainState,
   }) {
     return PageRouteBuilder(
+      fullscreenDialog: fullscreenDialog ?? false,
+      maintainState: maintainState ?? true,
       settings: RouteSettings(name: routeName),
       pageBuilder: (c, a1, a2) => child,
       transitionsBuilder: (c, anim, a2, child) => SlideTransition(
@@ -223,6 +313,18 @@ class AppRouter {
             galleryItem: galleryItem ?? GalleryModel(),
             index: index ?? 0,
           ),
+        );
+
+      case BusScreen.routeName:
+        return transitionAnimation(
+          routeName: BusScreen.routeName,
+          child: const BusScreen(),
+        );
+      case ObservationSchedule.routeName:
+        return transitionAnimation(
+          fullscreenDialog: true,
+          routeName: ObservationSchedule.routeName,
+          child: const ObservationSchedule(),
         );
 
       default:

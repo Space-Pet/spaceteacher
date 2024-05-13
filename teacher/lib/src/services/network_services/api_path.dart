@@ -35,7 +35,10 @@ class ApiPath {
   static String getRegisterNotebookStudent =
       'https://test-iportal.nhg.vn.api.php';
   static String getRegisterNotebookTeacher =
-      'https://test-iportal.nhg.vn.api.php';
-  static String postRegisterNotebook = 'https://test-iportal.nhg.vn.api.php';
-  static String deleteRegisterNotebook = 'https://test-iportal.nhg.vn.api.php';
+      'https://apitest-iportal.nhg.vn.api.php';
+  static String postRegisterNotebook = 'https://apitest-iportal.nhg.vn.api.php';
+  static String deleteRegisterNotebook =
+      'https://apitest-iportal.nhg.vn.api.php';
+  static String getListBusRoutes = '${baseUrl}staff/school-bus/routes';
+  static String getListBusSchedule = '${baseUrl}staff/school-bus';
 }

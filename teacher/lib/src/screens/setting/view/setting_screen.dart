@@ -80,26 +80,26 @@ class _SettingScreenState extends State<SettingScreen> {
                           padding: const EdgeInsets.only(top: 18),
                           child: SwitchSetting(
                             text: 'turn off noti'.tr(),
-                            iconAsset: Assets.icons.bell,
+                            iconAsset: Assets.icons.bell.path,
                             showDottedLine: true,
                           ),
                         ),
                         SwitchSetting(
                           text: 'feedback'.tr(),
-                          iconAsset: Assets.icons.message,
+                          iconAsset: Assets.icons.message.path,
                           showDottedLine: true,
                           onPressed: () {},
                         ),
                         SwitchSetting(
                           showDottedLine: true,
                           text: 'user manual'.tr(),
-                          iconAsset: Assets.icons.userManual,
+                          iconAsset: Assets.icons.userManual.path,
                           onPressed: () {},
                         ),
                         SwitchSetting(
                           showDottedLine: true,
                           text: 'change account'.tr(),
-                          iconAsset: Assets.icons.accountConversion,
+                          iconAsset: Assets.icons.accountConversion.path,
                           onPressed: () {
                             // context.push(const ChangeAccountScreen());
                           },
@@ -107,7 +107,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         SwitchSetting(
                           showDottedLine: true,
                           text: 'change password'.tr(),
-                          iconAsset: Assets.icons.message,
+                          iconAsset: Assets.icons.message.path,
                           onPressed: () {
                             // showDialog(
                             //   context: context,
@@ -126,14 +126,14 @@ class _SettingScreenState extends State<SettingScreen> {
                         SwitchSetting(
                           showDottedLine: true,
                           text: 'change wallpaper'.tr(),
-                          iconAsset: Assets.icons.tablet,
+                          iconAsset: Assets.icons.tablet.path,
                           onPressed: () {
                             // context.push(const ChangeWallpaperScreen());
                           },
                         ),
                         ListTile(
                           leading: SvgPicture.asset(
-                            Assets.icons.global,
+                            Assets.icons.global.path,
                             height: 20,
                             width: 20,
                           ),
@@ -227,8 +227,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.only(left: 5),
-                                        child: SvgPicture.asset(
-                                            Assets.icons.logout),
+                                        child: Assets.icons.logout.svg(),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 8),

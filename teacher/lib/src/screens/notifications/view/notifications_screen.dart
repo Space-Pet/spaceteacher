@@ -2,7 +2,6 @@ import 'package:core/core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/repository/notification_repository/notification_repositories.dart';
@@ -161,8 +160,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         CircleAvatar(
                                           backgroundColor: AppColors.green100,
                                           maxRadius: 16,
-                                          child: SvgPicture.asset(
-                                            Assets.icons.check,
+                                          child: Assets.icons.check.svg(
                                             width: 24,
                                             height: 24,
                                           ),
@@ -209,8 +207,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 Positioned(
                                   top: 8,
                                   left: 8,
-                                  child: SvgPicture.asset(
-                                    Assets.icons.check,
+                                  child: Assets.icons.check.svg(
                                     width: 8,
                                     height: 8,
                                   ),

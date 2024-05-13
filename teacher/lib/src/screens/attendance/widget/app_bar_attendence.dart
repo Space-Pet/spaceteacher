@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:teacher/model/children_model.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/resources.dart';
@@ -42,9 +41,7 @@ class AppBarAttendance extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            SvgPicture.asset(
-                              Assets.icons.academic,
-                            ),
+                            Assets.icons.academic.svg(),
                             Padding(
                               padding: const EdgeInsets.only(left: 6),
                               child: Text(

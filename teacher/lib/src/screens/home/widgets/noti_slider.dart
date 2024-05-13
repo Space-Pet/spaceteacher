@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/resources/assets.gen.dart';
@@ -42,9 +41,7 @@ class _NotiSliderState extends State<NotiSlider> {
                     borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: SvgPicture.asset(
-                    Assets.icons.homeNotiWhite,
-                  ),
+                  child: Assets.icons.homeNotiWhite.svg(),
                 ),
               ),
               const SizedBox(
