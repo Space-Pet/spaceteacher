@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/select_field.dart';
 
 class CardFilterObservation extends StatelessWidget {

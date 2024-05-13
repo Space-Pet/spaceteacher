@@ -1,6 +1,6 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
 
 class SplashContent extends StatelessWidget {
   final String title1;

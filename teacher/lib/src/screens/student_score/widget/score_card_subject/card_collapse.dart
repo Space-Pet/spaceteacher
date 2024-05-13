@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:teacher/resources/app_colors.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/student_score/widget/score_card_subject/score_subject_model.dart';
 
 class CardCollapseScore extends StatelessWidget {

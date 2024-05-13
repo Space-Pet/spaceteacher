@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/resources/assets.gen.dart';
 
 class AppBarScore extends StatelessWidget {

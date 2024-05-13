@@ -207,6 +207,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/tablet.svg
   SvgGenImage get tablet => const SvgGenImage('assets/icons/tablet.svg');
 
+  /// File path: assets/icons/trash-bin.svg
+  SvgGenImage get trashBin => const SvgGenImage('assets/icons/trash-bin.svg');
+
   /// File path: assets/icons/user.png
   AssetGenImage get user => const AssetGenImage('assets/icons/user.png');
 
@@ -271,6 +274,7 @@ class $AssetsIconsGen {
         send,
         setting,
         tablet,
+        trashBin,
         user,
         userManual,
         wallpaper
@@ -627,17 +631,17 @@ class $AssetsImagesMainBackgroundGen {
 class $AssetsImagesSplashGen {
   const $AssetsImagesSplashGen();
 
-  /// File path: assets/images/splash/Splash screen 1.png
+  /// File path: assets/images/splash/Splash screen 1.jpg
   AssetGenImage get splashScreen1 =>
-      const AssetGenImage('assets/images/splash/Splash screen 1.png');
+      const AssetGenImage('assets/images/splash/Splash screen 1.jpg');
 
-  /// File path: assets/images/splash/Splash screen 2.png
+  /// File path: assets/images/splash/Splash screen 2.jpg
   AssetGenImage get splashScreen2 =>
-      const AssetGenImage('assets/images/splash/Splash screen 2.png');
+      const AssetGenImage('assets/images/splash/Splash screen 2.jpg');
 
-  /// File path: assets/images/splash/Splash screen 3.png
+  /// File path: assets/images/splash/Splash screen 3 .jpg
   AssetGenImage get splashScreen3 =>
-      const AssetGenImage('assets/images/splash/Splash screen 3.png');
+      const AssetGenImage('assets/images/splash/Splash screen 3 .jpg');
 
   /// List of all assets
   List<AssetGenImage> get values =>
@@ -710,16 +714,7 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
-  }
+  ImageProvider provider() => AssetImage(_assetName);
 
   String get path => _assetName;
 
@@ -746,9 +741,9 @@ class SvgGenImage {
     bool excludeFromSemantics = false,
     SvgTheme theme = const SvgTheme(),
     ColorFilter? colorFilter,
-    Clip clipBehavior = Clip.hardEdge,
     @deprecated Color? color,
     @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated Clip? clipBehavior,
     @deprecated bool cacheColorFilter = false,
   }) {
     return SvgPicture.asset(
@@ -769,7 +764,7 @@ class SvgGenImage {
       colorFilter: colorFilter,
       color: color,
       colorBlendMode: colorBlendMode,
-      clipBehavior: clipBehavior,
+      clipBehavior: clipBehavior ?? Clip.hardEdge,
       cacheColorFilter: cacheColorFilter,
     );
   }

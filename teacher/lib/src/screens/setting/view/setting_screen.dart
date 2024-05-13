@@ -3,14 +3,15 @@ import 'package:country_flags/country_flags.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/main.dart';
+import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/setting/bloc/setting_screen_bloc.dart';
 import 'package:teacher/src/settings/settings.dart';
@@ -32,8 +33,9 @@ class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          SettingScreenBloc(settings: Injection.get<Settings>()),
+      create: (context) => SettingScreenBloc(
+          settings: Injection.get<Settings>(),
+          authRepository: Injection.get<AuthRepository>()),
       child: BlocListener<SettingScreenBloc, SettingScreenState>(
         listenWhen: (previous, current) =>
             previous.logoutStatus != current.logoutStatus,

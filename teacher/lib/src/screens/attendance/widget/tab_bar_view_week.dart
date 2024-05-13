@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/week_data_model.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 

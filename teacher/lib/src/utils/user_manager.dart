@@ -1,6 +1,8 @@
+import 'package:aad_oauth/aad_oauth.dart';
 import 'package:core/core.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/model/user_model.dart';
+import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/src/settings/settings.dart';
 
 class UserManager {
@@ -58,6 +60,7 @@ class UserManager {
 
   Future<void> logout({
     required Settings setting,
+    required AuthRepository authRepository,
   }) async {
     try {
       // await UserManager.instance.loadSession(setting);
@@ -65,6 +68,7 @@ class UserManager {
 
       await setting.clearUserInfoSecure();
       await setting.clearAccessToken();
+      await authRepository.logout365();
       UserManager.instance.removeInstance();
       final user = await setting.getUserInfoSecure();
       Log.prettyJson(user?.toJson() ?? {});

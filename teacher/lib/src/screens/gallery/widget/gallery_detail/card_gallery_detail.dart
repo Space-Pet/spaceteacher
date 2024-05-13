@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/model/gallery_model.dart';
-import 'package:teacher/resources/app_size.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 

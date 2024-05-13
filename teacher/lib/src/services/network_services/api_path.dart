@@ -41,4 +41,8 @@ class ApiPath {
       'https://apitest-iportal.nhg.vn.api.php';
   static String getListBusRoutes = '${baseUrl}staff/school-bus/routes';
   static String getListBusSchedule = '${baseUrl}staff/school-bus';
+  static String getObservationSchedule = '${baseUrl}staff/';
+
+  static String getConversation = '${baseUrl}staff/conversations';
+
 }

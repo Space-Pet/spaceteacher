@@ -6,7 +6,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/buttons/rounded_button.dart';
 import 'package:teacher/model/gallery_model.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_appbar.dart';
 
 class GalleryCarousel extends StatefulWidget {

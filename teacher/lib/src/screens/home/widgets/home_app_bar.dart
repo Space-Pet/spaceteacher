@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
+import 'package:teacher/src/screens/conversation/message_screen.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 
@@ -80,7 +81,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.push(ConversationScreen.routeName);
+            },
             child: CircleAvatar(
               backgroundColor: AppColors.whiteOpacity.withOpacity(0.3),
               radius: 20,

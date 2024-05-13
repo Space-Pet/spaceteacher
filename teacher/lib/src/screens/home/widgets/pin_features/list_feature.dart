@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/feature_item.dart';
-
 
 class ListFeature extends StatelessWidget {
   const ListFeature({

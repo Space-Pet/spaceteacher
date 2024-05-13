@@ -1,7 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class SwitchSetting extends StatefulWidget {
   const SwitchSetting(

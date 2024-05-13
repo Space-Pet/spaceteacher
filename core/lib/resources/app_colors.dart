@@ -146,4 +146,17 @@ class AppColors {
 
   static const Color secondary = Color(0XFF4F5E7B);
   static const Color lightBlue50 = Color(0XFFF0F9FF);
+
+  // colors observation status
+  static const Color observationStatusMyObsBG = Color(0xFF9C292E);
+  static const Color observationJoinText = Color(0xFF1570EF);
+  static const Color observationStatusPendingBg = Color(0xFFFFFAEB);
+  static const Color observationStatusPendingText = Color(0xFFFDB022);
+  static const Color observationStatusSuccessdBg = Color(0xFFECFDF3);
+  static const Color observationStatusSuccessText = Color(0xFF039855);
+  static const Color observationCardDetailDotted = Color(0xFFFEE4E2);
+  static const Color observationCardDetailbg = Color(0xFFFFFBFA);
+
+  //Text
+  static const Color textPrimary = Color(0xFF1B1A57);
 }

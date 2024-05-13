@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/attendance/widget/tab_bar_view_day.dart';
 import 'package:teacher/src/screens/attendance/widget/tab_bar_view_week.dart';
 import 'package:teacher/src/screens/home/models/week_data_model.dart';

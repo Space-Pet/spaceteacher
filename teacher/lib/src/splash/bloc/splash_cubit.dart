@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 
 import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/utils/user_manager.dart';
@@ -50,7 +51,9 @@ class SplashCubit extends Cubit<SplashState> {
     await Future.delayed(const Duration(seconds: 2));
   }
 
-  Future<void> splashCleanToken(Settings settings) async {
-    await UserManager.instance.logout(setting: settings);
+  Future<void> splashCleanToken(
+      Settings settings, AuthRepository authRepository) async {
+    await UserManager.instance
+        .logout(setting: settings, authRepository: authRepository);
   }
 }

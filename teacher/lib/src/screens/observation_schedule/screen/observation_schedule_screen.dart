@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/create_observation/create_observation_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';

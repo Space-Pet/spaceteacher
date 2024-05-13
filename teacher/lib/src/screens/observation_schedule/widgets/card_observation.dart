@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class CardObservation extends StatelessWidget {
   const CardObservation({

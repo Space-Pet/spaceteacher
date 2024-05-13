@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class SettingAppBar extends StatelessWidget {
   final VoidCallback? onBack;

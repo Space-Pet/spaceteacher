@@ -1,7 +1,7 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileBottomSheet extends StatefulWidget {
@@ -106,8 +106,9 @@ class _ProfileBottomSheetState extends State<ProfileBottomSheet> {
                                         ),
                                         Row(
                                           children: [
-                                            Assets.icons.academic.svg(color: AppColors.black,),
-                                              
+                                            Assets.icons.academic.svg(
+                                              color: AppColors.black,
+                                            ),
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 5),

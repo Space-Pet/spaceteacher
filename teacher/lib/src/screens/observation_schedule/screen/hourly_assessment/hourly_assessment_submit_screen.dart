@@ -8,7 +8,7 @@ import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 import 'package:teacher/src/utils/extension_context.dart';
 

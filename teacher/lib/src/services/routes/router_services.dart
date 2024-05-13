@@ -6,6 +6,7 @@ import 'package:teacher/model/user_info.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/bus/bus_screen.dart';
+import 'package:teacher/src/screens/conversation/message_screen.dart';
 import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
@@ -168,6 +169,10 @@ class AppRouter {
       case CreateObservationScreen.routeName:
         return _getPage(
           const CreateObservationScreen(),
+        );
+      case ConversationScreen.routeName:
+        return _getPage(
+          const ConversationScreen(),
         );
     }
     return _getPage(

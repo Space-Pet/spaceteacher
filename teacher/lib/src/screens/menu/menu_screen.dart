@@ -6,7 +6,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/menu.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/menu/widgets/app_bar_menu.dart';
 import 'package:teacher/src/screens/menu/widgets/menu_component.dart';
 import 'package:teacher/src/utils/extension_context.dart';

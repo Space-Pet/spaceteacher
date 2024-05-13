@@ -7,7 +7,7 @@ import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_submit_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/select_field.dart';
 import 'package:teacher/src/utils/extension_context.dart';

@@ -1,8 +1,7 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/app_main_layout.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/splash/bloc/splash_cubit.dart';

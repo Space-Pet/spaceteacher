@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:teacher/model/notification_detail_model.dart';
 import 'package:teacher/repository/notification_repository/notification_repositories.dart';
 

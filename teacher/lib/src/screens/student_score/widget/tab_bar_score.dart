@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
+import 'package:core/resources/resources.dart';
 
 class TabBarScore extends StatefulWidget {
   final String selectedScoreType;

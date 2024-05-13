@@ -1,6 +1,6 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+
 import 'package:teacher/src/utils/extension_context.dart';
 
 class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {

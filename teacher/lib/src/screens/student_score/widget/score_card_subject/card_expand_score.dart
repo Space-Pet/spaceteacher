@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:teacher/resources/app_colors.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/student_score/widget/score_card_subject/score_subject_model.dart';
 
 class CardExpandScore extends StatelessWidget {

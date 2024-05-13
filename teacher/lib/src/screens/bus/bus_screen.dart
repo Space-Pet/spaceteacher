@@ -1,4 +1,3 @@
-
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +9,7 @@ import 'package:teacher/components/date_picker_horizontal.dart';
 import 'package:teacher/components/empty_screen.dart';
 import 'package:teacher/components/skeletons/instruction_sekeletons.dart';
 import 'package:teacher/repository/bus_repository/bus_repositories.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/src/screens/bus/bus_card/card_bus_item.dart';
 import 'package:teacher/src/utils/extension_context.dart';
