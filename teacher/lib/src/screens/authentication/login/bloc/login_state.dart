@@ -1,45 +1,33 @@
 part of 'login_bloc.dart';
-enum LoginStatus { init, loading, success, emptyLoginInfoError, failure }
+
+enum LoginStatus { init, loading, readyToSubmit, success, failure }
 
 class LoginState extends Equatable {
   const LoginState({
-    required this.userName,
-    required this.password,
-    required this.isSaveLoginInfo,
-    required this.isSuccess,
-    required this.showError,
+    this.showError = false,
     this.status = LoginStatus.init,
-    this.passwordVisible = false,
+    this.cachedDomain = '',
   });
 
-  final String userName;
-  final String password;
-  final bool isSaveLoginInfo;
-  final bool isSuccess;
   final bool showError;
   final LoginStatus status;
-  final bool passwordVisible;
+  final String cachedDomain;
 
   @override
-  List<Object> get props => [userName, password, isSaveLoginInfo, isSuccess,showError, status, passwordVisible];
+  List<Object> get props => [showError, status, cachedDomain];
 
-  LoginState copyWith(
-      {String? userName,
-        String? password,
-        bool? isSaveLoginInfo,
-        bool? isSuccess,
-        bool? showError,
-        LoginStatus? status,
-        bool? passwordVisible,
-      }) {
+  bool get isReadyToSubmit => status == LoginStatus.readyToSubmit;
+  bool get isSuccess => status == LoginStatus.success;
+
+  LoginState copyWith({
+    bool? showError,
+    LoginStatus? status,
+    String? cachedDomain,
+  }) {
     return LoginState(
-      userName: userName ?? this.userName,
-      password: password ?? this.password,
-      isSaveLoginInfo: isSaveLoginInfo ?? this.isSaveLoginInfo,
-      isSuccess: isSuccess ?? this.isSuccess,
       showError: showError ?? this.showError,
       status: status ?? this.status,
-      passwordVisible: passwordVisible ?? this.passwordVisible,
+      cachedDomain: cachedDomain ?? this.cachedDomain,
     );
   }
 }

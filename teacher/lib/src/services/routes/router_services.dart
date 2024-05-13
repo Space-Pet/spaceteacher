@@ -32,7 +32,7 @@ class AppRouter {
   Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case LoginScreen.routeName:
-        return _getPage(const LoginScreen());
+        return _getPage(LoginScreen());
       case HomeScreen.routeName:
         return _getPage(const HomeScreen());
       case LoadingScreen.routeName:

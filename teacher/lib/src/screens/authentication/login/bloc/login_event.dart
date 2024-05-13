@@ -52,5 +52,14 @@ class LoginButtonPressed extends LoginEvent {
   List<Object> get props => [userName, password];
 }
 
+class LoginDomainSave extends LoginEvent {
+  final String domain;
+
+  const LoginDomainSave({
+    required this.domain,
+  });
+  @override
+  List<Object> get props => [domain];
+}
 
 class LoginWith365 extends LoginEvent {}
