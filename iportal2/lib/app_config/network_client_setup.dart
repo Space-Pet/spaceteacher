@@ -6,11 +6,9 @@ import 'package:network_data_source/network_client/interceptors/partner_token_in
 import 'package:network_data_source/network_client/network_client.dart';
 
 class CustomDioClient extends AbstractDioClient {
-  CustomDioClient({required String baseUrl}) {
+  CustomDioClient({required String baseUrl, required super.domainSaver}) {
     init(baseUrl: baseUrl);
   }
-
-  
 
   @override
   Future refreshTokenCall() async {}
@@ -20,10 +18,9 @@ class CustomDioClient extends AbstractDioClient {
 }
 
 class AuthRestClient extends RestApiClient {
-  AuthRestClient(
-    String baseUrl,
-    AuthorizeInterceptor authInterceptor,
-  ) : super(
+  AuthRestClient(String baseUrl, AuthorizeInterceptor authInterceptor,
+      {required super.domainSaver})
+      : super(
           dio: DioBuilder.createDio(
             baseUrl: baseUrl,
             interceptors: [
@@ -35,9 +32,9 @@ class AuthRestClient extends RestApiClient {
 
 class PartnerTokenRestClient extends RestApiClient {
   PartnerTokenRestClient(
-    String baseUrl,
-    PartnerTokenInterceptor partnerTokenInterceptor,
-  ) : super(
+      String baseUrl, PartnerTokenInterceptor partnerTokenInterceptor,
+      {required super.domainSaver})
+      : super(
           dio: DioBuilder.createDio(
             baseUrl: baseUrl,
             interceptors: [

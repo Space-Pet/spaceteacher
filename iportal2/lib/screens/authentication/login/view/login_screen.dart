@@ -1,4 +1,3 @@
-import 'package:core/core.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_strings.dart';
 import 'package:core/resources/app_text_styles.dart';

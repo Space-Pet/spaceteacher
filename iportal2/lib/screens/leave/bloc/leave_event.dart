@@ -7,11 +7,6 @@ class GetLeaves extends LeaveEvent {
   GetLeaves({required this.page});
   List<Object> get props => [page];
 }
-class GetLeavesMore extends LeaveEvent {
-  final int page;
-  GetLeavesMore({required this.page});
-  List<Object> get props => [page];
-}
 
 class CurrentUserUpdated extends LeaveEvent {
   CurrentUserUpdated({required this.user});

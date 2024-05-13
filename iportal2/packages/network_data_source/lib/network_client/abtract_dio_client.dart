@@ -2,12 +2,15 @@
 
 import 'dart:io';
 
+import 'package:core/core.dart';
 import 'package:core/presentation/screens/domain/domain_saver.dart';
-import 'package:dio/dio.dart';
 import 'package:network_data_source/network_client/network_client.dart';
 
 abstract class AbstractDioClient with TokenManagementMixin {
+  AbstractDioClient({required this.domainSaver});
   final dio = Dio();
+
+  final DomainSaver domainSaver;
 
   init({required String baseUrl}) {
     dio.interceptors.add(InterceptorsWrapper(
@@ -38,7 +41,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     if(baseUrl.isNotEmpty){
       return;
     }
-    baseUrl = await DomainSaver().getDomain();
+    baseUrl = await domainSaver.getDomain();
     if (baseUrl.isNotEmpty) {
       dio.options.baseUrl = 'https://$baseUrl';
     }
@@ -293,16 +296,18 @@ abstract class AbstractDioClient with TokenManagementMixin {
 class RestApiClient {
   RestApiClient({
     required this.dio,
+    required this.domainSaver,
   });
 
   final Dio dio;
+  final DomainSaver domainSaver;
 
   Future<void> ensureInitialized() async {
     String baseUrl = dio.options.baseUrl;
     if(baseUrl.isNotEmpty){
       return;
     }
-    baseUrl = await DomainSaver().getDomain();
+    baseUrl = await domainSaver.getDomain();
     if (baseUrl.isNotEmpty) {
       dio.options.baseUrl = 'https://$baseUrl';
     }

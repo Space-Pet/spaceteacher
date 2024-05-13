@@ -104,12 +104,11 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<List<LeaveData>> getLeaves(
       {required int classId,
       required int pupilId,
-      required int page,
       required int schoolId,
       required String schoolBrand}) async {
     try {
       final data = await _authRestClient.doHttpGet(
-          '/api/v1/member/leave-application/pupil?class_id=$classId&pupil_id=$pupilId&page=${page.toString()}',
+          '/api/v1/member/leave-application/pupil?class_id=$classId&pupil_id=$pupilId',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
       final dataList = data['data']['data'] as List<dynamic>;
       List<LeaveData> dataLeaves = [];

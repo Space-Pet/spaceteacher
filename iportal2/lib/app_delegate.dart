@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/app_config/env_config_override.dart';
 import 'package:iportal2/app_config/network_client_setup.dart';
 import 'package:iportal2/boostrap.dart';
@@ -38,6 +39,9 @@ class AppDelegate {
     await Hive.initFlutter();
     initializeDateFormatting();
 
+    // initialize domain saver
+    final instanceDomainSaver = SingletonDomainSaver();
+
     // Not yet implemented
     // await Firebase.initializeApp();
     await Firebase.initializeApp(
@@ -49,17 +53,18 @@ class AppDelegate {
 
     AbstractDioClient networkClient = CustomDioClient(
       baseUrl: EnvironmentConfigOverride.baseUrl,
+      domainSaver: instanceDomainSaver,
     );
 
     final AuthRestClient authRestClient = AuthRestClient(
-      EnvironmentConfigOverride.baseUrl,
-      AuthorizeInterceptor(),
-    );
+        EnvironmentConfigOverride.baseUrl, AuthorizeInterceptor(),
+        domainSaver: instanceDomainSaver);
 
     final PartnerTokenRestClient partnerTokenRestClient =
         PartnerTokenRestClient(
       EnvironmentConfigOverride.baseUrl,
       PartnerTokenInterceptor(),
+      domainSaver: instanceDomainSaver,
     );
 
     final authApi = AuthApi(

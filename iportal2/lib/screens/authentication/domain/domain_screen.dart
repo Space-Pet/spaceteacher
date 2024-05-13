@@ -1,7 +1,7 @@
-import 'package:core/presentation/screens/domain/domain_saver.dart';
 import 'package:core/presentation/screens/domain/domain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/app_config/env_config_override.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 
@@ -15,7 +15,7 @@ class DomainScreen extends StatelessWidget {
       if (EnvironmentConfigOverride.baseUrl.isNotEmpty) {
         context.push(const LoginScreen());
       } else {
-        DomainSaver().getDomain().then((value) {
+        SingletonDomainSaver().getDomain().then((value) {
           EnvironmentConfigOverride.baseURL = value;
           if (EnvironmentConfigOverride.baseUrl.isNotEmpty) {
             context.push(const LoginScreen());

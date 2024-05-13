@@ -97,13 +97,11 @@ class AppFetchApiRepository {
       {required int classId,
       required int pupilId,
       required int schoolId,
-      required int page,
       required String schoolBrand}) async {
     final data = _appFetchApi.getLeaves(
         classId: classId,
         pupilId: pupilId,
         schoolId: schoolId,
-        page: page,
         schoolBrand: schoolBrand);
     return data;
   }
@@ -142,12 +140,10 @@ class AppFetchApiRepository {
       required int schoolId,
       required String schoolBrand,
       required String startDate,
- 
       required String endDate}) async {
     final data = await _appFetchApi.getAttendanceWeek(
         pupilId: pupilId,
         classId: classId,
-      
         schoolId: schoolId,
         schoolBrand: schoolBrand,
         startDate: startDate,
@@ -159,14 +155,12 @@ class AppFetchApiRepository {
       {required int pupilId,
       required int classId,
       required int schoolId,
-     
       required String schoolBrand,
       required String startDate,
       required String endDate}) async {
     final data = await _appFetchApi.getAttendanceMonth(
         pupilId: pupilId,
         classId: classId,
-       
         schoolId: schoolId,
         schoolBrand: schoolBrand,
         startDate: startDate,

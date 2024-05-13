@@ -5,14 +5,29 @@ class DomainSaver {
   static const domainKey = 'domain';
 
   String cachedDomain = '';
+
+  Box? box;
+
+  Future<void> tryOpenHive() async {
+    try {
+      box = await Hive.openBox(domainKey);
+    } catch (_) {}
+  }
+
+  Future<void> tryCloseHive() async {
+    try {
+      await box?.close();
+    } catch (_) {}
+  }
+
   Future<bool> saveDomain({required String domain}) async {
     // Save domain to local storage
     try {
       final isValid = await isDomainValid(domain);
       if (isValid) {
-        final box = await Hive.openBox(domainKey);
-        await box.put(domainKey, domain);
-        await box.close();
+        await tryOpenHive();
+        await box?.put(domainKey, domain);
+        await tryCloseHive();
         cachedDomain = domain;
         return true;
       }
@@ -66,9 +81,9 @@ class DomainSaver {
   Future<bool> clearDomain() async {
     // Clear domain from local storage
     try {
-      final box = await Hive.openBox(domainKey);
-      await box.delete(domainKey);
-      await box.close();
+      await tryOpenHive();
+      await box?.delete(domainKey);
+      await tryCloseHive();
     } catch (_) {}
 
     cachedDomain = '';
@@ -77,13 +92,17 @@ class DomainSaver {
 
   Future<String> getDomain() async {
     // Get domain from local storage
+    if (cachedDomain.isNotEmpty) {
+      return cachedDomain;
+    }
+
     try {
-      final box = await Hive.openBox(domainKey);
-      final domain = box.get(domainKey) as String?;
+      await tryOpenHive();
+      final domain = box?.get(domainKey) as String?;
       if (domain != null) {
         cachedDomain = domain;
       }
-      await box.close();
+      await tryCloseHive();
     } catch (_) {}
     return cachedDomain;
   }

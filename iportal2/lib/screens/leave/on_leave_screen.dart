@@ -45,7 +45,6 @@ class OnLeaveView extends StatefulWidget {
 class _OnLeaveViewState extends State<OnLeaveView>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
@@ -53,32 +52,12 @@ class _OnLeaveViewState extends State<OnLeaveView>
       length: 2,
       vsync: this,
     );
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    _scrollController.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isScrollAtBottom()) {
-      final leaveBloc = context.read<LeaveBloc>();
-      if (leaveBloc.state.leaveStatus == LeaveStatus.success) {
-        const currentPage = 1;
-        leaveBloc.add(GetLeavesMore(page: currentPage + 1));
-      }
-    }
-  }
-
-  bool _isScrollAtBottom() {
-    if (!_scrollController.hasClients) return false;
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    return currentScroll >= maxScroll;
   }
 
   @override
@@ -233,8 +212,6 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                             if (pending.isNotEmpty)
                                               Expanded(
                                                 child: ListView.builder(
-                                                    controller:
-                                                        _scrollController,
                                                     padding:
                                                         const EdgeInsets.only(
                                                             top: 8),
@@ -273,8 +250,6 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                             if (approved.isNotEmpty)
                                               Expanded(
                                                 child: ListView.builder(
-                                                    controller:
-                                                        _scrollController,
                                                     padding:
                                                         const EdgeInsets.only(
                                                             top: 8),

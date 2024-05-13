@@ -1,4 +1,3 @@
-import 'package:core/resources/app_strings.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +11,9 @@ import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/dialog/dialog_change_password.dart';
 import 'package:iportal2/components/dialog/dialog_languages.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
-import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
 import 'package:iportal2/screens/settings/faq/faq_screen.dart';
-import 'package:iportal2/screens/settings/respond_comment/respond_comment_screen.dart';
 import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
 import 'package:iportal2/screens/settings/user_manual/user_manual_screen.dart';
 import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
