@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:core/presentation/screens/domain/domain_saver.dart';
 import 'package:equatable/equatable.dart';
 import 'package:repository/repository.dart';
 
@@ -27,6 +28,9 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
     try {
       await userRepository.clearLocalUser();
       await authRepository.loginOut();
+
+      final domainSaver = DomainSaver();
+      await domainSaver.clearDomain();
 
       emit(
         state.copyWith(

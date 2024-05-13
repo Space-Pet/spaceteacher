@@ -22,11 +22,19 @@ class DomainSaver {
 
   // private method
   String? _extractDomain(String url) {
-    try {
-      final parsedUrl = Uri.tryParse(url);
-      return parsedUrl?.host;
-    } catch (e) {
-      return null;
+    var parts = url.split('://');
+    if (parts.length > 1) {
+      return parts[1].split('/')[0]; // Get domain from first part after "://"
+    } else {
+      // Handle URLs without "://" (e.g., www.example.com)
+      parts = url.split('/');
+      if (parts.length > 1) {
+        return parts[0]; // Get domain from first part before "/"
+      } else if (parts.length == 1) {
+        return url; // Return the entire string if no clear domain is found
+      } else {
+        return null; // Invalid URL
+      }
     }
   }
 
