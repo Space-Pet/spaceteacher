@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -30,6 +32,8 @@ class _CDomainScreenState extends State<CDomainScreen> {
   bool isDomainValid = false;
   bool isDomainSaved = false;
 
+  final _domainSaver = DomainSaver();
+
   String get hintText =>
       widget.hintText ?? 'Nhập đường dẫn website iPortal của đơn vị';
 
@@ -39,6 +43,25 @@ class _CDomainScreenState extends State<CDomainScreen> {
 
   void Function(bool isSaved, String domain)? get onDomainSaved =>
       widget.onDomainSaved;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(onInitialized());
+  }
+
+  Future<void> onInitialized() async {
+    final domain = await _domainSaver.getDomain();
+
+    _textFieldController.text = domain;
+
+    if (domain.isNotEmpty) {
+      isDomainEntered = true;
+      isDomainValid = true;
+      isDomainSaved = true;
+    }
+    setState(() {});
+  }
 
   @override
   void dispose() {
@@ -106,16 +129,14 @@ class _CDomainScreenState extends State<CDomainScreen> {
                             right: 10,
                           ),
                           child: Container(
-                            height: 80,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: AppColors.gray300)),
                             child: TextField(
                               controller: _textFieldController,
                               onChanged: (value) {
-                                setState(() {
-                                  isDomainEntered = value.isNotEmpty;
-                                });
+                                isDomainEntered = value.isNotEmpty;
+                                setState(() {});
                               },
                               maxLines: 1,
                               decoration: InputDecoration(
@@ -168,7 +189,7 @@ class _CDomainScreenState extends State<CDomainScreen> {
                                 if (isDomainEntered) {
                                   try {
                                     isDomainSaved =
-                                        await DomainSaver().saveDomain(
+                                        await _domainSaver.saveDomain(
                                       domain: _textFieldController.text,
                                     );
 

@@ -20,9 +20,26 @@ class DomainSaver {
     return false;
   }
 
-  Future<bool> isDomainValid(String domain) async {
+  // private method
+  String? _extractDomain(String url) {
+    try {
+      final parsedUrl = Uri.tryParse(url);
+      return parsedUrl?.host;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> isDomainValid(String rawString) async {
     // Check if domain is valid via API call
     // https://domain/api/v1/check-domain
+    final domain = _extractDomain(rawString);
+
+    if (domain == null) {
+      // invalid domain
+      return false;
+    }
+
     try {
       final dio = Dio();
       final response = await dio.post(
@@ -36,6 +53,18 @@ class DomainSaver {
       rethrow;
     }
     return false;
+  }
+
+  Future<bool> clearDomain() async {
+    // Clear domain from local storage
+    try {
+      final box = await Hive.openBox(domainKey);
+      await box.delete(domainKey);
+      await box.close();
+    } catch (_) {}
+
+    cachedDomain = '';
+    return true;
   }
 
   Future<String> getDomain() async {
