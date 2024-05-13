@@ -27,14 +27,10 @@ class _ScheduleTabsState extends State<ScheduleTabs>
   @override
   void initState() {
     super.initState();
-    final startOfWeek = widget.datePicked
-        .subtract(Duration(days: widget.datePicked.weekday - 1));
-    final days = widget.datePicked.difference(startOfWeek).inDays;
 
     tabBarController = TabController(
       length: (widget.lessons ?? []).length,
       vsync: this,
-      initialIndex: days,
     );
   }
 
@@ -59,6 +55,8 @@ class _ScheduleTabsState extends State<ScheduleTabs>
         date: formatDate.format(date),
       );
     });
+
+    _onItemTapped(days);
 
     final listTabContent = List.generate(
         (widget.lessons ?? []).length,
@@ -111,16 +109,19 @@ class _ScheduleTabsState extends State<ScheduleTabs>
     return List.generate(widget.lessons?[index].dateSubject.length ?? 0,
         (innerIndex) {
       final lesson = widget.lessons?[index].dateSubject[innerIndex];
+      final lastIndex = (widget.lessons?[index].dateSubject.length ?? 0) - 1;
+      print(lastIndex);
+
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          borderRadius: index == (widget.lessons?.length ?? 0) - 1
+          borderRadius: innerIndex == lastIndex
               ? AppRadius.roundedBottom12
               : const BorderRadius.all(Radius.zero),
           color: AppColors.gray100,
           border: Border(
-            bottom: index == (widget.lessons?.length ?? 0) - 1
-                ? BorderSide.none
+            bottom: innerIndex == lastIndex
+                ? const BorderSide(color: AppColors.white)
                 : const BorderSide(color: AppColors.gray300),
           ),
         ),

@@ -43,6 +43,7 @@ class AppColors {
   // Blue
   static const Color blue400 = Color(0XFF45A4DE);
   static const Color blue500 = Color(0XFF2E90FA);
+  static const Color blue600 = Color(0XFF1570EF);
   static const Color blueA200 = Color(0XFF4A89FD);
 
   // BlueGray
@@ -142,4 +143,7 @@ class AppColors {
   static const Color green50 = Color(0xFF6CDAA6);
   static const Color purple300 = Color(0xFFBDB4FE);
   static const Color purple50 = Color(0xFFF4F3FF);
+
+  static const Color secondary = Color(0XFF4F5E7B);
+  static const Color lightBlue50 = Color(0XFFF0F9FF);
 }

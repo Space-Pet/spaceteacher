@@ -111,6 +111,10 @@ class ProfileInfo {
     return ['C_001', 'C_002'].contains(cap_dao_tao?.id);
   }
 
+  bool isStudent() {
+    return type != 2;
+  }
+
   // school_brand
   // uka -> UK
   // sga -> SGA

@@ -19,9 +19,9 @@ class HomeState extends Equatable {
   });
 
   final NotificationData notificationData;
-  final ExerciseData exerciseDueDateToday;
-  final ExerciseData exerciseDueDateDataList;
-  final ExerciseData exerciseInDayDataList;
+  final List<ExerciseItem> exerciseDueDateToday;
+  final List<ExerciseItem> exerciseDueDateDataList;
+  final List<ExerciseItem> exerciseInDayDataList;
   final AlbumData albumData;
   final StudentData userData;
   final List<int> pinnedAlbumIdList;
@@ -51,9 +51,9 @@ class HomeState extends Equatable {
   HomeState copyWith({
     LessonData? lessonData,
     NotificationData? notificationData,
-    ExerciseData? exerciseDueDateToday,
-    ExerciseData? exerciseDueDateDataList,
-    ExerciseData? exerciseInDayDataList,
+    List<ExerciseItem>? exerciseDueDateToday,
+    List<ExerciseItem>? exerciseDueDateDataList,
+    List<ExerciseItem>? exerciseInDayDataList,
     DateTime? datePicked,
     HomeStatus? statusNoti,
     HomeStatus? statusExercise,

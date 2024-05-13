@@ -51,6 +51,18 @@ class AppTextStyles {
         fontWeight: fontWeight,
         height: height,
       );
+  // 10
+  static TextStyle normal10({
+    Color color = AppColors.black,
+    FontWeight fontWeight = FontWeight.w400,
+    double? height,
+  }) =>
+      GoogleFonts.inter(
+        color: color,
+        fontSize: 10.fSize,
+        fontWeight: fontWeight,
+        height: height,
+      );
 
   static TextStyle semiBold12({
     Color color = AppColors.black,

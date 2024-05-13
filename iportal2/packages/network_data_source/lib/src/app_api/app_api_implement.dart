@@ -141,7 +141,8 @@ class AppFetchApi extends AbstractAppFetchApi {
       String userKey, String txtHocKy, String txtYear) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=show_score&user_key=$userKey&txt_hoc_ky=$txtHocKy&txt_learn_year=$txtYear');
+        '/api.php?act=show_score&user_key=$userKey&txt_hoc_ky=$txtHocKy&txt_learn_year=$txtYear',
+      );
 
       final scoreRes = ScoreModel.fromMap(data);
       return scoreRes;
@@ -185,24 +186,26 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<List<AttendanceDay>> getAttendanceDay(
-      {required String date,
-      required int pupilId,
-      required int classId,
-      required int schoolId,
-      required String schoolBrand}) async {
+  Future<List<AttendanceDay>> getAttendanceDay({
+    required String date,
+    required int pupilId,
+    required int classId,
+    required int schoolId,
+    required String type,
+    required String schoolBrand,
+  }) async {
     try {
       final data = await _client.doHttpGet(
-          '/api/v1/member/attendance/pupil?pupil_id=$pupilId&class_id=$classId&date=$date&attendance_type=so_lan',
+          '/api/v1/member/attendance/pupil?pupil_id=$pupilId&class_id=$classId&date=$date&attendance_type=$type',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
 
       final dataList = data['data'] as List<dynamic>;
 
-      final List<AttendanceDay> dataAttendabnceDay = [];
+      final List<AttendanceDay> dataAttendanceDay = [];
       for (final item in dataList) {
-        dataAttendabnceDay.add(AttendanceDay.fromJson(item));
+        dataAttendanceDay.add(AttendanceDay.fromJson(item));
       }
-      return dataAttendabnceDay;
+      return dataAttendanceDay;
     } catch (e) {
       print('error: $e');
       return [];
@@ -351,7 +354,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String startDate,
   }) async {
     final data = await _authRestClient.doHttpGet(
-      '/api/v1/member/school-bus/attendance/?pupil_id=$pupilId&start_date=$startDate',
+      '/api/v1/member/school-bus/attendance/?pupil_id=$pupilId&start_date=$startDate&end_date=$startDate',
       headers: {
         'School-Id': schoolId,
         'School-Brand': schoolBrand,
@@ -465,6 +468,19 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       print('error');
     }
+  }
+
+  Future<String> getAttendanceType({
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final token = await _client.getAccessToken();
+    print('$token');
+    final data = await _authRestClient
+        .doHttpGet('/api/v1/staff/attendance/get_attendance_type');
+    final dataType = data['data']['type'];
+    print('type: $dataType');
+    return dataType;
   }
 }
 

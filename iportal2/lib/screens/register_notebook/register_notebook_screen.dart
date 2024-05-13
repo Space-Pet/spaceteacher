@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
+import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
@@ -12,6 +13,7 @@ import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/register_notebook/bloc/register_notebook_bloc.dart';
 import 'package:iportal2/screens/register_notebook/register_lesson.dart';
 import 'package:repository/repository.dart';
+import 'package:skeletons/skeletons.dart';
 
 class RegisterNoteBoookScreen extends StatelessWidget {
   const RegisterNoteBoookScreen({super.key});
@@ -28,8 +30,10 @@ class RegisterNoteBoookScreen extends StatelessWidget {
       child: BlocBuilder<RegisterNotebookBloc, RegisterNotebookState>(
         builder: (context, state) {
           final bloc = context.read<RegisterNotebookBloc>();
-          final weeklyLessonData = state.lessonData;
-          final lessonData = weeklyLessonData.dataList;
+          final lessonData = state.lessonData.dataList;
+
+          final isLoading = state.status == RegisterNotebookStatus.loading;
+          final isEmpty = lessonData.isEmpty && !isLoading;
 
           final lessonListW = List.generate(lessonData.length, (index) {
             final lesson = lessonData[index];
@@ -53,15 +57,14 @@ class RegisterNoteBoookScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
-                    padding:
-                        const EdgeInsets.only(top: 12, left: 12, right: 12),
+                    padding: const EdgeInsets.only(left: 12, right: 12),
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: AppRadius.roundedTop28,
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //  SelectChild(),
                         const SizedBox(height: 12),
                         SelectDate(
                           datePicked: bloc.state.datePicked,
@@ -69,17 +72,21 @@ class RegisterNoteBoookScreen extends StatelessWidget {
                             bloc.add(RegisterSelectDate(datePicked: date));
                           },
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8),
                         Expanded(
-                          child: lessonData.isEmpty
-                              ? const EmptyScreen(
-                                  text: 'Sổ đầu bài trống',
-                                )
-                              : SingleChildScrollView(
-                                  child: Column(
+                          child: AppSkeleton(
+                            isLoading: isLoading,
+                            skeleton: const RegisterNotebookSkeleton(),
+                            child: isEmpty
+                                ? const Center(
+                                    child: EmptyScreen(
+                                      text: 'Không có dữ liệu',
+                                    ),
+                                  )
+                                : Column(
                                     children: lessonListW,
                                   ),
-                                ),
+                          ),
                         ),
                       ],
                     ),
@@ -89,6 +96,50 @@ class RegisterNoteBoookScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class RegisterNotebookSkeleton extends StatelessWidget {
+  const RegisterNotebookSkeleton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(0),
+      itemCount: 5,
+      itemBuilder: (context, index) => Container(
+        padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: index == 4
+                ? BorderSide.none
+                : const BorderSide(color: AppColors.gray300),
+          ),
+        ),
+        child: SkeletonItem(
+            child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: SkeletonParagraph(
+                    style: SkeletonParagraphStyle(
+                        lineStyle: SkeletonLineStyle(
+                      randomLength: true,
+                      height: 10,
+                      borderRadius: BorderRadius.circular(8),
+                    )),
+                  ),
+                )
+              ],
+            ),
+          ],
+        )),
       ),
     );
   }

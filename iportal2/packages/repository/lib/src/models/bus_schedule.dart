@@ -11,7 +11,7 @@ class BusSchedule with _$BusSchedule {
     required int schoolId,
     required int scheduleId,
     required DateTime attendanceDate,
-    required int attendance,
+    required int? attendance,
     required String? checkOut,
     required String? checkIn,
     required Pupil pupil,
@@ -51,9 +51,8 @@ extension BusScheduleX on BusSchedule {
   }
 
   String title() {
-    final left = isPickup ? 'Học sinh lên xe lúc' : 'Học sinh xuống xe lúc';
-
-    return '$left - ${estimatedTime()}';
+    const left = 'Học sinh lên - xuống xe lúc: ';
+    return '$left ${checkIn?.substring(11, 16) ?? ''} - ${checkOut?.substring(11, 16) ?? ''}';
   }
 
   String attendanceDateString() {

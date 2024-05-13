@@ -2,6 +2,7 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
@@ -136,7 +137,8 @@ class _PinFeaturesState extends State<PinFeatures> {
           context.push(const MenuScreen());
           break;
         case FeatureKey.survey:
-          context.push(const SurveyScreen());
+          mainNavKey.currentContext?.push(const SurveyScreen());
+
           break;
 
         default:

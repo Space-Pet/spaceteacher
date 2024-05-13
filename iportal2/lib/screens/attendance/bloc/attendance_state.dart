@@ -2,6 +2,8 @@ part of 'attendance_bloc.dart';
 
 enum AttendanceStatus {
   init,
+  initType,
+  successType,
   success,
   error,
   initWeek,
@@ -17,26 +19,37 @@ class AttendanceState extends Equatable {
   final AttendanceWeek? attendanceMonth;
   final AttendanceStatus attendanceStatus;
   final DateTime? selectDate;
+  final String? type;
   const AttendanceState(
       {required this.user,
       this.selectDate,
+      this.type,
       this.attendanceday,
       this.attendanceWeek,
       this.attendanceMonth,
       this.attendanceStatus = AttendanceStatus.init});
   @override
-  List<Object?> get props =>
-      [attendanceStatus, attendanceday, selectDate, user, attendanceWeek, attendanceMonth];
+  List<Object?> get props => [
+        type,
+        attendanceStatus,
+        attendanceday,
+        selectDate,
+        user,
+        attendanceWeek,
+        attendanceMonth
+      ];
 
   AttendanceState copyWith(
       {List<AttendanceDay>? attendanceday,
       AttendanceStatus? attendanceStatus,
       ProfileInfo? user,
+      String? type,
       DateTime? date,
       AttendanceWeek? attendanceWeek,
       AttendanceWeek? attendanceMonth}) {
     return AttendanceState(
-      selectDate: date ?? this.selectDate,
+        type: type ?? this.type,
+        selectDate: date ?? this.selectDate,
         attendanceMonth: attendanceMonth ?? this.attendanceMonth,
         attendanceWeek: attendanceWeek ?? this.attendanceWeek,
         user: user ?? this.user,

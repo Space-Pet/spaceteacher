@@ -1,5 +1,6 @@
 import 'package:core/data/models/survay_data.dart';
 import 'package:core/resources/resources.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -36,13 +37,17 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 22),
+        Container(
+          margin: const EdgeInsets.only(top: 12, bottom: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            color: AppColors.gray100,
+            borderRadius: BorderRadius.circular(4),
+          ),
           child: Text(
             widget.surveyData.nhomCauHoi,
-            style: AppTextStyles.normal20(
-              fontWeight: FontWeight.w600,
-              color: AppColors.gray900,
+            style: AppTextStyles.semiBold16(
+              color: AppColors.gray700,
             ),
           ),
         ),
@@ -56,12 +61,12 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
                 // ignore: unused_local_variable
                 final isLastIndex =
                     index == widget.surveyData.question.length - 1;
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 26),
+                      padding: const EdgeInsets.fromLTRB(26, 6, 4, 6),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -71,6 +76,7 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
                               color: AppColors.brand600,
                             ),
                           ),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: Text(
                               question.noiDungCauHoi,
@@ -84,11 +90,15 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
                       ),
                     ),
                     _buildCheckboxList(index),
-                    Container(
-                      width: double.infinity,
-                      height: 5,
-                      color: AppColors.pink100,
-                    ),
+                    if (!isLastIndex)
+                      Container(
+                        margin: const EdgeInsets.only(top: 8, bottom: 4),
+                        width: double.infinity,
+                        child: const DottedLine(
+                          dashLength: 2,
+                          dashColor: AppColors.gray700,
+                        ),
+                      ),
                   ],
                 );
               },
@@ -162,6 +172,7 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
               ),
             ],
           ),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -182,35 +193,42 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
 
           return Container(
             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-            child: Row(
-              children: [
-                GFCheckbox(
-                  size: 20,
-                  activeBgColor: GFColors.WHITE,
-                  type: GFCheckboxType.circle,
-                  onChanged: (value) {
-                    setState(() {
-                      _updateCheckboxStates(questionIndex, levelKey);
-                    });
-                  },
-                  value: isChecked,
-                  activeBorderColor: Colors.red,
-                  activeIcon: const Icon(
-                    Icons.fiber_manual_record,
-                    color: Colors.red,
-                    size: 16,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text(
-                    levelValue,
-                    style: AppTextStyles.normal16(
-                      fontWeight: FontWeight.w500,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _updateCheckboxStates(questionIndex, levelKey);
+                });
+              },
+              child: Row(
+                children: [
+                  GFCheckbox(
+                    size: 20,
+                    activeBgColor: GFColors.WHITE,
+                    type: GFCheckboxType.circle,
+                    onChanged: (value) {
+                      setState(() {
+                        _updateCheckboxStates(questionIndex, levelKey);
+                      });
+                    },
+                    value: isChecked,
+                    activeBorderColor: AppColors.brand600,
+                    activeIcon: const Icon(
+                      Icons.fiber_manual_record,
+                      color: AppColors.brand600,
+                      size: 16,
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      levelValue,
+                      style: AppTextStyles.normal14(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }).toList(),

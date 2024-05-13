@@ -1,6 +1,7 @@
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
@@ -24,8 +25,16 @@ class HomeTabsInstruction extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<HomeBloc>();
         final isLoading = state.statusExercise == HomeStatus.loading;
-        final isEmptyDueDate = exercisesDueDate.isEmpty && !isLoading;
         final isEmptyInDay = exercisesInDay.isEmpty && !isLoading;
+        final dateSelected = state.datePicked;
+        DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
+        final listExerciseDueDate = exercisesDueDate
+            .where((element) =>
+                element.hanNopBaoBai == formatDate.format(dateSelected))
+            .toList();
+
+        final isEmptyDueDate = listExerciseDueDate.isEmpty && !isLoading;
 
         return DefaultTabController(
             length: 2,
@@ -95,16 +104,29 @@ class HomeTabsInstruction extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                    isEmptyInDay
-                        ? const Center(
-                            child: EmptyScreen(text: 'Sổ báo bài trống'))
-                        : SingleChildScrollView(
-                            child: ExerciseItemList(
-                              exercise: exercisesInDay,
-                              isHomeScreenView: true,
-                              isTodayView: true,
-                            ),
-                          ),
+                    isLoading
+                        ? const InstructrionSkeleton()
+                        : isEmptyInDay
+                            ? const Center(
+                                child: EmptyScreen(text: 'Sổ báo bài trống'))
+                            : Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: AppColors.gray100,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(16),
+                                    bottomLeft: Radius.circular(16),
+                                    bottomRight: Radius.circular(16),
+                                  ),
+                                ),
+                                child: SingleChildScrollView(
+                                  child: ExerciseItemList(
+                                    exercise: exercisesInDay,
+                                    isHomeScreenView: true,
+                                    isTodayView: true,
+                                  ),
+                                ),
+                              ),
                   ]),
                 ),
               ],

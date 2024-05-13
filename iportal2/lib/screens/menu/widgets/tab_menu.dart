@@ -16,7 +16,7 @@ class TabMenu extends StatelessWidget {
     });
 
     final listTabContent = List.generate(
-      (dataMenu).length,
+      dataMenu.length,
       (index) => SingleChildScrollView(
         child: Column(
           children: tabView(index, context),
@@ -25,7 +25,7 @@ class TabMenu extends StatelessWidget {
     );
 
     return DefaultTabController(
-      length: (dataMenu).length,
+      length: dataMenu.length,
       child: Expanded(
         child: Column(
           children: [
@@ -65,14 +65,20 @@ class TabMenu extends StatelessWidget {
     'assets/images/brunch.png',
     'assets/images/dinner.png',
     'assets/images/breakfast.png',
+    'assets/images/lunch.png',
+    'assets/images/brunch.png',
+    'assets/images/dinner.png',
     'assets/images/breakfast.png',
+    'assets/images/lunch.png',
+    'assets/images/brunch.png',
+    'assets/images/dinner.png',
   ];
 
   List<Widget> tabView(int index, BuildContext context) {
-    return List.generate(dataMenu[index].dataInWeek.length ?? 0, (innerIndex) {
+    return List.generate(dataMenu[index].dataInWeek.length, (innerIndex) {
       final menu = dataMenu[index].dataInWeek[innerIndex];
       final imagePathIndex = innerIndex;
-
+      print('index: ${dataMenu[index].dataInWeek.length}, $innerIndex');
       return Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 8),
         child: GestureDetector(

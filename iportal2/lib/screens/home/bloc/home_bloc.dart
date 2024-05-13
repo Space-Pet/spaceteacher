@@ -18,16 +18,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.currentUserBloc,
     required this.userRepository,
   }) : super(HomeState(
-          exerciseDueDateToday: ExerciseData.empty(),
-          exerciseDueDateDataList: ExerciseData.empty(),
-          exerciseInDayDataList: ExerciseData.empty(),
+          exerciseDueDateToday: const [],
+          exerciseDueDateDataList: const [],
+          exerciseInDayDataList: const [],
           notificationData: NotificationData.empty(),
           userData: StudentData.empty(),
           albumData: AlbumData.empty,
           datePicked: DateTime.now(),
         )) {
     on<HomeFetchExercise>(_onFetchExercise);
-    // add(HomeFetchExercise());
+    add(HomeFetchExercise());
 
     on<HomeFetchNotificationData>(_onFetchNotifications);
     add(HomeFetchNotificationData());
@@ -89,13 +89,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(statusExercise: HomeStatus.loading));
 
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
-      userKey: currentUserBloc.state.user.user_key,
+      // userKey: currentUserBloc.state.user.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
-      // userKey: '0723210020',
+      userKey: '0723210020',
     );
+    
+    DateFormat formatDate = DateFormat("yyyy-MM-dd");
+    final listExerciseDueDate = exerciseDueDateDataList.exerciseDataList
+        .where((element) =>
+            element.hanNopBaoBai == formatDate.format(event.datePicked))
+        .toList();
+
     emit(
       state.copyWith(
-        exerciseDueDateDataList: exerciseDueDateDataList,
+        exerciseDueDateDataList: listExerciseDueDate,
       ),
     );
 
@@ -106,7 +113,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
     emit(
       state.copyWith(
-        exerciseInDayDataList: exerciseInDayDataList,
+        exerciseInDayDataList: exerciseInDayDataList.exerciseDataList,
         datePicked: event.datePicked,
         statusExercise: HomeStatus.success,
       ),
@@ -125,17 +132,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // userKey: '0723210020',
       );
 
+      DateFormat formatDate = DateFormat("yyyy-MM-dd");
+      final listExerciseDueDate = exerciseDataList.exerciseDataList
+          .where((element) =>
+              element.hanNopBaoBai == formatDate.format(DateTime.now()))
+          .toList();
+
       if (event.isDueDate) {
         emit(
           state.copyWith(
-            exerciseDueDateToday: exerciseDataList,
-            exerciseDueDateDataList: exerciseDataList,
+            exerciseDueDateToday: listExerciseDueDate,
+            exerciseDueDateDataList: listExerciseDueDate,
           ),
         );
       } else {
         emit(
           state.copyWith(
-            exerciseInDayDataList: exerciseDataList,
+            exerciseInDayDataList: listExerciseDueDate,
           ),
         );
       }

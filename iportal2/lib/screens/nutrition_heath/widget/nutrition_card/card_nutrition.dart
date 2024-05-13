@@ -37,7 +37,7 @@ class _CardNutritionState extends State<CardNutrition> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.fromLTRB(0, 12, 0, 10),
-        height: widget.isExpanded ? 194 : 48,
+        height: widget.isExpanded ? 220 : 48,
         decoration: const BoxDecoration(
           color: Colors.white,
         ),
@@ -59,7 +59,7 @@ class _CardNutritionState extends State<CardNutrition> {
                 GestureDetector(
                   onTap: widget.onExpansionChanged,
                   child: SvgPicture.asset(
-                    'assets/icons/${widget.isExpanded ? 'minus' : 'chevron-down'}.svg',
+                    'assets/icons/${widget.isExpanded ? 'chevron_up' : 'chevron-down'}.svg',
                   ),
                 ),
               ],

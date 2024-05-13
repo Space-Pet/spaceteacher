@@ -14,8 +14,8 @@ environment_config:
           dotenv: true
         baseUrl:
           env_var: BASE_URL
-          const: true
-          default: 'https://test-iportal.nhg.vn'
+          const: false
+          default: ''
     uat:
       fields:
         env:
@@ -24,8 +24,8 @@ environment_config:
           dotenv: true
         baseUrl:
           env_var: BASE_URL
-          const: true
-          default: 'https://test-iportal.nhg.vn'
+          const: false
+          default: ''
     staging:
       fields:
         env:
@@ -34,8 +34,8 @@ environment_config:
           dotenv: true
         baseUrl:
           env_var: BASE_URL
-          const: true
-          default: 'https://test-iportal.nhg.vn'
+          const: false
+          default: ''
     prod:
       fields:
         env:
@@ -44,5 +44,5 @@ environment_config:
           dotenv: true
         baseUrl:
           env_var: BASE_URL
-          const: true
-          default: 'https://test-iportal.nhg.vn'
+          const: false
+          default: ''

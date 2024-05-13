@@ -36,9 +36,9 @@ class DialogScaleAnimatedState extends State<DialogScaleAnimated>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Material(
-        color: Colors.transparent,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
         child: ScaleTransition(
           scale: scaleAnimation,
           child: Container(

@@ -7,9 +7,10 @@ abstract class AttendanceEvent extends Equatable {
 }
 
 class GetAttendanceDay extends AttendanceEvent {
-  const GetAttendanceDay({required this.date, required this.selectDate});
+  const GetAttendanceDay({required this.date, required this.selectDate, this.type});
   final String date;
   final DateTime selectDate;
+  final String? type;
 }
 
 class GetAttendanceWeek extends AttendanceEvent {
@@ -19,6 +20,7 @@ class GetAttendanceWeek extends AttendanceEvent {
   @override
   List<Object> get props => [];
 }
+
 class GetAttendanceMonth extends AttendanceEvent {
   const GetAttendanceMonth({required this.endDate, required this.startDate});
   final String startDate;
@@ -27,3 +29,4 @@ class GetAttendanceMonth extends AttendanceEvent {
   List<Object> get props => [];
 }
 
+class GetAttendanceType extends AttendanceEvent {}

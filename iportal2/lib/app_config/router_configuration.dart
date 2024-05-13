@@ -1,3 +1,4 @@
+import 'package:core/presentation/screens/domain/domain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
@@ -38,9 +39,9 @@ class CustomRouter {
 
   static PageRouteBuilder<dynamic>? onGenerateRoute(RouteSettings? settings) {
     switch (settings!.name) {
-      case DomainScreen.routeName:
+      case CDomainScreen.routeName:
         return transitionAnimation(
-            child: const DomainScreen(), routeName: DomainScreen.routeName);
+            child: const DomainScreen(), routeName: CDomainScreen.routeName);
       case LoginScreen.routeName:
         return transitionAnimation(
           routeName: LoginScreen.routeName,

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:core/presentation/screens/domain/domain_saver.dart';
 import 'package:dio/dio.dart';
 import 'package:network_data_source/network_client/network_client.dart';
 
@@ -30,6 +31,17 @@ abstract class AbstractDioClient with TokenManagementMixin {
     ));
 
     dio.options.baseUrl = baseUrl;
+  }
+
+  Future<void> ensureInitialized() async {
+    String baseUrl = dio.options.baseUrl;
+    if(baseUrl.isNotEmpty){
+      return;
+    }
+    baseUrl = await DomainSaver().getDomain();
+    if (baseUrl.isNotEmpty) {
+      dio.options.baseUrl = 'https://$baseUrl';
+    }
   }
 
   static bool unauthenCall(int? statusCode) {
@@ -74,6 +86,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     Json? headers,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.get(
         url,
         data: requestBody,
@@ -93,6 +106,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     Json? queryParameters,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.post(
         url,
         data: requestBody,
@@ -112,6 +126,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     Json? queryParameters,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.put(
         url,
         data: requestBody,
@@ -130,6 +145,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     List<Map<String, Object>>? data,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.put(
         url,
         data: data,
@@ -148,6 +164,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     List<Map<String, Object>>? data,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.post(
         url,
         data: data,
@@ -166,6 +183,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     required Map<String, Object?> data,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.post(
         url,
         data: data,
@@ -184,6 +202,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     Json? queryParameters,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.delete(
         url,
         data: requestBody,
@@ -201,6 +220,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
     required String filePath,
   }) async {
     try {
+      await ensureInitialized();
       final fileName = filePath.split('/').last;
 
       final formData = FormData.fromMap({
@@ -237,6 +257,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
       String? declaration,
       String? stocktaking}) async {
     try {
+      await ensureInitialized();
       final formData = FormData.fromMap({
         "user": creationUser,
         "order": order,
@@ -276,6 +297,17 @@ class RestApiClient {
 
   final Dio dio;
 
+  Future<void> ensureInitialized() async {
+    String baseUrl = dio.options.baseUrl;
+    if(baseUrl.isNotEmpty){
+      return;
+    }
+    baseUrl = await DomainSaver().getDomain();
+    if (baseUrl.isNotEmpty) {
+      dio.options.baseUrl = 'https://$baseUrl';
+    }
+  }
+
   Future<Json> doHttpGet(
     String url, {
     Json? requestBody,
@@ -283,6 +315,7 @@ class RestApiClient {
     Json? headers,
   }) async {
     try {
+      await ensureInitialized();
       Response response = await dio.get(
         url,
         data: requestBody,
@@ -303,6 +336,7 @@ class RestApiClient {
     Json? headers,
     List<Map<String, dynamic>>? data,
   }) async {
+    await ensureInitialized();
     Response response = await dio.post(
       url,
       data: requestBody ?? data,
@@ -318,6 +352,7 @@ class RestApiClient {
     Json? requestBody,
     Json? queryParameters,
   }) async {
+    await ensureInitialized();
     Response response = await dio.put(
       url,
       data: requestBody,
@@ -332,6 +367,7 @@ class RestApiClient {
     Json? requestBody,
     Json? queryParameters,
   }) async {
+    await ensureInitialized();
     Response response = await dio.delete(
       url,
       data: requestBody,
@@ -345,6 +381,7 @@ class RestApiClient {
     required String url,
     required FormData formData,
   }) async {
+    await ensureInitialized();
     Response response = await dio.post(
       url,
       data: formData,

@@ -12,7 +12,7 @@ import 'package:iportal2/components/empty_screen.dart';
 
 import 'package:iportal2/screens/bus/bloc/bus_bloc.dart';
 import 'package:iportal2/screens/bus/bus_card/card_bus_item.dart';
-import 'package:iportal2/screens/home/widgets/instruction_notebook/instruction_notebook_view.dart';
+import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:repository/repository.dart';
 
 class BusScreen extends StatelessWidget {
@@ -62,14 +62,12 @@ class BusView extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  // SelectChild(),
-                  // const SizedBox(height: 12),
                   SelectDate(
                     onDateChanged: (date) => context.read<BusBloc>().add(
                           BusChangedDate(date: date),
                         ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: BlocBuilder<BusBloc, BusState>(
                       builder: (context, state) {
@@ -149,13 +147,13 @@ class _SelectDateState extends State<SelectDate> {
           cancelText: 'Trở về',
           confirmText: 'Xong',
           initialDate: formatDate.parse(datePicked),
-          firstDate: DateTime(now.year, now.month, now.day - 7),
-          lastDate: DateTime(now.year, now.month, now.day + 7),
+          firstDate: DateTime(now.year - 2, now.month),
+          lastDate: DateTime(now.year + 2, now.month),
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: const ColorScheme.light(
-                  primary: AppColors.brand600,          
+                  primary: AppColors.brand600,
                   secondary: AppColors.white,
                 ),
               ),

@@ -6,7 +6,7 @@ import 'package:iportal2/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 
-class PhoneUpdate extends StatelessWidget {
+class PhoneUpdate extends StatefulWidget {
   const PhoneUpdate({
     super.key,
     required this.bloc,
@@ -19,9 +19,22 @@ class PhoneUpdate extends StatelessWidget {
   final bool isFather;
 
   @override
+  State<PhoneUpdate> createState() => _PhoneUpdateState();
+}
+
+class _PhoneUpdateState extends State<PhoneUpdate> {
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.requestFocus();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: bloc,
+      value: widget.bloc,
       child: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state.profileStatus == ProfileStatus.successUpdate) {
@@ -51,12 +64,13 @@ class PhoneUpdate extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 TitleAndInputText(
+                  focusNode: _focusNode,
                   textInputType: false,
                   isValid: !errMsg.isNotEmpty,
                   title: '',
                   hintText: 'Nhập số điện thoại mới',
                   onChanged: (value) {
-                    bloc.add(UpdatePhone(newPhoneNum: value));
+                    widget.bloc.add(UpdatePhone(newPhoneNum: value));
                   },
                   prefixIcon: Assets.icons.phone.image(),
                 ),
@@ -75,13 +89,13 @@ class PhoneUpdate extends StatelessWidget {
                       if (phone.length != 10) {
                         return;
                       }
-                      if (isParent) {
-                        bloc.add(UpdateParentPhone(
+                      if (widget.isParent) {
+                        widget.bloc.add(UpdateParentPhone(
                           phone: phone,
-                          isFather: isFather,
+                          isFather: widget.isFather,
                         ));
                       } else {
-                        bloc.add(UpdateStudentPhone(
+                        widget.bloc.add(UpdateStudentPhone(
                           phone: phone,
                           motherName: state.studentData.parent.motherName,
                           fatherPhone: state.studentData.parent.fatherPhone,
@@ -112,7 +126,7 @@ class PhoneUpdate extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    bloc.add(const CancelUpdatePhone());
+                    widget.bloc.add(const CancelUpdatePhone());
                     Navigator.pop(context);
                   },
                   child: SizedBox(

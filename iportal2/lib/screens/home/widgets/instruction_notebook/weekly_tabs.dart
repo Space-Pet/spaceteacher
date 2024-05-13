@@ -2,37 +2,67 @@ import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 
-
-class WeeklyTabs extends StatelessWidget {
+class WeeklyTabs extends StatefulWidget {
   const WeeklyTabs({
     super.key,
     this.lessons,
+    required this.date,
   });
 
   final List<DetailPlan>? lessons;
+  final DateTime date;
+
+  @override
+  State<WeeklyTabs> createState() => _WeeklyTabsState();
+}
+
+class _WeeklyTabsState extends State<WeeklyTabs>
+    with SingleTickerProviderStateMixin {
+  late TabController tabBarController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tabBarController = TabController(
+      length: (widget.lessons ?? []).length,
+      vsync: this,
+    );
+  }
+
+  Future<void> _onItemTapped(int index) async {
+    tabBarController.animateTo(index);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final listTab = List.generate((lessons ?? []).length, (index) {
+    final startOfWeek =
+        widget.date.subtract(Duration(days: widget.date.weekday - 1));
+    final days = widget.date.difference(startOfWeek).inDays;
+
+    final listTab = List.generate((widget.lessons ?? []).length, (index) {
       return TabDayOfWeek(
-        date: lessons?[index].planmnNgay.substring(0, 5) ?? '',
+        date: widget.lessons?[index].planmnNgay.substring(0, 5) ?? '',
         dayOfW: 'Thứ ${index + 2}',
       );
     });
 
     final listTabContent = List.generate(
-        (lessons ?? []).length,
+        (widget.lessons ?? []).length,
         (index) => SingleChildScrollView(
               child: Column(
                 children: tabView(index),
               ),
             ));
 
+    _onItemTapped(days);
+
     return DefaultTabController(
-        length: (lessons ?? []).length,
+        length: (widget.lessons ?? []).length,
         child: Column(
           children: [
             TabBar(
+              controller: tabBarController,
               padding: const EdgeInsets.all(0),
               labelPadding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
               labelColor: AppColors.brand600,
@@ -53,6 +83,7 @@ class WeeklyTabs extends StatelessWidget {
             ),
             Expanded(
               child: TabBarView(
+                controller: tabBarController,
                 children: listTabContent,
               ),
             ),
@@ -61,9 +92,9 @@ class WeeklyTabs extends StatelessWidget {
   }
 
   List<Container> tabView(int index) {
-    return List.generate(lessons?[index].planmnDataInWeek.length ?? 0,
+    return List.generate(widget.lessons?[index].planmnDataInWeek.length ?? 0,
         (innerIndex) {
-      final lesson = lessons?[index].planmnDataInWeek[innerIndex];
+      final lesson = widget.lessons?[index].planmnDataInWeek[innerIndex];
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: const BoxDecoration(
@@ -85,39 +116,43 @@ class WeeklyTabs extends StatelessWidget {
                   style: AppTextStyles.normal12(color: AppColors.black24),
                 )),
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 4,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: AppColors.brand600,
-                        borderRadius: BorderRadius.circular(14)),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        lesson?.planContent ?? '',
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            AppTextStyles.semiBold14(color: AppColors.black24),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        lesson?.planContentDetail ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.normal12(color: AppColors.gray61),
-                      ),
-                    ],
-                  )),
-                ],
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: AppColors.brand600,
+                          borderRadius: BorderRadius.circular(14)),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          lesson?.planContent ?? '',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.semiBold14(
+                              color: AppColors.black24),
+                        ),
+                        const SizedBox(height: 4),
+                        if (lesson?.planContentDetail != '')
+                          Text(
+                            lesson?.planContentDetail ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style:
+                                AppTextStyles.normal12(color: AppColors.gray61),
+                          ),
+                      ],
+                    )),
+                  ],
+                ),
               ),
             ),
           ],

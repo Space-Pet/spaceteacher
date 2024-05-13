@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../../data/models/models.dart';
-
+import '../../../resources/assets.gen.dart';
 import '../../../resources/resources.dart';
 import '../../extentions/date_formatter.dart';
 
@@ -184,7 +184,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
     });
 
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 10),
       child: Container(
         decoration: const BoxDecoration(
           color: AppColors.error100,

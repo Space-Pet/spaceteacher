@@ -40,7 +40,7 @@ class CTabBarAttendance extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 child: TabBar(
                   labelColor: AppColors.red,
                   unselectedLabelColor: AppColors.gray400,
@@ -61,7 +61,8 @@ class CTabBarAttendance extends StatelessWidget {
                       ),
                     ],
                   ),
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
+                  indicatorPadding:
+                      const EdgeInsets.symmetric(horizontal: -15, vertical: 8),
                   tabs: _buildTabs(),
                 ),
               ),

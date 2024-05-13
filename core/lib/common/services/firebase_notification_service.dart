@@ -44,9 +44,12 @@ class FirebaseNotificationService {
       print('Permission granted: ${settings.authorizationStatus}');
     }
 
-    final fcmToken = await messaging.getToken();
-
-    log('FirebaseNotificationService - init - fcmToken: $fcmToken');
+    try {
+      final fcmToken = await messaging.getToken();
+      log('FirebaseNotificationService - init - fcmToken: $fcmToken');
+    } catch (e) {
+      log('FirebaseNotificationService - init - error: $e');
+    }
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       showingNotification.showNotification(

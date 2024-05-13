@@ -56,7 +56,7 @@ class _MenuViewState extends State<MenuView> {
       final isLoading = state.menuStatus == MenuStatus.init;
 
       filteredData =
-          menu.data?.where((item) => item.thucDonNgay == currentDate).toList();
+          menu.data.where((item) => item.thucDonNgay == currentDate).toList();
       final date = state.date;
       print('day: ${menu.txtBeginDay}');
       final screenHeight = MediaQuery.of(context).size.height;
@@ -137,28 +137,26 @@ class _MenuViewState extends State<MenuView> {
                           },
                           child: Stack(
                             children: [
-                              SingleChildScrollView(
-                                child: SizedBox(
-                                  height: desiredHeight,
-                                  width: double.infinity,
-                                  child: Column(
-                                    children: [
-                                      MenuSelectWidget(
-                                        date: date ?? DateTime.now(),
-                                        weekSchedule: menu,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      if (menu.data != null)
-                                        TabMenu(dataMenu: menu.data ?? []),
-                                      if (menu.data == null)
-                                        const Expanded(
-                                          child: Center(
-                                            child: EmptyScreen(
-                                                text: 'Bạn chưa thực đơn mới'),
-                                          ),
-                                        )
-                                    ],
-                                  ),
+                              SizedBox(
+                                height: desiredHeight,
+                                width: double.infinity,
+                                child: Column(
+                                  children: [
+                                    MenuSelectWidget(
+                                      date: date ?? DateTime.now(),
+                                      weekSchedule: menu,
+                                    ),
+                                    const SizedBox(height: 8),
+                                    if (menu.data.isNotEmpty)
+                                      TabMenu(dataMenu: menu.data ?? []),
+                                    if (menu.data.isEmpty)
+                                      const Expanded(
+                                        child: Center(
+                                          child: EmptyScreen(
+                                              text: 'Bạn chưa thực đơn mới'),
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
                             ],

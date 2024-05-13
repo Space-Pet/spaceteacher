@@ -37,6 +37,10 @@ class _ScheduleScreenState extends State<ScheduleScreen>
         currentUserBloc: context.read<CurrentUserBloc>(),
       ),
       child: BlocBuilder<ScheduleBloc, ScheduleState>(
+        buildWhen: (previous, current) =>
+            previous.scheduleData != current.scheduleData ||
+            previous.status != current.status ||
+            previous.datePicked != current.datePicked,
         builder: (context, state) {
           final bloc = context.read<ScheduleBloc>();
           final isLoading = state.status == ScheduleStatus.loading;
@@ -50,6 +54,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
               context: context,
               builder: (_) => BlocBuilder<ScheduleBloc, ScheduleState>(
                 bloc: bloc,
+                buildWhen: (previous, current) =>
+                    previous.exerciseDataList != current.exerciseDataList,
                 builder: (context, state) {
                   final exerciseData = state.exerciseDataList.exerciseDataList;
                   final isEmptyExercise = exerciseData.isEmpty;
@@ -88,7 +94,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                     decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: AppRadius.roundedTop28,
@@ -101,7 +107,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                             bloc.add(ScheduleSelectDate(datePicked: date));
                           },
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
                         Expanded(
                           child: ClipRRect(
                             borderRadius: AppRadius.rounded10,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
 
-import '../../src/src.dart';
-
-
+import '../../core.dart';
 
 ThemeColor get themeColor => Injection.get<ThemeColor>();
 

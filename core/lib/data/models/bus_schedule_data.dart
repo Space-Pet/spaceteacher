@@ -12,7 +12,7 @@ class BusScheduleData with _$BusScheduleData {
     @JsonKey(name: 'school_id') required int schoolId,
     @JsonKey(name: 'schedule_id') required int scheduleId,
     @JsonKey(name: 'attendance_date') required String attendanceDate,
-    @JsonKey(name: 'attendance') required int attendance,
+    @JsonKey(name: 'attendance') required int? attendance,
     @JsonKey(name: 'check_out') required String? checkOut,
     @JsonKey(name: 'check_in') required String? checkIn,
     @JsonKey(name: 'pupil') required PupilData pupil,

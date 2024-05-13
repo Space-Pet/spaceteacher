@@ -47,12 +47,13 @@ class ScoreScreen extends StatelessWidget {
           scoreBloc.add(ScoreFilterChange(
             ViewScoreSelectedParam(
               selectedScoreType: state.scoreType,
-              selectedTerm: state.txtHocKy.text(),
+              selectedTerm:
+                  isPrimary ? state.txtTihHocKy.text() : state.txtHocKy.text(),
               selectedYear: newYear,
             ),
             isPrimary,
           ));
-          scoreBloc.add(ScoreFetchMoet());
+          // scoreBloc.add(ScoreFetchMoet());
         }
 
         final isLoading = state.status == ScoreStatus.loading;

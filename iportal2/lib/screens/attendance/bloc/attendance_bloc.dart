@@ -20,19 +20,39 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     on<GetAttendanceDay>(_onGetAttendanceDay);
     on<GetAttendanceWeek>(_onGetAttendanceWeek);
     on<GetAttendanceMonth>(_onGetAttendanceMonth);
+    on<GetAttendanceType>(_onGetType);
+    add(GetAttendanceType());
   }
+  void _onGetType(
+      GetAttendanceType event, Emitter<AttendanceState> emit) async {
+    try {
+      emit(state.copyWith(attendanceStatus: AttendanceStatus.initType));
+      final data = await appFetchApiRepo.getAttendanceType(
+          schoolId: currentUserBloc.state.user.school_id,
+          schoolBrand: currentUserBloc.state.user.school_brand);
+      emit(state.copyWith(
+          type: data, attendanceStatus: AttendanceStatus.successType));
+    } catch (e) {
+      emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
+    }
+  }
+
   void _onGetAttendanceDay(
       GetAttendanceDay event, Emitter<AttendanceState> emit) async {
     try {
-      emit(state.copyWith(attendanceStatus: AttendanceStatus.init, date: DateTime.now()));
+      emit(state.copyWith(
+          attendanceStatus: AttendanceStatus.init, date: DateTime.now()));
       final data = await appFetchApiRepo.getAttendanceDay(
+          type: state.type ?? '',
           date: event.date,
           pupilId: currentUserBloc.state.user.pupil_id,
           classId: currentUserBloc.state.user.children.class_id,
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.success, attendanceday: data, date: event.selectDate));
+          attendanceStatus: AttendanceStatus.success,
+          attendanceday: data,
+          date: event.selectDate));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }
@@ -41,16 +61,20 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   void _onGetAttendanceWeek(
       GetAttendanceWeek event, Emitter<AttendanceState> emit) async {
     try {
-      emit(state.copyWith(attendanceStatus: AttendanceStatus.initWeek, ));
+      emit(state.copyWith(
+        attendanceStatus: AttendanceStatus.initWeek,
+      ));
       final data = await appFetchApiRepo.getAttendanceWeek(
           pupilId: currentUserBloc.state.user.pupil_id,
           classId: currentUserBloc.state.user.children.class_id,
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand,
           startDate: event.startDate,
+     
           endDate: event.endDate);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.successMonth, attendanceWeek: data));
+          attendanceStatus: AttendanceStatus.successMonth,
+          attendanceWeek: data));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }
@@ -66,9 +90,11 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand,
           startDate: event.startDate,
+      
           endDate: event.endDate);
       emit(state.copyWith(
-          attendanceStatus: AttendanceStatus.successMonth, attendanceMonth: data));
+          attendanceStatus: AttendanceStatus.successMonth,
+          attendanceMonth: data));
     } catch (e) {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.error));
     }

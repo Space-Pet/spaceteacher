@@ -79,15 +79,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         isSaveLoginInfo: state.isSaveLoginInfo,
       );
 
-      final featuresLocal = await userRepository.getFeatures();
-      final listFeatures = featuresLocal
+      final dataLocal = await userRepository.getFeatures();
+      final listFeatures = dataLocal
           ?.firstWhere(
             (element) => element.user_key == user.user_key,
             orElse: () => LocalFeatures(user_key: '', features: []),
           )
           .features;
 
-      final pinnedAlbumIdList = featuresLocal
+      final featuresByGrade =
+          user.isKinderGarten() ? preSFeatures : hihgSFeatures;
+
+      final featuresByType = user.isStudent()
+          ? featuresByGrade
+              .where((element) => element.key != FeatureKey.survey)
+              .toList()
+          : featuresByGrade;
+
+      final pinnedAlbumIdList = dataLocal
           ?.firstWhere(
             (element) => element.user_key == user.user_key,
             orElse: () => LocalFeatures(
@@ -102,9 +111,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           .firstWhere((element) => element.value == user.school_brand);
 
       final userLocal = user.copyWith(
-        features: (listFeatures ?? []).isNotEmpty
-            ? listFeatures
-            : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
+        features:
+            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
         pinnedAlbumIdList: pinnedAlbumIdList,
         background: bgSchoolBrand,
       );
@@ -128,15 +136,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         platform: event.platform,
         tokenFirebase: event.tokenFirebase,
       );
-      final featuresLocal = await userRepository.getFeatures();
-      final listFeatures = featuresLocal
+      final dataLocal = await userRepository.getFeatures();
+
+      final listFeatures = dataLocal
           ?.firstWhere(
             (element) => element.user_key == user.user_key,
             orElse: () => LocalFeatures(user_key: '', features: []),
           )
           .features;
 
-      final pinnedAlbumIdList = featuresLocal
+      final featuresByGrade =
+          user.isKinderGarten() ? preSFeatures : hihgSFeatures;
+
+      final featuresByType = user.isStudent()
+          ? featuresByGrade
+              .where((element) => element.key != FeatureKey.survey)
+              .toList()
+          : featuresByGrade;
+
+      final pinnedAlbumIdList = dataLocal
           ?.firstWhere(
             (element) => element.user_key == user.user_key,
             orElse: () => LocalFeatures(
@@ -151,9 +169,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           .firstWhere((element) => element.value == user.school_brand);
 
       final userLocal = user.copyWith(
-        features: (listFeatures ?? []).isNotEmpty
-            ? listFeatures
-            : (user.isKinderGarten() ? preSFeatures : hihgSFeatures),
+        features:
+            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
         pinnedAlbumIdList: pinnedAlbumIdList,
         background: bgSchoolBrand,
       );

@@ -4,10 +4,10 @@ enum SurveyStatus { init, loadingSurvey, successSurvey }
 
 class SurveyState extends Equatable {
   final SurveyStatus surveyStatus;
-  final List<SurveyData>? surveyData;
+  final List<SurveyData> surveyData;
   final List<CheckBox>? checkBox;
   const SurveyState(
-      {this.surveyData, this.surveyStatus = SurveyStatus.init, this.checkBox});
+      {required this.surveyData, this.surveyStatus = SurveyStatus.init, this.checkBox});
   @override
   List<Object?> get props => [surveyData, surveyStatus, checkBox];
 

@@ -42,19 +42,27 @@ class _AttendanceScreenState extends State<AttendanceScreen>
         appFetchApiRepo: appFetchApiRepository,
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
-
-    attendanceBloc.add(GetAttendanceDay(
-        date: formatDate.format(DateTime.now()), selectDate: DateTime.now()));
     attendanceBloc.add(GetAttendanceWeek(
         endDate: formatDate.format(lastDayOfWeek),
         startDate: formatDate.format(firstDayOfWeek)));
     attendanceBloc.add(GetAttendanceMonth(
         endDate: formatDate.format(lastDayOfMonth),
         startDate: formatDate.format(firstDayOfMonth)));
-
     return BlocProvider.value(
       value: attendanceBloc,
-      child: const AttendanceView(),
+      child: BlocListener<AttendanceBloc, AttendanceState>(
+        listenWhen: (previous, current) {
+          return previous.attendanceStatus != current.attendanceStatus;
+        },
+        listener: (context, state) {
+          if (state.attendanceStatus == AttendanceStatus.successType) {
+            attendanceBloc.add(GetAttendanceDay(
+                date: formatDate.format(DateTime.now()),
+                selectDate: DateTime.now()));
+          }
+        },
+        child: AttendanceView(),
+      ),
     );
   }
 
@@ -87,7 +95,11 @@ class _AttendanceViewState extends State<AttendanceView> {
             final attendanceWeek = state.attendanceWeek;
             final attendanceMonth = state.attendanceMonth;
             final selectDate = state.selectDate;
-            final isLoading = state.attendanceStatus == AttendanceStatus.init;
+            final isLoading =
+                (state.attendanceStatus == AttendanceStatus.init) ||
+                    (state.attendanceStatus == AttendanceStatus.initType) ||
+                    (state.attendanceStatus == AttendanceStatus.successType);
+            final type = state.type;
             return Expanded(
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -171,13 +183,20 @@ class _AttendanceViewState extends State<AttendanceView> {
                             height: desiredHeight,
                             width: double.infinity,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TabBarAttendance(
                                   selectDate: selectDate,
                                   stateAttendance: attendanceDay,
                                   attendanceWeek: attendanceWeek,
                                   attendanceMonth: attendanceMonth,
-                                )
+                                ),
+                                // if (type == null)
+                                //   Padding(
+                                //     padding: const EdgeInsets.only(bottom: 150),
+                                //     child: EmptyScreen(
+                                //         text: 'Không lấy được loại điểm danh'),
+                                //   )
                               ],
                             ),
                           ),

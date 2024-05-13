@@ -18,7 +18,7 @@ class SelectDate extends StatefulWidget {
 class _SelectDateState extends State<SelectDate> {
   DateTime now = DateTime.now();
 
-  DateFormat formatDate = DateFormat("EEEE, dd/MM/yyyy", 'vi_VN');
+  DateFormat formatDate = DateFormat('EEEE, dd/MM/yyyy', 'vi_VN');
   late String datePickedFormat;
 
   @override
@@ -100,8 +100,7 @@ class _SelectDateState extends State<SelectDate> {
                     child: SizedBox(
                       child: Text(
                         DateFormat('dd/MM/yyyy')
-                                .format(widget.selectDate ?? DateTime.now()) ??
-                            datePickedFormat,
+                                .format(widget.selectDate ?? DateTime.now()),
                         style: AppTextStyles.normal16(color: AppColors.gray500),
                       ),
                     ),

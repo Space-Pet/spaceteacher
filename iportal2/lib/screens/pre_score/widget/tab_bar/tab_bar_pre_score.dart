@@ -74,8 +74,8 @@ class TabBarPreScore extends StatelessWidget {
                           endDate: endDate,
                           startDate: startDate,
                         )
-                      : Padding(
-                          padding: const EdgeInsets.only(top: 150),
+                      : const Padding(
+                          padding: EdgeInsets.only(top: 150),
                           child: Center(
                             child: EmptyScreen(text: 'Bạn chưa có nhận xét'),
                           ),

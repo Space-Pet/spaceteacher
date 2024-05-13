@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_strings.dart';
 import 'package:core/resources/app_text_styles.dart';
@@ -274,7 +275,7 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Text(
-                            'iPortal version 1.0.0 (31) - 20240220',
+                            'iPortal version 1.0.0 (37) - 20240220',
                             style: AppTextStyles.normal12(
                               color: AppColors.gray400,
                             ),

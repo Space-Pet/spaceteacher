@@ -92,6 +92,12 @@ class _WeekSelectState extends State<WeekSelect> {
                       helpText: 'Chọn ngày',
                       cancelText: 'Trở về',
                       confirmText: 'Xong',
+                      selectableDayPredicate: (DateTime date) {
+                        if (date.weekday == DateTime.sunday) {
+                          return false;
+                        }
+                        return true;
+                      },
                       initialDate: widget.date,
                       firstDate: DateTime(now.year - 3, now.month),
                       lastDate: DateTime(now.year + 1, now.month),

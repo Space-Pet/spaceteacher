@@ -58,7 +58,7 @@ class BMIGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140,
+      width: MediaQuery.of(context).size.width / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(

@@ -7,7 +7,6 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
-import 'package:iportal2/screens/home/models/lesson_model.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:iportal2/utils/validation_functions.dart';
 import 'package:skeletons/skeletons.dart';
@@ -32,14 +31,12 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         final isLoading = state.statusExercise == HomeStatus.loading;
-        final isDataEmpty =
-            state.exerciseDueDateDataList.exerciseDataList.isEmpty &&
-                !isLoading;
+        final exercisesDueDateToday = state.exerciseDueDateToday;
 
-        final exercisesDueDateToday =
-            state.exerciseDueDateToday.exerciseDataList;
-        final exercisesDueDate = state.exerciseDueDateDataList.exerciseDataList;
-        final exercisesInDay = state.exerciseInDayDataList.exerciseDataList;
+        final isDataEmpty = exercisesDueDateToday.isEmpty && !isLoading;
+
+        final exercisesDueDate = state.exerciseDueDateDataList;
+        final exercisesInDay = state.exerciseInDayDataList;
 
         final firstThreeExercisesDueDate =
             exercisesDueDateToday.take(3).toList();
@@ -259,76 +256,3 @@ class InstructrionSkeleton extends StatelessWidget {
     );
   }
 }
-
-final List<LessonModel> lessons = [
-  LessonModel(
-    room: 'Ngoài trời',
-    id: 1,
-    number: 1,
-    name: 'Toán',
-    teacherName: 'Nguyễn Minh Nhi',
-    description: 'B29: Tính toán với số thập phân',
-    advice: 'Chuẩn bị bài trước khi đến lớp',
-    timeStart: '7:30',
-    timeEnd: '8:15',
-    attendance: 'Có mặt',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 2,
-    number: 2,
-    name: 'Vật lý',
-    teacherName: 'Trần Anh Thư',
-    description: 'B32: Sự phụ thuộc của điện trở',
-    advice: 'Chuẩn bị bài trước khi đến lớp',
-    timeStart: '8:15',
-    timeEnd: '9:00',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 3,
-    number: 3,
-    name: 'Hóa học',
-    teacherName: 'Võ Hoàng Giang',
-    description: 'Kiểm tra 15p',
-    advice: 'Chuẩn bị bài trước khi đến lớp',
-    timeStart: '9:15',
-    timeEnd: '10:00',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 4,
-    number: 4,
-    teacherName: 'Cao Mỹ Nhân',
-    name: 'Hóa học',
-    description: 'B30: Nước',
-    advice: '',
-    timeStart: '10:00',
-    timeEnd: '10:45',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 5,
-    number: 5,
-    name: 'Tiếng Anh',
-    teacherName: 'Lê Trúc My',
-    description: 'Kiểm tra 15p',
-    advice: '',
-    timeStart: '10:45',
-    timeEnd: '11:30',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-];

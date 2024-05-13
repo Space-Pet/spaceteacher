@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 
+import '../../../presentation/screens/domain/domain_saver.dart';
 import '../../storage/token_manager_mixin.dart';
 import '../../utils/utils.dart';
 import '../interceptor/exceptions.dart';
@@ -28,14 +29,23 @@ class ApiClient with TokenManagementMixin {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = await getAccessToken();
+          print(token);
           if (token.isNotEmpty) {
-            options.headers['Authorization'] = 'Bearer $token';
+            dio.options.headers['Authorization'] = 'Bearer $token';
           }
           //====================================================================
           final log = StringBuffer();
           final method = !isNullOrEmpty(options.method)
               ? options.method.toUpperCase()
               : 'METHOD';
+
+          if (isNullOrEmpty(options.baseUrl)) {
+            final domainSaver = DomainSaver();
+            final domain = await domainSaver.getDomain();
+            if (domain.isNotEmpty) {
+              options.baseUrl = 'https://$domain/api/v1';
+            }
+          }
 
           final url = !isNullOrEmpty(options.path)
               ? '${options.baseUrl}${options.path}'

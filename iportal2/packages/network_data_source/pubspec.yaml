@@ -12,7 +12,6 @@ dependencies:
     path: ../../../core
   local_data_source:
     path: ../local_data_source
-  dio: ^5.0.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
+
+import 'package:flutter/material.dart';
 
 class CircularArchProgressBarPainter extends CustomPainter {
   final double strokeWidth;

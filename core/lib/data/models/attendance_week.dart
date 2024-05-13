@@ -59,7 +59,7 @@ class DataItems {
         id: json['id'] ?? 0,
         date: json['date'] ?? '',
         numberOfClassPeriod: json['number_of_class_period'] ?? '',
-        subjectId: json['subject_id'] ?? '',
+        subjectId: json['subject_id'] ?? 0,
         subjectName: json['subject_name'] ?? '');
   }
 }

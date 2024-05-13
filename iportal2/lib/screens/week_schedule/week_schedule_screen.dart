@@ -1,4 +1,5 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,10 +8,7 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-import 'package:core/resources/resources.dart';
-import 'package:iportal2/screens/home/models/lesson_model.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/weekly_tabs.dart';
 import 'package:iportal2/screens/week_schedule/bloc/week_schedule_bloc.dart';
 import 'package:repository/repository.dart';
@@ -61,9 +59,8 @@ class WeekScheduleView extends StatelessWidget {
       builder: (context, state) {
         final weekData = state.weekSchedule;
         final isLoading = state.weekScheduleStatus == WeekScheduleStatus.init;
-        final screenHeight = MediaQuery.of(context).size.height;
-        final desiredHeight = screenHeight * 1;
         final date = state.date;
+
         return BackGroundContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,116 +70,89 @@ class WeekScheduleView extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 26, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: AppRadius.roundedTop28,
                   ),
-                  child: CustomRefresh(
-                    onRefresh: () async {
-                      context.read<WeekScheduleBloc>().add(GetWeekSchedule(
-                          txtDate: DateFormat('dd-MM-yyy')
-                              .format(DateTime.now())
-                              .toString(),
-                          date: date ?? DateTime.now()));
-                    },
-                    child: Stack(
-                      children: [
-                        ListView(),
-                        SingleChildScrollView(
-                          child: ClipRRect(
-                            borderRadius: AppRadius.rounded10,
-                            child: AppSkeleton(
-                                skeleton: SizedBox(
-                                    height: 500,
-                                    child: ListView.builder(
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      padding: const EdgeInsets.all(0),
-                                      itemCount: 5,
-                                      itemBuilder: (context, index) =>
-                                          Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 12, 0, 12),
-                                        decoration: BoxDecoration(
-                                          border: Border(
-                                            bottom: index == 4
-                                                ? BorderSide.none
-                                                : const BorderSide(
-                                                    color: AppColors.gray300),
-                                          ),
-                                        ),
-                                        child: SkeletonItem(
-                                            child: Column(
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: SkeletonParagraph(
-                                                    style:
-                                                        SkeletonParagraphStyle(
-                                                            lineStyle:
-                                                                SkeletonLineStyle(
-                                                      randomLength: true,
-                                                      height: 10,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    )),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        )),
-                                      ),
-                                    )),
-                                isLoading: isLoading,
-                                child: SizedBox(
-                                  height: desiredHeight,
-                                  width: double.infinity,
-                                  child: Column(
-                                    children: [
-                                      WeekSelectWidget(
-                                        date: date ?? DateTime.now(),
-                                        weekSchedule: weekData,
-                                      ),
-                                      if (weekData != null &&
-                                          weekData.data.mainPlan!.isNotEmpty &&
-                                          state.weekScheduleStatus ==
-                                              WeekScheduleStatus.success)
-                                        WeeklyTopic(weekSchedule: weekData),
-                                      const SizedBox(height: 16),
-                                      if (weekData != null &&
-                                          weekData
-                                              .data.detailPlan!.isNotEmpty &&
-                                          state.weekScheduleStatus ==
-                                              WeekScheduleStatus.success)
+                  child: ClipRRect(
+                    borderRadius: AppRadius.rounded10,
+                    child: AppSkeleton(
+                        skeleton: SizedBox(
+                            height: 500,
+                            child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(0),
+                              itemCount: 5,
+                              itemBuilder: (context, index) => Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 12, 0, 12),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: index == 4
+                                        ? BorderSide.none
+                                        : const BorderSide(
+                                            color: AppColors.gray300),
+                                  ),
+                                ),
+                                child: SkeletonItem(
+                                    child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
                                         Expanded(
-                                          child: WeeklyTabs(
-                                            lessons: weekData.data.detailPlan,
-                                          ),
-                                        ),
-                                      if (weekData == null ||
-                                          weekData.data.detailPlan!.isEmpty)
-                                        const Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsets.only(bottom: 200),
-                                            child: Center(
-                                              child: EmptyScreen(
-                                                  text:
-                                                      'Bạn chưa có kế hoạch tuần'),
-                                            ),
+                                          child: SkeletonParagraph(
+                                            style: SkeletonParagraphStyle(
+                                                lineStyle: SkeletonLineStyle(
+                                              randomLength: true,
+                                              height: 10,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            )),
                                           ),
                                         )
-                                    ],
-                                  ),
+                                      ],
+                                    ),
+                                  ],
                                 )),
-                          ),
-                        ),
-                      ],
-                    ),
+                              ),
+                            )),
+                        isLoading: isLoading,
+                        child: Column(
+                          children: [
+                            WeekSelectWidget(
+                              date: date ?? DateTime.now(),
+                              weekSchedule: weekData,
+                            ),
+                            if (weekData != null &&
+                                weekData.data.mainPlan!.isNotEmpty &&
+                                state.weekScheduleStatus ==
+                                    WeekScheduleStatus.success)
+                              WeeklyTopic(weekSchedule: weekData),
+                            const SizedBox(height: 8),
+                            if (weekData != null &&
+                                weekData.data.detailPlan!.isNotEmpty &&
+                                state.weekScheduleStatus ==
+                                    WeekScheduleStatus.success)
+                              Expanded(
+                                child: WeeklyTabs(
+                                  date: date ?? DateTime.now(),
+                                  lessons: weekData.data.detailPlan,
+                                ),
+                              ),
+                            if (weekData == null ||
+                                weekData.data.detailPlan!.isEmpty)
+                              const Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(bottom: 200),
+                                  child: Center(
+                                    child: EmptyScreen(
+                                        text: 'Bạn chưa có kế hoạch tuần'),
+                                  ),
+                                ),
+                              )
+                          ],
+                        )),
                   ),
                 ),
               ),
@@ -200,7 +170,7 @@ class WeeklyTopic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 12),
+      margin: const EdgeInsets.only(top: 8),
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: ShapeDecoration(
@@ -283,173 +253,95 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-          decoration: const BoxDecoration(
-            color: AppColors.gray100,
-            borderRadius: BorderRadius.all(Radius.circular(40)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.read<WeekScheduleBloc>().add(GetWeekSchedule(
-                      date: DateTime.now(),
-                      txtDate: widget.weekSchedule?.txtPreWeek ?? ''));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.arrow_back_ios_rounded,
-                    size: 20,
-                    color: AppColors.gray400,
-                  ),
-                ),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      decoration: const BoxDecoration(
+        color: AppColors.gray100,
+        borderRadius: BorderRadius.all(Radius.circular(40)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () {
+              context.read<WeekScheduleBloc>().add(GetWeekSchedule(
+                  date: DateTime.now(),
+                  txtDate: widget.weekSchedule?.txtPreWeek ?? ''));
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                size: 20,
+                color: AppColors.gray400,
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      helpText: 'Chọn ngày',
-                      cancelText: 'Trở về',
-                      confirmText: 'Xong',
-                      initialDate: widget.date,
-                      firstDate: DateTime(now.year - 3, now.month),
-                      lastDate: DateTime(now.year + 1, now.month),
-                      builder: (context, child) {
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            colorScheme: const ColorScheme.light(
-                              primary: AppColors.brand600,
-                              secondary: AppColors.white,
-                            ),
-                          ),
-                          child: child!,
-                        );
-                      },
-                    );
-
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyy').format(pickedDate);
-                      setState(() {
-                        datePicked = formattedDate;
-                        context.read<WeekScheduleBloc>().add(GetWeekSchedule(
-                            txtDate: datePicked, date: pickedDate));
-                      });
-                    } else {}
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Tuần ${widget.weekSchedule?.txtWeek} ',
-                          style: AppTextStyles.semiBold14(
-                              color: AppColors.brand600)),
-                      Text(
-                        '(${widget.weekSchedule?.txtBeginDay} - ${widget.weekSchedule?.txtEndDay})',
-                        style: AppTextStyles.normal14(color: AppColors.gray500),
+            ),
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  helpText: 'Chọn ngày',
+                  cancelText: 'Trở về',
+                  confirmText: 'Xong',
+                  initialDate: widget.date,
+                  firstDate: DateTime(now.year - 3, now.month),
+                  lastDate: DateTime(now.year + 1, now.month),
+                  builder: (context, child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: const ColorScheme.light(
+                          primary: AppColors.brand600,
+                          secondary: AppColors.white,
+                        ),
                       ),
-                    ],
+                      child: child!,
+                    );
+                  },
+                );
+
+                if (pickedDate != null) {
+                  String formattedDate =
+                      DateFormat('dd-MM-yyy').format(pickedDate);
+                  setState(() {
+                    datePicked = formattedDate;
+                    context.read<WeekScheduleBloc>().add(
+                        GetWeekSchedule(txtDate: datePicked, date: pickedDate));
+                  });
+                } else {}
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Tuần ${widget.weekSchedule?.txtWeek} ',
+                      style:
+                          AppTextStyles.semiBold14(color: AppColors.brand600)),
+                  Text(
+                    '(${widget.weekSchedule?.txtBeginDay} - ${widget.weekSchedule?.txtEndDay})',
+                    style: AppTextStyles.normal14(color: AppColors.gray500),
                   ),
-                ),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  context.read<WeekScheduleBloc>().add(GetWeekSchedule(
-                      date: DateTime.now(),
-                      txtDate: widget.weekSchedule?.txtNextWeek ?? ''));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 20,
-                    color: AppColors.gray400,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+          GestureDetector(
+            onTap: () {
+              context.read<WeekScheduleBloc>().add(GetWeekSchedule(
+                  date: DateTime.now(),
+                  txtDate: widget.weekSchedule?.txtNextWeek ?? ''));
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 20,
+                color: AppColors.gray400,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
-
-final List<LessonModel> weeklyProjects = [
-  LessonModel(
-    room: 'P.310',
-    id: 1,
-    number: 1,
-    name: 'Đón trẻ và điểm danh',
-    teacherName: 'Nguyễn Minh Nhi',
-    description: 'Cô đón trẻ từ Quý Cha mẹ học sinh và tiến hành điểm danh',
-    advice: 'Học sinh chuẩn bị bài kỹ trước khi đến lớp.',
-    timeStart: '7:30',
-    timeEnd: '8:15',
-    attendance: 'Có mặt',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 2,
-    number: 2,
-    name: 'Ăn sáng',
-    teacherName: 'Trần Anh Thư',
-    description: '',
-    advice: '',
-    timeStart: '8:15',
-    timeEnd: '9:00',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 3,
-    number: 3,
-    name: 'Thực hành mầm non',
-    teacherName: 'Võ Hoàng Giang',
-    description:
-        'Cô hướng dẫn trẻ thực hành vệ sinh cá nhân, học cách tự phục vụ',
-    advice: 'Học sinh chuẩn bị bài kỹ trước khi đến lớp.',
-    timeStart: '9:15',
-    timeEnd: '10:00',
-    attendance: 'Vắng có phép',
-    fileUrl: '',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 4,
-    number: 4,
-    teacherName: 'Cao Mỹ Nhân',
-    name: 'Hoạt động vui chơi',
-    description:
-        'Cô dạy trẻ chơi trò chơi vận động, trò chơi xã hội, trò chơi xây dựng',
-    advice: '',
-    timeStart: '10:00',
-    timeEnd: '10:45',
-    attendance: 'Vắng có phép',
-    fileUrl: '',
-  ),
-  LessonModel(
-    room: 'P.310',
-    id: 5,
-    number: 5,
-    name: 'Hoạt động ngoài trời',
-    teacherName: 'Lê Trúc My',
-    description:
-        'Cô cùng trẻ vui chơi ngoài trời, trò chơi vận động, trò chơi xã hội',
-    advice: '',
-    timeStart: '10:45',
-    timeEnd: '11:30',
-    attendance: 'Vắng có phép',
-    fileUrl:
-        'https://aegona-my.sharepoint.com/:w:/p/phu_nguyen/EQeJxQVUN65Fl5MRI_dRo9IB6nFgBG7HROx4-ICPvy700A?e=f2MfU6',
-  ),
-];

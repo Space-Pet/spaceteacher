@@ -28,6 +28,7 @@ class RegisterNotebookBloc
 
   _onSelectDate(
       RegisterSelectDate event, Emitter<RegisterNotebookState> emit) async {
+    emit(state.copyWith(status: RegisterNotebookStatus.loading));
     final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
       userKey: currentUserBloc.state.user.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
@@ -38,19 +39,24 @@ class RegisterNotebookBloc
             ? LessonData.empty()
             : weeklyLessonData.lessonDataList[0],
         datePicked: event.datePicked,
+        status: RegisterNotebookStatus.success,
       ),
     );
   }
 
   _onFetchWeeklyData(RegisterNotebookFetchData event,
       Emitter<RegisterNotebookState> emit) async {
+    emit(state.copyWith(status: RegisterNotebookStatus.loading));
     final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
       userKey: currentUserBloc.state.user.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
     );
-    emit(state.copyWith(
-        lessonData: weeklyLessonData.lessonDataList.isEmpty
-            ? LessonData.empty()
-            : weeklyLessonData.lessonDataList[0]));
+    emit(
+      state.copyWith(
+          status: RegisterNotebookStatus.success,
+          lessonData: weeklyLessonData.lessonDataList.isEmpty
+              ? LessonData.empty()
+              : weeklyLessonData.lessonDataList[0]),
+    );
   }
 }

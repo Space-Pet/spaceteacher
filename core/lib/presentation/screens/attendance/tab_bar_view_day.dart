@@ -1,3 +1,4 @@
+import 'package:core/presentation/common_widget/empty_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -145,9 +146,10 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
     });
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 16),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: SelectDate(
               selectDate: widget.selectDate,
               onDatePicked: (date) {
@@ -155,12 +157,15 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
                 widget.getAttendanceDay?.call(formattedDate, date);
               },
             )),
-        Expanded(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [...lessonsWExpanded],
+        if (widget.lessons?.length != null)
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [...lessonsWExpanded],
+            ),
           ),
-        ),
+        if (widget.lessons?.length == null)
+          Expanded(child: EmptyScreen(text: 'Bạn chưa có điểm danh theo ngày'))
       ],
     );
   }

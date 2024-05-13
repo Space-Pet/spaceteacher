@@ -1,6 +1,7 @@
 import 'package:core/data/models/survay_data.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/screens/survey/bloc/survey_bloc.dart';
@@ -49,7 +50,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
                   surveyData: surveyItem,
                   isShow: true,
                   onNextPage: (updatedListSurvey) {
-                    listSurvey = updatedListSurvey; // Cập nhật listSurvey
+                    listSurvey = updatedListSurvey;
                     _pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
@@ -76,30 +77,30 @@ class _SurveyPageViewState extends State<SurveyPageView> {
           ),
         ),
         _buildPageIndicator(),
-        const SizedBox(height: 15),
+        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(AppColors.white),
-                ),
-                onPressed: () {
-                  if (_currentPage > 0) {
+              if (_currentPage > 0)
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(AppColors.white),
+                  ),
+                  onPressed: () {
                     _pageController.previousPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
                     );
-                  }
-                },
-                child: Text(
-                  'Quay lại',
-                  style: AppTextStyles.normal16(fontWeight: FontWeight.w600),
+                  },
+                  child: Text(
+                    'Quay lại',
+                    style: AppTextStyles.normal16(fontWeight: FontWeight.w600),
+                  ),
                 ),
-              ),
+              const SizedBox(width: 12),
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
@@ -132,7 +133,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
             ],
           ),
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 24),
       ],
     );
   }
@@ -155,7 +156,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
         width: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: _currentPage == index ? Colors.green : Colors.grey,
+          color: _currentPage == index ? AppColors.brand600 : AppColors.gray200,
         ),
       ),
     );

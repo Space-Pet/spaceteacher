@@ -11,6 +11,7 @@ class AuthorizeInterceptor extends Interceptor with TokenManagementMixin {
   ) async {
     await getToken();
     if (accessToken.isNotEmpty) {
+      print(accessToken);
       options.headers[HttpHeaders.authorizationHeader] = 'Bearer $accessToken';
     }
     handler.next(options);

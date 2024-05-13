@@ -8,7 +8,8 @@ part 'survey_state.dart';
 
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
   final AppFetchApiRepository appFetchApiRepository;
-  SurveyBloc({required this.appFetchApiRepository}) : super(SurveyState()) {
+  SurveyBloc({required this.appFetchApiRepository})
+      : super(SurveyState(surveyData: [])) {
     on<GetSurvey>(_onGetSurvey);
     on<PostSurvey>(_onPostSurvey);
   }

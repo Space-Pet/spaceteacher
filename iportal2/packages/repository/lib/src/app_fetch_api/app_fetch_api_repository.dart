@@ -124,11 +124,13 @@ class AppFetchApiRepository {
       required int pupilId,
       required int classId,
       required int schoolId,
+      required String type,
       required String schoolBrand}) async {
     final data = await _appFetchApi.getAttendanceDay(
         date: date,
         pupilId: pupilId,
         classId: classId,
+        type: type,
         schoolId: schoolId,
         schoolBrand: schoolBrand);
     return data;
@@ -140,10 +142,12 @@ class AppFetchApiRepository {
       required int schoolId,
       required String schoolBrand,
       required String startDate,
+ 
       required String endDate}) async {
     final data = await _appFetchApi.getAttendanceWeek(
         pupilId: pupilId,
         classId: classId,
+      
         schoolId: schoolId,
         schoolBrand: schoolBrand,
         startDate: startDate,
@@ -155,12 +159,14 @@ class AppFetchApiRepository {
       {required int pupilId,
       required int classId,
       required int schoolId,
+     
       required String schoolBrand,
       required String startDate,
       required String endDate}) async {
     final data = await _appFetchApi.getAttendanceMonth(
         pupilId: pupilId,
         classId: classId,
+       
         schoolId: schoolId,
         schoolBrand: schoolBrand,
         startDate: startDate,
@@ -280,5 +286,12 @@ class AppFetchApiRepository {
   Future<void> postSurvey(
       {required List<Map<String, dynamic>> listSurvey}) async {
     _appFetchApi.postSurvey(listSurvey: listSurvey);
+  }
+
+  Future<String> getAttendanceType(
+      {required int schoolId, required String schoolBrand}) async {
+    final data = await _appFetchApi.getAttendanceType(
+        schoolId: schoolId, schoolBrand: schoolBrand);
+    return data;
   }
 }
