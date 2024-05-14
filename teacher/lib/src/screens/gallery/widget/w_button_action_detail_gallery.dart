@@ -19,9 +19,13 @@ class ButtonActionDetailGallery extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        onPressed();
+        if (isEnable == true) {
+          onPressed();
+        }
       },
       style: ElevatedButton.styleFrom(
+        overlayColor: Colors.transparent,
+        shadowColor: isEnable == true ? AppColors.gray500 : Colors.transparent,
         backgroundColor: AppColors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -36,16 +40,21 @@ class ButtonActionDetailGallery extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppTextStyles.normal14(color: AppColors.gray500),
+            style: AppTextStyles.normal14(
+                color: isEnable == true
+                    ? AppColors.blueForgorPassword
+                    : AppColors.gray500),
           ),
           const SizedBox(
             width: 10,
           ),
           CircleAvatar(
               radius: 12,
-              backgroundColor: AppColors.blueGray500,
+              backgroundColor: isEnable == true
+                  ? AppColors.blueForgorPassword
+                  : AppColors.blueGray500,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(2.0),
                 child: icon,
               )),
         ],

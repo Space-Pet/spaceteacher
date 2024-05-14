@@ -63,8 +63,8 @@ class CustomDialogUpdatePhone extends StatelessWidget {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color?>(AppColors.white),
-                  side: MaterialStateProperty.all<BorderSide>(
+                      WidgetStateProperty.all<Color?>(AppColors.white),
+                  side: WidgetStateProperty.all<BorderSide>(
                     const BorderSide(color: AppColors.gray300),
                   ),
                 ),

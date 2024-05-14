@@ -9,8 +9,13 @@ class ImageModel {
   final String? description;
   @JsonKey(name: "images")
   final UrlImageModel? urlImageModel;
-
-  ImageModel({this.id, this.name, this.description, this.urlImageModel});
+  final bool? isChoose;
+  ImageModel(
+      {this.id,
+      this.name,
+      this.description,
+      this.urlImageModel,
+      this.isChoose});
 
   factory ImageModel.fromJson(Map<String, dynamic> json) =>
       _$ImageModelFromJson(json);
@@ -22,17 +27,18 @@ class ImageModel {
     return 'ImageModel{id: $id, name: $name, description: $description, urlImageModel: $urlImageModel}';
   }
 
-  ImageModel copyWith({
-    int? id,
-    String? name,
-    String? description,
-    UrlImageModel? urlImageModel,
-  }) {
+  ImageModel copyWith(
+      {int? id,
+      String? name,
+      String? description,
+      UrlImageModel? urlImageModel,
+      bool? isChoose}) {
     return ImageModel(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       urlImageModel: urlImageModel ?? this.urlImageModel,
+      isChoose: isChoose ?? this.isChoose,
     );
   }
 }

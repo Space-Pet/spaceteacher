@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
+
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/date_picker_horizontal.dart';
 import 'package:teacher/components/empty_screen.dart';
-import 'package:teacher/components/skeletons/instruction_sekeletons.dart';
+
 import 'package:teacher/repository/bus_repository/bus_repositories.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/src/screens/bus/bus_card/card_bus_item.dart';
 import 'package:teacher/src/utils/extension_context.dart';
-import 'package:teacher/src/utils/extension_date_time.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});
@@ -167,24 +166,20 @@ class _BusViewState extends State<BusView> {
                             child: Stack(
                               children: [
                                 ListView(),
-                                AppSkeleton(
-                                  isLoading: isLoading,
-                                  skeleton: const InstructrionSkeleton(),
-                                  child: isEmptyData
-                                      ? const Center(
-                                          child: EmptyScreen(
-                                              text: 'Chưa có dữ liệu'))
-                                      : ListView.builder(
-                                          padding: EdgeInsets.zero,
-                                          cacheExtent: 1000,
-                                          itemCount: busSchedules.length,
-                                          itemBuilder: (context, index) {
-                                            return CardBusItem(
-                                              busSchedule: busSchedules[index],
-                                            );
-                                          },
-                                        ),
-                                ),
+                                isEmptyData
+                                    ? const Center(
+                                        child: EmptyScreen(
+                                            text: 'Chưa có dữ liệu'))
+                                    : ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        cacheExtent: 1000,
+                                        itemCount: busSchedules.length,
+                                        itemBuilder: (context, index) {
+                                          return CardBusItem(
+                                            busSchedule: busSchedules[index],
+                                          );
+                                        },
+                                      ),
                               ],
                             ),
                           );

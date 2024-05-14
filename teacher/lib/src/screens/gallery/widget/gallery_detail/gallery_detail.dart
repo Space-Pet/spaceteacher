@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
@@ -25,6 +23,18 @@ class GalleryDetail extends StatefulWidget {
 }
 
 class GalleryDetailState extends State<GalleryDetail> {
+  bool _isEnable = false;
+  bool _isEdit = false;
+  late List<bool> _isChooseList;
+  late List<int> selectedIndices;
+
+  @override
+  void initState() {
+    _isChooseList = List.filled(widget.galleryItem.images?.length ?? 0, false);
+    selectedIndices = [];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +48,57 @@ class GalleryDetailState extends State<GalleryDetail> {
                 context.pop();
               },
               canGoBack: true,
+              actionWidget: _isEnable == true
+                  ? ElevatedButton(
+                      onPressed: () {
+                        _isEnable = !_isEnable;
+                        setState(() {});
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff1B3A6D),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: AppRadius.rounded20,
+                        ),
+                      ),
+                      child: Text(
+                        'Hủy',
+                        style: AppTextStyles.semiBold16(
+                          color: AppColors.white,
+                        ),
+                      ))
+                  : Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _isEnable = !_isEnable;
+                            setState(() {});
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff1B3A6D),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: AppRadius.rounded20,
+                            ),
+                          ),
+                          child: Text(
+                            'Chọn',
+                            style: AppTextStyles.semiBold16(
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            _isEdit = !_isEdit;
+                            setState(() {});
+                          },
+                          icon: CircleAvatar(
+                            maxRadius: 20,
+                            backgroundColor: AppColors.observationStatusMyObsBG,
+                            child: Assets.icons.edit.svg(),
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             Expanded(
               child: Container(
@@ -107,15 +168,32 @@ class GalleryDetailState extends State<GalleryDetail> {
                                     mainAxisSpacing: 6),
                             itemCount: widget.galleryItem.images?.length,
                             itemBuilder: (context, index) {
-                              return CardGalleryDetail(
-                                  index: index,
-                                  galleryModel: widget.galleryItem,
-                                  galleryItem: widget.galleryItem.images![index]
-                                          .urlImageModel?.mobile ??
-                                      "",
-                                  lastIndex:
-                                      widget.galleryItem.images?.length ??
-                                          0 - 1);
+                              return GestureDetector(
+                                onTap: () {
+                                  if (_isEnable == true) {
+                                    setState(() {
+                                      _isChooseList[index] =
+                                          !_isChooseList[index];
+                                    });
+                                  }
+                                },
+                                child: CardGalleryDetail(
+                                    index: index,
+                                    onChoose: (value) =>
+                                        _onChoose(index, value),
+                                    isEnable: _isEnable,
+                                    isChoose: _isChooseList[index],
+                                    galleryModel: widget.galleryItem,
+                                    galleryItem: widget
+                                            .galleryItem
+                                            .images![index]
+                                            .urlImageModel
+                                            ?.mobile ??
+                                        "",
+                                    lastIndex:
+                                        widget.galleryItem.images?.length ??
+                                            0 - 1),
+                              );
                             },
                             physics: const AlwaysScrollableScrollPhysics(),
                           ),
@@ -123,30 +201,37 @@ class GalleryDetailState extends State<GalleryDetail> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Row(
-                          children: [
-                            ButtonActionDetailGallery(
-                              onPressed: () {},
-                              title: 'Lưu ảnh',
-                              icon: Assets.icons.download.svg(
-                                  color: AppColors.white),
-                              isEnable: true,
-                            ),
-                             ButtonActionDetailGallery(
-                              onPressed: () {},
-                              title: 'Chia sẻ',
-                              icon: Assets.icons.share.svg(
-                                  color: AppColors.white),
-                              isEnable: true,
-                            ),
-                             ButtonActionDetailGallery(
-                              onPressed: () {},
-                              title: 'Xóa',
-                              icon: Assets.icons.trashBin.svg(
-                                  color: AppColors.white),
-                              isEnable: true,
-                            ),
-                          ],
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 10),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ButtonActionDetailGallery(
+                                onPressed: () {
+                                  _downloadSelectedImages();
+                                },
+                                title: 'Lưu ảnh',
+                                icon: Assets.icons.download
+                                    .svg(color: AppColors.white),
+                                isEnable: _isEnable,
+                              ),
+                              ButtonActionDetailGallery(
+                                onPressed: () {},
+                                title: 'Chia sẻ',
+                                icon: Assets.icons.share
+                                    .svg(color: AppColors.white),
+                                isEnable: _isEnable,
+                              ),
+                              ButtonActionDetailGallery(
+                                onPressed: () {},
+                                title: 'Xóa',
+                                icon: Assets.icons.trashBin
+                                    .svg(color: AppColors.white),
+                                isEnable: _isEnable,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -158,5 +243,24 @@ class GalleryDetailState extends State<GalleryDetail> {
         ),
       ),
     );
+  }
+
+  void _onChoose(int index, bool isSelected) {
+    setState(() {
+      _isChooseList[index] = isSelected;
+      if (isSelected) {
+        selectedIndices.add(index);
+      } else {
+        selectedIndices.remove(index);
+      }
+    });
+  }
+
+  void _downloadSelectedImages() {
+    final selectedImages = selectedIndices
+        .map((index) => widget.galleryItem.images![index])
+        .toList();
+    // Logic to download the selectedImages
+    print('Downloading images: $selectedImages');
   }
 }
