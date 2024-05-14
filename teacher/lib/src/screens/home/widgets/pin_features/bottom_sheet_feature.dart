@@ -1,9 +1,13 @@
 import 'package:core/common/utils/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/src/screens/bus/bus_screen.dart';
+import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/current_pinned_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/list_feature.dart';
-
+import 'package:teacher/src/screens/menu/menu_screen.dart';
+import 'package:teacher/src/screens/observation_schedule/screen/observation_schedule_screen.dart';
+import 'package:teacher/src/utils/extension_context.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({
@@ -87,36 +91,46 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
         });
       }
     } else {
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
 
-      // switch (id) {
-      //   case 1:
-      //     homeNavigatorKey.currentContext
-      //         ?.pushNamed(routeName: RegisterNoteBoookScreen.routeName);
-      //     break;
+      switch (id) {
+        case 1:
+          // context.push(const RegisterNoteBoookScreen());
 
-      //   case 4:
-      //     homeNavigatorKey.currentContext
-      //         ?.pushNamed(routeName: ExerciseScreen.routeName);
-      //     break;
+          break;
 
-      //   case 5:
-      //     homeNavigatorKey.currentContext
-      //         ?.pushNamed(routeName: OnLeaveScreen.routeName);
-      //     break;
+        case 3:
+          context.push(BusScreen.routeName);
+          // final UserInfo userInfo =
+          //     await UserManager.instance.getUser(Injection.get<Settings>()) ??
+          //         UserInfo();
+          // // ignore: use_build_context_synchronously
+          // context.push(GalleryScreen.routeName,
+          //     arguments: {'teacherId': 10007548});
+          break;
 
-      //   case 6:
-      //     homeNavigatorKey.currentContext
-      //         ?.pushNamed(routeName: StudentScoreScreenMain.routeName);
-      //     break;
+        case 4:
+          context.push(MenuScreen.routeName);
+          break;
 
-      //   case 9:
-      //     homeNavigatorKey.currentContext
-      //         ?.pushNamed(routeName: PhoneBookScreen.routeName);
-      //     break;
+        case 5:
+          // context.push(const OnLeaveScreen());
+          context.push(ObservationSchedule.routeName);
+          break;
 
-      //   default:
-      // }
+        case 6:
+          // context.push(const StudentScoreScreenMain());
+          break;
+
+        case 9:
+          break;
+        case 12:
+          context.push(GalleryScreen.routeName,
+              arguments: {'teacherId': 10007548});
+          break;
+
+        default:
+      }
     }
   }
 

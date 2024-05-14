@@ -159,4 +159,7 @@ class AppColors {
 
   //Text
   static const Color textPrimary = Color(0xFF1B1A57);
+
+  //Conversation
+  static const Color cardBackgroundChatByMe = Color(0xFF1B72C0);
 }

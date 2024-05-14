@@ -6,7 +6,8 @@ import 'package:teacher/model/user_info.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/bus/bus_screen.dart';
-import 'package:teacher/src/screens/conversation/message_screen.dart';
+import 'package:teacher/src/screens/conversation/conversation_screen.dart';
+import 'package:teacher/src/screens/conversation/view/conversation_detail/conversation_detail_screen.dart';
 import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
@@ -173,6 +174,56 @@ class AppRouter {
       case ConversationScreen.routeName:
         return _getPage(
           const ConversationScreen(),
+        );
+      case ConversationDetailScreen.routeName:
+        final args = settings.arguments as Map?;
+        int? conversationId;
+        String? fullName;
+        if (args != null) {
+          conversationId = args['message'];
+          fullName = args['fullName'];
+        }
+        return _getPage(
+          ConversationDetailScreen(
+            conversationId: conversationId ?? 0,
+            fullName: fullName ?? "",
+          ),
+        );
+      case GalleryScreen.routeName:
+        final args = settings.arguments as Map?;
+        int? teacherId;
+        if (args != null) {
+          teacherId = args['teacherId'];
+        }
+        return _getPage(
+          GalleryScreen(
+            teacherId: teacherId ?? 0,
+          ),
+        );
+      case GalleryDetail.routeName:
+        final args = settings.arguments as Map?;
+        GalleryModel? galleryItem;
+        if (args != null) {
+          galleryItem = args['galleryItem'];
+        }
+        return _getPage(
+          GalleryDetail(
+            galleryItem: galleryItem ?? GalleryModel(),
+          ),
+        );
+      case GalleryCarousel.routeName:
+        final args = settings.arguments as Map?;
+        GalleryModel? galleryItem;
+        int? index;
+        if (args != null) {
+          galleryItem = args['galleryItem'];
+          index = args['index'];
+        }
+        return _getPage(
+          GalleryCarousel(
+            galleryItem: galleryItem ?? GalleryModel(),
+            index: index ?? 0,
+          ),
         );
     }
     return _getPage(

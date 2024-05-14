@@ -30,7 +30,7 @@ class _ObservationScheduleState extends State<ObservationSchedule> {
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: ScreenAppBar(
-                title: 'Observation Schedule',
+                title: 'Lịch dự giờ',
                 canGoback: true,
                 onBack: () {
                   context.pop();
@@ -67,7 +67,7 @@ class _ObservationScheduleState extends State<ObservationSchedule> {
                                     const BorderSide(color: AppColors.gray400),
                               ),
                               fillColor: AppColors.gray400,
-                              hintText: 'Search observation schedule',
+                              hintText: 'Tìm kiếm lớp dự giờ',
                               prefixIcon: Image.asset(
                                 Assets.images.search.path,
                                 color: AppColors.black,

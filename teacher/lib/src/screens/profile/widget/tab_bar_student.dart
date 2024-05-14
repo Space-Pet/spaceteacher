@@ -1,10 +1,11 @@
+import 'package:core/resources/resources.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/components/custom_dialog_update_phone.dart';
 import 'package:teacher/components/tab/tab_content.dart';
 
 import 'package:teacher/model/student_model.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+
 import 'package:teacher/resources/i18n/locale_keys.g.dart';
 
 import 'package:teacher/src/utils/extension_context.dart';

@@ -110,7 +110,8 @@ class _PinFeaturesState extends State<PinFeatures> {
         case 9:
           break;
         case 12:
-          context.push(GalleryScreen.routeName);
+          context.push(GalleryScreen.routeName,
+              arguments: {'teacherId': 10007548});
           break;
 
         default:

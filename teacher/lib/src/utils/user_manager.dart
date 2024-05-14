@@ -1,4 +1,3 @@
-import 'package:aad_oauth/aad_oauth.dart';
 import 'package:core/core.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/model/user_model.dart';
@@ -23,6 +22,8 @@ class UserManager {
     _userModel = null;
   }
 
+  UserInfo get user => _user!;
+  UserModel get userModel => _userModel!;
   Future<void> loadSession(Settings setting) async {
     try {
       _user = await setting.getUserInfoSecure();

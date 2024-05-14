@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:core/common/constants/app_locale.dart';
 import 'package:core/core.dart';
@@ -20,7 +19,6 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await dotenv.load(fileName: '.env');
-    HttpOverrides.global = MyHttpOverrides();
     Injector.init();
     Enviroment.initFlavor(EnviromentFlavor.dev);
     runApp(
@@ -74,14 +72,5 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigatorKey,
       ),
     );
-  }
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

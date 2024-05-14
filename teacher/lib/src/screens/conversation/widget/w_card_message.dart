@@ -112,6 +112,14 @@ class CardMessage extends StatelessWidget {
                       .svg(color: AppColors.blueForgorPassword),
                 ),
               ),
+              const PopupMenuItem(
+                value: 'cancel',
+                child: PopupMenuItemMessage(
+                  title: 'Hủy',
+                  isLast: true,
+                  colorText: AppColors.red,
+                ),
+              ),
             ];
           },
           offset: const Offset(0, 40),
@@ -125,11 +133,14 @@ class PopupMenuItemMessage extends StatelessWidget {
   const PopupMenuItemMessage({
     super.key,
     required this.title,
-    required this.svg,
+    this.svg,
+    this.isLast = false,
+    this.colorText,
   });
   final String title;
-  final SvgPicture svg;
-
+  final SvgPicture? svg;
+  final bool? isLast;
+  final Color? colorText;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -137,24 +148,29 @@ class PopupMenuItemMessage extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 1 / 3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: isLast == true
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              svg,
-              const SizedBox(width: 10),
+              if (!isNullOrEmpty(svg)) svg ?? const SizedBox(),
+              if (!isLast!) const SizedBox(width: 10),
               Text(
                 title,
-                style: AppTextStyles.normal12(),
+                style: AppTextStyles.normal12(
+                  color: colorText ?? AppColors.black,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          const DottedLine(
-            dashLength: 5,
-            dashColor: AppColors.gray500,
-          ),
+          if (!isLast!) const SizedBox(height: 10),
+          if (!isLast!)
+            const DottedLine(
+              dashLength: 5,
+              dashColor: AppColors.gray500,
+            ),
         ],
       ),
     );

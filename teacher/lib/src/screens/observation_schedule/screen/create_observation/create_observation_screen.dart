@@ -31,6 +31,7 @@ class _CreateObservationScreenState extends State<CreateObservationScreen> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: BackGroundContainer(
           child: Stack(
             alignment: Alignment.topCenter,

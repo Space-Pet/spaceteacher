@@ -50,150 +50,153 @@ class _BusViewState extends State<BusView> {
 
   @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ScreenAppBar(
-            title: 'Lịch xe đưa rước',
-            canGoback: true,
-            onBack: () {
-              context.pop();
-            },
-          ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height / 7,
-                    decoration: BoxDecoration(
-                      color: AppColors.gray200,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                _pageController.previousPage(
-                                    duration: Durations.medium4,
-                                    curve: Curves.linear);
-                              },
-                              icon: const Icon(Icons.chevron_left),
-                            ),
-                            Text(
-                              'Tuần ${_selectedDay.weekOfYear} '
-                              '(${DateFormat('dd/MM').format(_selectedDay)} - $_endDate)',
-                              style: AppTextStyles.bold16(),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                _pageController.nextPage(
-                                    duration: Durations.medium4,
-                                    curve: Curves.linear);
-                              },
-                              icon: const Icon(Icons.chevron_right),
-                            ),
-                          ],
-                        ),
-                        DatePickerHorizontal(
-                          pageController: _pageController,
-                          selectedDay: _selectedDay,
-                          changeDay: (value) => setState(() {
-                            _selectedDay = value;
-                            _endDate = DateFormat('dd/MM').format(_selectedDay
-                                .copyWith(month: _selectedDay.month + 1));
-
-                            context.read<BusBloc>().add(
-                                  BusFetchedSchedules(
-                                    startDate: DateFormat('yyyy-MM-dd')
-                                        .format(_selectedDay),
-                                    endDate: DateFormat('yyyy-MM-dd').format(
-                                        _selectedDay.copyWith(
-                                            month: _selectedDay.month + 1)),
-                                    schoolBrand: 'ischool',
-                                    schoolId: 104,
-                                  ),
-                                );
-                          }),
-                          enableWeeknumberText: false,
-                          weeknumberColor: AppColors.blueForgorPassword,
-                          weeknumberTextColor: AppColors.gray400,
-                          backgroundColor: AppColors.gray200,
-                          weekdayTextColor: const Color(0xFF8A8A8A),
-                          digitsColor: AppColors.gray400,
-                          selectedDigitBackgroundColor:
-                              AppColors.blueForgorPassword,
-                          weekdays: const [
-                            "T2",
-                            "T3",
-                            "T4",
-                            "T5",
-                            "T6",
-                            "T7",
-                            "CN"
-                          ],
-                          daysInWeek: 7,
-                        ),
-                      ],
-                    ),
+    return Scaffold(
+      body: BackGroundContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ScreenAppBar(
+              title: 'Lịch xe đưa rước',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: BlocBuilder<BusBloc, BusState>(
-                      builder: (context, state) {
-                        final busSchedules = state.busSchedules;
-                        final isLoading = state.status == BusStatus.loading;
-                        final isEmptyData = busSchedules.isEmpty && !isLoading;
-
-                        return SmartRefresher(
-                          controller: _controller,
-                          onRefresh: () async {},
-                          child: Stack(
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height / 7,
+                      decoration: BoxDecoration(
+                        color: AppColors.gray200,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ListView(),
-                              AppSkeleton(
-                                isLoading: isLoading,
-                                skeleton: const InstructrionSkeleton(),
-                                child: isEmptyData
-                                    ? const Center(
-                                        child: EmptyScreen(
-                                            text: 'Chưa có dữ liệu'))
-                                    : ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        cacheExtent: 1000,
-                                        itemCount: busSchedules.length,
-                                        itemBuilder: (context, index) {
-                                          return CardBusItem(
-                                            busSchedule: busSchedules[index],
-                                          );
-                                        },
-                                      ),
+                              IconButton(
+                                onPressed: () {
+                                  _pageController.previousPage(
+                                      duration: Durations.medium4,
+                                      curve: Curves.linear);
+                                },
+                                icon: const Icon(Icons.chevron_left),
+                              ),
+                              Text(
+                                'Tuần ${_selectedDay.weekOfYear} '
+                                '(${DateFormat('dd/MM').format(_selectedDay)} - $_endDate)',
+                                style: AppTextStyles.bold16(),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  _pageController.nextPage(
+                                      duration: Durations.medium4,
+                                      curve: Curves.linear);
+                                },
+                                icon: const Icon(Icons.chevron_right),
                               ),
                             ],
                           ),
-                        );
-                      },
+                          DatePickerHorizontal(
+                            pageController: _pageController,
+                            selectedDay: _selectedDay,
+                            changeDay: (value) => setState(() {
+                              _selectedDay = value;
+                              _endDate = DateFormat('dd/MM').format(_selectedDay
+                                  .copyWith(month: _selectedDay.month + 1));
+
+                              context.read<BusBloc>().add(
+                                    BusFetchedSchedules(
+                                      startDate: DateFormat('yyyy-MM-dd')
+                                          .format(_selectedDay),
+                                      endDate: DateFormat('yyyy-MM-dd').format(
+                                          _selectedDay.copyWith(
+                                              month: _selectedDay.month + 1)),
+                                      schoolBrand: 'ischool',
+                                      schoolId: 104,
+                                    ),
+                                  );
+                            }),
+                            enableWeeknumberText: false,
+                            weeknumberColor: AppColors.blueForgorPassword,
+                            weeknumberTextColor: AppColors.gray400,
+                            backgroundColor: AppColors.gray200,
+                            weekdayTextColor: const Color(0xFF8A8A8A),
+                            digitsColor: AppColors.gray400,
+                            selectedDigitBackgroundColor:
+                                AppColors.blueForgorPassword,
+                            weekdays: const [
+                              "T2",
+                              "T3",
+                              "T4",
+                              "T5",
+                              "T6",
+                              "T7",
+                              "CN"
+                            ],
+                            daysInWeek: 7,
+                          ),
+                        ],
+                      ),
                     ),
-                  )
-                ],
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: BlocBuilder<BusBloc, BusState>(
+                        builder: (context, state) {
+                          final busSchedules = state.busSchedules;
+                          final isLoading = state.status == BusStatus.loading;
+                          final isEmptyData =
+                              busSchedules.isEmpty && !isLoading;
+
+                          return SmartRefresher(
+                            controller: _controller,
+                            onRefresh: () async {},
+                            child: Stack(
+                              children: [
+                                ListView(),
+                                AppSkeleton(
+                                  isLoading: isLoading,
+                                  skeleton: const InstructrionSkeleton(),
+                                  child: isEmptyData
+                                      ? const Center(
+                                          child: EmptyScreen(
+                                              text: 'Chưa có dữ liệu'))
+                                      : ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          cacheExtent: 1000,
+                                          itemCount: busSchedules.length,
+                                          itemBuilder: (context, index) {
+                                            return CardBusItem(
+                                              busSchedule: busSchedules[index],
+                                            );
+                                          },
+                                        ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

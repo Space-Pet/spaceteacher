@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
-import 'package:teacher/src/screens/conversation/message_screen.dart';
+import 'package:teacher/src/screens/conversation/conversation_screen.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 

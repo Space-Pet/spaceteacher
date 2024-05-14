@@ -1,8 +1,7 @@
 import 'package:core/core.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:teacher/components/app_bar/screen_app_bar.dart';
 
 import 'package:teacher/components/back_ground_container.dart';
@@ -10,11 +9,12 @@ import 'package:teacher/model/message_model.dart';
 import 'package:teacher/repository/conversation_repository/conversation_repositories.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/src/screens/conversation/bloc/conversation_bloc.dart';
+import 'package:teacher/src/screens/conversation/view/conversation_detail/conversation_detail_screen.dart';
 import 'package:teacher/src/screens/conversation/widget/w_card_message.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 
 class ConversationScreen extends StatefulWidget {
-  static const String routeName = '/message';
+  static const String routeName = '/conversation';
   const ConversationScreen({super.key});
 
   @override
@@ -39,10 +39,22 @@ class _ConversationScreenState extends State<ConversationScreen> {
         final it = state.conversation?.messages;
 
         if (state.status == ConversationStatus.loading) {
-          return const Scaffold(
+          return Scaffold(
             body: BackGroundContainer(
-              child: Center(
-                child: CircularProgressIndicator(),
+              child: Container(
+                margin: const EdgeInsets.only(top: 100),
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
           );
@@ -113,9 +125,13 @@ class _ConversationScreenState extends State<ConversationScreen> {
                           itemBuilder: (ctx, index) {
                             return GestureDetector(
                               onTap: () {
-                                Fluttertoast.showToast(
-                                    msg: '${it?[index].fullName}',
-                                    gravity: ToastGravity.BOTTOM);
+                                context.push(
+                                  ConversationDetailScreen.routeName,
+                                  arguments: {
+                                    'conversationId': it?[index].conversationId,
+                                    'fullName': it?[index].fullName,
+                                  },
+                                );
                               },
                               child: CardMessage(
                                 message: it?[index] ?? MessageModel(),

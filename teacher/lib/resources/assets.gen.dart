@@ -104,6 +104,9 @@ class $AssetsIconsGen {
   SvgGenImage get documentMedicine =>
       const SvgGenImage('assets/icons/document-medicine.svg');
 
+  /// File path: assets/icons/download.svg
+  SvgGenImage get download => const SvgGenImage('assets/icons/download.svg');
+
   /// File path: assets/icons/e.svg
   SvgGenImage get e => const SvgGenImage('assets/icons/e.svg');
 
@@ -204,6 +207,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/setting.svg
   SvgGenImage get setting => const SvgGenImage('assets/icons/setting.svg');
 
+  /// File path: assets/icons/share.svg
+  SvgGenImage get share => const SvgGenImage('assets/icons/share.svg');
+
   /// File path: assets/icons/tablet.svg
   SvgGenImage get tablet => const SvgGenImage('assets/icons/tablet.svg');
 
@@ -243,6 +249,7 @@ class $AssetsIconsGen {
         closeGrayCircle,
         conversationIcon,
         documentMedicine,
+        download,
         e,
         editProfile,
         emojiNormal,
@@ -273,6 +280,7 @@ class $AssetsIconsGen {
         report,
         send,
         setting,
+        share,
         tablet,
         trashBin,
         user,
