@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class WeekSelectWidget extends StatefulWidget {
   const WeekSelectWidget({super.key});

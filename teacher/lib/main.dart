@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:core/common/constants/app_locale.dart';
 import 'package:core/core.dart';
+import 'package:core/resources/resources.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:teacher/enviroment.dart';
-import 'package:teacher/resources/resources.dart';
 
 import 'package:teacher/src/services/routes/router_services.dart';
 import 'package:teacher/src/settings/injector.dart';
@@ -20,7 +19,6 @@ void main() {
     WidgetsFlutterBinding.ensureInitialized();
     await EasyLocalization.ensureInitialized();
     await dotenv.load(fileName: '.env');
-    HttpOverrides.global = MyHttpOverrides();
     Injector.init();
     Enviroment.initFlavor(EnviromentFlavor.dev);
     runApp(
@@ -74,14 +72,5 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navigatorKey,
       ),
     );
-  }
-}
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

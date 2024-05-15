@@ -5,7 +5,7 @@ import 'package:teacher/model/children_model.dart';
 import 'package:teacher/model/student_model.dart';
 
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 import 'package:teacher/src/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';

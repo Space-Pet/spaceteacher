@@ -4,7 +4,7 @@ import 'package:teacher/components/buttons/rounded_button.dart';
 
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 
 class ImagesLibrary extends StatelessWidget {
   const ImagesLibrary({

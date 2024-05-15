@@ -1,5 +1,5 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_size.dart';
 
 class CenterPositioned extends StatelessWidget {
   const CenterPositioned({

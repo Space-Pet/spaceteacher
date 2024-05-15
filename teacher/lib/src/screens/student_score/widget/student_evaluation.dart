@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:teacher/resources/app_colors.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/student_score/widget/student_evaluation_item.dart';
 
 class StudentEvaluation extends StatelessWidget {

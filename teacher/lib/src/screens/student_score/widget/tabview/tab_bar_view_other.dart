@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/student_score/widget/score_card_other/score_card_subject_other.dart';
 import 'package:teacher/src/screens/student_score/widget/tabview/tab_bar_view_mid_term.dart';
 

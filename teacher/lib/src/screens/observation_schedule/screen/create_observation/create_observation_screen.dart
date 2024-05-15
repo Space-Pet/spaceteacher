@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dilaog_yes_no.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/create_observation/widget/card_info_add_observation.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/select_field.dart';
@@ -31,6 +31,7 @@ class _CreateObservationScreenState extends State<CreateObservationScreen> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: BackGroundContainer(
           child: Stack(
             alignment: Alignment.topCenter,

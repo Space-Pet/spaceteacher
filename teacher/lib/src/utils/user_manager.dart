@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:teacher/model/user_info.dart';
 import 'package:teacher/model/user_model.dart';
+import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/src/settings/settings.dart';
 
 class UserManager {
@@ -21,6 +22,8 @@ class UserManager {
     _userModel = null;
   }
 
+  UserInfo get user => _user!;
+  UserModel get userModel => _userModel!;
   Future<void> loadSession(Settings setting) async {
     try {
       _user = await setting.getUserInfoSecure();
@@ -58,6 +61,7 @@ class UserManager {
 
   Future<void> logout({
     required Settings setting,
+    required AuthRepository authRepository,
   }) async {
     try {
       // await UserManager.instance.loadSession(setting);
@@ -65,6 +69,7 @@ class UserManager {
 
       await setting.clearUserInfoSecure();
       await setting.clearAccessToken();
+      await authRepository.logout365();
       UserManager.instance.removeInstance();
       final user = await setting.getUserInfoSecure();
       Log.prettyJson(user?.toJson() ?? {});

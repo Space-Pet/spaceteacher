@@ -7,7 +7,7 @@ import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
 import 'package:teacher/repository/user_repository/user_repositories.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/resources/i18n/locale_keys.g.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/attendance/attendance_screen.dart';
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';

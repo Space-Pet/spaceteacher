@@ -177,8 +177,9 @@ class ApiClient with TokenManagementMixin {
     }
   }
 
-  Future<dynamic> get([Map<String, dynamic>? params]) =>
-      _callApi(ApiMethod.get, body: params ?? {});
+  Future<dynamic> get(
+          [Map<String, dynamic>? params, Map<String, dynamic>? body]) =>
+      _callApi(ApiMethod.get, body: body ?? {}, params: params ?? {});
 
   Future<dynamic> post(dynamic body, [Map<String, dynamic>? params]) =>
       _callApi(ApiMethod.post, body: body, params: params);
@@ -211,16 +212,17 @@ class ApiClient with TokenManagementMixin {
     Map<String, dynamic>? params,
   }) async {
     Response? response;
-    var encodedUrl = url;
-    if (method == ApiMethod.get &&
-        !isNullOrEmpty(body) &&
-        body is Map<String, dynamic>) {
-      encodedUrl = getUrlWithQuery(url, body);
-    }
+    final encodedUrl = url;
+    // if (method == ApiMethod.get &&
+    //     !isNullOrEmpty(body) &&
+    //     body is Map<String, dynamic>) {
+    //   encodedUrl = getUrlWithQuery(url, body);
+    // }
     try {
       switch (method) {
         case ApiMethod.get:
-          response = await dio.get(encodedUrl);
+          response =
+              await dio.get(encodedUrl, data: body, queryParameters: params);
 
           break;
         case ApiMethod.post:

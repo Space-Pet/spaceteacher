@@ -1,13 +1,13 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/children_model.dart';
 import 'package:teacher/model/user_info.dart';
 
 import 'package:teacher/repository/student_repository/student_repository.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/profile/bloc/profile_bloc.dart';
 import 'package:teacher/src/screens/profile/widget/profile_app_bar.dart';
 import 'package:teacher/src/screens/profile/widget/tab_bar_parent.dart';

@@ -4,7 +4,7 @@ import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dilaog_yes_no.dart';
 
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/widget/line_text_observation.dart';

@@ -17,13 +17,15 @@ class GalleryModel {
   @JsonKey(name: 'gallery_images')
   final List<ImageModel>? images;
 
+  final bool? isChoose;
   GalleryModel(
       {this.id,
       this.name,
       this.learnYear,
       this.schoolId,
       this.galleryNumber,
-      this.images});
+      this.images,
+      this.isChoose});
 
   factory GalleryModel.fromJson(Map<String, dynamic> json) =>
       _$GalleryModelFromJson(json);
@@ -42,6 +44,7 @@ class GalleryModel {
     int? schoolId,
     int? galleryNumber,
     List<ImageModel>? images,
+    bool? isChoose,
   }) {
     return GalleryModel(
       id: id ?? this.id,
@@ -50,6 +53,7 @@ class GalleryModel {
       schoolId: schoolId ?? this.schoolId,
       galleryNumber: galleryNumber ?? this.galleryNumber,
       images: images ?? this.images,
+      isChoose: isChoose ?? this.isChoose,
     );
   }
 }

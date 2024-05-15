@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teacher/model/dish_menu_model.dart';
 import 'package:teacher/model/menu.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/utils/extension_context.dart';
 

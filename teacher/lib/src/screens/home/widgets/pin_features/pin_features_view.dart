@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bus_screen.dart';
 import 'package:teacher/src/screens/gallery/gallery_screen.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
@@ -110,7 +110,8 @@ class _PinFeaturesState extends State<PinFeatures> {
         case 9:
           break;
         case 12:
-          context.push(GalleryScreen.routeName);
+          context.push(GalleryScreen.routeName,
+              arguments: {'teacherId': 10007548});
           break;
 
         default:

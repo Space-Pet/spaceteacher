@@ -14,7 +14,7 @@ abstract class AuthRepository {
 
   Future<UserInfo?> loginWith365();
 
-  // Future<void> logout({String userName, String password});
+  Future<void> logout365();
 }
 
 class AuthRepositoryImp implements AuthRepository {
@@ -86,9 +86,27 @@ class AuthRepositoryImp implements AuthRepository {
     return UserInfo();
   }
 
-  // @override
-  // Future<void> logout({String userName, String password}) {
-  //   // TODO: implement logout
-  //   throw UnimplementedError();
-  // }
+  @override
+  Future<void> logout365() async {
+    final String redirectUri = dotenv.env['REDIRECT_URI'] ?? '';
+    final String clientId = dotenv.env['CLIENT_ID'] ?? '';
+    final String tenant = dotenv.env['TENANT'] ?? '';
+    final String clientScr = dotenv.env['CLIENT_SCR'] ?? '';
+    final Config config = Config(
+        tenant: tenant,
+        clientId: clientId,
+        scope: 'openid profile offline_access',
+        redirectUri: redirectUri,
+        responseType: 'code',
+        clientSecret: clientScr,
+        navigatorKey: navigatorKey);
+
+    final AadOAuth oauth = AadOAuth(config);
+
+    try {
+      await oauth.logout();
+    } catch (e) {
+      Log.e('$e', name: "Logout Error AuthRepository -> logout365()");
+    }
+  }
 }

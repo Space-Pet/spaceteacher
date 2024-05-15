@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:teacher/resources/app_colors.dart';
-import 'package:teacher/resources/app_text_styles.dart';
+import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/student_score/widget/select_button/select_button_year/select_button_year.dart';
 
 class ScreenAppBar extends StatelessWidget {

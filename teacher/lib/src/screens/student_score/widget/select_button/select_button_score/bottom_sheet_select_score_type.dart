@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
+import 'package:core/resources/resources.dart';
 
 // Step 1: Define a model for list items
 class ListItem<T> {

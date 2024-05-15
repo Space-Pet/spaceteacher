@@ -104,12 +104,18 @@ class $AssetsIconsGen {
   SvgGenImage get documentMedicine =>
       const SvgGenImage('assets/icons/document-medicine.svg');
 
+  /// File path: assets/icons/download.svg
+  SvgGenImage get download => const SvgGenImage('assets/icons/download.svg');
+
   /// File path: assets/icons/e.svg
   SvgGenImage get e => const SvgGenImage('assets/icons/e.svg');
 
   /// File path: assets/icons/edit-profile.svg
   SvgGenImage get editProfile =>
       const SvgGenImage('assets/icons/edit-profile.svg');
+
+  /// File path: assets/icons/edit.svg
+  SvgGenImage get edit => const SvgGenImage('assets/icons/edit.svg');
 
   /// File path: assets/icons/emoji-normal.svg
   SvgGenImage get emojiNormal =>
@@ -204,8 +210,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/setting.svg
   SvgGenImage get setting => const SvgGenImage('assets/icons/setting.svg');
 
+  /// File path: assets/icons/share.svg
+  SvgGenImage get share => const SvgGenImage('assets/icons/share.svg');
+
   /// File path: assets/icons/tablet.svg
   SvgGenImage get tablet => const SvgGenImage('assets/icons/tablet.svg');
+
+  /// File path: assets/icons/trash-bin.svg
+  SvgGenImage get trashBin => const SvgGenImage('assets/icons/trash-bin.svg');
 
   /// File path: assets/icons/user.png
   AssetGenImage get user => const AssetGenImage('assets/icons/user.png');
@@ -240,8 +252,10 @@ class $AssetsIconsGen {
         closeGrayCircle,
         conversationIcon,
         documentMedicine,
+        download,
         e,
         editProfile,
+        edit,
         emojiNormal,
         empty,
         exercise,
@@ -270,7 +284,9 @@ class $AssetsIconsGen {
         report,
         send,
         setting,
+        share,
         tablet,
+        trashBin,
         user,
         userManual,
         wallpaper
@@ -627,17 +643,17 @@ class $AssetsImagesMainBackgroundGen {
 class $AssetsImagesSplashGen {
   const $AssetsImagesSplashGen();
 
-  /// File path: assets/images/splash/Splash screen 1.png
+  /// File path: assets/images/splash/Splash screen 1.jpg
   AssetGenImage get splashScreen1 =>
-      const AssetGenImage('assets/images/splash/Splash screen 1.png');
+      const AssetGenImage('assets/images/splash/Splash screen 1.jpg');
 
-  /// File path: assets/images/splash/Splash screen 2.png
+  /// File path: assets/images/splash/Splash screen 2.jpg
   AssetGenImage get splashScreen2 =>
-      const AssetGenImage('assets/images/splash/Splash screen 2.png');
+      const AssetGenImage('assets/images/splash/Splash screen 2.jpg');
 
-  /// File path: assets/images/splash/Splash screen 3.png
+  /// File path: assets/images/splash/Splash screen 3 .jpg
   AssetGenImage get splashScreen3 =>
-      const AssetGenImage('assets/images/splash/Splash screen 3.png');
+      const AssetGenImage('assets/images/splash/Splash screen 3 .jpg');
 
   /// List of all assets
   List<AssetGenImage> get values =>
