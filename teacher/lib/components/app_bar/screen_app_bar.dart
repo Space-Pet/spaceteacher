@@ -14,7 +14,7 @@ class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.canGoBack = false,
     this.automaticallyImplyLeading = true,
     this.onBack,
-  }) : preferredSize = const Size.fromHeight(44.0);
+  }) : preferredSize = const Size.fromHeight(30.0);
 
   final String title;
   final double elevation;
@@ -38,6 +38,7 @@ class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       bottom: bottom,
       titleSpacing: -10,
+      toolbarHeight: 50,
       leading: canGoBack
           ? InkWell(
               onTap: onBack ??

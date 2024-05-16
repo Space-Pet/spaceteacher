@@ -8,9 +8,10 @@ import 'package:teacher/src/screens/authentication/login/view/login_screen.dart'
 import 'package:teacher/src/screens/bus/bus_screen.dart';
 import 'package:teacher/src/screens/conversation/conversation_screen.dart';
 import 'package:teacher/src/screens/conversation/view/conversation_detail/conversation_detail_screen.dart';
-import 'package:teacher/src/screens/gallery/gallery_screen.dart';
-import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
-import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
+import 'package:teacher/src/screens/gallery/view/gallery_add_album/gallery_add_album.dart';
+import 'package:teacher/src/screens/gallery/view/gallery_screen/gallery_screen.dart';
+import 'package:teacher/src/screens/gallery/view/gallery_deail/gallery_detail.dart';
+
 import 'package:teacher/src/screens/home/view/home_screen.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
@@ -211,19 +212,9 @@ class AppRouter {
             galleryItem: galleryItem ?? GalleryModel(),
           ),
         );
-      case GalleryCarousel.routeName:
-        final args = settings.arguments as Map?;
-        GalleryModel? galleryItem;
-        int? index;
-        if (args != null) {
-          galleryItem = args['galleryItem'];
-          index = args['index'];
-        }
+      case GalleryAddAlbum.routeName:
         return _getPage(
-          GalleryCarousel(
-            galleryItem: galleryItem ?? GalleryModel(),
-            index: index ?? 0,
-          ),
+          const GalleryAddAlbum(),
         );
     }
     return _getPage(
@@ -352,22 +343,6 @@ class AppRouter {
           routeName: GalleryScreen.routeName,
           child: GalleryScreen(
             teacherId: teacherId ?? 0,
-          ),
-        );
-
-      case GalleryCarousel.routeName:
-        final args = settings.arguments as Map?;
-        GalleryModel? galleryItem;
-        int? index;
-        if (args != null) {
-          galleryItem = args['galleryItem'];
-          index = args['index'];
-        }
-        return transitionAnimation(
-          routeName: GalleryCarousel.routeName,
-          child: GalleryCarousel(
-            galleryItem: galleryItem ?? GalleryModel(),
-            index: index ?? 0,
           ),
         );
 

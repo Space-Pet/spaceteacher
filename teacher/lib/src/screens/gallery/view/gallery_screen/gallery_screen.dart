@@ -2,14 +2,16 @@ import 'package:core/core.dart';
 import 'package:core/presentation/common_widget/export.dart';
 
 import 'package:flutter/material.dart';
-import 'package:teacher/components/app_bar/app_bar.dart';
+import 'package:teacher/components/app_bar/screen_app_bar.dart';
 
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/gallery_model.dart';
 
 import 'package:teacher/repository/gallery_repository/gallery_repositories.dart';
 import 'package:core/resources/resources.dart';
+
 import 'package:teacher/src/screens/gallery/bloc/gallery_bloc.dart';
+import 'package:teacher/src/screens/gallery/view/gallery_add_album/gallery_add_album.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_card/card_gallery.dart';
 
 import 'package:teacher/src/utils/extension_context.dart';
@@ -39,12 +41,21 @@ class GalleryScreenState extends State<GalleryScreen> {
       body: BackGroundContainer(
         child: Column(
           children: [
-            ScreenAppBar(
-              title: 'Thư viện ảnh',
-              canGoback: true,
+            ScreensAppBar(
+              'Thư viện ảnh',
+              canGoBack: true,
               onBack: () {
                 context.pop();
               },
+              actionWidget: IconButton(
+                onPressed: () {
+                  context.push(GalleryAddAlbum.routeName);
+                },
+                icon: const Icon(
+                  Icons.add_circle_outline,
+                  color: AppColors.white,
+                ),
+              ),
             ),
             Expanded(
               child: BlocBuilder<GalleryBloc, GalleryState>(

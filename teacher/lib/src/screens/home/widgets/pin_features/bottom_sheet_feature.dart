@@ -1,7 +1,7 @@
 import 'package:core/common/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/src/screens/bus/bus_screen.dart';
-import 'package:teacher/src/screens/gallery/gallery_screen.dart';
+import 'package:teacher/src/screens/gallery/view/gallery_screen/gallery_screen.dart';
 import 'package:teacher/src/screens/home/models/feature_model.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/current_pinned_feature.dart';
 import 'package:teacher/src/screens/home/widgets/pin_features/list_feature.dart';

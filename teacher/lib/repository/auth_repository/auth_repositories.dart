@@ -21,8 +21,8 @@ class AuthRepositoryImp implements AuthRepository {
   @override
   Future<UserInfo?> login({String? userName, String? password}) async {
     try {
-      final res = await ApiClient(ApiPath.login)
-          .post({'user_key': userName, 'password': password, 'login_app': 0});
+      final res = await ApiClient(ApiPath.loginStaff)
+          .post({'email': 'k12.testapp@ischool.edu.vn', 'login_app': 0});
 
       if (isNullOrEmpty(res['data'])) return null;
       Log.d(res["data"]["info"]);

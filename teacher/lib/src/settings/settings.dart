@@ -45,7 +45,6 @@ class Settings {
 
   Future<void> saveLanguage(String language) async {
     await UserSecureStorage.write(LocalStorageKey.language, language);
-    print(await getLanguage());
   }
 
   Future<void> removeLanguage() async =>

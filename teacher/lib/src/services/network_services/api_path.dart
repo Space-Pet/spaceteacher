@@ -45,4 +45,5 @@ class ApiPath {
 
   static String getConversation = '${baseUrl}staff/conversations';
 
+  static String hourlyAssessment = 'https://test-iportal.nhg.vn/api/api.php';
 }
