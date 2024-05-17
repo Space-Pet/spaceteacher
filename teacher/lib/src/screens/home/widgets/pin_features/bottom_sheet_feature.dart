@@ -7,7 +7,7 @@ import 'package:teacher/src/screens/home/widgets/pin_features/current_pinned_fea
 import 'package:teacher/src/screens/home/widgets/pin_features/list_feature.dart';
 import 'package:teacher/src/screens/menu/menu_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_schedule_screen.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({

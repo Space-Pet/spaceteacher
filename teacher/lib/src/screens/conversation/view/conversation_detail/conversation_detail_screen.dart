@@ -7,7 +7,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/src/screens/conversation/mockdata/mock_data_message.dart';
 import 'package:teacher/src/screens/conversation/view/conversation_detail/widget/card_message_detail.dart';
 
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class ConversationDetailScreen extends StatefulWidget {
   static const String routeName = '/conversation_detail';

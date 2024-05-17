@@ -1,16 +1,15 @@
+import 'package:core/core.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
+
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:iportal2/utils/validation_functions.dart';
-import 'package:skeletons/skeletons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class InstructionNotebook extends StatefulWidget {
   const InstructionNotebook({
@@ -203,7 +202,6 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                           Expanded(
                             child: AppSkeleton(
                               isLoading: isLoading,
-                              skeleton: const InstructrionSkeleton(),
                               child: isDataEmpty
                                   ? const EmptyScreen(text: 'Sổ báo bài trống')
                                   : Column(
@@ -222,37 +220,37 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
   }
 }
 
-class InstructrionSkeleton extends StatelessWidget {
-  const InstructrionSkeleton({
-    super.key,
-  });
+// class InstructrionSkeleton extends StatelessWidget {
+//   const InstructrionSkeleton({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return const SkeletonItem(
-      child: Expanded(
-        child: Column(
-          children: [
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-            SizedBox(height: 8),
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-            SizedBox(height: 8),
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const SkeletonItem(
+//       child: Expanded(
+//         child: Column(
+//           children: [
+//             Expanded(
+//               child: SkeletonAvatar(
+//                 style: SkeletonAvatarStyle(width: double.infinity),
+//               ),
+//             ),
+//             SizedBox(height: 8),
+//             Expanded(
+//               child: SkeletonAvatar(
+//                 style: SkeletonAvatarStyle(width: double.infinity),
+//               ),
+//             ),
+//             SizedBox(height: 8),
+//             Expanded(
+//               child: SkeletonAvatar(
+//                 style: SkeletonAvatarStyle(width: double.infinity),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

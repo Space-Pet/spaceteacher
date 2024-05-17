@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/components/custom_dialog_update_phone.dart';
 import 'package:teacher/components/tab/tab_bar.dart';
 import 'package:teacher/components/tab/tab_content.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class TabBarParent extends StatelessWidget {
   const TabBarParent({

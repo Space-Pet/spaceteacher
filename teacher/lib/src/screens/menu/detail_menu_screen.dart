@@ -5,7 +5,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/model/dish_menu_model.dart';
 import 'package:teacher/model/menu.dart';
 import 'package:core/resources/resources.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class DetailMenuScreen extends StatelessWidget {
   const DetailMenuScreen({super.key, required this.item});

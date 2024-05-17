@@ -6,7 +6,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/conversation/conversation_screen.dart';
 import 'package:teacher/src/screens/profile/view/profile_screen.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({

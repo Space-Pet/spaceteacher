@@ -3,7 +3,7 @@ import 'package:teacher/model/dish_menu_model.dart';
 import 'package:teacher/model/menu.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/menu/detail_menu_screen.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class MenuComponent extends StatelessWidget {
   const MenuComponent({

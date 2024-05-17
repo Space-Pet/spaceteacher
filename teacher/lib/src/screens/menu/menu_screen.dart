@@ -9,7 +9,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/menu/widgets/app_bar_menu.dart';
 import 'package:teacher/src/screens/menu/widgets/menu_component.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});

@@ -12,7 +12,7 @@ import 'package:teacher/src/screens/profile/bloc/profile_bloc.dart';
 import 'package:teacher/src/screens/profile/widget/profile_app_bar.dart';
 import 'package:teacher/src/screens/profile/widget/tab_bar_parent.dart';
 import 'package:teacher/src/screens/profile/widget/tab_bar_student.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({required this.userInfo, super.key});

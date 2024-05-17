@@ -40,7 +40,7 @@ class _ListViewReportState extends State<ListViewReport> {
                   setState(() {
                     isAccordionExpanded[index] = !isAccordionExpanded[index];
                   });
-                  print('bool: ${isAccordionExpanded}');
+                  print('bool: $isAccordionExpanded');
                 },
                 titleBorderRadius: isAccordionExpanded[index]
                     ? BorderRadius.circular(10)
@@ -147,9 +147,6 @@ class _ListViewReportState extends State<ListViewReport> {
                                                 children: [
                                                   Expanded(
                                                     child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
@@ -200,7 +197,7 @@ class _ListViewReportState extends State<ListViewReport> {
                                         ),
                                       ),
                                     );
-                                  }).toList(),
+                                  }),
                                 ],
                               ),
                             ),

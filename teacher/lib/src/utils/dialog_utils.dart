@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class LoadingDialog extends StatelessWidget {
   static void show(BuildContext context, {Key? key}) => showDialog<void>(

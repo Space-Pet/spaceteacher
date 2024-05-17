@@ -1,7 +1,7 @@
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
@@ -12,8 +12,8 @@ import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/leave/bloc/leave_bloc.dart';
 import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/widget/application_item.dart';
+import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class OnLeaveScreen extends StatelessWidget {
   const OnLeaveScreen({super.key});
@@ -87,9 +87,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                 ScreenAppBar(
                   title: 'Nghỉ phép',
                   canGoback: true,
-                  onBack: () {
-                    context.pop();
-                  },
+                  onBack: () {},
                 ),
                 const SizedBox(height: 6),
                 Flexible(
@@ -152,47 +150,6 @@ class _OnLeaveViewState extends State<OnLeaveView>
                         Expanded(
                           child: AppSkeleton(
                             isLoading: isLoading,
-                            skeleton: Container(
-                                color: Colors.white,
-                                height: double.infinity,
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.all(0),
-                                  itemCount: 5,
-                                  itemBuilder: (context, index) => Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: index == 4
-                                            ? BorderSide.none
-                                            : const BorderSide(
-                                                color: AppColors.gray300),
-                                      ),
-                                    ),
-                                    child: SkeletonItem(
-                                        child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: SkeletonParagraph(
-                                                style: SkeletonParagraphStyle(
-                                                    lineStyle:
-                                                        SkeletonLineStyle(
-                                                  randomLength: true,
-                                                  height: 10,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                )),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                                  ),
-                                )),
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -234,7 +191,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                                     }),
                                               ),
                                             if (pending.isEmpty)
-                                              EmptyScreen(
+                                              const EmptyScreen(
                                                   text:
                                                       'Bạn không có nghỉ phép chưa duyệt'),
                                           ],
@@ -244,7 +201,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                               MainAxisAlignment.center,
                                           children: [
                                             if (approved.isEmpty)
-                                              EmptyScreen(
+                                              const EmptyScreen(
                                                   text:
                                                       'Bạn không có nghỉ phép đã duyệt'),
                                             if (approved.isNotEmpty)

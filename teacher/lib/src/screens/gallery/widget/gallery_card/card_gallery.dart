@@ -8,7 +8,7 @@ import 'package:teacher/model/gallery_model.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_detail.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class CardGallery extends StatelessWidget {
   const CardGallery({

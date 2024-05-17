@@ -12,7 +12,7 @@ import 'package:teacher/resources/assets.gen.dart';
 
 import 'package:teacher/src/screens/authentication/login/bloc/login_bloc.dart';
 import 'package:teacher/src/utils/dialog_utils.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';

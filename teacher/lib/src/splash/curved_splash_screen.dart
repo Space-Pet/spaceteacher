@@ -7,7 +7,7 @@ import 'package:teacher/repository/auth_repository/auth_repositories.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/settings/settings.dart';
 import 'package:teacher/src/splash/bloc/splash_cubit.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class CurvedSplashScreen extends StatelessWidget {
   const CurvedSplashScreen({

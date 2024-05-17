@@ -11,7 +11,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/src/screens/conversation/bloc/conversation_bloc.dart';
 import 'package:teacher/src/screens/conversation/view/conversation_detail/conversation_detail_screen.dart';
 import 'package:teacher/src/screens/conversation/widget/w_card_message.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class ConversationScreen extends StatefulWidget {
   static const String routeName = '/conversation';

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/gallery_view_carousel.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class AppBarGallery extends StatelessWidget {
   const AppBarGallery({

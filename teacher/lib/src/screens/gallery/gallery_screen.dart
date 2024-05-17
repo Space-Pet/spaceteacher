@@ -12,7 +12,7 @@ import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_card/card_gallery.dart';
 
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({required this.teacherId, super.key});

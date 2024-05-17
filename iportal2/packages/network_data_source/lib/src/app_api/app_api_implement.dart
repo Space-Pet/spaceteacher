@@ -457,12 +457,12 @@ class AppFetchApi extends AbstractAppFetchApi {
         }
         requestBody.add(item);
       }
-      print('d: ${requestBody}');
+      print('d: $requestBody');
       final data = await _authRestClient.doHttpPost(
         url: '/api/v1/member/survey/question',
         data: requestBody,
       );
-      print('jiji: ${requestBody}');
+      print('jiji: $requestBody');
       print('ok: $data');
     } catch (e) {
       print('error');

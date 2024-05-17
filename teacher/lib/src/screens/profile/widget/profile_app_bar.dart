@@ -10,7 +10,7 @@ import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:teacher/src/screens/setting/view/setting_screen.dart';
 
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 import 'package:teacher/src/utils/user_manager.dart';
 
 class ProfileAppBar extends StatefulWidget {

@@ -10,7 +10,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class HourAssessmentSubmitScreen extends StatefulWidget {
   static const routeName = '/hour_assessment_submit';

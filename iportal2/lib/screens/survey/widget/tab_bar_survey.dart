@@ -1,7 +1,6 @@
 import 'package:core/data/models/survay_data.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/screens/survey/bloc/survey_bloc.dart';
@@ -87,7 +86,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(AppColors.white),
+                        WidgetStateProperty.all<Color>(AppColors.white),
                   ),
                   onPressed: () {
                     _pageController.previousPage(
@@ -104,7 +103,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(AppColors.red),
+                      WidgetStateProperty.all<Color>(AppColors.red),
                 ),
                 onPressed: () {
                   if (_currentPage < widget.surveyData.length - 1) {

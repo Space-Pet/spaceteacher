@@ -12,7 +12,7 @@ import 'package:teacher/repository/bus_repository/bus_repositories.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/src/screens/bus/bus_card/card_bus_item.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});

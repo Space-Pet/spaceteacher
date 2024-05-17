@@ -1,4 +1,3 @@
-import 'package:core/resources/app_strings.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,9 +86,9 @@ class ChangeWallpaperScreen extends StatelessWidget {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                           AppColors.redMenu),
-                                  shape: MaterialStateProperty.all<
+                                  shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25.0),

@@ -9,7 +9,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/src/screens/gallery/widget/gallery_detail/card_gallery_detail.dart';
 
 import 'package:teacher/src/screens/gallery/widget/w_button_action_detail_gallery.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class GalleryDetail extends StatefulWidget {
   const GalleryDetail({

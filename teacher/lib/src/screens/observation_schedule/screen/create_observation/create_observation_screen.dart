@@ -7,7 +7,7 @@ import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/create_observation/widget/card_info_add_observation.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/select_field.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class CreateObservationScreen extends StatefulWidget {
   static const routeName = '/create_observation';

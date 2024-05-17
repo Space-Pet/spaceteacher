@@ -8,7 +8,7 @@ import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/observation_schedule/mock_data/subject_mock.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/hourly_assessment/hourly_assessment_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/widget/line_text_observation.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class ObservationDetailScreen extends StatefulWidget {
   static const routeName = '/observation_detail';

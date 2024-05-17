@@ -1,9 +1,9 @@
+import 'package:core/core.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
@@ -11,7 +11,6 @@ import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/attendance/bloc/attendance_bloc.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 import 'widget/tab_bar_attendance.dart';
 
@@ -61,7 +60,7 @@ class _AttendanceScreenState extends State<AttendanceScreen>
                 selectDate: DateTime.now()));
           }
         },
-        child: AttendanceView(),
+        child: const AttendanceView(),
       ),
     );
   }
@@ -108,42 +107,6 @@ class _AttendanceViewState extends State<AttendanceView> {
                   borderRadius: AppRadius.roundedTop28,
                 ),
                 child: AppSkeleton(
-                  skeleton: SizedBox(
-                      height: 500,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.all(0),
-                        itemCount: 5,
-                        itemBuilder: (context, index) => Container(
-                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: index == 4
-                                  ? BorderSide.none
-                                  : const BorderSide(color: AppColors.gray300),
-                            ),
-                          ),
-                          child: SkeletonItem(
-                              child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: SkeletonParagraph(
-                                      style: SkeletonParagraphStyle(
-                                          lineStyle: SkeletonLineStyle(
-                                        randomLength: true,
-                                        height: 10,
-                                        borderRadius: BorderRadius.circular(8),
-                                      )),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          )),
-                        ),
-                      )),
                   isLoading: isLoading,
                   child: CustomRefresh(
                     onRefresh: () async {
@@ -152,9 +115,9 @@ class _AttendanceViewState extends State<AttendanceView> {
                       DateTime firstDayOfWeek = currentDate
                           .subtract(Duration(days: currentDate.weekday - 1));
                       DateTime lastDayOfWeek =
-                          firstDayOfWeek.add(Duration(days: 6));
+                          firstDayOfWeek.add(const Duration(days: 6));
                       DateTime firstDayOfMonth =
-                          DateTime(currentDate.year, currentDate.month, 1);
+                          DateTime(currentDate.year, currentDate.month);
                       DateTime lastDayOfMonth =
                           DateTime(currentDate.year, currentDate.month + 1, 0);
 

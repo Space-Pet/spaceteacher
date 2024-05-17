@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'extention.dart';
 
 extension BaseContext on BuildContext {
   TextStyle get listHeading => Theme.of(this)

@@ -21,6 +21,7 @@ export 'load_failed.dart';
 export 'loading.dart';
 export 'menu_item_widget.dart';
 export 'news_widget.dart';
+export 'select_field/select_field.dart';
 export 'selection_item.dart';
 export 'smart_refresher_wrapper.dart';
 export 'status_widget.dart';

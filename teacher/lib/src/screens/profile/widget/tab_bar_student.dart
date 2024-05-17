@@ -8,7 +8,7 @@ import 'package:teacher/model/student_model.dart';
 
 import 'package:teacher/resources/i18n/locale_keys.g.dart';
 
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class TabBarStudent extends StatelessWidget {
   const TabBarStudent({

@@ -1,6 +1,5 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
@@ -14,7 +13,6 @@ import 'package:iportal2/screens/schedule/select_week.dart';
 import 'package:iportal2/utils/validation_functions.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -113,7 +111,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                             borderRadius: AppRadius.rounded10,
                             child: AppSkeleton(
                               isLoading: isLoading,
-                              skeleton: const ScheduleSkeleton(),
                               child: ScheduleTabs(
                                 lessons: scheduleData,
                                 datePicked: state.datePicked,
@@ -138,48 +135,48 @@ class _ScheduleScreenState extends State<ScheduleScreen>
   bool get wantKeepAlive => true;
 }
 
-class ScheduleSkeleton extends StatelessWidget {
-  const ScheduleSkeleton({
-    super.key,
-  });
+// class ScheduleSkeleton extends StatelessWidget {
+//   const ScheduleSkeleton({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 500,
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(0),
-          itemCount: 5,
-          itemBuilder: (context, index) => Container(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: index == 4
-                    ? BorderSide.none
-                    : const BorderSide(color: AppColors.gray300),
-              ),
-            ),
-            child: SkeletonItem(
-                child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: SkeletonParagraph(
-                        style: SkeletonParagraphStyle(
-                            lineStyle: SkeletonLineStyle(
-                          randomLength: true,
-                          height: 10,
-                          borderRadius: BorderRadius.circular(8),
-                        )),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            )),
-          ),
-        ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//         height: 500,
+//         child: ListView.builder(
+//           physics: const NeverScrollableScrollPhysics(),
+//           padding: const EdgeInsets.all(0),
+//           itemCount: 5,
+//           itemBuilder: (context, index) => Container(
+//             padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+//             decoration: BoxDecoration(
+//               border: Border(
+//                 bottom: index == 4
+//                     ? BorderSide.none
+//                     : const BorderSide(color: AppColors.gray300),
+//               ),
+//             ),
+//             child: SkeletonItem(
+//                 child: Column(
+//               children: [
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: SkeletonParagraph(
+//                         style: SkeletonParagraphStyle(
+//                             lineStyle: SkeletonLineStyle(
+//                           randomLength: true,
+//                           height: 10,
+//                           borderRadius: BorderRadius.circular(8),
+//                         )),
+//                       ),
+//                     )
+//                   ],
+//                 ),
+//               ],
+//             )),
+//           ),
+//         ));
+//   }
+// }

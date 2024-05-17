@@ -15,7 +15,7 @@ import 'package:core/resources/resources.dart';
 import 'package:teacher/src/screens/authentication/login/view/login_screen.dart';
 import 'package:teacher/src/screens/setting/bloc/setting_screen_bloc.dart';
 import 'package:teacher/src/settings/settings.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 import 'package:teacher/src/utils/lang_utils.dart';
 
 import '../widget/switch_setting.dart';

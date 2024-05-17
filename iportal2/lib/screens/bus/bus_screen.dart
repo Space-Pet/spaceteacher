@@ -1,7 +1,6 @@
+import 'package:core/core.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
@@ -12,7 +11,6 @@ import 'package:iportal2/components/empty_screen.dart';
 
 import 'package:iportal2/screens/bus/bloc/bus_bloc.dart';
 import 'package:iportal2/screens/bus/bus_card/card_bus_item.dart';
-import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:repository/repository.dart';
 
 class BusScreen extends StatelessWidget {
@@ -84,7 +82,6 @@ class BusView extends StatelessWidget {
                               ListView(),
                               AppSkeleton(
                                 isLoading: isLoading,
-                                skeleton: const InstructrionSkeleton(),
                                 child: isEmptyData
                                     ? const Center(
                                         child: EmptyScreen(

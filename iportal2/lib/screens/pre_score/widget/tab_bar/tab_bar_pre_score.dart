@@ -8,7 +8,7 @@ import 'package:iportal2/screens/pre_score/widget/tab_bar/tav_bar_view_report.da
 
 class TabBarPreScore extends StatelessWidget {
   TabBarPreScore(
-      {this.comment, this.endDate, this.startDate, required this.state});
+      {super.key, this.comment, this.endDate, this.startDate, required this.state});
   final List<String> tabs = ['Nhận xét', 'Báo cáo học tập'];
   final List<Comment>? comment;
   final DateTime? endDate;

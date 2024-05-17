@@ -9,7 +9,7 @@ import 'package:teacher/src/screens/observation_schedule/screen/create_observati
 import 'package:teacher/src/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/card_observation.dart';
 import 'package:teacher/src/screens/observation_schedule/widgets/filter_observation.dart';
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:core/presentation/extentions/extension_context.dart';
 
 class ObservationSchedule extends StatefulWidget {
   static const routeName = '/observation_schedule';

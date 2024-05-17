@@ -1,6 +1,7 @@
+import 'package:core/core.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -12,7 +13,6 @@ import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/notifications/bloc/notification_bloc.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 enum FilterType {
   read,
@@ -186,7 +186,6 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                           ListView(),
                           AppSkeleton(
                             isLoading: isLoading,
-                            skeleton: const NotiSkeleton(),
                             child: isEmptyData
                                 ? const Center(
                                     child: EmptyScreen(
@@ -213,48 +212,48 @@ class _NotificationsScreenState extends State<NotificationsScreen>
   bool get wantKeepAlive => true;
 }
 
-class NotiSkeleton extends StatelessWidget {
-  const NotiSkeleton({
-    super.key,
-  });
+// class NotiSkeleton extends StatelessWidget {
+//   const NotiSkeleton({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        height: 600,
-        child: ListView.builder(
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 6,
-          itemBuilder: (context, index) => Container(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: index == 5
-                    ? BorderSide.none
-                    : const BorderSide(color: AppColors.gray300),
-              ),
-            ),
-            child: SkeletonItem(
-                child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: SkeletonParagraph(
-                        style: SkeletonParagraphStyle(
-                            lineStyle: SkeletonLineStyle(
-                          randomLength: true,
-                          height: 10,
-                          borderRadius: BorderRadius.circular(8),
-                        )),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            )),
-          ),
-        ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//         height: 600,
+//         child: ListView.builder(
+//           padding: EdgeInsets.zero,
+//           physics: const NeverScrollableScrollPhysics(),
+//           itemCount: 6,
+//           itemBuilder: (context, index) => Container(
+//             padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+//             decoration: BoxDecoration(
+//               border: Border(
+//                 bottom: index == 5
+//                     ? BorderSide.none
+//                     : const BorderSide(color: AppColors.gray300),
+//               ),
+//             ),
+//             child: SkeletonItem(
+//                 child: Column(
+//               children: [
+//                 Row(
+//                   children: [
+//                     Expanded(
+//                       child: SkeletonParagraph(
+//                         style: SkeletonParagraphStyle(
+//                             lineStyle: SkeletonLineStyle(
+//                           randomLength: true,
+//                           height: 10,
+//                           borderRadius: BorderRadius.circular(8),
+//                         )),
+//                       ),
+//                     )
+//                   ],
+//                 ),
+//               ],
+//             )),
+//           ),
+//         ));
+//   }
+// }

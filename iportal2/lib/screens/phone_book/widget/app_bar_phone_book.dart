@@ -87,8 +87,6 @@ class AppBarPhoneBook extends StatelessWidget {
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
-                          isDismissible: true,
-                          enableDrag: true,
                           isScrollControlled: true,
                           backgroundColor: Colors.transparent,
                           builder: (context) {
