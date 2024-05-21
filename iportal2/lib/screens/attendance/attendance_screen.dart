@@ -1,3 +1,4 @@
+import 'package:core/presentation/common_widget/empty_screen.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_decoration.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class _AttendanceScreenState extends State<AttendanceScreen>
                 selectDate: DateTime.now()));
           }
         },
-        child: AttendanceView(),
+        child: const AttendanceView(),
       ),
     );
   }
@@ -100,6 +101,7 @@ class _AttendanceViewState extends State<AttendanceView> {
                     (state.attendanceStatus == AttendanceStatus.initType) ||
                     (state.attendanceStatus == AttendanceStatus.successType);
             final type = state.type;
+            print('type: $type');
             return Expanded(
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -152,9 +154,9 @@ class _AttendanceViewState extends State<AttendanceView> {
                       DateTime firstDayOfWeek = currentDate
                           .subtract(Duration(days: currentDate.weekday - 1));
                       DateTime lastDayOfWeek =
-                          firstDayOfWeek.add(Duration(days: 6));
+                          firstDayOfWeek.add(const Duration(days: 6));
                       DateTime firstDayOfMonth =
-                          DateTime(currentDate.year, currentDate.month, 1);
+                          DateTime(currentDate.year, currentDate.month);
                       DateTime lastDayOfMonth =
                           DateTime(currentDate.year, currentDate.month + 1, 0);
 
@@ -191,12 +193,12 @@ class _AttendanceViewState extends State<AttendanceView> {
                                   attendanceWeek: attendanceWeek,
                                   attendanceMonth: attendanceMonth,
                                 ),
-                                // if (type == null)
-                                //   Padding(
-                                //     padding: const EdgeInsets.only(bottom: 150),
-                                //     child: EmptyScreen(
-                                //         text: 'Không lấy được loại điểm danh'),
-                                //   )
+                                if (type == null || type == '')
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 150),
+                                    child: EmptyScreen(
+                                        text: 'Không lấy được loại điểm danh'),
+                                  )
                               ],
                             ),
                           ),

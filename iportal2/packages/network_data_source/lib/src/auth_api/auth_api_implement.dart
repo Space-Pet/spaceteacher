@@ -56,11 +56,23 @@ class AuthApi extends AbstractAuthApi {
   Future<ProfileInfo> login({
     required String email,
     required String password,
+    required String deviceId,
+    required String model,
+    required String platform,
+    required String tokenFirebase,
   }) async {
     try {
       final data = await _client.doHttpPost(
         url: '/api/v1/login',
-        requestBody: {"user_key": email, "password": password, "login_app": 0},
+        requestBody: {
+          "user_key": email,
+          "password": password,
+          "login_app": 1,
+          "device_id": deviceId,
+          "model": model,
+          "platform": platform,
+          "token_firebase": tokenFirebase,
+        },
       );
       final dataToken = data['data'] as Map<String, dynamic>;
       final loginInfo = LoginInfo.fromMap(dataToken);
@@ -68,6 +80,8 @@ class AuthApi extends AbstractAuthApi {
 
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
+
+      print(userInfo);
 
       return userInfo;
     } catch (e) {
@@ -95,7 +109,7 @@ class AuthApi extends AbstractAuthApi {
       final dataToken = data['data'] as Map<String, dynamic>;
       final loginInfo = LoginInfo.fromMap(dataToken);
       _client.updateAccessToken(loginInfo.access_token);
-      
+
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
 
@@ -106,9 +120,16 @@ class AuthApi extends AbstractAuthApi {
     }
   }
 
-  Future logOut() async {
+  Future<bool> logOut() async {
     try {
-      await _client.clearToken();
+      final data = await _client.doHttpPost(url: '/api/v1/logout');
+      final isSuccess = data['status'] == 'success';
+      print('isSuccess: $isSuccess');
+      
+      if (isSuccess) {
+        await _client.clearToken();
+      }
+      return isSuccess;
     } catch (e) {
       throw LogOutFailure();
     }

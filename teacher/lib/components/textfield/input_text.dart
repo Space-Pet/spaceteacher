@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
+import 'package:core/resources/app_colors.dart';
 
 class TitleAndInputText extends StatefulWidget {
   const TitleAndInputText({
-    Key? key,
+    super.key,
     this.paddingTop = 0,
     this.paddingBottom = 0,
     required this.hintText,
@@ -23,13 +23,9 @@ class TitleAndInputText extends StatefulWidget {
     this.labelStyles,
     this.prefixIcon,
     this.onEditComplated,
+    this.fillColor,
     this.prefixIconFallback = const SizedBox(),
-    this.controller,
-    this.onTapVisibilityPassword,
-    this.isPasswordFeild = false,
-    this.label,
-    this.keyboardType,
-  }) : super(key: key);
+  });
 
   final String hintText;
   final TextStyle? labelStyles;
@@ -46,26 +42,23 @@ class TitleAndInputText extends StatefulWidget {
   final FocusNode? focusNode;
   final Function()? onSubmit;
   final Function()? onTap;
-  final Function()? onTapVisibilityPassword;
   final Function()? onEditComplated;
-  final TextEditingController? controller;
-  final bool isPasswordFeild;
-  final Widget? label;
-  final TextInputType? keyboardType;
+  final Color? fillColor;
+
   @override
   _TitleAndInputTextState createState() => _TitleAndInputTextState();
 }
 
 class _TitleAndInputTextState extends State<TitleAndInputText> {
+  bool _obscureText = false;
+
   @override
   Widget build(BuildContext context) {
-    const redColor = Color(0xffCE2D30);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
-          controller: widget.controller,
           focusNode: widget.focusNode,
           onChanged: widget.onChanged,
           onTap: () {
@@ -83,47 +76,46 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
               widget.onEditComplated!();
             }
           },
-          cursorColor: widget.isValid ? null : redColor,
+          cursorColor: widget.isValid ? null : Colors.black,
           decoration: InputDecoration(
-            
             constraints: const BoxConstraints(
               maxHeight: 50,
               minHeight: 42,
             ),
-            contentPadding: const EdgeInsets.all(5),
-            label: widget.label,
+            contentPadding: EdgeInsets.zero,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: widget.isValid ? Colors.grey : redColor),
+                  color: widget.isValid ? Colors.grey : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: widget.isValid ? Colors.blue : redColor),
+                  color: widget.isValid ? Colors.blue : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             border: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: widget.isValid ? Colors.grey : redColor),
+                  color: widget.isValid ? Colors.grey : Colors.transparent),
               borderRadius: BorderRadius.circular(8),
             ),
             hintText: widget.hintText,
-            hintStyle: const TextStyle(color: AppColors.gray500),
-            labelStyle: TextStyle(
-              color: widget.isValid ? Colors.grey : redColor,
-              fontSize: 16,
-            ),
+            hintStyle: const TextStyle(
+                color: AppColors.gray500,
+                fontSize: 15,
+                fontWeight: FontWeight.normal),
             filled: true,
-            fillColor: Colors.white,
-            prefixIconColor: widget.isValid ? null : redColor,
+            fillColor: widget.fillColor ?? Colors.white,
+            prefixIconColor: widget.isValid ? null : Colors.transparent,
             prefixIcon: widget.prefixIcon,
-            suffixIcon: widget.isPasswordFeild == true
+            suffixIcon: !widget.obscureText
                 ? GestureDetector(
                     onTap: () {
-                      widget.onTapVisibilityPassword?.call();
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
                     },
                     child: Icon(
-                      widget.obscureText
+                      _obscureText
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
                       color: Colors.grey,
@@ -131,9 +123,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
                   )
                 : null,
           ),
-          obscureText: widget.obscureText,
-          keyboardType: widget.keyboardType,
-
+          obscureText: _obscureText,
         ),
       ],
     );

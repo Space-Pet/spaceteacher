@@ -1,0 +1,25 @@
+{
+    "status": "success",
+    "message": "Thành công",
+    "code": 200,
+    "data": {
+        "info": {
+            "name": "UKA.GL_Mebarki Abdnor",
+            "user_key": "abdnoru.iecukaquangngai",
+            "user_id": 10125415,
+            "school_id": 132,
+            "type": 1,
+            "type_text": "Nhân viên",
+            "teacher_id": 10007645,
+            "school_name": "IEC UKA",
+            "school_logo": "https://test-iportal.nhg.vn/api/images/logo/iec.png",
+            "school_brand": "iec",
+            "semester": 2,
+            "learn_year": "2023-2024",
+            "email": "k12.testapp@iec.edu.vn"
+        },
+        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvdGVzdC1pcG9ydGFsLm5oZy52blwvYXBpXC92MVwvc3RhZmYtbG9naW4iLCJpYXQiOjE3MTU4MzM5NzQsIm5iZiI6MTcxNTgzMzk3NCwianRpIjoiYXBhS0U4cHRIYnJPTlpNTiIsInN1YiI6MjcxLCJwcnYiOiJhYTkxZDcyMWU5Y2EwOTRkNWNiOTlmYWMxYmNiMDZkOTE0NmZhY2M3IiwiZnVsbF9uYW1lIjoiVUtBLkdMX01lYmFya2kgQWJkbm9yIiwiZW1haWwiOiJrMTIudGVzdGFwcEBpZWMuZWR1LnZuIiwidXNlcl9rZXkiOiJhYmRub3J1LmllY3VrYXF1YW5nbmdhaSIsInVzZXJfaWQiOjEwMTI1NDE1LCJzY2hvb2xfaWQiOjEzMiwidHlwZSI6MSwicHVwaWxfaWQiOjAsInBhcmVudF9uYW1lIjoiIiwiZmFuZG1faWQiOjAsImZhdGhlcl9uYW1lIjoiIiwic2Nob29sX2JyYW5kIjoiaWVjIiwidGVhY2hlcl9pZCI6MTAwMDc2NDV9.PY97v1omqnZh3QcFA8LXsffqDFRGMYH1xFA9GgTUyRY",
+        "token_type": "bearer",
+        "expires_in": 0
+    }
+}

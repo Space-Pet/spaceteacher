@@ -11,7 +11,6 @@ export 'dot_status.dart';
 export 'empty_placeholder.dart';
 export 'home_menu.dart';
 export 'icon_text_view.dart';
-export 'image_picker_widget.dart';
 export 'info_item.dart';
 export 'inform_popup.dart';
 export 'item_devider.dart';

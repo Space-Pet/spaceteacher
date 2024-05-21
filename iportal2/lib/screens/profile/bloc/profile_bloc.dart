@@ -17,12 +17,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           studentData: StudentData.empty(),
           parentData: ParentData.empty(),
         )) {
-    on<GetProfileInfo>(_onGetProfileData);
-    add(const GetProfileInfo());
-
-    on<GetProfileStudent>(_onGetProfileStudent);
-    on<GetProfileParent>(_onGetProfileParent);
-
     on<CurrentUserUpdated>(_onUpdateUser);
 
     on<UpdatePhone>(_updatePhone);
@@ -51,7 +45,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           phone: event.phone,
           motherName: event.motherName,
           fatherPhone: event.fatherPhone,
-          pupil_id: currentUserBloc.state.user.pupil_id.toString());
+          pupilId: currentUserBloc.state.user.pupil_id.toString());
 
       if (data!['code'] == 200) {
         add(const GetProfileStudent());
@@ -110,56 +104,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     } catch (e) {
       emit(state.copyWith(profileStatus: ProfileStatus.error));
-    }
-  }
-
-  void _onGetProfileData(
-    GetProfileInfo event,
-    Emitter<ProfileState> emit,
-  ) {
-    final isParent =
-        currentUserBloc.state.user.type == ProfileType.parent.value;
-
-    if (isParent) {
-      add(const GetProfileParent());
-    } else {
-      add(const GetProfileStudent());
-    }
-  }
-
-  void _onGetProfileStudent(
-    GetProfileStudent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(profileStatus: ProfileStatus.init));
-      final data = await userRepository.getProfileStudent(
-          pupil_id: currentUserBloc.state.user.pupil_id.toString());
-      emit(state.copyWith(
-        profileStatus: ProfileStatus.success,
-        studentData: data,
-      ));
-    } catch (e) {
-      print('err: $e');
-    }
-  }
-
-  void _onGetProfileParent(
-    GetProfileParent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(profileStatus: ProfileStatus.init));
-      final data = await userRepository.getProfileParent(
-          pupilId: currentUserBloc.state.user.pupil_id.toString());
-      emit(state.copyWith(
-        profileStatus: ProfileStatus.success,
-        parentData: data,
-      ));
-
-      add(const GetProfileStudent());
-    } catch (e) {
-      print('err: $e');
     }
   }
 

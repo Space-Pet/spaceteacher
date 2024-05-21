@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/app_main_layout.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
-import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/splash/bloc/splash_cubit.dart';
 import 'package:iportal2/screens/splash/curved_splash_screen.dart';
 import 'package:iportal2/screens/splash/splash_content.dart';

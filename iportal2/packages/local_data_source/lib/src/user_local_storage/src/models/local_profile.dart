@@ -77,7 +77,7 @@ class LocalProfile {
   @HiveField(16)
   final int semester;
   @HiveField(17)
-  final LocalChildren children;
+  final List<LocalChildren> children;
   @HiveField(18)
   final LocalTrainingLevel cap_dao_tao;
   @HiveField(19)
@@ -128,7 +128,7 @@ class LocalProfile {
     String? school_logo,
     String? school_brand,
     int? semester,
-    LocalChildren? children,
+    List<LocalChildren>? children,
     LocalTrainingLevel? cap_dao_tao,
     List<FeatureModel>? features,
     List<int>? pinnedAlbumIdList,
@@ -177,12 +177,20 @@ class LocalProfile {
       'school_logo': school_logo,
       'school_brand': school_brand,
       'semester': semester,
-      'children': children.toMap(),
+      'children': children.map((x) => x.toMap()).toList(),
       'cap_dao_tao': cap_dao_tao.toMap(),
     };
   }
 
   factory LocalProfile.fromMap(Map<String, dynamic> map) {
+    final childrenData = map['children'];
+
+    final children = childrenData is List
+        ? childrenData
+            .map((e) => LocalChildren.fromMap(e as Map<String, dynamic>))
+            .toList()
+        : [LocalChildren.fromMap(childrenData as Map<String, dynamic>)];
+
     return LocalProfile(
       name: map['name'] as String,
       user_key: map['user_key'] as String,
@@ -200,7 +208,7 @@ class LocalProfile {
       school_logo: map['school_logo'] as String,
       school_brand: map['school_brand'] as String,
       semester: map['semester'].toInt() as int,
-      children: LocalChildren.fromMap(map['children'] as Map<String, dynamic>),
+      children: children,
       cap_dao_tao: LocalTrainingLevel.fromMap(
         map['cap_dao_tao'] as Map<String, dynamic>,
       ),

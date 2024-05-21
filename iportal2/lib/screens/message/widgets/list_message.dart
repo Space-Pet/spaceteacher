@@ -2,6 +2,9 @@ import 'package:core/data/models/models.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:iportal2/app.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/screens/message/chat_room.dart';
 import 'package:iportal2/screens/message/conponents/card_messages.dart';
 
 class ListMessage extends StatelessWidget {
@@ -72,12 +75,18 @@ class ListMessage extends StatelessWidget {
         shrinkWrap: true,
         itemCount: chatRooms.length,
         itemBuilder: (BuildContext context, int index) {
-          final chat = chatRooms[index];
+          final message = chatRooms[index];
           return ChatRoomItem(
               onTap: () {
-                // context.push(ChatRoomScreen(messageChatRoom: chat));
+                mainNavKey.currentContext!.pushNamed(
+                  routeName: ChatRoomScreen.routeName,
+                  arguments: {
+                    'message': message,
+                    'phoneBookStudent': PhoneBookStudent.empty(),
+                  },
+                );
               },
-              chatRoom: chat);
+              chatRoom: message);
         },
       ),
     );

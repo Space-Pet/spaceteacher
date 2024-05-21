@@ -46,6 +46,8 @@ class UserApi extends AbstractUserApi {
   Future logOut() async {
     try {
       await _client.clearToken();
+      _partnerTokenRestClient.clearDomain();
+      _authRestClient.clearDomain();
     } catch (e) {
       throw LogOutFailure();
     }
@@ -55,11 +57,11 @@ class UserApi extends AbstractUserApi {
     required String phone,
     required String motherName,
     required String fatherPhone,
-    required String pupil_id,
+    required String pupilId
   }) async {
     try {
       final data = await _client.doHttpPut(
-        url: '/api/v1/member/pupil/$pupil_id',
+        url: '/api/v1/member/pupil/$pupilId',
         requestBody: {
           "mother_name": motherName,
           "phone": phone,
@@ -85,9 +87,9 @@ class UserApi extends AbstractUserApi {
     }
   }
 
-  Future<StudentData> getProfileStudent({required String pupil_id}) async {
+  Future<StudentData> getProfileStudent({required String pupilId}) async {
     try {
-      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupil_id');
+      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupilId');
       final studentInfo = StudentData.fromMap(data['data']);
       return studentInfo;
     } catch (e) {
@@ -99,7 +101,6 @@ class UserApi extends AbstractUserApi {
     try {
       final data =
           await _client.doHttpGet('/api/v1/member/pupil/$pupilId/parent');
-      print(data);
       final parentInfo = ParentData.fromMap(data['data']);
       return parentInfo;
     } catch (e) {

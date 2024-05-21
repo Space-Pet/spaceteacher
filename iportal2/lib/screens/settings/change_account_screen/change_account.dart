@@ -1,4 +1,3 @@
-import 'package:core/resources/app_strings.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:dotted_line/dotted_line.dart';

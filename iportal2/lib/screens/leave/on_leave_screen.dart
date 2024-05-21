@@ -234,7 +234,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                                     }),
                                               ),
                                             if (pending.isEmpty)
-                                              EmptyScreen(
+                                              const EmptyScreen(
                                                   text:
                                                       'Bạn không có nghỉ phép chưa duyệt'),
                                           ],
@@ -244,7 +244,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                               MainAxisAlignment.center,
                                           children: [
                                             if (approved.isEmpty)
-                                              EmptyScreen(
+                                              const EmptyScreen(
                                                   text:
                                                       'Bạn không có nghỉ phép đã duyệt'),
                                             if (approved.isNotEmpty)

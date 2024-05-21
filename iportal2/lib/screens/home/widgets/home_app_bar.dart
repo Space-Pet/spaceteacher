@@ -1,8 +1,9 @@
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/screens/home/bloc/home_bloc.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/profile/profile_screen.dart';
 
@@ -13,10 +14,10 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
+    return BlocBuilder<CurrentUserBloc, CurrentUserState>(
       builder: (context, state) {
-        final userData = state.userData;
-        final urlImage = userData.avatar.mobile;
+        final userData = state.activeChild;
+        final urlImage = userData.url_image.mobile;
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -48,13 +49,13 @@ class HomeAppBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userData.pupil.name,
+                            userData.full_name,
                             style: AppTextStyles.semiBold12(
                               color: AppColors.white,
                             ),
                           ),
                           Text(
-                            'Lớp ${userData.classInfo.name}',
+                            'Lớp ${userData.class_name}',
                             style: AppTextStyles.normal12(
                               color: AppColors.white,
                             ),
@@ -66,7 +67,8 @@ class HomeAppBar extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    context.push(const MessageScreen());
+                    mainNavKey.currentContext!
+                        .pushNamed(routeName: MessageScreen.routeName);
                   },
                   child: CircleAvatar(
                     backgroundColor: const Color.fromRGBO(255, 255, 255, 0.205),

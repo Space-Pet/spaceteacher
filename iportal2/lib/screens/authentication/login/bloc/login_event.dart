@@ -7,6 +7,20 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class InitDomain extends LoginEvent {
+  const InitDomain();
+
+  @override
+  List<Object> get props => [];
+}
+
+class InitDeviceInfo extends LoginEvent {
+  const InitDeviceInfo();
+
+  @override
+  List<Object> get props => [];
+}
+
 class PasswordVisibility extends LoginEvent {
   const PasswordVisibility();
 
@@ -42,16 +56,8 @@ class LoginSubmitted extends LoginEvent {}
 
 class LoginQR extends LoginEvent {
   final String qrCode;
-  final String deviceId;
-  final String model;
-  final String platform;
-  final String tokenFirebase;
-  const LoginQR(
-      {required this.deviceId,
-      required this.model,
-      required this.platform,
-      required this.qrCode,
-      required this.tokenFirebase});
+
+  const LoginQR({required this.qrCode});
   @override
-  List<Object> get props => [deviceId, model, platform, qrCode, tokenFirebase];
+  List<Object> get props => [qrCode];
 }

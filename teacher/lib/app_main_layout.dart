@@ -1,22 +1,17 @@
 import 'package:core/core.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-
-import 'package:teacher/common_bloc/user_manager/bloc/user_manager_bloc.dart';
-
-import 'package:teacher/repository/user_repository/user_repositories.dart';
-import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/i18n/locale_keys.g.dart';
-import 'package:core/resources/resources.dart';
-import 'package:teacher/src/screens/attendance/attendance_screen.dart';
-import 'package:teacher/src/screens/home/view/home_screen.dart';
-import 'package:teacher/src/screens/menu/menu_screen.dart';
-import 'package:teacher/src/screens/notifications/view/notifications_screen.dart';
-import 'package:teacher/src/screens/schedule/schedule_screen.dart';
-import 'package:teacher/src/screens/week_schedule/week_schedule_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:teacher/app_config/router_configuration.dart';
+import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/components/custom_loading_logo.dart';
+import 'package:teacher/components/home_shadow_box.dart';
+import 'package:teacher/screens/attendance/attendance_screen.dart';
+import 'package:teacher/screens/home/home_navigator.dart';
+import 'package:teacher/screens/notifications/notifications_screen.dart';
+import 'package:teacher/screens/schedule/schedule_screen.dart';
+import 'package:teacher/screens/week_schedule/week_schedule_screen.dart';
 
 class AppMainLayout extends StatefulWidget {
-  static const String routeName = '/';
   const AppMainLayout({
     super.key,
     this.initIndex = 0,
@@ -28,32 +23,50 @@ class AppMainLayout extends StatefulWidget {
   State<AppMainLayout> createState() => _AppMainLayoutState();
 }
 
-class _AppMainLayoutState extends State<AppMainLayout> {
+class _AppMainLayoutState extends State<AppMainLayout>
+    with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
-  final bloc = UserManagerBloc(userRepository: Injection.get<UserRepository>());
+  late TabController tabBarController;
+
   final List<Widget> widgetOptionKinderGarten = [
-    const HomeScreen(),
+    const HomeNavigator(),
     const WeekScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
-    const MenuScreen(),
   ];
 
   final List<Widget> widgetOptions = <Widget>[
-    const HomeScreen(),
+    const HomeNavigator(),
     const ScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
-    const MenuScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initIndex;
+    tabBarController = TabController(
+      length: 4,
+      vsync: this,
+    );
   }
 
   Future<void> _onItemTapped(int index) async {
+    if (index == 0 &&
+        index == _selectedIndex &&
+        homeNavigatorKey.currentContext != null) {
+      if (Navigator.canPop(homeNavigatorKey.currentContext!)) {
+        homeNavigatorKey.currentContext?.pop();
+      }
+    }
+
+    // TODO: improve this can not find HomeProvider to handle refresh
+    // if (index == 0 && _selectedIndex == 0) {
+    //   final homeBloc = homeNavigatorKey.currentContext?.read<HomeBloc>();
+    //   homeBloc?.add(HomeRefresh());
+    // }
+
     if (_selectedIndex != index) {
       setState(() {
         _selectedIndex = index;
@@ -63,115 +76,138 @@ class _AppMainLayoutState extends State<AppMainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 5,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: true,
-        body: BlocBuilder<UserManagerBloc, UserManagerState>(
-          bloc: bloc,
-          builder: (context, state) {
-            return TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              children: state.userInfo.isKinderGarten()
-                  ? widgetOptionKinderGarten
-                  : widgetOptions,
-            );
-          },
-        ),
-        bottomNavigationBar: ClipRRect(
-          child: BlocBuilder<UserManagerBloc, UserManagerState>(
-            bloc: bloc,
+    return LoaderOverlay(
+      useDefaultLoading: false,
+      overlayColor: AppColors.gray100.withOpacity(0.7),
+      overlayWidgetBuilder: (_) {
+        //ignored progress for the moment
+        return const Center(
+          child: LoadingWithBrand(),
+        );
+      },
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) {
+          if (_selectedIndex != 0) {
+            tabBarController.animateTo(0);
+            setState(() {
+              _selectedIndex = 0;
+            });
+          }
+
+          if (_selectedIndex == 0 && homeNavigatorKey.currentContext != null) {
+            if (Navigator.canPop(homeNavigatorKey.currentContext!)) {
+              homeNavigatorKey.currentContext?.pop();
+            }
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: BlocBuilder<CurrentUserBloc, CurrentUserState>(
+            builder: (context, state) {
+              return TabBarView(
+                controller: tabBarController,
+                physics: const NeverScrollableScrollPhysics(),
+                children: state.user.isKinderGarten()
+                    ? widgetOptionKinderGarten
+                    : widgetOptions,
+              );
+            },
+          ),
+          bottomNavigationBar: BlocBuilder<CurrentUserBloc, CurrentUserState>(
             builder: (context, state) {
               return Container(
-                decoration: const BoxDecoration(color: AppColors.white),
+                height: 82.v,
+                decoration: BoxDecoration(
+                    color: AppColors.white, boxShadow: [homeBoxShadow()]),
                 child: TabBar(
+                  controller: tabBarController,
                   padding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.zero,
-                  labelColor: AppColors.red,
+                  labelColor: AppColors.brand500,
+                  unselectedLabelColor: AppColors.gray400,
                   indicator: const BoxDecoration(),
-                  labelStyle: AppTextStyles.normal10(),
+                  labelStyle: AppTextStyles.semiBold12(),
                   tabs: [
                     Tab(
-                      height: 92.v,
-                      icon: Assets.icons.home.svg(
+                      icon: SvgPicture.asset(
+                        'assets/icons/home.svg',
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 0
-                              ? AppColors.red
+                              ? AppColors.brand500
                               : AppColors.gray400,
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: LocaleKeys.home.tr(),
+                      iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                      text: 'Trang chủ',
                     ),
-                    state.userInfo.isKinderGarten()
+                    state.user.isKinderGarten()
                         ? Tab(
-                            icon: Assets.icons.calendar.svg(
+                            icon: SvgPicture.asset(
+                              'assets/icons/calendar.svg',
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
-                                    ? AppColors.red
+                                    ? AppColors.brand500
                                     : AppColors.gray400,
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: LocaleKeys.weeklyProject.tr(),
+                            iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            text: 'Kế hoạch tuần',
                           )
                         : Tab(
-                            icon: Assets.icons.features.highSScores.svg(
+                            icon: SvgPicture.asset(
+                              'assets/icons/calendar.svg',
                               colorFilter: ColorFilter.mode(
                                 _selectedIndex == 1
-                                    ? AppColors.red
+                                    ? AppColors.brand500
                                     : AppColors.gray400,
                                 BlendMode.srcIn,
                               ),
                             ),
-                            text: LocaleKeys.checkGrades.tr(),
-                          ),
-                    state.userInfo.isKinderGarten()
-                        ? Tab(
-                            icon: Assets.icons.features.highSBus.svg(
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 2
-                                    ? AppColors.red
-                                    : AppColors.gray400,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            text: LocaleKeys.weeklyProject.tr(),
-                          )
-                        : Tab(
-                            icon: Assets.icons.features.highSAttendance.svg(
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 2
-                                    ? AppColors.red
-                                    : AppColors.gray400,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            text: LocaleKeys.attendance.tr(),
+                            iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                            text: 'Thời khóa biểu',
                           ),
                     Tab(
-                      icon: Assets.icons.noti.svg(
+                      child: Container(
+                        padding: EdgeInsets.only(left: 12.h),
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/check.svg',
+                              colorFilter: ColorFilter.mode(
+                                _selectedIndex == 2
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Điểm danh',
+                              style: AppTextStyles.semiBold12(
+                                color: _selectedIndex == 2
+                                    ? AppColors.brand500
+                                    : AppColors.gray400,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Tab(
+                      icon: SvgPicture.asset(
+                        'assets/icons/noti.svg',
                         colorFilter: ColorFilter.mode(
                           _selectedIndex == 3
-                              ? AppColors.red
+                              ? AppColors.brand500
                               : AppColors.gray400,
                           BlendMode.srcIn,
                         ),
                       ),
-                      text: 'noti'.tr(),
-                    ),
-                    Tab(
-                      icon: Assets.icons.features.moreCircle.svg(
-                        width: 28,
-                        colorFilter: ColorFilter.mode(
-                          _selectedIndex == 4
-                              ? AppColors.red
-                              : AppColors.gray400,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                      text: LocaleKeys.all.tr(),
+                      iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                      text: 'Thông báo',
                     ),
                   ],
                   onTap: (index) async {

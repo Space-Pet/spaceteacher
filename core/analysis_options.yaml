@@ -10,7 +10,7 @@ analyzer:
     - lib/generated_plugin_registrant.dart
     - lib/di/di.config.dart
     - lib/generated
-    - "**.g.dart"
+    - '**.g.dart'
 
 linter:
   rules:
@@ -22,7 +22,7 @@ linter:
     - annotate_overrides
     - prefer_single_quotes
     - avoid_empty_else
-    - avoid_print
+    # - avoid_print
     - avoid_field_initializers_in_const_classes
     - avoid_init_to_null
     - avoid_null_checks_in_equality_operators
@@ -109,6 +109,6 @@ linter:
     - unnecessary_lambdas
     - flutter_style_todos
     - join_return_with_assignment
-    - lines_longer_than_80_chars
+    # - lines_longer_than_80_chars
     - prefer_foreach
     - use_to_and_as_if_applicable

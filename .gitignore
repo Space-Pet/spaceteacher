@@ -1,0 +1,4 @@
+# all generated dart files
+**/*.g.dart
+**/*.freezed.dart
+**/*.gen.dart

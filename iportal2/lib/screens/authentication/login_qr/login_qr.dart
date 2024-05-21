@@ -1,11 +1,7 @@
-import 'dart:async';
 import 'dart:io';
+
 import 'package:core/resources/app_colors.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/app_main_layout.dart';
@@ -88,14 +84,10 @@ class _LoginQRViewState extends State<LoginQRView> {
   QRViewController? controller;
   String? fcmToken;
   bool isCameraRunning = false;
-  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-  Map<String, dynamic> _deviceData = <String, dynamic>{};
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-    getFCMToken();
   }
 
   @override
@@ -106,55 +98,6 @@ class _LoginQRViewState extends State<LoginQRView> {
     } else if (Platform.isIOS) {
       controller!.resumeCamera();
     }
-  }
-
-  Future<void> getFCMToken() async {
-    final firebaseMessaging = FirebaseMessaging.instance;
-    fcmToken = await firebaseMessaging.getToken();
-
-    print(fcmToken);
-  }
-
-  Future<void> initPlatformState() async {
-    var deviceData = <String, dynamic>{};
-
-    try {
-      deviceData = switch (defaultTargetPlatform) {
-        TargetPlatform.android =>
-          _readAndroidBuildData(await deviceInfoPlugin.androidInfo),
-        TargetPlatform.iOS =>
-          _readIosDeviceInfo(await deviceInfoPlugin.iosInfo),
-        _ => {},
-      };
-    } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      _deviceData = deviceData;
-    });
-  }
-
-  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
-    return <String, dynamic>{
-      'model': build.model,
-      'id': build.id,
-      'version.release': build.version.release,
-      'platform': 'Android',
-    };
-  }
-
-  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-    return <String, dynamic>{
-      'name': data.name,
-      'systemName': data.systemName,
-      'model': data.model,
-      'platform': 'iOS',
-    };
   }
 
   @override
@@ -198,43 +141,11 @@ class _LoginQRViewState extends State<LoginQRView> {
       });
       if (result != null) {
         _stopCamera();
-        final deviceId = await _getDeviceId();
-        final platform = Platform.isAndroid ? 'Android' : 'iOS';
         context.read<LoginBloc>().add(LoginQR(
-              deviceId: deviceId,
-              model: _deviceData['model'],
-              platform: platform,
               qrCode: result!.code.toString(),
-              tokenFirebase: fcmToken ?? '',
             ));
-
-        print(result!.code.toString());
       }
     });
-  }
-
-  Future<String> _getDeviceId() async {
-    if (Platform.isAndroid) {
-      // Lấy thông tin về thiết bị Android
-      AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
-      return androidInfo.id;
-    } else if (Platform.isIOS) {
-      // Lấy thông tin về thiết bị iOS
-      IosDeviceInfo iosInfo = await deviceInfoPlugin.iosInfo;
-      return iosInfo.systemName;
-    } else {
-      // Nếu không phải Android hoặc iOS, trả về giá trị mặc định
-      return 'Unknown';
-    }
-  }
-
-  void _startCamera() {
-    if (controller != null) {
-      controller!.resumeCamera();
-      setState(() {
-        isCameraRunning = true;
-      });
-    }
   }
 
   void _stopCamera() {

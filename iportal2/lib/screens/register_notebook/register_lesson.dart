@@ -1,8 +1,8 @@
+import 'package:core/data/models/weeky_lesson.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/components/dialog/dialog_view_exercise.dart';
-import 'package:core/resources/resources.dart';
-import 'package:network_data_source/network_data_source.dart';
 
 class RegisterItem extends StatelessWidget {
   const RegisterItem({

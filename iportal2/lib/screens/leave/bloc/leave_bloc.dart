@@ -35,8 +35,8 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   void _onGetLeaves(GetLeaves event, Emitter<LeaveState> emit) async {
     emit(state.copyWith(leaveStatus: LeaveStatus.init));
     final data = await appFetchApiRepo.getLeaves(
-        classId: currentUserBloc.state.user.children.class_id,
-        pupilId: currentUserBloc.state.user.children.pupil_id,
+        classId: currentUserBloc.state.user.children[0].class_id,
+        pupilId: currentUserBloc.state.user.children[0].pupil_id,
         schoolId: currentUserBloc.state.user.school_id,
         schoolBrand: currentUserBloc.state.user.school_brand);
     emit(state.copyWith(leaveStatus: LeaveStatus.success, leaveData: data));

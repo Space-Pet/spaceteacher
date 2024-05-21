@@ -156,10 +156,4 @@ class AppColors {
   static const Color observationStatusSuccessText = Color(0xFF039855);
   static const Color observationCardDetailDotted = Color(0xFFFEE4E2);
   static const Color observationCardDetailbg = Color(0xFFFFFBFA);
-
-  //Text
-  static const Color textPrimary = Color(0xFF1B1A57);
-
-  //Conversation
-  static const Color cardBackgroundChatByMe = Color(0xFF1B72C0);
 }

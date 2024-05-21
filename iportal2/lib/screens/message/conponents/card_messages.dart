@@ -4,7 +4,9 @@ import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-
+import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/screens/message/bloc/message_bloc.dart';
+import 'package:iportal2/utils/utils_export.dart';
 
 class ChatRoomItem extends StatelessWidget {
   final Message? chatRoom;
@@ -139,11 +141,19 @@ class ChatRoomItem extends StatelessWidget {
                       const PopupMenuDivider(),
                       PopupMenuItem<int>(
                         value: 1,
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(Assets.icons.trash),
-                            const Text('Xoá tin nhắn'),
-                          ],
+                        child: GestureDetector(
+                          onTap: () {
+                            context.read<MessageBloc>().add(DeleteMessage(
+                                  idMessage: chatRoom?.conversationId ?? 0,
+                                ));
+                            context.pop();
+                          },
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(Assets.icons.trash),
+                              const Text('Xoá tin nhắn'),
+                            ],
+                          ),
                         ),
                       ),
                       const PopupMenuDivider(),

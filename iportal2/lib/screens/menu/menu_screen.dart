@@ -1,7 +1,6 @@
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -10,7 +9,6 @@ import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/empty_screen.dart';
-
 import 'package:iportal2/screens/menu/bloc/menu_bloc.dart';
 import 'package:iportal2/screens/menu/widgets/tab_menu.dart';
 import 'package:repository/repository.dart';
@@ -58,7 +56,6 @@ class _MenuViewState extends State<MenuView> {
       filteredData =
           menu.data.where((item) => item.thucDonNgay == currentDate).toList();
       final date = state.date;
-      print('day: ${menu.txtBeginDay}');
       final screenHeight = MediaQuery.of(context).size.height;
       final desiredHeight = screenHeight * 1;
       return BackGroundContainer(
@@ -148,7 +145,7 @@ class _MenuViewState extends State<MenuView> {
                                     ),
                                     const SizedBox(height: 8),
                                     if (menu.data.isNotEmpty)
-                                      TabMenu(dataMenu: menu.data ?? []),
+                                      TabMenu(dataMenu: menu.data),
                                     if (menu.data.isEmpty)
                                       const Expanded(
                                         child: Center(
@@ -312,7 +309,6 @@ class _MenuSelectWidgetState extends State<MenuSelectWidget> {
   DateTime now = DateTime.now();
 
   DateFormat formatDate = DateFormat("dd/MM/yyyy");
-  int _currentWeek = 1;
   late String datePicked;
 
   @override
@@ -321,29 +317,8 @@ class _MenuSelectWidgetState extends State<MenuSelectWidget> {
     datePicked = formatDate.format(DateTime.now());
   }
 
-  void _goBackOneWeek() {
-    setState(() {
-      if (_currentWeek >= 1) {
-        now = now.subtract(const Duration(days: 7));
-        _currentWeek--;
-      } else {
-        return;
-      }
-    });
-  }
-
-  void _goForwardOneWeek() {
-    setState(() {
-      _currentWeek++;
-      now = now.add(const Duration(days: 7));
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final endOfWeek = startOfWeek.add(const Duration(days: 4));
-
     return Column(
       children: [
         Container(

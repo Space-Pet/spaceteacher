@@ -1,12 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/notifications/bloc/notification_bloc.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:meta/meta.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'home_event.dart';
@@ -22,7 +20,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           exerciseDueDateDataList: const [],
           exerciseInDayDataList: const [],
           notificationData: NotificationData.empty(),
-          userData: StudentData.empty(),
           albumData: AlbumData.empty,
           datePicked: DateTime.now(),
         )) {
@@ -41,79 +38,36 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<HomeExerciseSelectDate>(_onSelectDate);
 
-    on<HomeFetchProfileData>(_onFetchProfileData);
-    add(HomeFetchProfileData());
-
-    on<UpdateProfile>(_onUpdateProfileStudent);
+    on<HomeRefresh>(_onRefresh);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
   final UserRepository userRepository;
 
-  void _onFetchProfileData(
-    HomeFetchProfileData event,
-    Emitter<HomeState> emit,
-  ) async {
-    emit(state.copyWith(profileStatus: HomeStatus.init));
-    final data = await userRepository.getProfileStudent(
-        pupil_id: currentUserBloc.state.user.pupil_id.toString());
-
-    emit(state.copyWith(
-      profileStatus: HomeStatus.success,
-      userData: data,
-    ));
-  }
-
-  Future<String?> _onUpdateProfileStudent(
-      UpdateProfile event, Emitter<HomeState> emit) async {
-    emit(state.copyWith(profileStatus: HomeStatus.loading));
-    final data = await userRepository.updateStudentPhone(
-        phone: event.phone,
-        motherName: event.motherName,
-        fatherPhone: event.fatherPhone,
-        pupil_id: currentUserBloc.state.user.pupil_id.toString());
-
-    if (data!['code'] == 200) {
-      emit(state.copyWith(profileStatus: HomeStatus.success));
-    } else if (data['code'] != 200 && data['code'] != 0) {
-      emit(state.copyWith(profileStatus: HomeStatus.failure
-          //  message: data['message']
-          ));
-    }
-
-    return data['message'] ?? 'Cập nhật thông tin thành công';
-  }
-
   _onSelectDate(HomeExerciseSelectDate event, Emitter<HomeState> emit) async {
     emit(state.copyWith(statusExercise: HomeStatus.loading));
 
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
       // userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
+      datePicked: event.datePicked,
       userKey: '0723210020',
     );
-    
-    DateFormat formatDate = DateFormat("yyyy-MM-dd");
-    final listExerciseDueDate = exerciseDueDateDataList.exerciseDataList
-        .where((element) =>
-            element.hanNopBaoBai == formatDate.format(event.datePicked))
-        .toList();
 
     emit(
       state.copyWith(
-        exerciseDueDateDataList: listExerciseDueDate,
+        exerciseDueDateDataList: exerciseDueDateDataList,
       ),
     );
 
     final exerciseInDayDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
+      datePicked: event.datePicked,
       isDueDate: false,
     );
     emit(
       state.copyWith(
-        exerciseInDayDataList: exerciseInDayDataList.exerciseDataList,
+        exerciseInDayDataList: exerciseInDayDataList,
         datePicked: event.datePicked,
         statusExercise: HomeStatus.success,
       ),
@@ -126,29 +80,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final exerciseDataList = await appFetchApiRepo.getExercises(
         userKey: currentUserBloc.state.user.user_key,
-        txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+        datePicked: DateTime.now(),
         isDueDate: event.isDueDate,
         // txtDate: '18-03-2024',
         // userKey: '0723210020',
       );
 
-      DateFormat formatDate = DateFormat("yyyy-MM-dd");
-      final listExerciseDueDate = exerciseDataList.exerciseDataList
-          .where((element) =>
-              element.hanNopBaoBai == formatDate.format(DateTime.now()))
-          .toList();
-
       if (event.isDueDate) {
         emit(
           state.copyWith(
-            exerciseDueDateToday: listExerciseDueDate,
-            exerciseDueDateDataList: listExerciseDueDate,
+            exerciseDueDateToday: exerciseDataList,
+            exerciseDueDateDataList: exerciseDataList,
           ),
         );
       } else {
         emit(
           state.copyWith(
-            exerciseInDayDataList: listExerciseDueDate,
+            exerciseInDayDataList: exerciseDataList,
           ),
         );
       }
@@ -220,5 +168,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
 
     emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
+  }
+
+  _onRefresh(HomeRefresh event, Emitter<HomeState> emit) {
+    final isKinderGarten = currentUserBloc.state.user.isKinderGarten();
+    add(HomeFetchProfileData());
+    add(HomeFetchNotificationData());
+
+    if (isKinderGarten) {
+      add(HomeFetchAlbumData());
+      add(HomeGetPinnedAlbumIdList());
+    } else {
+      add(HomeFetchExercise());
+    }
   }
 }

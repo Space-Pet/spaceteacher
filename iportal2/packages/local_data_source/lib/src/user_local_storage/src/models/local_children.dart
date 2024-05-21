@@ -36,6 +36,8 @@ class LocalChildren {
   final String class_name;
   @HiveField(12)
   final LocalUrlImage url_image;
+  @HiveField(13)
+  final bool isActive;
 
   LocalChildren({
     required this.pupil_id,
@@ -51,6 +53,7 @@ class LocalChildren {
     required this.parent_id,
     required this.class_name,
     required this.url_image,
+    required this.isActive,
   });
 
   LocalChildren copyWith({
@@ -67,6 +70,7 @@ class LocalChildren {
     int? parent_id,
     String? class_name,
     LocalUrlImage? url_image,
+    bool? isActive,
   }) {
     return LocalChildren(
       pupil_id: pupil_id ?? this.pupil_id,
@@ -82,6 +86,7 @@ class LocalChildren {
       parent_id: parent_id ?? this.parent_id,
       class_name: class_name ?? this.class_name,
       url_image: url_image ?? this.url_image,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -100,6 +105,7 @@ class LocalChildren {
       'parent_id': parent_id,
       'class_name': class_name,
       'url_image': url_image.toMap(),
+      'isActive': isActive,
     };
   }
 
@@ -119,6 +125,7 @@ class LocalChildren {
       class_name: map['class_name'] as String,
       url_image:
           LocalUrlImage.fromMap(map['url_image'] as Map<String, dynamic>),
+      isActive: map['isActive'] as bool,
     );
   }
 

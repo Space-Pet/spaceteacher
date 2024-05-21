@@ -22,7 +22,7 @@ class FirebaseNotificationService {
   }) async {
     final messaging = FirebaseMessaging.instance;
 
-    final settings = await messaging.requestPermission(
+    await messaging.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -41,7 +41,7 @@ class FirebaseNotificationService {
     await iosConfiguration();
 
     if (kDebugMode) {
-      print('Permission granted: ${settings.authorizationStatus}');
+      // print('Permission granted: ${settings.authorizationStatus}');
     }
 
     try {

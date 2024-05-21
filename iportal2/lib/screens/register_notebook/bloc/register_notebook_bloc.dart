@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'register_notebook_event.dart';

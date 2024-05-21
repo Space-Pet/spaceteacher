@@ -21,7 +21,7 @@ class ProfileInfo {
   final String school_logo;
   final String school_brand;
   final int semester;
-  final Children children;
+  final List<Children> children;
   final TrainingLevel? cap_dao_tao;
   final List<FeatureModel>? features;
   final List<int> pinnedAlbumIdList;
@@ -68,7 +68,7 @@ class ProfileInfo {
     String? school_logo,
     String? school_brand,
     int? semester,
-    Children? children,
+    List<Children>? children,
     TrainingLevel? cap_dao_tao,
     List<FeatureModel>? features,
     List<int>? pinnedAlbumIdList,
@@ -140,18 +140,20 @@ class ProfileInfo {
       'school_logo': school_logo,
       'school_brand': school_brand,
       'semester': semester,
-      'children': children.toMap(),
+      'children': children.map((x) => x.toMap()).toList(),
       'cap_dao_tao': cap_dao_tao?.toMap(),
     };
   }
 
   factory ProfileInfo.fromMap(Map<String, dynamic> map) {
     final childrenData = map['children'];
-    final children = childrenData is List
-        ? Children.fromMap(childrenData.first as Map<String, dynamic>)
-        : Children.fromMap(childrenData as Map<String, dynamic>);
 
-    // Kiểm tra và gán giá trị cho các trường có thể null
+    final children = childrenData is List
+        ? childrenData
+            .map((e) => Children.fromMap(e as Map<String, dynamic>))
+            .toList()
+        : [Children.fromMap(childrenData as Map<String, dynamic>)];
+
     return ProfileInfo(
       name: map['name'] as String? ?? '',
       user_key: map['user_key'] as String? ?? '',
@@ -196,24 +198,7 @@ class ProfileInfo {
       school_logo: '--',
       school_brand: '--',
       semester: 0,
-      children: Children(
-        pupil_id: 0,
-        user_id: '--',
-        birthday: '--',
-        school_id: 0,
-        school_name: '--',
-        class_id: 0,
-        customer_id: 0,
-        learn_year: '--',
-        full_name: '--',
-        user_key: '--',
-        parent_id: 0,
-        class_name: '--',
-        url_image: UrlImage(
-          web: '--',
-          mobile: '--',
-        ),
-      ),
+      children: [],
       cap_dao_tao: TrainingLevel(
         id: '--',
         name: '--',
@@ -244,7 +229,8 @@ class ProfileInfo {
       school_logo: localProfile.school_logo,
       school_brand: localProfile.school_brand,
       semester: localProfile.semester,
-      children: Children.fromLocal(localProfile.children),
+      children:
+          localProfile.children.map((e) => Children.fromLocal(e)).toList(),
       cap_dao_tao: TrainingLevel.fromLocal(localProfile.cap_dao_tao),
       features: localProfile.features ?? [],
       pinnedAlbumIdList: localProfile.pinnedAlbumIdList ?? [],
@@ -272,6 +258,7 @@ class Children {
   final int parent_id;
   final String class_name;
   final UrlImage url_image;
+  final bool isActive;
 
   Children({
     required this.pupil_id,
@@ -287,6 +274,7 @@ class Children {
     required this.parent_id,
     required this.class_name,
     required this.url_image,
+    this.isActive = false,
   });
 
   Children copyWith({
@@ -303,6 +291,7 @@ class Children {
     int? parent_id,
     String? class_name,
     UrlImage? url_image,
+    bool? isActive,
   }) {
     return Children(
       pupil_id: pupil_id ?? this.pupil_id,
@@ -318,6 +307,7 @@ class Children {
       parent_id: parent_id ?? this.parent_id,
       class_name: class_name ?? this.class_name,
       url_image: url_image ?? this.url_image,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -362,6 +352,25 @@ class Children {
   factory Children.fromJson(String source) =>
       Children.fromMap(json.decode(source) as Map<String, dynamic>);
 
+  // generate method empty
+  factory Children.empty() {
+    return Children(
+      pupil_id: 0,
+      user_id: '',
+      birthday: '',
+      school_id: 0,
+      school_name: '',
+      class_id: 0,
+      customer_id: 0,
+      learn_year: '',
+      full_name: '',
+      user_key: '',
+      parent_id: 0,
+      class_name: '',
+      url_image: UrlImage(web: '', mobile: ''),
+    );
+  }
+
   factory Children.fromLocal(LocalChildren localChildren) {
     return Children(
       pupil_id: localChildren.pupil_id,
@@ -377,6 +386,7 @@ class Children {
       parent_id: localChildren.parent_id,
       class_name: localChildren.class_name,
       url_image: UrlImage.fromLocal(localChildren.url_image),
+      isActive: localChildren.isActive,
     );
   }
   @override

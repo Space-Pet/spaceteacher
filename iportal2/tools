@@ -3,11 +3,27 @@
 function run_pub_gen() {
 	flutter pub get
 	dart run build_runner build -d
+	fluttergen -c pubspec.yaml
 }
 
 function clean() {
 	run_clean_packages
 	run_clean
+}
+
+function flutter_pub_add() {
+	echo "Adding package to core"
+	cd ../core
+	echo "Enter package name:"
+	read package_name
+	flutter pub add $package_name
+	if ! grep -q "package:$package_name/$package_name.dart" lib/core.dart; then
+		echo "Adding package to core.dart"
+		echo "export 'package:$package_name/$package_name.dart';" >>lib/core.dart
+	fi
+	cd $(pwd)
+	echo "flutter pub get"
+	flutter pub get
 }
 
 function run_clean() {
@@ -25,24 +41,30 @@ function run_clean() {
 function run_clean_packages() {
 	cd packages
 	for d in */ ; do
+		echo "Cleaning in $d directory"
 		cd $d
 		flutter clean
 		flutter pub get
 		dart run build_runner build -d
-		cd ..
+		cd ../
 	done
+	cd ../
 }
 
 function main() {
 	echo "Choose function to run:"
-	select app in "run_pub_gen" "clean"; do
+	select app in "run_pub_gen" "clean" "flutter pub add"; do
 		case $app in
-			run_pub_gen)
+			"run_pub_gen")
 				run_pub_gen
 				break
 				;;
-			clean)
+			"clean")
 				clean
+				break
+				;;
+			"flutter pub add")
+				flutter_pub_add
 				break
 				;;
 			*)

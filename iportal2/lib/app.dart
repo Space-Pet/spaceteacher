@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:core/common/constants/app_locale.dart';
 import 'package:core/common/services/firebase_notification_service.dart';
 import 'package:core/resources/app_size.dart';
@@ -10,6 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/screens/message/bloc/message_bloc.dart';
+import 'package:iportal2/screens/message/chat_room.dart';
+import 'package:iportal2/screens/message/message_screen.dart';
+import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
 import 'package:repository/repository.dart';
 import 'package:intl/intl.dart' as intl;
@@ -21,13 +24,11 @@ class IPortal2App extends StatefulWidget {
     super.key,
     required this.authRepository,
     required this.userRepository,
-    required this.registerRepository,
     required this.appFetchApiRepository,
   });
 
   final AuthRepository authRepository;
   final UserRepository userRepository;
-  final RegisterNotebookRepository registerRepository;
   final AppFetchApiRepository appFetchApiRepository;
 
   @override
@@ -35,11 +36,12 @@ class IPortal2App extends StatefulWidget {
 }
 
 class _IPortal2AppState extends State<IPortal2App> {
+  final RouteObserver _routeObserver = RouteObserver();
+
   @override
   void initState() {
     super.initState();
     FirebaseNotificationService.shared.notiOpened = onNotificationOpened;
-
     FirebaseNotificationService.shared.notiReceived = onReceiveNotification;
 
     FirebaseMessaging.instance.getInitialMessage().then(
@@ -52,10 +54,52 @@ class _IPortal2AppState extends State<IPortal2App> {
 
   void onNotificationOpened(Map<String, dynamic>? data) {
     log("IPortal2App - onNotificationOpened: $data");
+    final notiType = data?['type'];
+    switch (notiType) {
+      case 'notification':
+        final notiId = data?['id'] as String;
+
+        mainNavKey.currentContext?.push(
+          NotiDetailScreen(
+            id: int.tryParse(notiId) ?? 0,
+          ),
+        );
+        break;
+      case 'message':
+        mainNavKey.currentContext?.push(
+          const MessageScreen(),
+        );
+      default:
+    }
   }
 
-  void onReceiveNotification(Map<String, dynamic>? data) {
+  void onReceiveNotification(Map<String, dynamic>? data) async {
     log("IPortal2App - onReceiveNotification: $data");
+    final notiType = data?['conversation_id'];
+    final currentContext = mainNavKey.currentState!.context;
+    bool isMessageScreen = false;
+    bool isMessageDetail = false;
+    currentContext.popUntil(predicate: (Route route) {
+      log('navKey.currentState!.context.popUntil ${route.settings.name}');
+      if (route.settings.name == MessageScreen.routeName) {
+        isMessageScreen = true;
+      }
+      return true;
+    });
+    if (isMessageScreen) {
+      currentContext.read<MessageBloc>().add(GetListMessageResert());
+    }
+    currentContext.popUntil(predicate: (Route route) {
+      if (route.settings.name == ChatRoomScreen.routeName) {
+        isMessageDetail = true;
+      }
+      return true;
+    });
+    if (isMessageDetail) {
+      currentContext
+          .read<MessageBloc>()
+          .add(GetMessageDetail(conversationId: notiType));
+    }
   }
 
   @override
@@ -65,29 +109,38 @@ class _IPortal2AppState extends State<IPortal2App> {
         providers: [
           RepositoryProvider.value(value: widget.authRepository),
           RepositoryProvider.value(value: widget.userRepository),
-          RepositoryProvider.value(value: widget.userRepository),
-          RepositoryProvider.value(value: widget.registerRepository),
           RepositoryProvider.value(value: widget.appFetchApiRepository),
         ],
-        child: BlocProvider(
-          create: (context) => CurrentUserBloc(
-            userRepository: context.read<UserRepository>(),
-          ),
-          child: BlocListener<CurrentUserBloc, CurrentUserState>(
-            listenWhen: (previous, current) => previous.user != current.user,
-            listener: (context, state) {},
-            child: MaterialApp(
-              navigatorKey: mainNavKey,
-              debugShowCheckedModeBanner: false,
-              locale: AppLocale.vi,
-              localizationsDelegates: const [
-                CustomMaterialLocalizationsDelegate(),
-                GlobalCupertinoLocalizations.delegate,
-                DefaultWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: const [AppLocale.vi, AppLocale.en],
-              initialRoute: LoadingScreen.routeName,
-              onGenerateRoute: CustomRouter.onGenerateRoute,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => CurrentUserBloc(
+                userRepository: context.read<UserRepository>(),
+              ),
+            ),
+          ],
+          child: BlocProvider(
+            create: (context) => MessageBloc(
+              appApiRepository: context.read<AppFetchApiRepository>(),
+              currentUserBloc: context.read<CurrentUserBloc>(),
+            ),
+            child: BlocListener<CurrentUserBloc, CurrentUserState>(
+              listenWhen: (previous, current) => previous.user != current.user,
+              listener: (context, state) {},
+              child: MaterialApp(
+                navigatorKey: mainNavKey,
+                debugShowCheckedModeBanner: false,
+                locale: AppLocale.vi,
+                localizationsDelegates: const [
+                  CustomMaterialLocalizationsDelegate(),
+                  GlobalCupertinoLocalizations.delegate,
+                  DefaultWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: const [AppLocale.vi, AppLocale.en],
+                initialRoute: LoadingScreen.routeName,
+                onGenerateRoute: CustomRouter.onGenerateRoute,
+                navigatorObservers: [_routeObserver],
+              ),
             ),
           ),
         ),

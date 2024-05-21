@@ -1,3 +1,4 @@
+import 'package:core/data/models/exercise_data.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,6 @@ import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:skeletons/skeletons.dart';
 
 class HomeTabsInstruction extends StatelessWidget {

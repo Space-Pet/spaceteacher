@@ -64,6 +64,7 @@ class NotificationItem {
   final int schoolId;
   final String title;
   final String content;
+  final String excerpt;
   final dynamic attachment;
   final dynamic viewerId;
   final dynamic pupilId;
@@ -78,6 +79,7 @@ class NotificationItem {
     required this.schoolId,
     required this.title,
     required this.content,
+    required this.excerpt,
     required this.attachment,
     required this.viewerId,
     required this.pupilId,
@@ -94,6 +96,7 @@ class NotificationItem {
       schoolId: map['school_id'],
       title: map['title'],
       content: map['content'],
+      excerpt: map['excerpt'],
       attachment: map['attachment'],
       viewerId: map['viewer_id'],
       pupilId: map['pupil_id'],
@@ -111,6 +114,7 @@ class NotificationItem {
       'school_id': schoolId,
       'title': title,
       'content': content,
+      'excerpt': excerpt,
       'attachment': attachment,
       'viewer_id': viewerId,
       'pupil_id': pupilId,
@@ -137,6 +141,7 @@ class NotificationItem {
       schoolId: 0,
       title: '',
       content: '',
+      excerpt: '',
       attachment: '',
       viewerId: '',
       pupilId: '',

@@ -42,14 +42,7 @@ class _HomeScreenState extends State<HomeScreen>
         return BackGroundContainer(
           child: CustomRefresh(
             onRefresh: () async {
-              if (isKinderGarten) {
-                homeBloc.add(HomeFetchAlbumData());
-                homeBloc.add(HomeGetPinnedAlbumIdList());
-              } else {
-                homeBloc.add(HomeFetchExercise());
-              }
-              homeBloc.add(HomeFetchNotificationData());
-              homeBloc.add(HomeFetchProfileData());
+              homeBloc.add(HomeRefresh());
             },
             child: Stack(
               children: [

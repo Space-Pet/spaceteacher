@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
+import 'package:core/core.dart';
 import 'package:network_data_source/network_client/token_manager_mixin.dart';
 
 class AuthorizeInterceptor extends Interceptor with TokenManagementMixin {
@@ -11,7 +10,6 @@ class AuthorizeInterceptor extends Interceptor with TokenManagementMixin {
   ) async {
     await getToken();
     if (accessToken.isNotEmpty) {
-      print(accessToken);
       options.headers[HttpHeaders.authorizationHeader] = 'Bearer $accessToken';
     }
     handler.next(options);

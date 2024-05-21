@@ -68,8 +68,7 @@ class ExerciseScreenView extends StatelessWidget {
 
               final listSubject = state.subjectList;
 
-              final isEmpty =
-                  exerciseList.exerciseDataList.isEmpty && !isLoading;
+              final isEmpty = exerciseList.isEmpty && !isLoading;
 
               return Expanded(
                 child: Container(
@@ -144,7 +143,7 @@ class ExerciseScreenView extends StatelessWidget {
                                             text: 'Sổ báo bài trống'),
                                       )
                                     : ExerciseItemList(
-                                        exercise: exerciseList.exerciseDataList,
+                                        exercise: exerciseList,
                                       ),
                               ),
                             ],

@@ -49,7 +49,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
   int getWeekNumber(DateTime date) {
     print('object: $date');
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    final firstDayOfYear = DateTime(firstDayOfWeek.year, 1, 1);
+    final firstDayOfYear = DateTime(firstDayOfWeek.year);
     final daysOffset = firstDayOfYear.weekday;
     final daysOfYear = firstDayOfWeek.difference(firstDayOfYear).inDays + 1;
     return week = ((daysOfYear - daysOffset) / 7).ceil();
@@ -63,8 +63,8 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
     getWeekNumber(endDate);
     context.read<PreScoreBloc>().add(GetComment(
         txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        endDate: endDate,
-        startDate: startDate));
+        inputEndDate: endDate,
+        inputStartDate: startDate));
   }
 
   void getNextPeriodData() {
@@ -76,8 +76,8 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
     getWeekNumber(endDate);
     context.read<PreScoreBloc>().add(GetComment(
         txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        endDate: endDate,
-        startDate: startDate));
+        inputEndDate: endDate,
+        inputStartDate: startDate));
   }
 
   @override

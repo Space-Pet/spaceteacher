@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
-import 'package:iportal2/app_config/env_config_override.dart';
 import 'package:iportal2/app_config/network_client_setup.dart';
 import 'package:iportal2/boostrap.dart';
 import 'package:iportal2/firebase_options.dart';
@@ -52,17 +51,15 @@ class AppDelegate {
     // await configureDependencies();
 
     AbstractDioClient networkClient = CustomDioClient(
-      baseUrl: EnvironmentConfigOverride.baseUrl,
       domainSaver: instanceDomainSaver,
     );
 
     final AuthRestClient authRestClient = AuthRestClient(
-        EnvironmentConfigOverride.baseUrl, AuthorizeInterceptor(),
+        AuthorizeInterceptor(),
         domainSaver: instanceDomainSaver);
 
     final PartnerTokenRestClient partnerTokenRestClient =
         PartnerTokenRestClient(
-      EnvironmentConfigOverride.baseUrl,
       PartnerTokenInterceptor(),
       domainSaver: instanceDomainSaver,
     );
@@ -71,12 +68,6 @@ class AppDelegate {
       client: networkClient,
     );
     final userApi = UserApi(
-      client: networkClient,
-      authRestClient: authRestClient,
-      partnerTokenRestClient: partnerTokenRestClient,
-    );
-
-    final registerNoteBookApi = RegisterNoteBookApi(
       client: networkClient,
       authRestClient: authRestClient,
       partnerTokenRestClient: partnerTokenRestClient,
@@ -98,7 +89,6 @@ class AppDelegate {
       authApi: authApi,
       authLocalStorage: authLocalStorage,
       userApi: userApi,
-      registerNoteBookApi: registerNoteBookApi,
       appFetchApi: appFetchApi,
       userLocalStorage: userLocalStorage,
     );

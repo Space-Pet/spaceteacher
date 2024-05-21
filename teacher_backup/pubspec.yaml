@@ -1,0 +1,71 @@
+name: teacher
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.1.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+
+  # App Core 
+  core:
+    path: ../core
+    
+  equatable: ^2.0.5
+  json_annotation: ^4.8.1
+  fluttertoast: ^8.2.4
+  google_fonts: ^6.2.1
+  country_flags: ^2.2.0
+  easy_localization: ^3.0.5
+  flutter_svg: ^2.0.10+1
+  bottom_sheet: ^4.0.2
+  smooth_page_indicator: ^1.1.0
+  dotted_border: ^2.1.0
+  dotted_line: ^3.2.2
+  shared_preferences: ^2.2.2
+  cached_network_image: ^3.3.1
+  provider: ^6.1.2
+  timeline_tile: ^2.0.0
+  aad_oauth: ^1.0.1
+  flutter_dotenv: ^5.1.0
+  pull_to_refresh_flutter3: ^2.0.2
+  qr_code_scanner: ^1.0.1
+  skeletons: ^0.0.3
+  expandable: ^5.0.1
+  intl: ^0.18.1
+  weekly_date_picker: ^1.4.2
+  getwidget: ^4.0.0
+  custom_refresh_indicator: ^3.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  json_serializable: ^6.7.1
+  build_runner: ^2.4.8
+  flutter_gen_runner:
+  
+flutter_gen:
+  output: lib/resources/
+  integrations:
+    flutter_svg: true
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/i18n/
+    - assets/images/
+    - assets/images/main_background/
+    - assets/images/brand_logo/
+    - assets/images/logo_app/
+    - assets/icons/
+    - assets/icons/features/  
+    - assets/images/login/
+    - assets/images/splash/
+    - .env

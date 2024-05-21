@@ -1,3 +1,4 @@
+import 'package:core/data/models/models.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_decoration.dart';
 import 'package:core/resources/app_text_styles.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/utils/validation_functions.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ExerciseItemList extends StatelessWidget {

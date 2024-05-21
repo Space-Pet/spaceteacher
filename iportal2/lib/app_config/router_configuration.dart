@@ -1,3 +1,4 @@
+import 'package:core/data/models/models.dart';
 import 'package:core/presentation/screens/domain/domain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
@@ -10,6 +11,9 @@ import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
+import 'package:iportal2/screens/message/chat_room.dart';
+import 'package:iportal2/screens/message/list_new_messages.dart';
+import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
@@ -22,9 +26,10 @@ class CustomRouter {
   static PageRouteBuilder transitionAnimation({
     required Widget child,
     required String routeName,
+    Object? arguments,
   }) {
     return PageRouteBuilder(
-      settings: RouteSettings(name: routeName),
+      settings: RouteSettings(name: routeName, arguments: arguments),
       transitionDuration: const Duration(milliseconds: 150),
       pageBuilder: (c, a1, a2) => child,
       transitionsBuilder: (c, anim, a2, child) => SlideTransition(
@@ -66,6 +71,19 @@ class CustomRouter {
           routeName: RegisterNoteBoookScreen.routeName,
         );
 
+      case ChatRoomScreen.routeName:
+        final arguments = settings.arguments as Map<String, dynamic>;
+        final message = arguments['message'] as Message;
+        final phoneBookStudent =
+            arguments['phoneBookStudent'] as PhoneBookStudent;
+        return transitionAnimation(
+          child: ChatRoomScreen(
+            messageChatRoom: message,
+            phoneBookStudent: phoneBookStudent,
+          ),
+          routeName: ChatRoomScreen.routeName,
+        );
+
       case OnLeaveScreen.routeName:
         return transitionAnimation(
           child: const OnLeaveScreen(),
@@ -76,6 +94,18 @@ class CustomRouter {
         return transitionAnimation(
           child: const PhoneBookScreen(),
           routeName: PhoneBookScreen.routeName,
+        );
+
+      case MessageScreen.routeName:
+        return transitionAnimation(
+          child: const MessageScreen(),
+          routeName: MessageScreen.routeName,
+        );
+
+      case ListNewMessagesScreen.routeName:
+        return transitionAnimation(
+          child: const ListNewMessagesScreen(),
+          routeName: ListNewMessagesScreen.routeName,
         );
 
       case LeaveApplicationScreen.routeName:
@@ -194,13 +224,8 @@ extension Navigation on BuildContext {
     Navigator.pop(this, result);
   }
 
-  popUntil({
-    required String routeName,
-  }) {
-    Navigator.popUntil(
-      this,
-      ModalRoute.withName(routeName),
-    );
+  popUntil({required bool Function(Route<dynamic>) predicate}) {
+    Navigator.popUntil(this, predicate);
   }
 
   pushNamedAndRemoveUntil({

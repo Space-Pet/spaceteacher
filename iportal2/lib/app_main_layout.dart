@@ -1,17 +1,15 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/custom_loading_logo.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/attendance/attendance_screen.dart';
 import 'package:iportal2/screens/home/home_navigator.dart';
 import 'package:iportal2/screens/notifications/notifications_screen.dart';
 import 'package:iportal2/screens/schedule/schedule_screen.dart';
 import 'package:iportal2/screens/week_schedule/week_schedule_screen.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AppMainLayout extends StatefulWidget {
   const AppMainLayout({
@@ -62,6 +60,12 @@ class _AppMainLayoutState extends State<AppMainLayout>
         homeNavigatorKey.currentContext?.pop();
       }
     }
+
+    // TODO: improve this can not find HomeProvider to handle refresh
+    // if (index == 0 && _selectedIndex == 0) {
+    //   final homeBloc = homeNavigatorKey.currentContext?.read<HomeBloc>();
+    //   homeBloc?.add(HomeRefresh());
+    // }
 
     if (_selectedIndex != index) {
       setState(() {

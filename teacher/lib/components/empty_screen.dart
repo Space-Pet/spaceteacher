@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:core/resources/resources.dart';
 
 class EmptyScreen extends StatelessWidget {
   const EmptyScreen({super.key, required this.text});
@@ -12,7 +12,9 @@ class EmptyScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Assets.icons.empty.svg(),
+        SvgPicture.asset(
+          'assets/icons/empty.svg',
+        ),
         const SizedBox(height: 12),
         Text(text,
             style: AppTextStyles.semiBold16(

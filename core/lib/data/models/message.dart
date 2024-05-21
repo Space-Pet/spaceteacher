@@ -30,4 +30,14 @@ class Message {
         senderId: json['sender_id'] ?? 0,
         unRead: json['un_read'] ?? 0);
   }
+  factory Message.empty() => Message(
+      avatarUrl: '',
+      content: '',
+      conversationId: 0,
+      createAt: DateTime.now(),
+      fullName: '',
+      id: 0,
+      receiverId: 0,
+      senderId: 0,
+      unRead: 0);
 }

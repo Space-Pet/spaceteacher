@@ -39,7 +39,7 @@ class _CDomainScreenState extends State<CDomainScreen> {
 
   String get contactMessage =>
       widget.contactMessage ??
-      'Vui lòng liên hện IT trường nếu như bạn quên đường dẫn website iPortal';
+      'Vui lòng liên hệ IT trường nếu như bạn quên đường dẫn website iPortal';
 
   void Function(bool isSaved, String domain)? get onDomainSaved =>
       widget.onDomainSaved;
@@ -114,11 +114,21 @@ class _CDomainScreenState extends State<CDomainScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
-                          child: Text(
-                            'Nhập đường dẫn',
-                            style: AppTextStyles.normal16(
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.brand600,
+                          child: InkWell(
+                            onTap: () {
+                              // TODO: remove this one before release
+                              setState(() {
+                                _textFieldController.text =
+                                    'test-iportal.nhg.vn';
+                                isDomainEntered = true;
+                              });
+                            },
+                            child: Text(
+                              'Nhập đường dẫn',
+                              style: AppTextStyles.normal16(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.brand600,
+                              ),
                             ),
                           ),
                         ),
@@ -168,7 +178,7 @@ class _CDomainScreenState extends State<CDomainScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(12, 4, 8, 0),
+                          padding: const EdgeInsets.fromLTRB(12, 4, 10, 0),
                           child: Text(contactMessage,
                               style: AppTextStyles.normal12()),
                         ),
@@ -211,7 +221,7 @@ class _CDomainScreenState extends State<CDomainScreen> {
                                   } catch (_) {}
                                 } else {
                                   await Fluttertoast.showToast(
-                                      msg: 'Hãy nhập đường dẫn website',
+                                      msg: 'Hãy nhập đường dẫn website iPortal',
                                       toastLength: Toast.LENGTH_LONG,
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: AppColors.black,

@@ -53,24 +53,27 @@ class UserRepository {
       school_logo: user.school_logo,
       school_brand: user.school_brand,
       semester: user.semester,
-      children: LocalChildren(
-        pupil_id: user.children.pupil_id,
-        user_id: user.children.user_id,
-        birthday: user.children.birthday,
-        school_id: user.children.school_id,
-        school_name: user.children.school_name,
-        class_id: user.children.class_id,
-        customer_id: user.children.customer_id,
-        learn_year: user.children.learn_year,
-        full_name: user.children.full_name,
-        user_key: user.children.user_key,
-        parent_id: user.children.parent_id,
-        class_name: user.children.class_name,
-        url_image: LocalUrlImage(
-          web: user.children.url_image.web,
-          mobile: user.children.url_image.mobile,
-        ),
-      ),
+      children: user.children
+          .map((e) => LocalChildren(
+                pupil_id: e.pupil_id,
+                user_id: e.user_id,
+                birthday: e.birthday,
+                school_id: e.school_id,
+                school_name: e.school_name,
+                class_id: e.class_id,
+                customer_id: e.customer_id,
+                learn_year: e.learn_year,
+                full_name: e.full_name,
+                user_key: e.user_key,
+                parent_id: e.parent_id,
+                class_name: e.class_name,
+                url_image: LocalUrlImage(
+                  mobile: e.url_image.mobile,
+                  web: e.url_image.web,
+                ),
+                isActive: e.isActive,
+              ))
+          .toList(),
       cap_dao_tao: LocalTrainingLevel(
         id: user.cap_dao_tao?.id ?? '',
         name: user.cap_dao_tao?.name ?? '',
@@ -111,13 +114,13 @@ class UserRepository {
       {required String phone,
       required String motherName,
       required String fatherPhone,
-      required String pupil_id}) async {
+      required String pupilId}) async {
     try {
       final data = await _userApi.updateStudentPhone(
           phone: phone,
           fatherPhone: fatherPhone,
           motherName: motherName,
-          pupil_id: pupil_id);
+          pupilId: pupilId);
       return data;
     } catch (e) {
       return null;
@@ -134,9 +137,9 @@ class UserRepository {
     }
   }
 
-  Future<StudentData> getProfileStudent({required String pupil_id}) async {
+  Future<StudentData> getProfileStudent({required String pupilId}) async {
     try {
-      final resProfile = await _userApi.getProfileStudent(pupil_id: pupil_id);
+      final resProfile = await _userApi.getProfileStudent(pupilId: pupilId);
       return resProfile;
     } catch (e) {
       throw GetStudentInfoFailure();
@@ -155,6 +158,7 @@ class UserRepository {
   Future loginOut() async {
     try {
       await _userApi.logOut();
+      await _userLocalStorage.clearUser();
     } catch (e) {
       throw LogOutFailure();
     }

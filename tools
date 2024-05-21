@@ -16,7 +16,24 @@ function run_clean_core() {
 	cd ../
 }
 
+function flutter_pub_add() {
+	echo "Enter package name:"
+	read package
+	cd core
+	flutter pub add $package
+	echo "export 'package:$package/$package.dart';" >> lib/core.dart
+	cd ../
+	echo "flutter pub get"
+	cd iportal2
+	flutter pub get
+	cd ../teacher
+	flutter pub get
+}
+
 function clean(){
+	echo "Deleting .g.dart and .freezed.dart files..."
+	find . -name "*.freezed.dart" -type f -delete
+	find . -name "*.g.dart" -type f -delete
 	echo "Choose app need to clean:"
 	select app in "iportal2" "teacher" "core" "default - all"; do
 		case $app in
@@ -158,7 +175,7 @@ Note: Each directory have its own tools script. You can cd to the directory and 
 function main() {
 	while true; do
 		echo "Running tools scripts (interactive mode)"
-		select choice in "Activate tools scripts" "Build APK" "Clean" "Pub gen" "Reset pod cache" "Help" "Exit"; do
+		select choice in "Activate tools scripts" "Build APK" "Clean" "Pub gen" "flutter pub add" "Reset pod cache" "Help" "Exit"; do
 			case $choice in
 				"Activate tools scripts")
 					activate_tools_script
@@ -173,6 +190,10 @@ function main() {
 					break
 					;;
 				"Pub gen")
+					clean
+					break
+					;;
+				"flutter pub add")
 					clean
 					break
 					;;

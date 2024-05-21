@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'schedule_event.dart';
@@ -16,7 +15,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     required this.currentUserBloc,
   }) : super(ScheduleState(
           scheduleData: Schedule.empty(),
-          exerciseDataList: ExerciseData.empty(),
+          exerciseDataList: const [],
           datePicked: DateTime.now(),
         )) {
     on<ScheduleFetchData>(_onFetchScheduleData);
@@ -33,7 +32,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       ScheduleFetchExercise event, Emitter<ScheduleState> emit) async {
     final exerciseDataList = await appFetchApiRepo.getExercises(
       // userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
+      datePicked: event.datePicked,
       userKey: '0723210020',
     );
 

@@ -5,6 +5,8 @@ enum SettingScreenStatus {
   loading,
   success,
   failure,
+  successChangePassword,
+  failureChangePassword,
 }
 
 extension SettingScreenStatusX on SettingScreenStatus {
@@ -12,17 +14,27 @@ extension SettingScreenStatusX on SettingScreenStatus {
   bool get isLoading => this == SettingScreenStatus.loading;
   bool get isSuccess => this == SettingScreenStatus.success;
   bool get isFailure => this == SettingScreenStatus.failure;
+  bool get isSuccessChangePassword =>
+      this == SettingScreenStatus.successChangePassword;
+  bool get isFailureChangePassword =>
+      this == SettingScreenStatus.failureChangePassword;
 }
 
 class SettingScreenState extends Equatable {
   const SettingScreenState({
     this.logoutStatus = SettingScreenStatus.initial,
+    this.message,
   });
 
   final SettingScreenStatus logoutStatus;
+  final String? message;
 
-  SettingScreenState copyWith({SettingScreenStatus? logoutStatus}) {
+  SettingScreenState copyWith({
+    SettingScreenStatus? logoutStatus,
+    String? message,
+  }) {
     return SettingScreenState(
+      message: message ?? this.message,
       logoutStatus: logoutStatus ?? this.logoutStatus,
     );
   }
@@ -30,5 +42,6 @@ class SettingScreenState extends Equatable {
   @override
   List<Object?> get props => [
         logoutStatus,
+        message,
       ];
 }

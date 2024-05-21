@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/screens/menu/widgets/menu_component.dart';
 
 class TabMenu extends StatelessWidget {
-  TabMenu({super.key, required this.dataMenu});
+  const TabMenu({super.key, required this.dataMenu});
+
   final List<DataMenu> dataMenu;
+
   @override
   Widget build(BuildContext context) {
     final listTab = List.generate((dataMenu).length, (index) {
@@ -59,26 +61,25 @@ class TabMenu extends StatelessWidget {
     );
   }
 
-  List<String> imagePaths = [
-    'assets/images/breakfast.png',
-    'assets/images/lunch.png',
-    'assets/images/brunch.png',
-    'assets/images/dinner.png',
-    'assets/images/breakfast.png',
-    'assets/images/lunch.png',
-    'assets/images/brunch.png',
-    'assets/images/dinner.png',
-    'assets/images/breakfast.png',
-    'assets/images/lunch.png',
-    'assets/images/brunch.png',
-    'assets/images/dinner.png',
-  ];
+  List<String> get imagePaths => [
+        'assets/images/breakfast.png',
+        'assets/images/lunch.png',
+        'assets/images/brunch.png',
+        'assets/images/dinner.png',
+        'assets/images/breakfast.png',
+        'assets/images/lunch.png',
+        'assets/images/brunch.png',
+        'assets/images/dinner.png',
+        'assets/images/breakfast.png',
+        'assets/images/lunch.png',
+        'assets/images/brunch.png',
+        'assets/images/dinner.png',
+      ];
 
   List<Widget> tabView(int index, BuildContext context) {
     return List.generate(dataMenu[index].dataInWeek.length, (innerIndex) {
       final menu = dataMenu[index].dataInWeek[innerIndex];
       final imagePathIndex = innerIndex;
-      print('index: ${dataMenu[index].dataInWeek.length}, $innerIndex');
       return Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 8),
         child: GestureDetector(
@@ -132,7 +133,7 @@ class TabMenu extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 20),
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 5),
-                                child: Container(
+                                child: SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 1 / 2,
                                   child: Text(

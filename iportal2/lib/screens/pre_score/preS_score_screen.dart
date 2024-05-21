@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +15,6 @@ import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:iportal2/screens/pre_score/widget/tab_bar/tab_bar_pre_score.dart';
 import 'package:repository/repository.dart';
 
-
 class PreScoreScreen extends StatelessWidget {
   const PreScoreScreen({super.key});
 
@@ -27,13 +28,12 @@ class PreScoreScreen extends StatelessWidget {
         appFetchApiRepo: appFetchApiRepository,
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
-        
-        
+
     preScoreBloc.add(GetComment(
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()).toString(),
-      startDate:
+      inputStartDate:
           DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)),
-      endDate: DateTime.now()
+      inputEndDate: DateTime.now()
           .add(Duration(days: DateTime.daysPerWeek - DateTime.now().weekday)),
     ));
 

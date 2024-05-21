@@ -37,18 +37,18 @@ class DomainSaver {
 
   // private method
   String? _extractDomain(String url) {
-    var parts = url.split('://');
+    final parts = url.split('://');
     if (parts.length > 1) {
       return parts[1].split('/')[0]; // Get domain from first part after "://"
     } else {
       // Handle URLs without "://" (e.g., www.example.com)
-      parts = url.split('/');
-      if (parts.length > 1) {
-        return parts[0]; // Get domain from first part before "/"
-      } else if (parts.length == 1) {
-        return url; // Return the entire string if no clear domain is found
+      final newParts = parts[0].split('/');
+      if (newParts.length > 1) {
+        return newParts[0]; // Get domain from first part before "/"
+      } else if (newParts.length == 1) {
+        return newParts[0]; // Get domain from first part
       } else {
-        return null; // Invalid URL
+        return null; // Invalid domain
       }
     }
   }
@@ -92,10 +92,10 @@ class DomainSaver {
 
   Future<String> getDomain() async {
     // Get domain from local storage
-    if (cachedDomain.isNotEmpty) {
+    if(cachedDomain.isNotEmpty) {
       return cachedDomain;
     }
-
+    
     try {
       await tryOpenHive();
       final domain = box?.get(domainKey) as String?;

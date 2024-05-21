@@ -10,7 +10,6 @@ class HomeState extends Equatable {
     required this.exerciseInDayDataList,
     required this.albumData,
     required this.datePicked,
-    required this.userData,
     this.statusNoti = HomeStatus.init,
     this.statusExercise = HomeStatus.init,
     this.statusAlbum = HomeStatus.init,
@@ -23,7 +22,6 @@ class HomeState extends Equatable {
   final List<ExerciseItem> exerciseDueDateDataList;
   final List<ExerciseItem> exerciseInDayDataList;
   final AlbumData albumData;
-  final StudentData userData;
   final List<int> pinnedAlbumIdList;
 
   final DateTime datePicked;
@@ -44,7 +42,6 @@ class HomeState extends Equatable {
         statusAlbum,
         albumData,
         pinnedAlbumIdList,
-        userData,
         profileStatus,
       ];
 
@@ -60,7 +57,6 @@ class HomeState extends Equatable {
     HomeStatus? statusAlbum,
     AlbumData? albumData,
     List<int>? pinnedAlbumIdList,
-    StudentData? userData,
     HomeStatus? profileStatus,
   }) {
     return HomeState(
@@ -76,7 +72,6 @@ class HomeState extends Equatable {
       statusExercise: statusExercise ?? this.statusExercise,
       statusAlbum: statusAlbum ?? this.statusAlbum,
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
-      userData: userData ?? this.userData,
       profileStatus: profileStatus ?? this.profileStatus,
     );
   }

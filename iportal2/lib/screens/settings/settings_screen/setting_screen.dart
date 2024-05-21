@@ -30,10 +30,26 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   String? selectedLanguage;
+
+  late TextEditingController currentPassword = TextEditingController();
+  late TextEditingController password = TextEditingController();
+  late TextEditingController passwordConfirmation = TextEditingController();
+
+  void _handlePasswordChange(
+      String currentPassword, String newPassword, String confirmPassword) {
+    setState(() {
+      this.currentPassword.text = currentPassword;
+      password.text = newPassword;
+      passwordConfirmation.text = confirmPassword;
+    });
+    // Add logic to handle password change
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SettingScreenBloc(
+        appFetchApiRepo: context.read<AppFetchApiRepository>(),
         authRepository: context.read<AuthRepository>(),
         userRepository: context.read<UserRepository>(),
       ),
@@ -52,6 +68,15 @@ class _SettingScreenState extends State<SettingScreen> {
           if (state.logoutStatus.isFailure) {
             Fluttertoast.showToast(
               msg: 'Vui lòng thử lại sau',
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: AppColors.black,
+              textColor: AppColors.white,
+            );
+          }
+          if (state.logoutStatus.isFailureChangePassword) {
+            Fluttertoast.showToast(
+              msg: state.message ?? 'Vui lòng thử lại sau',
               toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               backgroundColor: AppColors.black,
@@ -87,11 +112,9 @@ class _SettingScreenState extends State<SettingScreen> {
                         child: SwitchSetting(
                           text: AppStrings.turnOffNoti,
                           iconAsset: Assets.icons.bell,
-                          showDottedLine: true,
                         ),
                       ),
                       SwitchSetting(
-                        showDottedLine: true,
                         text: AppStrings.userManual,
                         iconAsset: Assets.icons.userManual,
                         onPressed: () {
@@ -99,7 +122,6 @@ class _SettingScreenState extends State<SettingScreen> {
                         },
                       ),
                       SwitchSetting(
-                        showDottedLine: true,
                         text: 'FAQ',
                         iconAsset: Assets.icons.faq,
                         onPressed: () {
@@ -107,34 +129,36 @@ class _SettingScreenState extends State<SettingScreen> {
                         },
                       ),
                       SwitchSetting(
-                        showDottedLine: true,
                         text: AppStrings.changeAccount,
                         iconAsset: Assets.icons.accountConversion,
                         onPressed: () {
                           context.push(const ChangeAccountScreen());
                         },
                       ),
-                      SwitchSetting(
-                        showDottedLine: true,
-                        text: AppStrings.changePassword,
-                        iconAsset: Assets.icons.lockPassword,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                DialogChangePassword(
+                      BlocBuilder<SettingScreenBloc, SettingScreenState>(
+                          builder: (context, state) {
+                        return SwitchSetting(
+                          text: 'Đổi mật khẩu',
+                          iconAsset: Assets.icons.lockPassword,
+                          onPressed: () {
+                            DialogChangePassword.show(
+                              context,
                               onClosePressed: () {
                                 context.pop();
                               },
-                              onSavePressed: () {
-                                context.pop();
+                              onSavePressed: (currentPassword, newPassword,
+                                  confirmPassword) {
+                                context.read<SettingScreenBloc>().add(
+                                    ChangePassword(
+                                        currentPassword: currentPassword,
+                                        password: newPassword,
+                                        passwordConfirmation: confirmPassword));
                               },
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        );
+                      }),
                       SwitchSetting(
-                        showDottedLine: true,
                         text: AppStrings.changeWallpaper,
                         iconAsset: Assets.icons.tablet,
                         onPressed: () {

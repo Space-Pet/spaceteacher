@@ -11,8 +11,6 @@ class DetailMenuScreen extends StatelessWidget {
   static const routeName = '/detailMenu';
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final itemW = (screenWidth - 60) / 3;
 
     return Scaffold(
       backgroundColor: Colors.transparent,

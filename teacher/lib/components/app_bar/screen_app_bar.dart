@@ -1,7 +1,6 @@
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-
-import 'package:teacher/src/utils/extension_context.dart';
+import 'package:teacher/app_config/router_configuration.dart';
+import 'package:core/resources/resources.dart';
 
 class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ScreensAppBar(
@@ -51,11 +50,8 @@ class ScreensAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             )
           : const SizedBox(),
-      title: Text(
-        title,
-        style: AppTextStyles.semiBold18(color: AppColors.white),
-        overflow: TextOverflow.ellipsis,
-      ),
+      title:
+          Text(title, style: AppTextStyles.semiBold18(color: AppColors.white)),
       actions: [
         if (actionWidget != null) actionWidget! else const SizedBox(),
       ],

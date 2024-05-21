@@ -80,6 +80,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       final notiData = NotificationData.fromMap(res['data']);
       return notiData;
     } catch (e) {
+      print(e);
       throw GetNotificationsFailure();
     }
   }
@@ -363,13 +364,16 @@ class AppFetchApi extends AbstractAppFetchApi {
     return dataList?.map((e) => BusScheduleData.fromJson(e)).toList() ?? [];
   }
 
-  Future<List<Message>> getlistMessage(
-      {required int page,
-      required int schoolId,
-      required String schoolBrand}) async {
+  Future<List<Message>> getlistMessage({
+    required int schoolId,
+    required String classId,
+    required String userId,
+    required String schoolBrand,
+  }) async {
     try {
-      final data = await _client.doHttpGet('/api/v1/member/conversations',
-          headers: {'School-Id': '125', 'School-Brand': 'uka'});
+      final data = await _client.doHttpGet(
+          '/api/v1/member/conversations?class_id=$classId&user_id=$userId',
+          headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
       final dataList = data['data']['data'] as List<dynamic>?;
       return dataList?.map((e) => Message.fromJson(e)).toList() ?? [];
     } catch (e) {
@@ -457,12 +461,12 @@ class AppFetchApi extends AbstractAppFetchApi {
         }
         requestBody.add(item);
       }
-      print('d: ${requestBody}');
+      print('d: $requestBody');
       final data = await _authRestClient.doHttpPost(
         url: '/api/v1/member/survey/question',
         data: requestBody,
       );
-      print('jiji: ${requestBody}');
+      print('jiji: $requestBody');
       print('ok: $data');
     } catch (e) {
       print('error');
@@ -481,6 +485,170 @@ class AppFetchApi extends AbstractAppFetchApi {
     print('type: $dataType');
     return dataType;
   }
+
+  Future<List<MessageDetail>> getMessageDetail({
+    required String conversationId,
+    required String schoolId,
+    required String schoolBrand,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/conversations/$conversationId',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+      );
+      final dataList = data['data']['data'] as List<dynamic>?;
+      return dataList?.map((e) => MessageDetail.fromJson(e)).toList() ?? [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<int> postMessage({
+    required String content,
+    required String classId,
+    required String recipient,
+    required String schoolId,
+    required String schoolBrand,
+  }) async {
+    try {
+      final data =
+          await _client.doHttpPost(url: '/api/v1/member/messages', headers: {
+        'School_Id': schoolId,
+        'School_Brand': schoolBrand,
+      }, requestBody: {
+        "content": content,
+        "class_id": classId,
+        "recipient": [recipient]
+      });
+      return data['code'];
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<int> deleteMessageDetail({
+    required String content,
+    required String schoolId,
+    required String schoolBrand,
+    required String recipient,
+    required int idMessage,
+  }) async {
+    try {
+      final data = await _client.doHttpDelete(
+        url: '/api/v1/member/messages/$idMessage',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+        requestBody: {
+          "content": content,
+          "recipient": [recipient]
+        },
+      );
+      return data['code'];
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<int> deleteMessage({
+    required String schoolId,
+    required String schoolBrand,
+    required int idMessage,
+  }) async {
+    try {
+      final data = await _client.doHttpDelete(
+        url: '/api/v1/member/conversations/$idMessage',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+      );
+      return data['code'];
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<Map<String, dynamic>?> changePassword({
+    required String password,
+    required String currentPassword,
+    required String passwordConfirmation,
+  }) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api/v1/member/change-password/',
+        requestBody: {
+          'current_password': currentPassword,
+          'password': password,
+          'password_confirmation': passwordConfirmation,
+        },
+      );
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> postPinMessage({
+    required String schoolBrand,
+    required String schoolId,
+    required int idMessage,
+  }) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api/v1/member/message/$idMessage/pin',
+        headers: {
+          'School_Brand': schoolBrand,
+          'School_Id': schoolId,
+        },
+      );
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> postDeletePinMessage({
+    required String schoolBrand,
+    required String schoolId,
+    required int idMessage,
+  }) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api/v1/member/message/$idMessage/un-pin',
+        headers: {
+          'School_Brand': schoolBrand,
+          'School_Id': schoolId,
+        },
+      );
+      return data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<MessageDetail?> getMessagePin({
+    required String schoolBrand,
+    required String schoolId,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/member/message/pinned',
+        headers: {
+          'School_Brand': schoolBrand,
+          'School_Id': schoolId,
+        },
+      );
+      final jsonData = data['data'] as Map<String, dynamic>;
+      return MessageDetail.fromJson(jsonData);
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class GetNotificationsFailure implements Exception {}
@@ -496,3 +664,9 @@ class GetAlbumFailure implements Exception {}
 class GetMenuFailure implements Exception {}
 
 class GetPrimaryConductFailure implements Exception {}
+
+class GetScoreFailure implements Exception {}
+
+class GetExerciseFailure implements Exception {}
+
+class GetRegisterNoteBookFailure implements Exception {}

@@ -1,18 +1,17 @@
+import 'package:core/data/models/exercise_data.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/dialog/dialog_view_exercise.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/schedule/bloc/schedule_bloc.dart';
 import 'package:iportal2/screens/schedule/schedule_tabs.dart';
 import 'package:iportal2/screens/schedule/select_week.dart';
 import 'package:iportal2/utils/validation_functions.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 import 'package:skeletons/skeletons.dart';
 
@@ -48,7 +47,6 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
           onViewExercise(DateTime date, int tietNum) {
             bloc.add(ScheduleFetchExercise(datePicked: date));
-            DateFormat formatDate = DateFormat("yyyy-MM-dd");
 
             showDialog(
               context: context,
@@ -57,15 +55,13 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                 buildWhen: (previous, current) =>
                     previous.exerciseDataList != current.exerciseDataList,
                 builder: (context, state) {
-                  final exerciseData = state.exerciseDataList.exerciseDataList;
+                  final exerciseData = state.exerciseDataList;
                   final isEmptyExercise = exerciseData.isEmpty;
 
                   final exercise = isEmptyExercise
                       ? null
                       : exerciseData.firstWhere(
-                          (element) =>
-                              int.parse(element.tietNum) == tietNum &&
-                              formatDate.format(date) == element.hanNopBaoBai,
+                          (element) => int.parse(element.tietNum) == tietNum,
                           orElse: () => ExerciseItem.empty());
 
                   final fileName = getFileName(exercise?.fileBaoBai ?? '');

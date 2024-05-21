@@ -28,8 +28,8 @@ class SelectChild extends StatelessWidget {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image:
-                                  NetworkImage(user.children.url_image.mobile)),
+                              image: NetworkImage(
+                                  user.children[0].url_image.mobile)),
                           shape: BoxShape.circle,
                           color: AppColors.white,
                           border: Border.all(color: AppColors.white, width: 2)),

@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:core/resources/resources.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/survey/bloc/survey_bloc.dart';
 import 'package:iportal2/screens/survey/widget/tab_bar_survey.dart';
 import 'package:repository/repository.dart';
@@ -81,7 +78,8 @@ class _SurveyViewState extends State<SurveyView> {
                               border: Border(
                                 bottom: index == 4
                                     ? BorderSide.none
-                                    : const BorderSide(color: AppColors.gray300),
+                                    : const BorderSide(
+                                        color: AppColors.gray300),
                               ),
                             ),
                             child: SkeletonItem(
@@ -95,7 +93,8 @@ class _SurveyViewState extends State<SurveyView> {
                                             lineStyle: SkeletonLineStyle(
                                           randomLength: true,
                                           height: 10,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         )),
                                       ),
                                     )
@@ -106,7 +105,7 @@ class _SurveyViewState extends State<SurveyView> {
                           ),
                         )),
                     isLoading: isLoading,
-                    child: SurveyPageView(surveyData: surveyData ?? [])),
+                    child: SurveyPageView(surveyData: surveyData)),
               ))
             ],
           ),

@@ -35,6 +35,12 @@ class _NotiSliderState extends State<NotiSlider> {
         final notiList = List.generate(notificationList.length, (index) {
           final noti = notificationList[index];
 
+          final date = DateTime.parse(noti.createdAt);
+          // parse 2024-05-14 11:44:30 to Thứ 3, 14 tháng 5, 2024 11:44
+
+          final formattedDate = '${date.day} tháng ${date.month}, ${date.year} '
+              '${date.hour}:${date.minute}';
+
           return InkWell(
             onTap: () {
               context.push(NotiDetailScreen(
@@ -71,18 +77,27 @@ class _NotiSliderState extends State<NotiSlider> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(noti.createdAt,
+                          Text(formattedDate,
                               style: AppTextStyles.custom(
                                   color: AppColors.gray400)),
-                          Text(noti.title,
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2, bottom: 4),
+                            child: Text(noti.title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.bold14(
+                                    height: 14 / 12,
+                                    color: AppColors.gray90002)),
+                          ),
+                          Text(noti.excerpt.trim(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.bold14(
-                                  height: 16 / 12, color: AppColors.gray90002)),
-                          Text('Xem chi tiết',
                               style: AppTextStyles.normal12(
-                                color: AppColors.gray600,
-                              )),
+                                  color: AppColors.gray90002)),
+                          // Text('Xem chi tiết',
+                          //     style: AppTextStyles.normal12(
+                          //       color: AppColors.gray600,
+                          //     )),
                         ],
                       ),
                     )
@@ -100,7 +115,7 @@ class _NotiSliderState extends State<NotiSlider> {
                     isEmptyNoti
                         ? const EmptyNoti()
                         : SizedBox(
-                            height: 140,
+                            height: 144,
                             width: double.infinity,
                             child: PageView.builder(
                               controller: controller,

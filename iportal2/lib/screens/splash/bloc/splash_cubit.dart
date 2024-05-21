@@ -54,6 +54,6 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<void> splashCleanToken() async {
-    await authRepository.loginOut();
+    await authRepository.logOut();
   }
 }

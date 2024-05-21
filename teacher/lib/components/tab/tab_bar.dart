@@ -1,15 +1,19 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/resources/app_colors.dart';
-
+import 'package:teacher/components/home_shadow_box.dart';
 
 class TabBarFlexible extends StatelessWidget {
   final List<String> tabTitles;
   final List<List<Widget>> tabContent;
+  final double padding;
+  final double tabHeigth;
 
   const TabBarFlexible({
     super.key,
     required this.tabTitles,
     required this.tabContent,
+    this.tabHeigth = 32,
+    this.padding = 16,
   });
 
   @override
@@ -20,7 +24,7 @@ class TabBarFlexible extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -30,19 +34,15 @@ class TabBarFlexible extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(5),
                   child: TabBar(
-                    labelColor: AppColors.red,
+                    labelColor: AppColors.red90001,
                     unselectedLabelColor: AppColors.gray700,
-                    isScrollable: false,
                     dividerColor: Colors.transparent,
-                    labelStyle: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    unselectedLabelStyle: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w400),
+                    labelStyle: AppTextStyles.semiBold14(),
+                    unselectedLabelStyle: AppTextStyles.normal14(),
                     indicator: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.circular(20),
+                      boxShadow: [homeBoxShadow()],
                     ),
                     indicatorPadding:
                         const EdgeInsets.symmetric(horizontal: -15),
@@ -64,14 +64,16 @@ class TabBarFlexible extends StatelessWidget {
 
   List<Widget> _buildTabs() {
     return tabTitles.map((title) {
-      return Tab(
-        child: Align(
-          alignment: Alignment.center,
-          child: Center(
-              child: Text(
-            title,
-            textAlign: TextAlign.center,
-          )),
+      return SizedBox(
+        height: tabHeigth,
+        child: Tab(
+          child: Align(
+            child: Center(
+                child: Text(
+              title,
+              textAlign: TextAlign.center,
+            )),
+          ),
         ),
       );
     }).toList();

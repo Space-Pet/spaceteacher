@@ -11,6 +11,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   CurrentUserBloc({required this.userRepository})
       : super(
           CurrentUserState(
+            activeChild: Children.empty(),
             user: userRepository.notSignedIn(),
           ),
         ) {
@@ -26,6 +27,8 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   ) async {
     emit(state.copyWith(
       user: event.user,
+      activeChild:
+          event.user.children.firstWhere((element) => element.isActive),
       background: event.user.background,
     ));
   }

@@ -157,15 +157,19 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
                 widget.getAttendanceDay?.call(formattedDate, date);
               },
             )),
-        if (widget.lessons?.length != null)
+        if (widget.lessons?.length != 0)
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [...lessonsWExpanded],
             ),
           ),
-        if (widget.lessons?.length == null)
-          Expanded(child: EmptyScreen(text: 'Bạn chưa có điểm danh theo ngày'))
+        if (widget.lessons?.length == null || widget.lessons?.length == 0)
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.only(bottom: 200),
+            child: EmptyScreen(text: 'Bạn chưa có điểm danh theo ngày'),
+          ))
       ],
     );
   }

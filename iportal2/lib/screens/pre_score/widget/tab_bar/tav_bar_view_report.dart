@@ -1,7 +1,6 @@
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
@@ -138,7 +137,7 @@ class _TabBarReportState extends State<TabBarReport> {
                 selectedTerm: state.txtHocKy!,
               ),
               onUpdateTerm: (value) {
-                if (value == 'Học kỳ 1 - Năm học ${learnYear}') {
+                if (value == 'Học kỳ 1 - Năm học $learnYear') {
                   context.read<PreScoreBloc>().add(
                       GetListReportStudent(learnYear: learnYear, semester: 1));
                 } else {

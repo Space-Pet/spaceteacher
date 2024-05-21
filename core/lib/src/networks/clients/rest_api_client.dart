@@ -10,15 +10,20 @@ import '../interceptor/exceptions.dart';
 
 enum ApiMethod { get, post, put, delete, upload }
 
-class ApiClient with TokenManagementMixin {
+class ApiClientBase with TokenManagementMixin {
   final Dio dio = Dio();
-  final String url;
-
+  final String? prefix;
+  final String? suffix;
   bool isRefreshingToken = false;
 
-  ApiClient(this.url, {Map<String, dynamic>? headers}) {
-    // dio.interceptors.add(LoggingInterceptors(
-    //     dio: dio, setting: setting, user: user ?? UserModel()));
+  final DomainSaver domainSaver;
+
+  ApiClientBase({
+    Map<String, dynamic>? headers,
+    this.prefix,
+    this.suffix,
+    required this.domainSaver,
+  }) {
     dio.httpClientAdapter = IOHttpClientAdapter();
     dio.options.connectTimeout = const Duration(seconds: 60);
     dio.options.receiveTimeout = const Duration(seconds: 60);
@@ -29,28 +34,31 @@ class ApiClient with TokenManagementMixin {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = await getAccessToken();
-          print(token);
           if (token.isNotEmpty) {
             dio.options.headers['Authorization'] = 'Bearer $token';
           }
-          //====================================================================
-          final log = StringBuffer();
-          final method = !isNullOrEmpty(options.method)
-              ? options.method.toUpperCase()
-              : 'METHOD';
+
+          final log = StringBuffer()
+            ..write('--> METHOD ${options.method.toUpperCase()}\n');
 
           if (isNullOrEmpty(options.baseUrl)) {
-            final domainSaver = DomainSaver();
             final domain = await domainSaver.getDomain();
             if (domain.isNotEmpty) {
-              options.baseUrl = 'https://$domain/api/v1';
+              var tempDomain = domain;
+              if (prefix != null) {
+                tempDomain = '$prefix$tempDomain';
+              }
+              if (suffix != null) {
+                tempDomain = '$tempDomain$suffix';
+              }
+              options.baseUrl = 'https://$tempDomain';
             }
           }
 
-          final url = !isNullOrEmpty(options.path)
-              ? '${options.baseUrl}${options.path}'
-              : 'URL';
-          log.write('--> $method $url\nHEADERS: ');
+          log
+            ..write('--> DOMAIN: ${options.baseUrl}\n')
+            ..write('--> PATH: ${options.path}\n')
+            ..write('--> HEADERS:\n');
 
           options.headers.forEach((k, v) => log.write('$k: $v; '));
           if (!isNullOrEmpty(options.queryParameters)) {
@@ -78,7 +86,7 @@ class ApiClient with TokenManagementMixin {
               log.write('\nBODY: Cannot convert to JSON');
             }
           }
-          log.write('\n--> END $method');
+          log.write('\n--> END');
           Log.d(log.toString());
 
           handler.next(options);
@@ -157,10 +165,10 @@ class ApiClient with TokenManagementMixin {
                   name: '$err');
               throw NoInternetConnectionException(err.requestOptions);
             case DioExceptionType.badCertificate:
-              // TODO: Handle this case.
+              // [TODO]: Handle this case.
               break;
             case DioExceptionType.connectionError:
-              // TODO: Handle this case.
+              // [TODO]: Handle this case.
               break;
           }
           Log.e(
@@ -177,18 +185,20 @@ class ApiClient with TokenManagementMixin {
     }
   }
 
-  Future<dynamic> get(
-          [Map<String, dynamic>? params, Map<String, dynamic>? body]) =>
-      _callApi(ApiMethod.get, body: body ?? {}, params: params ?? {});
+  Future<dynamic> get(String path, [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.get, body: params ?? {}, path: path);
 
-  Future<dynamic> post(dynamic body, [Map<String, dynamic>? params]) =>
-      _callApi(ApiMethod.post, body: body, params: params);
+  Future<dynamic> post(String path, dynamic body,
+          [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.post, body: body, params: params, path: path);
 
-  Future<dynamic> put(dynamic body, [Map<String, dynamic>? params]) =>
-      _callApi(ApiMethod.put, body: body, params: params);
+  Future<dynamic> put(String path, dynamic body,
+          [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.put, body: body, params: params, path: path);
 
-  Future<dynamic> delete(dynamic body, [Map<String, dynamic>? params]) =>
-      _callApi(ApiMethod.delete, body: body, params: params);
+  Future<dynamic> delete(String path, dynamic body,
+          [Map<String, dynamic>? params]) =>
+      _callApi(ApiMethod.delete, body: body, params: params, path: path);
 
   ApiMethod getMethod(String methodString) {
     switch (methodString) {
@@ -208,21 +218,21 @@ class ApiClient with TokenManagementMixin {
 
   Future<dynamic> _callApi(
     ApiMethod method, {
+    required String path,
     dynamic body,
     Map<String, dynamic>? params,
   }) async {
     Response? response;
-    final encodedUrl = url;
-    // if (method == ApiMethod.get &&
-    //     !isNullOrEmpty(body) &&
-    //     body is Map<String, dynamic>) {
-    //   encodedUrl = getUrlWithQuery(url, body);
-    // }
+    var encodedUrl = path;
+    if (method == ApiMethod.get &&
+        !isNullOrEmpty(body) &&
+        body is Map<String, dynamic>) {
+      encodedUrl = getUrlWithQuery(path, body);
+    }
     try {
       switch (method) {
         case ApiMethod.get:
-          response =
-              await dio.get(encodedUrl, data: body, queryParameters: params);
+          response = await dio.get(encodedUrl);
 
           break;
         case ApiMethod.post:
@@ -250,7 +260,7 @@ class ApiClient with TokenManagementMixin {
       }
     } catch (e) {
       Log.e(
-        '$url\n$e',
+        '$path\n$e',
         name: 'ApiClient -> callApi()',
       );
     }

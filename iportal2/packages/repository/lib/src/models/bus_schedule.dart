@@ -15,7 +15,7 @@ class BusSchedule with _$BusSchedule {
     required String? checkOut,
     required String? checkIn,
     required Pupil pupil,
-    required Route route,
+    required RouteBus route,
     required AttendanceFeeType attendanceFeeType,
     required ScheduleType scheduleType,
     required BusStop busStop,
@@ -33,7 +33,7 @@ class BusSchedule with _$BusSchedule {
       checkOut: data.checkOut,
       checkIn: data.checkIn,
       pupil: Pupil.fromData(data.pupil),
-      route: Route.fromData(data.route),
+      route: RouteBus.fromData(data.route),
       attendanceFeeType: AttendanceFeeType.fromData(data.attendanceFeeType),
       scheduleType: ScheduleType.fromData(data.scheduleType),
       busStop: BusStop.fromData(data.busStop),
@@ -46,13 +46,16 @@ class BusSchedule with _$BusSchedule {
 extension BusScheduleX on BusSchedule {
   bool get isPickup => scheduleType.value == 1;
 
+  bool get isCompleted =>
+      (checkIn ?? '').isNotEmpty && (checkOut ?? '').isNotEmpty;
+
   String estimatedTime() {
     return DateFormat('HH:mm').format(busStop.estimatedTime);
   }
 
   String title() {
-    const left = 'Học sinh lên - xuống xe lúc: ';
-    return '$left ${checkIn?.substring(11, 16) ?? ''} - ${checkOut?.substring(11, 16) ?? ''}';
+    const left = 'Học sinh lên - xuống xe:';
+    return '$left${(checkIn ?? '').isNotEmpty ? ' ${checkIn?.substring(11, 16)} - ' : ''}${checkOut?.substring(11, 16) ?? ''}';
   }
 
   String attendanceDateString() {
@@ -80,14 +83,14 @@ class Pupil with _$Pupil {
 }
 
 @freezed
-class Route with _$Route {
-  const factory Route({
+class RouteBus with _$RouteBus {
+  const factory RouteBus({
     required int routeId,
     required String routeName,
-  }) = _Route;
+  }) = _RouteBus;
 
-  factory Route.fromData(RouteData data) {
-    return Route(
+  factory RouteBus.fromData(RouteData data) {
+    return RouteBus(
       routeId: data.routeId,
       routeName: data.routeName,
     );

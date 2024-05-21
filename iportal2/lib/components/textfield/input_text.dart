@@ -25,6 +25,7 @@ class TitleAndInputText extends StatefulWidget {
     this.onEditComplated,
     this.fillColor,
     this.prefixIconFallback = const SizedBox(),
+    this.controller,
   });
 
   final String hintText;
@@ -44,6 +45,7 @@ class TitleAndInputText extends StatefulWidget {
   final Function()? onTap;
   final Function()? onEditComplated;
   final Color? fillColor;
+  final TextEditingController? controller;
 
   @override
   _TitleAndInputTextState createState() => _TitleAndInputTextState();
@@ -59,6 +61,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextField(
+          controller: widget.controller,
           focusNode: widget.focusNode,
           onChanged: widget.onChanged,
           onTap: () {

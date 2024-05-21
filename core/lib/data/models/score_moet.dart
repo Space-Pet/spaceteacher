@@ -309,10 +309,6 @@ class DiemItemType {
       DiemItemType(mucDatDuoc: '', diemKtdk: '', nhanXet: '');
 
   String toJson() => json.encode(toMap());
-
-  @override
-  String toString() =>
-      'DiemItemType(mucDatDuoc: $mucDatDuoc, diemKtdk: $diemKtdk, nhanXet: $nhanXet)';
 }
 
 class TbmhkType {

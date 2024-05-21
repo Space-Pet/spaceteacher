@@ -36,7 +36,7 @@ class PhoneBookBloc extends Bloc<PhoneBookEvent, PhoneBookState> {
       GetPhoneBookStudent event, Emitter<PhoneBookState> emit) async {
     emit(state.copyWith(phoneBookStatus: PhoneBookStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookStudent(
-        classId: currentUserBloc.state.user.children.class_id);
+        classId: currentUserBloc.state.user.children[0].class_id);
     emit(state.copyWith(
         phoneBookStatus: PhoneBookStatus.success, phoneBookStudent: data));
   }

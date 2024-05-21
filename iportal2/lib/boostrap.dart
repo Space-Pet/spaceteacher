@@ -11,7 +11,6 @@ void bootstrap({
   required AuthApi authApi,
   required AbstractAuthLocalStorage authLocalStorage,
   required UserApi userApi,
-  required RegisterNoteBookApi registerNoteBookApi,
   required AppFetchApi appFetchApi,
   required UserLocalStorage userLocalStorage,
 }) async {
@@ -20,9 +19,6 @@ void bootstrap({
 
   final userRepository =
       UserRepository(userApi: userApi, userLocalStorage: userLocalStorage);
-
-  final registerNoteBookRepository =
-      RegisterNotebookRepository(registerNoteBookApi: registerNoteBookApi);
 
   final appFetchApiRepository = AppFetchApiRepository(appFetchApi: appFetchApi);
 
@@ -34,7 +30,6 @@ void bootstrap({
   runApp(IPortal2App(
     authRepository: authRepository,
     userRepository: userRepository,
-    registerRepository: registerNoteBookRepository,
     appFetchApiRepository: appFetchApiRepository,
   ));
 }

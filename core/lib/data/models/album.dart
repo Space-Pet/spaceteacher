@@ -17,7 +17,8 @@ class AlbumData {
     required this.totalPages,
   });
 
-  factory AlbumData.fromJson(Map<String, dynamic> json) => AlbumData.fromMap(json);
+  factory AlbumData.fromJson(Map<String, dynamic> json) =>
+      AlbumData.fromMap(json);
 
   factory AlbumData.fromMap(Map<String, dynamic> map) {
     var itemsJson = map['items'] as List;
@@ -34,13 +35,13 @@ class AlbumData {
   }
 
   Map<String, dynamic> toMap() => {
-    'items': items.map((item) => item.toMap()).toList(),
-    'total': total,
-    'count': count,
-    'per_page': perPage,
-    'current_page': currentPage,
-    'total_pages': totalPages,
-  };
+        'items': items.map((item) => item.toMap()).toList(),
+        'total': total,
+        'count': count,
+        'per_page': perPage,
+        'current_page': currentPage,
+        'total_pages': totalPages,
+      };
 
   String toJson() => json.encode(toMap());
 
@@ -50,13 +51,13 @@ class AlbumData {
   }
 
   static AlbumData get empty => AlbumData(
-    items: [],
-    total: 0,
-    count: 0,
-    perPage: 0,
-    currentPage: 0,
-    totalPages: 0,
-  );
+        items: [],
+        total: 0,
+        count: 0,
+        perPage: 0,
+        currentPage: 0,
+        totalPages: 0,
+      );
 }
 
 class Gallery {
@@ -80,7 +81,8 @@ class Gallery {
 
   factory Gallery.fromMap(Map<String, dynamic> map) {
     var imagesJson = map['gallery_images'] as List;
-    List<GalleryImage> imagesList = imagesJson.map((i) => GalleryImage.fromMap(i)).toList();
+    List<GalleryImage> imagesList =
+        imagesJson.map((i) => GalleryImage.fromMap(i)).toList();
 
     return Gallery(
       galleryId: map['gallery_id'],
@@ -93,13 +95,13 @@ class Gallery {
   }
 
   Map<String, dynamic> toMap() => {
-    'gallery_id': galleryId,
-    'gallery_name': galleryName,
-    'learn_year': learnYear,
-    'school_id': schoolId,
-    'gallery_number': galleryNumber,
-    'gallery_images': galleryImages.map((image) => image.toMap()).toList(),
-  };
+        'gallery_id': galleryId,
+        'gallery_name': galleryName,
+        'learn_year': learnYear,
+        'school_id': schoolId,
+        'gallery_number': galleryNumber,
+        'gallery_images': galleryImages.map((image) => image.toMap()).toList(),
+      };
 
   String toJson() => json.encode(toMap());
 
@@ -109,13 +111,13 @@ class Gallery {
   }
 
   static Gallery get empty => Gallery(
-    galleryId: 0,
-    galleryName: '',
-    learnYear: '',
-    schoolId: 0,
-    galleryNumber: 0,
-    galleryImages: [],
-  );
+        galleryId: 0,
+        galleryName: '',
+        learnYear: '',
+        schoolId: 0,
+        galleryNumber: 0,
+        galleryImages: [],
+      );
 }
 
 class GalleryImage {
@@ -131,7 +133,8 @@ class GalleryImage {
     required this.images,
   });
 
-  factory GalleryImage.fromJson(Map<String, dynamic> json) => GalleryImage.fromMap(json);
+  factory GalleryImage.fromJson(Map<String, dynamic> json) =>
+      GalleryImage.fromMap(json);
 
   factory GalleryImage.fromMap(Map<String, dynamic> map) {
     return GalleryImage(
@@ -143,11 +146,11 @@ class GalleryImage {
   }
 
   Map<String, dynamic> toMap() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'images': images.toMap(),
-  };
+        'id': id,
+        'name': name,
+        'description': description,
+        'images': images.toMap(),
+      };
 
   String toJson() => json.encode(toMap());
 
@@ -157,11 +160,11 @@ class GalleryImage {
   }
 
   static GalleryImage get empty => GalleryImage(
-    id: 0,
-    name: '',
-    description: '',
-    images: ImageUrl.empty,
-  );
+        id: 0,
+        name: '',
+        description: '',
+        images: ImageUrl.empty,
+      );
 }
 
 class ImageUrl {
@@ -173,7 +176,8 @@ class ImageUrl {
     required this.mobile,
   });
 
-  factory ImageUrl.fromJson(Map<String, dynamic> json) => ImageUrl.fromMap(json);
+  factory ImageUrl.fromJson(Map<String, dynamic> json) =>
+      ImageUrl.fromMap(json);
 
   factory ImageUrl.fromMap(Map<String, dynamic> map) {
     return ImageUrl(
@@ -183,9 +187,9 @@ class ImageUrl {
   }
 
   Map<String, dynamic> toMap() => {
-    'web': web,
-    'mobile': mobile,
-  };
+        'web': web,
+        'mobile': mobile,
+      };
 
   String toJson() => json.encode(toMap());
 
@@ -195,7 +199,7 @@ class ImageUrl {
   }
 
   static ImageUrl get empty => ImageUrl(
-    web: '',
-    mobile: '',
-  );
+        web: '',
+        mobile: '',
+      );
 }

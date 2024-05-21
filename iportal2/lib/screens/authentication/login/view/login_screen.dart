@@ -83,8 +83,11 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     final loginBloc = context.read<LoginBloc>();
+
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
+        final domain = state.domain;
+
         return GestureDetector(
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -274,7 +277,16 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 12),
                           child: Text(
-                            'iPortal version 1.0.0 (37) - 20240220',
+                            domain,
+                            style: AppTextStyles.normal14(
+                              color: AppColors.brand600,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
+                            'iPortal version 1.0.0 (39) - 20240220',
                             style: AppTextStyles.normal12(
                               color: AppColors.gray400,
                             ),

@@ -1,7 +1,7 @@
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/components/textfield/input_text.dart';
 import 'package:teacher/resources/assets.gen.dart';
-import 'package:teacher/resources/resources.dart';
 
 class DialogChangePassword extends StatefulWidget {
   const DialogChangePassword({
@@ -82,7 +82,6 @@ class _DialogChangePasswordState extends State<DialogChangePassword> {
                     hintText: 'Nhập lại mật khẩu mới',
                     onChanged: (value) {},
                     prefixIcon: Assets.icons.lock.image(),
-                    obscureText: true,
                     onTap: () {
                       setState(() {
                         _isInputFocused = true;
@@ -116,10 +115,10 @@ class _DialogChangePasswordState extends State<DialogChangePassword> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color?>(
+                          backgroundColor: MaterialStateProperty.all<Color?>(
                             AppColors.white,
                           ),
-                          side: WidgetStateProperty.all<BorderSide>(
+                          side: MaterialStateProperty.all<BorderSide>(
                             const BorderSide(color: AppColors.gray300),
                           ),
                         ),

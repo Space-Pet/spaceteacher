@@ -43,19 +43,26 @@ class AuthRepository {
   Future<ProfileInfo> login({
     required String userName,
     required String password,
-    required bool isSaveLoginInfo,
+    required String deviceId,
+    required String model,
+    required String platform,
+    required String tokenFirebase,
   }) async {
     try {
-      final loginInfo =
-          await _authApi.login(email: userName, password: password);
+      final loginInfo = await _authApi.login(
+        email: userName,
+        password: password,
+        deviceId: deviceId,
+        model: model,
+        platform: platform,
+        tokenFirebase: tokenFirebase,
+      );
 
-      if (isSaveLoginInfo) {
-        await _authLocalStorage.clearLoginInfo();
-        await _authLocalStorage.saveLoginInfo(
-          email: userName,
-          password: password,
-        );
-      }
+      await _authLocalStorage.clearLoginInfo();
+      await _authLocalStorage.saveLoginInfo(
+        email: userName,
+        password: password,
+      );
       return loginInfo;
     } catch (e) {
       rethrow;
@@ -78,9 +85,13 @@ class AuthRepository {
     return loginInfo;
   }
 
-  Future loginOut() async {
+  Future<bool> logOut() async {
     try {
-      await _authApi.logOut();
+      final isSuccess = await _authApi.logOut();
+      if (isSuccess) {
+        await _authLocalStorage.clearLoginInfo();
+      }
+      return isSuccess;
     } catch (e) {
       throw LogOutFailure();
     }

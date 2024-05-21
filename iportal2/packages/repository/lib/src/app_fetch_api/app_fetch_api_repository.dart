@@ -19,16 +19,29 @@ class AppFetchApiRepository {
           {required String userKey, required String txtDate}) =>
       _appFetchApi.getSchedule(userKey, txtDate);
 
-  Future<ExerciseData> getExercises({
+  Future<List<ExerciseItem>> getExercises({
     required String userKey,
-    required String txtDate,
+    required DateTime datePicked,
     bool isDueDate = true,
-  }) =>
-      _appFetchApi.getExercises(
-        userKey,
-        txtDate,
-        isDueDate: isDueDate,
-      );
+  }) async {
+    final exerciseData = await _appFetchApi.getExercises(
+      userKey,
+      DateFormat('dd-MM-yyyy').format(datePicked),
+      isDueDate: isDueDate,
+    );
+
+    if (!isDueDate) {
+      return exerciseData.exerciseDataList;
+    }
+
+    DateFormat formatDate = DateFormat("yyyy-MM-dd");
+    final listExerciseDueDate = exerciseData.exerciseDataList
+        .where(
+            (element) => element.hanNopBaoBai == formatDate.format(datePicked))
+        .toList();
+
+    return listExerciseDueDate;
+  }
 
   Future<ScoreModel> getMoetScore({
     required String userKey,
@@ -231,12 +244,18 @@ class AppFetchApiRepository {
     return data.map((e) => BusSchedule.fromData(e)).toList();
   }
 
-  Future<List<Message>> getListMessage(
-      {required int page,
-      required int schoolId,
-      required String schoolBrand}) async {
+  Future<List<Message>> getListMessage({
+    required int schoolId,
+    required String classId,
+    required String userId,
+    required String schoolBrand,
+  }) async {
     final data = await _appFetchApi.getlistMessage(
-        page: page, schoolId: schoolId, schoolBrand: schoolBrand);
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      classId: classId,
+      userId: userId,
+    );
     return data;
   }
 
@@ -286,6 +305,114 @@ class AppFetchApiRepository {
       {required int schoolId, required String schoolBrand}) async {
     final data = await _appFetchApi.getAttendanceType(
         schoolId: schoolId, schoolBrand: schoolBrand);
+    return data;
+  }
+
+  Future<List<MessageDetail>> getMessageDetail({
+    required String conversationId,
+    required String schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getMessageDetail(
+      conversationId: conversationId,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<int> postMessage({
+    required String content,
+    required String classId,
+    required String recipient,
+    required String schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.postMessage(
+      content: content,
+      classId: classId,
+      recipient: recipient,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<int> deleteMessageDetail({
+    required String content,
+    required String schoolId,
+    required String schoolBrand,
+    required String recipient,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.deleteMessageDetail(
+        content: content,
+        schoolId: schoolId,
+        schoolBrand: schoolBrand,
+        recipient: recipient,
+        idMessage: idMessage);
+    return data;
+  }
+
+  Future<int> deleteMessage({
+    required String schoolId,
+    required String schoolBrand,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.deleteMessage(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      idMessage: idMessage,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> changePassword({
+    required String password,
+    required String currentPassword,
+    required String passwordConfirmation,
+  }) async {
+    final data = await _appFetchApi.changePassword(
+      password: password,
+      currentPassword: currentPassword,
+      passwordConfirmation: passwordConfirmation,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> postPinMessage({
+    required String schoolBrand,
+    required String schoolId,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.postPinMessage(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      idMessage: idMessage,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> postDeletePinMessage({
+    required String schoolBrand,
+    required String schoolId,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.postDeletePinMessage(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      idMessage: idMessage,
+    );
+    return data;
+  }
+
+  Future<MessageDetail?> getMessagePin({
+    required String schoolBrand,
+    required String schoolId,
+  }) async {
+    final data = await _appFetchApi.getMessagePin(
+        schoolBrand: schoolBrand, schoolId: schoolId);
+
     return data;
   }
 }

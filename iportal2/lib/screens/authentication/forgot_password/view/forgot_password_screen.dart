@@ -1,7 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/resources/app_colors.dart';
-import 'package:core/resources/app_strings.dart';
-import 'package:core/resources/app_text_styles.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +8,6 @@ import 'package:iportal2/components/input_text.dart';
 import 'package:iportal2/screens/authentication/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:iportal2/screens/authentication/send_opt/view/send_otp_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
-import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
 
 import '../models/models.dart';
@@ -63,7 +59,7 @@ class ForgotPasswordScreen extends StatelessWidget {
 }
 
 class ForgotPasswordView extends StatelessWidget {
-  ForgotPasswordView({
+  const ForgotPasswordView({
     super.key,
     required this.phoneNumberController,
   });

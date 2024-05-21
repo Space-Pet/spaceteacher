@@ -45,7 +45,6 @@ class PhoneBookView extends StatelessWidget {
       final isLoading = state.phoneBookStatus == PhoneBookStatus.loading;
       final phoneBookStudent = state.phoneBookStudent;
       final phoneBookTeacher = state.phoneBookTeacher;
-      final user = state.user;
       return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
