@@ -33,6 +33,11 @@ class StudentFeesResponse {
       data: data ?? this.data,
     );
   }
+
+  @override
+  String toString() {
+    return 'StudentFeesResponse(status: $status, message: $message, code: $code, data: $data)';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -87,6 +92,19 @@ class FeeCategory {
   factory FeeCategory.fromJson(Map<String, dynamic> json) =>
       _$FeeCategoryFromJson(json);
   Map<String, dynamic> toJson() => _$FeeCategoryToJson(this);
+
+  FeeCategory copyWith({
+    FeeCategoryData? data,
+  }) {
+    return FeeCategory(
+      data: data ?? this.data,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'FeeCategory(data: $data)';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -116,17 +134,25 @@ class FeeCategoryData {
       items: items ?? this.items,
     );
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'FeeCategoryData(title: $title, multiple_choice: $multiple_choice, items: $items)';
+  }
 }
 
 @JsonSerializable(explicitToJson: true)
 class FeeItem {
   final int? id;
   final int? list_fee_id;
+  final int? list_fee_detail_id;
   final int? school_id;
   final String? learn_year;
   final String? title;
   final String? content;
-  final String? price;
+  @JsonKey(fromJson: _priceFromJson, toJson: _priceToJson)
+  final int price;
   final String? level;
   final int? apply_multiple;
   final String? unit;
@@ -139,15 +165,21 @@ class FeeItem {
   final String? SPL3_Ten;
   final String? PB_11T_GROUP;
   final MetaData? meta_data;
+  final String? date;
+  final String? discount;
+
+  final String? grand_total;
+  final String? status;
 
   FeeItem({
     this.id,
     this.list_fee_id,
+    this.list_fee_detail_id,
     this.school_id,
     this.learn_year,
     this.title,
     this.content,
-    this.price,
+    this.price = 0,
     this.level,
     this.apply_multiple,
     this.unit,
@@ -160,20 +192,37 @@ class FeeItem {
     this.SPL3_Ten,
     this.PB_11T_GROUP,
     this.meta_data,
+    this.date,
+    this.discount,
+    this.grand_total,
+    this.status,
   });
 
   factory FeeItem.fromJson(Map<String, dynamic> json) =>
       _$FeeItemFromJson(json);
   Map<String, dynamic> toJson() => _$FeeItemToJson(this);
 
+  static int _priceFromJson(dynamic price) {
+    if (price is int) {
+      return price;
+    } else if (price is String) {
+      return int.tryParse(price) ?? 0;
+    } else {
+      throw Exception('Invalid type for price');
+    }
+  }
+
+  static dynamic _priceToJson(int price) => price;
+
   FeeItem copyWith({
     int? id,
     int? list_fee_id,
+    int? list_fee_detail_id,
     int? school_id,
     String? learn_year,
     String? title,
     String? content,
-    String? price,
+    int? price,
     String? level,
     int? apply_multiple,
     String? unit,
@@ -186,10 +235,15 @@ class FeeItem {
     String? SPL3_Ten,
     String? PB_11T_GROUP,
     MetaData? meta_data,
+    String? date,
+    String? discount,
+    String? grand_total,
+    String? status,
   }) {
     return FeeItem(
       id: id ?? this.id,
       list_fee_id: list_fee_id ?? this.list_fee_id,
+      list_fee_detail_id: list_fee_detail_id ?? this.list_fee_detail_id,
       school_id: school_id ?? this.school_id,
       learn_year: learn_year ?? this.learn_year,
       title: title ?? this.title,
@@ -207,7 +261,16 @@ class FeeItem {
       SPL3_Ten: SPL3_Ten ?? this.SPL3_Ten,
       PB_11T_GROUP: PB_11T_GROUP ?? this.PB_11T_GROUP,
       meta_data: meta_data ?? this.meta_data,
+      date: date ?? this.date,
+      discount: discount ?? this.discount,
+      grand_total: grand_total ?? this.grand_total,
+      status: status ?? this.status,
     );
+  }
+
+  @override
+  String toString() {
+    return 'FeeItem(id: $id, list_fee_id: $list_fee_id, list_fee_detail_id: $list_fee_detail_id ,school_id: $school_id, learn_year: $learn_year, title: $title, content: $content, price: $price, level: $level, apply_multiple: $apply_multiple, unit: $unit, active: $active, SPL1_Ma: $SPL1_Ma, SPL1_Ten: $SPL1_Ten, SPL2_Ma: $SPL2_Ma, SPL2_Ten: $SPL2_Ten, SPL3_Ma: $SPL3_Ma, SPL3_Ten: $SPL3_Ten, PB_11T_GROUP: $PB_11T_GROUP, meta_data: $meta_data, date: $date, discount: $discount, grand_total: $grand_total, status: $status)';
   }
 }
 
@@ -249,6 +312,11 @@ class MetaDataPrice {
       price_text: price_text ?? this.price_text,
     );
   }
+
+  @override
+  String toString() {
+    return 'MetaDataPrice(label: $label, price_text: $price_text)';
+  }
 }
 
 @JsonSerializable()
@@ -281,5 +349,10 @@ class MetaDataItem {
       label: label ?? this.label,
       date: date ?? this.date,
     );
+  }
+
+  @override
+  String toString() {
+    return 'MetaDataItem(list_fee_detail_id: $list_fee_detail_id, price: $price, label: $label, date: $date)';
   }
 }

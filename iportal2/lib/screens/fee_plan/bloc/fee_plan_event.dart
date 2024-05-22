@@ -24,3 +24,19 @@ class SendFeeRequested extends FeePlanEvent {
   // TODO: implement props
   List<Object> get props => [listItemFee];
 }
+
+class AddFeeToListVerify extends FeePlanEvent {
+  final FeeItem feeItem;
+
+  const AddFeeToListVerify({required this.feeItem});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [feeItem];
+}
+
+class RemoveFeeFromListVerify extends FeePlanEvent {
+  final FeeItem feeItem;
+
+  const RemoveFeeFromListVerify({required this.feeItem});
+}

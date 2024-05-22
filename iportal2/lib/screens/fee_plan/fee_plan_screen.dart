@@ -21,57 +21,35 @@ class FeePlanScreen extends StatelessWidget {
         userRepository: context.read<UserRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
       ),
-      child: BlocBuilder<FeePlanBloc, FeePlanState>(
-        builder: (context, state) {
-          if (state.status == FeePlanStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (state.status == FeePlanStatus.error) {
-            return Center(
-              child: Text(state.errorsText ?? ""),
-            );
-          }
-          if (state.status == FeePlanStatus.loaded) {
-            return BackGroundContainer(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ScreenAppBar(
-                    title: 'Chọn biểu phí',
-                    canGoback: true,
-                    onBack: () {
-                      context.pop();
-                    },
+      child: BackGroundContainer(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ScreenAppBar(
+              title: 'Chọn biểu phí',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: TabBarTariff(
-                        tabTitles: const ['Tất cả', 'Đã yêu cầu'],
-                        studentFeesResponse:
-                            state.studentFeesData ?? StudentFeesResponse(),
-                        studentFeesRequestedResponse:
-                            state.studentFeesRequestedData ??
-                                StudentFeesResponse(),
-                      ),
-                    ),
-                  )
-                ],
+                ),
+                child: const TabBarTariff(
+                  tabTitles: ['Tất cả', 'Đã yêu cầu'],
+                ),
               ),
-            );
-          }
-          return Container();
-        },
+            )
+          ],
+        ),
       ),
     );
   }

@@ -14,12 +14,17 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
     this.appFetchApiRepo, {
     required this.currentUserBloc,
     required this.userRepository,
-  }) : super(const FeePlanState(status: FeePlanStatus.initial)) {
+  }) : super(const FeePlanState(
+          status: FeePlanStatus.initial,
+          listVerify: [],
+        )) {
     on<GetListFee>(_onGetListFee);
     add(const GetListFee());
     on<GetFeeRequested>(_onGetFeeRequested);
     add(const GetFeeRequested());
     on<SendFeeRequested>(_onSendFeeRequested);
+    on<AddFeeToListVerify>(_onAddFeeToListVerify);
+    on<RemoveFeeFromListVerify>(_onRemoveFeeFromListVerify);
   }
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
@@ -98,6 +103,28 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
         errorsText: e.toString(),
         status: FeePlanStatus.error,
       ));
+    }
+  }
+
+  Future<void> _onRemoveFeeFromListVerify(
+      RemoveFeeFromListVerify event, Emitter<FeePlanState> emit) async {
+    try {
+      final listVerify = List<FeeItem>.from(state.listVerify ?? []);
+      listVerify.removeWhere((element) => element.id == event.feeItem.id);
+      emit(state.copyWith(listVerify: listVerify));
+    } catch (e) {
+      Log.e('Error: $e');
+    }
+  }
+
+  Future<void> _onAddFeeToListVerify(
+      AddFeeToListVerify event, Emitter<FeePlanState> emit) async {
+    try {
+      final listVerify = List<FeeItem>.from(state.listVerify ?? []);
+      listVerify.add(event.feeItem);
+      emit(state.copyWith(listVerify: listVerify));
+    } catch (e) {
+      Log.e('Error: $e');
     }
   }
 }

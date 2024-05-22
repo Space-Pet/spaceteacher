@@ -437,7 +437,7 @@ class AppFetchApiRepository {
       await _appFetchApi.getListFeeRequested(
         schoolBrand: schoolBrand,
         schoolId: schoolId,
-        pupilId: pupilId,
+        pupilId: 10052984,
         learnYear: learnYear,
       );
 

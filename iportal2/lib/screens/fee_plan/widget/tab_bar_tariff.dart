@@ -1,4 +1,4 @@
-import 'package:core/data/models/student_fees.dart';
+
 import 'package:core/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_all.dart';
@@ -6,13 +6,10 @@ import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_requested.dart';
 
 class TabBarTariff extends StatefulWidget {
   final List<String> tabTitles;
-  final StudentFeesResponse studentFeesResponse;
-  final StudentFeesResponse studentFeesRequestedResponse;
+
   const TabBarTariff({
     super.key,
     required this.tabTitles,
-    required this.studentFeesResponse,
-    required this.studentFeesRequestedResponse,
   });
   @override
   State<TabBarTariff> createState() => _TabBaTariff();
@@ -67,17 +64,14 @@ class _TabBaTariff extends State<TabBarTariff> {
               ),
             ),
           ),
-          Expanded(
-              child: TabBarView(
-            children: [
-              TabBarViewAll(
-                studentFeesData: widget.studentFeesResponse,
-              ),
-              TabBarViewRequested(
-                studentFeesResponse: widget.studentFeesRequestedResponse,
-              ),
-            ],
-          ))
+          const Expanded(
+            child: TabBarView(
+              children: [
+                TabBarViewAll(),
+                TabBarViewRequested(),
+              ],
+            ),
+          ),
         ],
       ),
     );
