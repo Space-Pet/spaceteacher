@@ -36,7 +36,7 @@ class LocalChildren {
   final String class_name;
   @HiveField(12)
   final LocalUrlImage url_image;
-  @HiveField(13)
+  @HiveField(13, defaultValue: true)
   final bool isActive;
 
   LocalChildren({
@@ -53,7 +53,7 @@ class LocalChildren {
     required this.parent_id,
     required this.class_name,
     required this.url_image,
-    required this.isActive,
+    this.isActive = false,
   });
 
   LocalChildren copyWith({

@@ -86,7 +86,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(AppColors.white),
+                        WidgetStateProperty.all<Color>(AppColors.white),
                   ),
                   onPressed: () {
                     _pageController.previousPage(
@@ -103,7 +103,7 @@ class _SurveyPageViewState extends State<SurveyPageView> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateProperty.all<Color>(AppColors.red),
+                      WidgetStateProperty.all<Color>(AppColors.red),
                 ),
                 onPressed: () {
                   if (_currentPage < widget.surveyData.length - 1) {

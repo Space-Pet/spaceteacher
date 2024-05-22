@@ -1,45 +1,77 @@
-import 'package:core/resources/app_colors.dart';
-import 'package:core/resources/app_text_styles.dart';
+import 'package:core/core.dart';
+import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_tariff.dart';
+import 'package:repository/repository.dart';
 
 class FeePlanScreen extends StatelessWidget {
   const FeePlanScreen({super.key});
   static const routeName = '/fee-plan';
   @override
   Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ScreenAppBar(
-            title: 'Chọn biểu phí',
-            canGoback: true,
-            onBack: () {
-              context.pop();
-            },
-          ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 255, 255, 255),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
+    return BlocProvider(
+      create: (context) => FeePlanBloc(
+        context.read<AppFetchApiRepository>(),
+        userRepository: context.read<UserRepository>(),
+        currentUserBloc: context.read<CurrentUserBloc>(),
+      ),
+      child: BlocBuilder<FeePlanBloc, FeePlanState>(
+        builder: (context, state) {
+          if (state.status == FeePlanStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state.status == FeePlanStatus.error) {
+            return Center(
+              child: Text(state.errorsText ?? ""),
+            );
+          }
+          if (state.status == FeePlanStatus.loaded) {
+            return BackGroundContainer(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ScreenAppBar(
+                    title: 'Chọn biểu phí',
+                    canGoback: true,
+                    onBack: () {
+                      context.pop();
+                    },
+                  ),
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: TabBarTariff(
+                        tabTitles: const ['Tất cả', 'Đã yêu cầu'],
+                        studentFeesResponse:
+                            state.studentFeesData ?? StudentFeesResponse(),
+                        studentFeesRequestedResponse:
+                            state.studentFeesRequestedData ??
+                                StudentFeesResponse(),
+                      ),
+                    ),
+                  )
+                ],
               ),
-              child: const TabBarTariff(
-                tabTitles: ['Tất cả', 'Đã yêu cầu'],
-              ),
-            ),
-          )
-        ],
+            );
+          }
+          return Container();
+        },
       ),
     );
   }

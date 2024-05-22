@@ -1,4 +1,5 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/data/models/student_fees.dart';
 import 'package:intl/intl.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -415,4 +416,43 @@ class AppFetchApiRepository {
 
     return data;
   }
+
+  Future<StudentFeesResponse> getListFee(
+          {required String schoolBrand,
+          required int schoolId,
+          required int pupilId,
+          required String learnYear}) async =>
+      await _appFetchApi.getListFee(
+        schoolBrand: schoolBrand,
+        schoolId: schoolId,
+        pupilId: 10052984,
+        learnYear: learnYear,
+      );
+
+  Future<StudentFeesResponse> getListFeeRequested(
+          {required String schoolBrand,
+          required int schoolId,
+          required int pupilId,
+          required String learnYear}) async =>
+      await _appFetchApi.getListFeeRequested(
+        schoolBrand: schoolBrand,
+        schoolId: schoolId,
+        pupilId: pupilId,
+        learnYear: learnYear,
+      );
+
+  Future<StudentFeesResponse> postFeeRequested({
+    required String schoolBrand,
+    required int schoolId,
+    required int pupilId,
+    required String learnYear,
+    required List<FeeItem> listFee,
+  }) async =>
+      await _appFetchApi.postFeeRequested(
+        schoolBrand: schoolBrand,
+        schoolId: schoolId,
+        pupilId: pupilId,
+        learnYear: learnYear,
+        listFee: listFee,
+      );
 }

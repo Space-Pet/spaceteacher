@@ -1,6 +1,6 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_skeleton.dart';
@@ -10,7 +10,6 @@ import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_detail.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
-import 'package:skeletons/skeletons.dart';
 
 class ImagesLibrary extends StatelessWidget {
   const ImagesLibrary({
@@ -99,65 +98,60 @@ class ImagesLibrary extends StatelessWidget {
               ),
               SizedBox(
                 height: 180,
-                child: AppSkeleton(
-                  isLoading: isLoading,
-                  skeleton: const HomeGallerySkeleton(),
-                  child: isEmptyData
-                      ? const EmptyScreen(text: 'Thư viện ảnh của bạn trống!')
-                      : ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: pinnedAlbumList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final album = pinnedAlbumList[index];
-                            String imgUrl =
-                                album.galleryImages[0].images.mobile;
+                child: isEmptyData
+                    ? const EmptyScreen(text: 'Thư viện ảnh của bạn trống!')
+                    : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: pinnedAlbumList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final album = pinnedAlbumList[index];
+                          String imgUrl = album.galleryImages[0].images.mobile;
 
-                            return InkWell(
-                              onTap: () {
-                                context.push(GalleryDetail(
-                                  galleryItem: album,
-                                  isFromHomeScreen: true,
-                                ));
-                              },
-                              child: Container(
-                                width: 120,
-                                padding: const EdgeInsets.only(top: 12),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 105,
-                                      width: 105,
-                                      decoration: BoxDecoration(
-                                        borderRadius: AppRadius.rounded14,
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(imgUrl)),
-                                        color: AppColors.white,
-                                      ),
+                          return InkWell(
+                            onTap: () {
+                              context.push(GalleryDetail(
+                                galleryItem: album,
+                                isFromHomeScreen: true,
+                              ));
+                            },
+                            child: Container(
+                              width: 120,
+                              padding: const EdgeInsets.only(top: 12),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 105,
+                                    width: 105,
+                                    decoration: BoxDecoration(
+                                      borderRadius: AppRadius.rounded14,
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(imgUrl)),
+                                      color: AppColors.white,
                                     ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 4, 2, 4),
-                                        child: Text(
-                                          album.galleryName,
-                                          style: AppTextStyles.normal12(
-                                            color: AppColors.gray600,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                          softWrap: true,
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(8, 4, 2, 4),
+                                      child: Text(
+                                        album.galleryName,
+                                        style: AppTextStyles.normal12(
+                                          color: AppColors.gray600,
                                         ),
+                                        textAlign: TextAlign.left,
+                                        softWrap: true,
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
-                ),
+                            ),
+                          );
+                        },
+                      ),
               ),
             ],
           ),
@@ -167,48 +161,48 @@ class ImagesLibrary extends StatelessWidget {
   }
 }
 
-class HomeGallerySkeleton extends StatelessWidget {
-  const HomeGallerySkeleton({
-    super.key,
-  });
+// class HomeGallerySkeleton extends StatelessWidget {
+//   const HomeGallerySkeleton({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 3,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) => Container(
-        padding: const EdgeInsets.only(top: 12),
-        width: 120,
-        height: 200,
-        child: Column(
-          children: [
-            const SkeletonAvatar(
-              style: SkeletonAvatarStyle(
-                  width: 105,
-                  height: 105,
-                  borderRadius: BorderRadius.all(Radius.circular(14))),
-            ),
-            const SizedBox(height: 4),
-            Expanded(
-              child: Column(
-                children: [
-                  SkeletonParagraph(
-                    style: SkeletonParagraphStyle(
-                        lines: 2,
-                        lineStyle: SkeletonLineStyle(
-                          randomLength: true,
-                          alignment: Alignment.centerLeft,
-                          height: 14,
-                          borderRadius: BorderRadius.circular(8),
-                        )),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListView.builder(
+//       itemCount: 3,
+//       scrollDirection: Axis.horizontal,
+//       itemBuilder: (context, index) => Container(
+//         padding: const EdgeInsets.only(top: 12),
+//         width: 120,
+//         height: 200,
+//         child: Column(
+//           children: [
+//             const SkeletonAvatar(
+//               style: SkeletonAvatarStyle(
+//                   width: 105,
+//                   height: 105,
+//                   borderRadius: BorderRadius.all(Radius.circular(14))),
+//             ),
+//             const SizedBox(height: 4),
+//             Expanded(
+//               child: Column(
+//                 children: [
+//                   SkeletonParagraph(
+//                     style: SkeletonParagraphStyle(
+//                         lines: 2,
+//                         lineStyle: SkeletonLineStyle(
+//                           randomLength: true,
+//                           alignment: Alignment.centerLeft,
+//                           height: 14,
+//                           borderRadius: BorderRadius.circular(8),
+//                         )),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

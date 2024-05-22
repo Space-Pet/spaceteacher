@@ -164,8 +164,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           .firstWhere((element) => element.value == user.school_brand);
 
       final userLocal = user.copyWith(
-        features:
-            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
+        features: isNullOrEmpty(listFeatures) ? listFeatures : featuresByType,
         pinnedAlbumIdList: pinnedAlbumIdList,
         background: bgSchoolBrand,
       );

@@ -7,7 +7,6 @@ import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/utils/utils_export.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class NotiSlider extends StatefulWidget {
@@ -106,44 +105,42 @@ class _NotiSliderState extends State<NotiSlider> {
           );
         });
 
-        return isLoading
-            ? NotiSkeleton(isLoading: isLoading)
-            : Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Stack(
-                  children: [
-                    isEmptyNoti
-                        ? const EmptyNoti()
-                        : SizedBox(
-                            height: 144,
-                            width: double.infinity,
-                            child: PageView.builder(
-                              controller: controller,
-                              itemCount: notiList.length,
-                              itemBuilder: (_, index) {
-                                return notiList[index % notiList.length];
-                              },
-                            ),
-                          ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: 124,
-                      child: Center(
-                        child: SmoothPageIndicator(
-                            controller: controller,
-                            count: notiList.length,
-                            effect: const ExpandingDotsEffect(
-                              activeDotColor: AppColors.red90002,
-                              dotHeight: 5,
-                              dotWidth: 5,
-                              radius: 50,
-                            )),
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Stack(
+            children: [
+              isEmptyNoti
+                  ? const EmptyNoti()
+                  : SizedBox(
+                      height: 144,
+                      width: double.infinity,
+                      child: PageView.builder(
+                        controller: controller,
+                        itemCount: notiList.length,
+                        itemBuilder: (_, index) {
+                          return notiList[index % notiList.length];
+                        },
                       ),
                     ),
-                  ],
-                ),
-              );
+              // Positioned(
+              //   left: 0,
+              //   right: 0,
+              //   top: 124,
+              //   child: Center(
+              //     child: SmoothPageIndicator(
+              //         controller: controller,
+              //         count: notiList.length,
+              //         effect: const ExpandingDotsEffect(
+              //           activeDotColor: AppColors.red90002,
+              //           dotHeight: 5,
+              //           dotWidth: 5,
+              //           radius: 50,
+              //         )),
+              //   ),
+              // ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -197,62 +194,62 @@ class EmptyNoti extends StatelessWidget {
   }
 }
 
-class NotiSkeleton extends StatelessWidget {
-  const NotiSkeleton({
-    super.key,
-    required this.isLoading,
-  });
+// class NotiSkeleton extends StatelessWidget {
+//   const NotiSkeleton({
+//     super.key,
+//     required this.isLoading,
+//   });
 
-  final bool isLoading;
+//   final bool isLoading;
 
-  @override
-  Widget build(BuildContext context) {
-    return ShaDowBoxContainer(
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 28),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-      child: AppSkeleton(
-        skeleton: SkeletonItem(
-          child: Row(
-            children: [
-              const SkeletonAvatar(
-                style: SkeletonAvatarStyle(
-                    width: 50,
-                    height: 50,
-                    borderRadius: BorderRadius.all(Radius.circular(40))),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  children: [
-                    SkeletonParagraph(
-                      style: SkeletonParagraphStyle(
-                          lines: 1,
-                          lineStyle: SkeletonLineStyle(
-                            randomLength: true,
-                            alignment: Alignment.centerLeft,
-                            height: 14,
-                            borderRadius: BorderRadius.circular(8),
-                          )),
-                    ),
-                    SkeletonParagraph(
-                      style: SkeletonParagraphStyle(
-                          lines: 1,
-                          lineStyle: SkeletonLineStyle(
-                            randomLength: true,
-                            alignment: Alignment.centerLeft,
-                            height: 14,
-                            borderRadius: BorderRadius.circular(8),
-                          )),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        isLoading: isLoading,
-        child: const SizedBox(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ShaDowBoxContainer(
+//       margin: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+//       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+//       child: AppSkeleton(
+//         skeleton: SkeletonItem(
+//           child: Row(
+//             children: [
+//               const SkeletonAvatar(
+//                 style: SkeletonAvatarStyle(
+//                     width: 50,
+//                     height: 50,
+//                     borderRadius: BorderRadius.all(Radius.circular(40))),
+//               ),
+//               const SizedBox(width: 12),
+//               Expanded(
+//                 child: Column(
+//                   children: [
+//                     SkeletonParagraph(
+//                       style: SkeletonParagraphStyle(
+//                           lines: 1,
+//                           lineStyle: SkeletonLineStyle(
+//                             randomLength: true,
+//                             alignment: Alignment.centerLeft,
+//                             height: 14,
+//                             borderRadius: BorderRadius.circular(8),
+//                           )),
+//                     ),
+//                     SkeletonParagraph(
+//                       style: SkeletonParagraphStyle(
+//                           lines: 1,
+//                           lineStyle: SkeletonLineStyle(
+//                             randomLength: true,
+//                             alignment: Alignment.centerLeft,
+//                             height: 14,
+//                             borderRadius: BorderRadius.circular(8),
+//                           )),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         isLoading: isLoading,
+//         child: const SizedBox(),
+//       ),
+//     );
+//   }
+// }

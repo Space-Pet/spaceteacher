@@ -15,6 +15,7 @@ export 'package:hive/hive.dart';
 export 'package:hive_flutter/hive_flutter.dart';
 export 'package:image_gallery_saver/image_gallery_saver.dart';
 export 'package:image_picker/image_picker.dart';
+export 'package:intl/intl.dart';
 export 'package:loader_overlay/loader_overlay.dart';
 export 'package:url_launcher/url_launcher.dart';
 

@@ -1,6 +1,6 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
+
 
 part 'bus_schedule.freezed.dart';
 

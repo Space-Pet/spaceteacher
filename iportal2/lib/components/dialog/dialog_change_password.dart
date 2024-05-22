@@ -128,10 +128,10 @@ class DialogChangePassword {
                               ),
                               ElevatedButton(
                                 style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color?>(
+                                  backgroundColor: WidgetStateProperty.all<Color?>(
                                     Colors.white,
                                   ),
-                                  side: MaterialStateProperty.all<BorderSide>(
+                                  side: WidgetStateProperty.all<BorderSide>(
                                     const BorderSide(color: Colors.grey),
                                   ),
                                 ),

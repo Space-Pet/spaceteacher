@@ -1,16 +1,21 @@
+import 'package:core/core.dart';
+import 'package:core/data/models/student_fees.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_text_styles.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/dialog/show_dialog.dart';
+import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 import 'package:iportal2/screens/fee_plan/models/tariff_model.dart';
+import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_requested.dart';
 
 class TabBarViewAll extends StatefulWidget {
   const TabBarViewAll({
     super.key,
+    required this.studentFeesData,
   });
-
+  final StudentFeesResponse studentFeesData;
   @override
   State<TabBarViewAll> createState() => _TabBarViewAll();
 }
@@ -18,90 +23,109 @@ class TabBarViewAll extends StatefulWidget {
 class _TabBarViewAll extends State<TabBarViewAll> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...List.generate(
-                  feePlanList.length,
-                  (index) => TariffRadioItemWidget(
-                    planItem: FeePlanItem(
-                        id: feePlanList[index].id,
-                        title: feePlanList[index].title,
-                        paymentType: feePlanList[index].paymentType,
-                        oneTimePayment: feePlanList[index].oneTimePayment,
-                        multiTimePayment: feePlanList[index].multiTimePayment),
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'Dịch vụ giáo dục',
-                  style: AppTextStyles.semiBold16(
-                    color: AppColors.brand600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 6,
-                ),
-                ...List.generate(
-                  eduService.length,
-                  (index) => TariffEduServiceItemWidget(
-                    eduServiceItem: EducationServiceItem(
-                        id: eduService[index].id,
-                        title: eduService[index].title,
-                        totalPayment: eduService[index].totalPayment,
-                        payDue: eduService[index].payDue),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 44,
-          child: RoundedButton(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const ShowDialog(
-                      title: 'Đã gửi yêu cầu đến trường.',
-                      textConten:
-                          'Quý cha mẹ học sinh vui lòng chờ nhân viên trường kiểm tra và áp giảm giá (nếu có)',
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Color(0xFFECFDF3),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Color(0xFFD1FADF),
-                          child: Icon(
-                            Icons.done,
-                            color: AppColors.green600,
-                          ),
-                        ),
-                      ),
-                    );
-                  });
-            },
-            borderRadius: 70,
-            padding: EdgeInsets.zero,
-            buttonColor: AppColors.red90001,
-            child: Text(
-              'Xác nhận biểu phí',
-              style: AppTextStyles.semiBold16(
-                color: AppColors.white,
+    return BlocBuilder<FeePlanBloc, FeePlanState>(
+      builder: (context, state) {
+        final it = state.studentFeesData?.data;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              // child: SingleChildScrollView(
+              //   physics: const AlwaysScrollableScrollPhysics(),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       ...List.generate(
+              //         feePlanList.length,
+              //         (index) => TariffRadioItemWidget(
+              //           planItem: FeePlanItem(
+              //               id: feePlanList[index].id,
+              //               title: feePlanList[index].title,
+              //               paymentType: feePlanList[index].paymentType,
+              //               oneTimePayment: feePlanList[index].oneTimePayment,
+              //               multiTimePayment: feePlanList[index].multiTimePayment),
+              //         ),
+              //       ),
+              //       const SizedBox(
+              //         height: 12,
+              //       ),
+              //       Text(
+              //         'Dịch vụ giáo dục',
+              //         style: AppTextStyles.semiBold16(
+              //           color: AppColors.brand600,
+              //         ),
+              //       ),
+              //       const SizedBox(
+              //         height: 6,
+              //       ),
+              //       ...List.generate(
+              //         eduService.length,
+              //         (index) => TariffEduServiceItemWidget(
+              //           eduServiceItem: EducationServiceItem(
+              //               id: eduService[index].id,
+              //               title: eduService[index].title,
+              //               totalPayment: eduService[index].totalPayment,
+              //               payDue: eduService[index].payDue),
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
+              child: ListView(
+                children: [
+                  if (!isNullOrEmpty(it?.sp1_001))
+                    FeeCategoryWidget(category: it?.sp1_001 ?? FeeCategory()),
+                  if (!isNullOrEmpty(it?.sp1_002))
+                    FeeCategoryWidget(category: it?.sp1_002 ?? FeeCategory()),
+                  if (!isNullOrEmpty(it?.sp1_003))
+                    FeeCategoryWidget(category: it?.sp1_003 ?? FeeCategory()),
+                  if (!isNullOrEmpty(it?.sp1_004))
+                    FeeCategoryWidget(category: it?.sp1_004 ?? FeeCategory()),
+                  if (!isNullOrEmpty(it?.sp1_005))
+                    FeeCategoryWidget(category: it?.sp1_005 ?? FeeCategory()),
+                ],
               ),
             ),
-          ),
-        ),
-      ],
+            SizedBox(
+              height: 44,
+              child: RoundedButton(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ShowDialog(
+                          title: 'Đã gửi yêu cầu đến trường.',
+                          textConten:
+                              'Quý cha mẹ học sinh vui lòng chờ nhân viên trường kiểm tra và áp giảm giá (nếu có)',
+                          child: CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Color(0xFFECFDF3),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Color(0xFFD1FADF),
+                              child: Icon(
+                                Icons.done,
+                                color: AppColors.green600,
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+                },
+                borderRadius: 70,
+                padding: EdgeInsets.zero,
+                buttonColor: AppColors.red90001,
+                child: Text(
+                  'Xác nhận biểu phí',
+                  style: AppTextStyles.semiBold16(
+                    color: AppColors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
