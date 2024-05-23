@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:core/core.dart';
 import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:iportal2/components/dialog/show_dialog.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 
 import 'package:iportal2/screens/fee_plan/widget/card_fee_detail/w_card_topic_fee_detal.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TabBarViewAll extends StatefulWidget {
   const TabBarViewAll({
@@ -25,11 +28,11 @@ class _TabBarViewAll extends State<TabBarViewAll> {
       child: BlocBuilder<FeePlanBloc, FeePlanState>(
         builder: (context, state) {
           final it = state.studentFeesData?.data;
-          if (state.status == FeePlanStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+          if (state.status == FeePlanStatus.error) {
+            return Center(
+              child: Text(state.errorsText ?? ""),
             );
-          } else if (state.status == FeePlanStatus.loaded) {
+          } else {
             return Stack(
               children: [
                 CustomRefresh(
@@ -38,35 +41,38 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                           const GetListFee(),
                         );
                   },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        if (!isNullOrEmpty(it?.sp1_001))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Học phí",
-                              feeCategoryData:
-                                  it?.sp1_001?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_002))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Phí bán trú",
-                              feeCategoryData:
-                                  it?.sp1_002?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_003))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Phí nội trú",
-                              feeCategoryData:
-                                  it?.sp1_003?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_004))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Dịch vụ giáo dục",
-                              feeCategoryData:
-                                  it?.sp1_004?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_005))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Lệ phí",
-                              feeCategoryData:
-                                  it?.sp1_005?.data ?? FeeCategoryData()),
-                      ],
+                  child: Skeletonizer(
+                    enabled: state.status == FeePlanStatus.loading,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (!isNullOrEmpty(it?.sp1_001))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Học phí",
+                                feeCategoryData:
+                                    it?.sp1_001?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_002))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Phí bán trú",
+                                feeCategoryData:
+                                    it?.sp1_002?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_003))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Phí nội trú",
+                                feeCategoryData:
+                                    it?.sp1_003?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_004))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Dịch vụ giáo dục",
+                                feeCategoryData:
+                                    it?.sp1_004?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_005))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Lệ phí",
+                                feeCategoryData:
+                                    it?.sp1_005?.data ?? FeeCategoryData()),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -75,33 +81,56 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                   child: SizedBox(
                     height: 44,
                     child: RoundedButton(
-                      onTap: () {
+                      onTap: () async {
                         context.read<FeePlanBloc>().add(
                               SendFeeRequested(
                                 listItemFee: state.listVerify ?? [],
                               ),
                             );
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const ShowDialog(
-                                title: 'Đã gửi yêu cầu đến trường.',
-                                textConten:
-                                    'Quý cha mẹ học sinh vui lòng chờ nhân viên trường kiểm tra và áp giảm giá (nếu có)',
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Color(0xFFECFDF3),
+                        if (state.status == FeePlanStatus.loaded) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ShowDialog(
+                                  title: 'Đã gửi yêu cầu đến trường.',
+                                  textConten:
+                                      'Quý cha mẹ học sinh vui lòng chờ nhân viên trường kiểm tra và áp giảm giá (nếu có)',
                                   child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Color(0xFFD1FADF),
-                                    child: Icon(
-                                      Icons.done,
-                                      color: AppColors.green600,
+                                    radius: 30,
+                                    backgroundColor: Color(0xFFECFDF3),
+                                    child: CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Color(0xFFD1FADF),
+                                      child: Icon(
+                                        Icons.done,
+                                        color: AppColors.green600,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            });
+                                );
+                              });
+                        } else if (state.status == FeePlanStatus.error) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ShowDialog(
+                                  title: 'Đã xảy ra lỗi.',
+                                  textConten: 'Vui lòng thử lại sau.',
+                                  child: CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Color(0xFFFFF0F0),
+                                    child: CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Color(0xFFFFD1D1),
+                                      child: Icon(
+                                        Icons.error,
+                                        color: AppColors.red90001,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              });
+                        }
                       },
                       borderRadius: 70,
                       padding: EdgeInsets.zero,
@@ -117,12 +146,6 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                 ),
               ],
             );
-          } else if (state.status == FeePlanStatus.error) {
-            return Center(
-              child: Text(state.errorsText ?? ""),
-            );
-          } else {
-            return Container();
           }
         },
       ),

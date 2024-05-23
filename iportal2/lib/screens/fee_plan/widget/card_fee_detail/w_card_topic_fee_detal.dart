@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
+import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/card_fee_detail/w_card_fee_detail.dart';
 

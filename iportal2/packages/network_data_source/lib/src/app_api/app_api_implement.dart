@@ -702,11 +702,24 @@ class AppFetchApi extends AbstractAppFetchApi {
         requestBody: {
           'pupil_id': pupilId,
           'learn_year': learnYear,
-          'list_fee_items': listFee.map((e) => e.toJson()).toList(),
+          'list_fee_items': listFee.map(
+            (e) {
+              return {
+                "pupil_id": pupilId,
+                "school_id": schoolId,
+                "list_fee_detail_id": e.list_fee_detail_id,
+                "list_fee_id": e.list_fee_id,
+                "price": e.price,
+                "unit": int.parse("${e.unit}"),
+                "SPL1_Ma": e.SPL1_Ma,
+                "SPL2_Ma": e.SPL2_Ma,
+                "SPL3_Ma": e.SPL3_Ma,
+                "PB_11T_GROUP": e.PB_11T_GROUP,
+              };
+            },
+          ).toList(),
         },
       );
-      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
-
       return StudentFeesResponse.fromJson(data);
     } catch (e) {
       print('error: $e');

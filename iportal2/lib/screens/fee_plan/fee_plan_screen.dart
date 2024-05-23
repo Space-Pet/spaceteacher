@@ -1,5 +1,5 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:iportal2/app_config/router_configuration.dart';

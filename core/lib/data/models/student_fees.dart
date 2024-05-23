@@ -7,7 +7,7 @@ class StudentFeesResponse {
   final String? status;
   final String? message;
   final int? code;
-  final Data? data;
+  final _Data? data;
 
   StudentFeesResponse({
     this.status,
@@ -24,7 +24,7 @@ class StudentFeesResponse {
     String? status,
     String? message,
     int? code,
-    Data? data,
+    _Data? data,
   }) {
     return StudentFeesResponse(
       status: status ?? this.status,
@@ -41,7 +41,7 @@ class StudentFeesResponse {
 }
 
 @JsonSerializable(explicitToJson: true)
-class Data {
+class _Data {
   @JsonKey(name: 'SP1_001')
   final FeeCategory? sp1_001;
   @JsonKey(name: 'SP1_002')
@@ -53,7 +53,7 @@ class Data {
   @JsonKey(name: 'SP1_005')
   final FeeCategory? sp1_005;
 
-  Data({
+  _Data({
     this.sp1_001,
     this.sp1_002,
     this.sp1_003,
@@ -61,17 +61,17 @@ class Data {
     this.sp1_005,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory _Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
   Map<String, dynamic> toJson() => _$DataToJson(this);
 
-  Data copyWith({
+  _Data copyWith({
     FeeCategory? sp1_001,
     FeeCategory? sp1_002,
     FeeCategory? sp1_003,
     FeeCategory? sp1_004,
     FeeCategory? sp1_005,
   }) {
-    return Data(
+    return _Data(
       sp1_001: sp1_001 ?? this.sp1_001,
       sp1_002: sp1_002 ?? this.sp1_002,
       sp1_003: sp1_003 ?? this.sp1_003,
@@ -166,9 +166,9 @@ class FeeItem {
   final String? PB_11T_GROUP;
   final MetaData? meta_data;
   final String? date;
-  final String? discount;
+  final int? discount;
 
-  final String? grand_total;
+  final int? grand_total;
   final String? status;
 
   FeeItem({
@@ -236,8 +236,8 @@ class FeeItem {
     String? PB_11T_GROUP,
     MetaData? meta_data,
     String? date,
-    String? discount,
-    String? grand_total,
+    int? discount,
+    int? grand_total,
     String? status,
   }) {
     return FeeItem(

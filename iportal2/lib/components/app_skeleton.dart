@@ -14,6 +14,7 @@ class AppSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
+      effect: const ShimmerEffect(),
       enabled: false,
       child: child,
     );
