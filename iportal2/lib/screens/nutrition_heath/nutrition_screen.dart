@@ -10,7 +10,6 @@ import 'package:iportal2/screens/nutrition_heath/bloc/nutrition_bloc.dart';
 import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/card_nutrition.dart';
 import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class NutritionScreen extends StatefulWidget {
   const NutritionScreen({super.key});
@@ -68,44 +67,6 @@ class NutritionScreenState extends State<NutritionScreen> {
                       ),
                     ),
                     child: AppSkeleton(
-                      skeleton: SizedBox(
-                          height: 500,
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.all(0),
-                            itemCount: 5,
-                            itemBuilder: (context, index) => Container(
-                              padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  bottom: index == 4
-                                      ? BorderSide.none
-                                      : const BorderSide(
-                                          color: AppColors.gray300),
-                                ),
-                              ),
-                              child: SkeletonItem(
-                                  child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: SkeletonParagraph(
-                                          style: SkeletonParagraphStyle(
-                                              lineStyle: SkeletonLineStyle(
-                                            randomLength: true,
-                                            height: 10,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          )),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              )),
-                            ),
-                          )),
                       isLoading: isLoading,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

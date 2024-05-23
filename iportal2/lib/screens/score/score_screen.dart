@@ -18,7 +18,6 @@ import 'package:iportal2/screens/score/widgets/moet/moet_view_primary.dart';
 import 'package:iportal2/screens/score/widgets/score_filter.dart';
 import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class ScoreScreen extends StatelessWidget {
   static const String routeName = 'score';
@@ -132,7 +131,6 @@ class ScoreScreen extends StatelessWidget {
                               physics: const AlwaysScrollableScrollPhysics(),
                               child: AppSkeleton(
                                 isLoading: isLoading,
-                                skeleton: const SkeletonScore(),
                                 child: isEmptyData
                                     ? const EmptyScreen(
                                         text: 'Chưa có dữ liệu',
@@ -211,41 +209,41 @@ class ScoreAppbar extends StatelessWidget {
   }
 }
 
-class SkeletonScore extends StatelessWidget {
-  const SkeletonScore({
-    super.key,
-  });
+// class SkeletonScore extends StatelessWidget {
+//   const SkeletonScore({
+//     super.key,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final listSkeleton = List.generate(
-        6,
-        (index) => SkeletonAvatar(
-              style: SkeletonAvatarStyle(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  width: double.infinity,
-                  height: 44,
-                  borderRadius: AppRadius.rounded10),
-            ));
+//   @override
+//   Widget build(BuildContext context) {
+//     final listSkeleton = List.generate(
+//         6,
+//         (index) => SkeletonAvatar(
+//               style: SkeletonAvatarStyle(
+//                   padding: const EdgeInsets.only(bottom: 12),
+//                   width: double.infinity,
+//                   height: 44,
+//                   borderRadius: AppRadius.rounded10),
+//             ));
 
-    return SkeletonItem(
-      child: Column(
-        children: [
-          Column(
-            children: listSkeleton,
-          ),
-          SkeletonAvatar(
-            style: SkeletonAvatarStyle(
-                padding: const EdgeInsets.only(bottom: 12),
-                width: double.infinity,
-                height: 90,
-                borderRadius: AppRadius.rounded10),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//     return SkeletonItem(
+//       child: Column(
+//         children: [
+//           Column(
+//             children: listSkeleton,
+//           ),
+//           SkeletonAvatar(
+//             style: SkeletonAvatarStyle(
+//                 padding: const EdgeInsets.only(bottom: 12),
+//                 width: double.infinity,
+//                 height: 90,
+//                 borderRadius: AppRadius.rounded10),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class ViewScoreSelectedParam {
   final String selectedYear;

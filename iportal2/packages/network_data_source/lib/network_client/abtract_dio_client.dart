@@ -308,6 +308,7 @@ class RestApiClient {
         'RestApiClient - ensureInitialized baseUrl: $baseUrl - method: $method - path: $path');
     if (baseUrl.isNotEmpty && dioBaseUrl != 'https://$baseUrl') {
       dio.options.baseUrl = 'https://$baseUrl';
+      print(dio.options.baseUrl);
     }
   }
 

@@ -1,3 +1,4 @@
+
 import 'package:core/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_all.dart';
@@ -5,6 +6,7 @@ import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_requested.dart';
 
 class TabBarTariff extends StatefulWidget {
   final List<String> tabTitles;
+
   const TabBarTariff({
     super.key,
     required this.tabTitles,
@@ -63,12 +65,13 @@ class _TabBaTariff extends State<TabBarTariff> {
             ),
           ),
           const Expanded(
-              child: TabBarView(
-            children: [
-              TabBarViewAll(),
-              TabBarViewRequested(),
-            ],
-          ))
+            child: TabBarView(
+              children: [
+                TabBarViewAll(),
+                TabBarViewRequested(),
+              ],
+            ),
+          ),
         ],
       ),
     );

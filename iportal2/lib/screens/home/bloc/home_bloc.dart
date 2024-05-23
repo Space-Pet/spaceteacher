@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/notifications/bloc/notification_bloc.dart';
@@ -85,7 +85,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // txtDate: '18-03-2024',
         // userKey: '0723210020',
       );
-
+      if (isNullOrEmpty(exerciseDataList)) {
+        return emit(
+          state.copyWith(
+            exerciseDueDateToday: [],
+            exerciseDueDateDataList: [],
+          ),
+        );
+      }
       if (event.isDueDate) {
         emit(
           state.copyWith(
@@ -120,6 +127,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       viewed: 0,
       orderBy: NotificationOrderBy.desc.value,
     );
+    if (isNullOrEmpty(notificationData.data)) return emit(state.copyWith());
     emit(state.copyWith(
         notificationData: notificationData, statusNoti: HomeStatus.success));
   }
@@ -134,6 +142,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // pupilId: '10044568',
         pupilId: user.pupil_id.toString(),
       );
+      if (isNullOrEmpty(albumData)) return emit(state.copyWith());
       emit(state.copyWith(
         albumData: albumData,
         statusAlbum: HomeStatus.success,

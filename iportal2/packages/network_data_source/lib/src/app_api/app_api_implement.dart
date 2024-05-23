@@ -1,4 +1,6 @@
+import 'package:core/core.dart';
 import 'package:core/data/models/models.dart';
+import 'package:core/data/models/student_fees.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class AppFetchApi extends AbstractAppFetchApi {
@@ -76,8 +78,8 @@ class AppFetchApi extends AbstractAppFetchApi {
         '/api/v1/member/announce/notifications?orderBy=$orderBy&$viewedParam',
         headers: headers,
       );
-
       final notiData = NotificationData.fromMap(res['data']);
+      if (isNullOrEmpty(notiData)) return NotificationData.empty();
       return notiData;
     } catch (e) {
       print(e);
@@ -647,6 +649,68 @@ class AppFetchApi extends AbstractAppFetchApi {
       return MessageDetail.fromJson(jsonData);
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<StudentFeesResponse> getListFee(
+      {required String schoolBrand,
+      required int schoolId,
+      required int pupilId,
+      required String learnYear}) async {
+    try {
+      final data = await _authRestClient.doHttpGet(
+          '/api/v1/member/tuition-fees/pupil?pupil_id=$pupilId&learn_year=$learnYear',
+          headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
+      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
+
+      return StudentFeesResponse.fromJson(data);
+    } catch (e) {
+      print('error: $e');
+      return StudentFeesResponse();
+    }
+  }
+
+  Future<StudentFeesResponse> getListFeeRequested(
+      {required String schoolBrand,
+      required int schoolId,
+      required int pupilId,
+      required String learnYear}) async {
+    try {
+      final data = await _authRestClient.doHttpGet(
+          '/api/v1/member/tuition-fees/requested?pupil_id=$pupilId&learn_year=$learnYear',
+          headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
+      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
+
+      return StudentFeesResponse.fromJson(data);
+    } catch (e) {
+      print('error: $e');
+      return StudentFeesResponse();
+    }
+  }
+
+  Future<StudentFeesResponse> postFeeRequested({
+    required String schoolBrand,
+    required int schoolId,
+    required int pupilId,
+    required String learnYear,
+    required List<FeeItem> listFee,
+  }) async {
+    try {
+      final data = await _authRestClient.doHttpPost(
+        url: '/api/v1/member/tuition-fees/pupil/mass-select-temp',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+        requestBody: {
+          'pupil_id': pupilId,
+          'learn_year': learnYear,
+          'list_fee_items': listFee.map((e) => e.toJson()).toList(),
+        },
+      );
+      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
+
+      return StudentFeesResponse.fromJson(data);
+    } catch (e) {
+      print('error: $e');
+      return StudentFeesResponse();
     }
   }
 }

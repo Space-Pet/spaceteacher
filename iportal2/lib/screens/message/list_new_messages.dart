@@ -1,7 +1,6 @@
-import 'package:core/data/models/models.dart';
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
@@ -11,7 +10,6 @@ import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/screens/message/chat_room.dart';
 import 'package:iportal2/screens/message/conponents/card_messages.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 import '../../common_bloc/current_user/bloc/current_user_bloc.dart';
 
@@ -70,51 +68,6 @@ class _ListNewMessagesViewState extends State<ListNewMessagesView> {
                       Expanded(
                         child: AppSkeleton(
                           isLoading: isLoading,
-                          skeleton: Container(
-                              decoration: const BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  topRight: Radius.circular(30),
-                                ),
-                              ),
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(0),
-                                itemCount: 5,
-                                itemBuilder: (context, index) => Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                                  decoration: BoxDecoration(
-                                    border: Border(
-                                      bottom: index == 4
-                                          ? BorderSide.none
-                                          : const BorderSide(
-                                              color: AppColors.gray300),
-                                    ),
-                                  ),
-                                  child: SkeletonItem(
-                                      child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: SkeletonParagraph(
-                                              style: SkeletonParagraphStyle(
-                                                  lineStyle: SkeletonLineStyle(
-                                                randomLength: true,
-                                                height: 10,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              )),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  )),
-                                ),
-                              )),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 24, horizontal: 16),
