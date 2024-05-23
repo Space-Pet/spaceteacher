@@ -7,7 +7,7 @@ class FieldRowCardDetail extends StatelessWidget {
     super.key,
     required this.title,
     required this.value,
-    this.isLastItem,
+    this.isLastItem = false,
     this.titleStyle,
     this.valueStyle,
   });
@@ -47,11 +47,10 @@ class FieldRowCardDetail extends StatelessWidget {
         if (isLastItem == false)
           const DottedLine(
             dashColor: AppColors.gray300,
-            dashGapLength: 3,
           ),
         if (isLastItem == false)
           const SizedBox(
-            height: 5,
+            height: 10,
           ),
       ],
     );

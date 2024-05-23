@@ -14,6 +14,7 @@ import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
+import 'package:iportal2/screens/school_fee/screen/school_fee_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:local_data_source/local_data_source.dart';
 
@@ -161,6 +162,10 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
         case FeatureKey.tariff:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: FeePlanScreen.routeName);
+          break;
+        case FeatureKey.tuition:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: SchoolFeeScreen.routeName);
           break;
 
         default:
