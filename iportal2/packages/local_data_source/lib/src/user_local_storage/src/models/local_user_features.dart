@@ -15,7 +15,7 @@ enum SchoolBrand {
 
   @HiveField(3)
   iec,
-  
+
   @HiveField(4)
   ischool,
 }
