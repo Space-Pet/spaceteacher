@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:core/core.dart' hide LoginInfo;
 import 'package:network_data_source/network_data_source.dart';
 
-class LoginFailure implements Exception {}
+class LoginFailure implements Exception {
+  LoginFailure({this.message});
+  final String? message;
+}
 
 class GetJobListFailure implements Exception {}
 
@@ -74,6 +78,20 @@ class AuthApi extends AbstractAuthApi {
           "token_firebase": tokenFirebase,
         },
       );
+
+      // Response fail
+      // {
+      //   "status": "fail",
+      //   "message": "Mật khẩu hoặc tài khoản không đúng",
+      //   "code": 201,
+      //   "data": []
+      // }
+      final status = data['status'] as String?;
+      if (status == 'fail') {
+        final message = data['message'] as String?;
+        throw LoginFailure(message: message);
+      }
+
       final dataToken = data['data'] as Map<String, dynamic>;
       final loginInfo = LoginInfo.fromMap(dataToken);
       _client.updateAccessToken(loginInfo.access_token);
@@ -81,7 +99,8 @@ class AuthApi extends AbstractAuthApi {
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
 
-      print(userInfo);
+      Log.d('login: userInfo:');
+      Log.d(userInfo.toMap());
 
       return userInfo;
     } catch (e) {
@@ -125,7 +144,7 @@ class AuthApi extends AbstractAuthApi {
       final data = await _client.doHttpPost(url: '/api/v1/logout');
       final isSuccess = data['status'] == 'success';
       print('isSuccess: $isSuccess');
-      
+
       if (isSuccess) {
         await _client.clearToken();
       }

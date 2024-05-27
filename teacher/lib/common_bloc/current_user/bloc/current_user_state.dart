@@ -1,4 +1,4 @@
-part of 'current_user_bloc.dart';
+part of '../current_user_bloc.dart';
 
 class CurrentUserState extends Equatable {
   const CurrentUserState({
@@ -6,11 +6,11 @@ class CurrentUserState extends Equatable {
     this.background = SchoolBrand.uka,
   });
 
-  final ProfileInfo user;
+  final LocalTeacher user;
   final SchoolBrand background;
 
   CurrentUserState copyWith({
-    ProfileInfo? user,
+    LocalTeacher? user,
     SchoolBrand? background,
   }) {
     return CurrentUserState(

@@ -3,6 +3,7 @@ import 'package:core/presentation/screens/domain/domain_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 import '../../../../app_main_layout.dart';
 import '../../../../resources/assets.gen.dart';
@@ -11,18 +12,20 @@ import '../bloc/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/login';
-  LoginScreen({super.key});
-
-  final loginBloc = LoginBloc(
-    authRepository: Injection.get<AuthRepository>(),
-    domainSaver: Injection.get<DomainSaver>(),
-  );
+  const LoginScreen({super.key});
 
   TextStyle get hintStyle => TextStyle(
       fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey[500]);
 
   @override
   Widget build(BuildContext context) {
+    final loginBloc = LoginBloc(
+      authRepository: Injection.get<AuthRepository>(),
+      domainSaver: Injection.get<DomainSaver>(),
+      userRepository: Injection.get<UserRepository>(),
+      currentUserBloc: context.read<CurrentUserBloc>(),
+    );
+
     final size = MediaQuery.of(context).size;
     return BlocConsumer<LoginBloc, LoginState>(
       bloc: loginBloc,
@@ -30,8 +33,7 @@ class LoginScreen extends StatelessWidget {
         if (state.status == LoginStatus.success) {
           LoadingDialog.hide(context);
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) =>const AppMainLayout())
-          );
+              MaterialPageRoute(builder: (_) => const AppMainLayout()));
         } else if (state.status == LoginStatus.failure) {
           Fluttertoast.showToast(
               msg: 'Tài khoản không hợp lệ',
@@ -217,5 +219,4 @@ class LoginScreen extends StatelessWidget {
       },
     );
   }
-
 }

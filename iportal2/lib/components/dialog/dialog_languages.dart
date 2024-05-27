@@ -59,10 +59,10 @@ class _DialogLanguagesState extends State<DialogLanguages> {
             ),
             ElevatedButton(
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color?>(
+                backgroundColor: MaterialStateProperty.all<Color?>(
                   AppColors.white,
                 ),
-                side: WidgetStateProperty.all<BorderSide>(
+                side: MaterialStateProperty.all<BorderSide>(
                   const BorderSide(color: AppColors.gray300),
                 ),
               ),

@@ -1,12 +1,15 @@
 import 'package:core/core.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
-import 'package:iportal2/screens/school_fee/model/history_school_fee_payment.dart';
 
 class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
   const CardDetailSchoolFeeHistoryPayment({required this.item, super.key});
   final HistorySchoolFeePayment item;
+
+  // Parse dd-MM-yyyy to dd/MM/yyyy
+  String parseDate(String? date) {
+    return date?.toDDMMYYYY?.ddMMyyyySlash ?? '';
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,12 +46,8 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                           AppTextStyles.normal14(color: AppColors.gray700),
                       valueStyle:
                           AppTextStyles.semiBold14(color: AppColors.gray700),
-                      value: DateFormat("dd/MM/yyyy")
-                          .format(
-                            DateFormat("dd-MM-yyyy")
-                                .parse(item.paymentDate ?? ""),
-                          )
-                          .toString(),
+                      value: parseDate(item.paymentDate ?? ""),
+                     
                       isLastItem: false),
                   FieldRowCardDetail(
                       title: "Hình thức thu",
@@ -77,7 +76,6 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.brand600,
                   disabledBackgroundColor: Colors.transparent,
-                  overlayColor: Colors.transparent,
                   padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 ),
                 onPressed: () {},

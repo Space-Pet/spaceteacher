@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class UserApi extends AbstractUserApi {

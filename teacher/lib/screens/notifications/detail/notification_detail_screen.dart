@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:core/presentation/modules/webview/webview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/screens/notifications/detail/bloc/noti_detail_bloc.dart';

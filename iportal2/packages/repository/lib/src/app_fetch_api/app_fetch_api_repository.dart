@@ -1,5 +1,4 @@
 import 'package:core/data/models/models.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:intl/intl.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -53,6 +52,18 @@ class AppFetchApiRepository {
       final scoreData =
           await _appFetchApi.getMoetScore(userKey, txtHocKy, txtYear);
       return scoreData;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ScoreOther> getScoreOther({
+    required String userKey,
+    required String txtYear,
+  }) async {
+    try {
+      final otherScoreData = await _appFetchApi.getScoreOther(userKey, txtYear);
+      return otherScoreData;
     } catch (e) {
       rethrow;
     }

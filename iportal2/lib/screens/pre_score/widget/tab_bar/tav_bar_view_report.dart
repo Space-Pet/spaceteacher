@@ -3,10 +3,8 @@ import 'package:core/resources/assets.gen.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 
 import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:iportal2/screens/pre_score/widget/select_button/score_filter.dart';

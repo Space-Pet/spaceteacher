@@ -1,8 +1,7 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
 
-import 'package:iportal2/screens/fee_plan/widget/card_fee_detail_requested/w_card_fee_detail_requested.dart';
+import 'w_card_fee_detail_requested.dart';
 
 class CardTopicFeeDetailRequested extends StatelessWidget {
   const CardTopicFeeDetailRequested({

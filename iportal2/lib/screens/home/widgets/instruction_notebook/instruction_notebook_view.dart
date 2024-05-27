@@ -1,10 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
-
-import 'package:iportal2/components/app_skeleton.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
@@ -181,7 +177,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                                     style: AppTextStyles.normal14(
                                         color: AppColors.gray600)),
                                 const SizedBox(height: 8),
-                                Text(DateFormat('dd').format(now),
+                                Text(now.dd,
                                     style: AppTextStyles.custom(
                                       color: AppColors.gray600,
                                       fontWeight: FontWeight.w700,
@@ -190,7 +186,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                                     )),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '${DateFormat('MM').format(now)} / ${now.year}',
+                                  '${now.MM} / ${now.year}',
                                   style: AppTextStyles.normal14(
                                       color: AppColors.gray600),
                                 ),
@@ -218,38 +214,3 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
     );
   }
 }
-
-// class InstructrionSkeleton extends StatelessWidget {
-//   const InstructrionSkeleton({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return const SkeletonItem(
-//       child: Expanded(
-//         child: Column(
-//           children: [
-//             Expanded(
-//               child: SkeletonAvatar(
-//                 style: SkeletonAvatarStyle(width: double.infinity),
-//               ),
-//             ),
-//             SizedBox(height: 8),
-//             Expanded(
-//               child: SkeletonAvatar(
-//                 style: SkeletonAvatarStyle(width: double.infinity),
-//               ),
-//             ),
-//             SizedBox(height: 8),
-//             Expanded(
-//               child: SkeletonAvatar(
-//                 style: SkeletonAvatarStyle(width: double.infinity),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

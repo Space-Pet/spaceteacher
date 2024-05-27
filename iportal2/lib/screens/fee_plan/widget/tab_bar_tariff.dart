@@ -1,4 +1,3 @@
-
 import 'package:core/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_all.dart';

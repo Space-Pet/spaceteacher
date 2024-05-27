@@ -26,6 +26,19 @@ function flutter_pub_add() {
 	flutter pub get
 }
 
+function flutter_pub_get() {
+	cd packages
+	for d in */ ; do
+		echo "run in $d directory"
+		cd $d
+		flutter pub get
+		cd ../
+	done
+	cd ../
+	echo "run flutter pub get in $(pwd)"
+	flutter pub get
+}
+
 function run_clean() {
 	echo "================== Clean =================="
 	flutter clean
@@ -53,7 +66,7 @@ function run_clean_packages() {
 
 function main() {
 	echo "Choose function to run:"
-	select app in "run_pub_gen" "clean" "flutter pub add"; do
+	select app in "run_pub_gen" "clean" "flutter pub add" "flutter pub get"; do
 		case $app in
 			"run_pub_gen")
 				run_pub_gen
@@ -65,6 +78,10 @@ function main() {
 				;;
 			"flutter pub add")
 				flutter_pub_add
+				break
+				;;
+			"flutter pub get")
+				flutter_pub_get
 				break
 				;;
 			*)

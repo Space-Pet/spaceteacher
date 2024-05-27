@@ -11,15 +11,12 @@ import 'package:repository/repository.dart';
 
 void bootstrap({
   required AuthApi authApi,
-  required AbstractAuthLocalStorage authLocalStorage,
   required UserApi userApi,
   required AppFetchApi appFetchApi,
   required UserLocalStorage userLocalStorage,
 }) async {
-  
   Injector.init(
     authApi: authApi,
-    authLocalStorage: authLocalStorage,
     userApi: userApi,
     appFetchApi: appFetchApi,
     userLocalStorage: userLocalStorage,

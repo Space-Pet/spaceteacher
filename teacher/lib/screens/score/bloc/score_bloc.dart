@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';

@@ -120,8 +120,8 @@ class _PhoneUpdateState extends State<PhoneUpdate> {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        WidgetStateProperty.all<Color?>(AppColors.white),
-                    side: WidgetStateProperty.all<BorderSide>(
+                        MaterialStateProperty.all<Color?>(AppColors.white),
+                    side: MaterialStateProperty.all<BorderSide>(
                       const BorderSide(color: AppColors.gray300),
                     ),
                   ),

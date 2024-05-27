@@ -19,9 +19,10 @@ import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
-import 'package:iportal2/screens/school_fee/screen/school_fee_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
+
+import '../screens/school_fee/screen/school_fee_screen.dart';
 
 class CustomRouter {
   static PageRouteBuilder transitionAnimation({

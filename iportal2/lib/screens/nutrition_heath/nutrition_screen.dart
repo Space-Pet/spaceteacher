@@ -1,14 +1,12 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/nutrition_heath/bloc/nutrition_bloc.dart';
 import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/card_nutrition.dart';
-import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
 
 class NutritionScreen extends StatefulWidget {

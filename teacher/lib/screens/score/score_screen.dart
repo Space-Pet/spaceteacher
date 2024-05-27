@@ -1,12 +1,10 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
 import 'package:teacher/components/dropdown/dropdown.dart';
@@ -16,9 +14,7 @@ import 'package:teacher/screens/score/widgets/moet/moet_view.dart';
 import 'package:teacher/screens/score/widgets/moet/moet_view_primary.dart';
 import 'package:teacher/screens/score/widgets/score_filter.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
-import '../../components/empty_screen.dart';
 
 class ScoreScreen extends StatelessWidget {
   static const String routeName = 'score';
@@ -132,7 +128,6 @@ class ScoreScreen extends StatelessWidget {
                               physics: const AlwaysScrollableScrollPhysics(),
                               child: AppSkeleton(
                                 isLoading: isLoading,
-                                skeleton: const SkeletonScore(),
                                 child: isEmptyData
                                     ? const EmptyScreen(
                                         text: 'Chưa có dữ liệu',
@@ -207,42 +202,6 @@ class ScoreAppbar extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class SkeletonScore extends StatelessWidget {
-  const SkeletonScore({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final listSkeleton = List.generate(
-        6,
-        (index) => SkeletonAvatar(
-              style: SkeletonAvatarStyle(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  width: double.infinity,
-                  height: 44,
-                  borderRadius: AppRadius.rounded10),
-            ));
-
-    return SkeletonItem(
-      child: Column(
-        children: [
-          Column(
-            children: listSkeleton,
-          ),
-          SkeletonAvatar(
-            style: SkeletonAvatarStyle(
-                padding: const EdgeInsets.only(bottom: 12),
-                width: double.infinity,
-                height: 90,
-                borderRadius: AppRadius.rounded10),
-          ),
-        ],
-      ),
     );
   }
 }

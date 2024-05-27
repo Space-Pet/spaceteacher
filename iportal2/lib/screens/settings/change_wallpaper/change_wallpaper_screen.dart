@@ -1,14 +1,11 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/check_box/check_box.dart';
 
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:local_data_source/local_data_source.dart';
 import 'package:repository/repository.dart';
 
 import '../../../resources/assets.gen.dart';
@@ -86,9 +83,9 @@ class ChangeWallpaperScreen extends StatelessWidget {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      WidgetStateProperty.all<Color>(
+                                      MaterialStateProperty.all<Color>(
                                           AppColors.redMenu),
-                                  shape: WidgetStateProperty.all<
+                                  shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25.0),

@@ -3,16 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dropdown/dropdown_subject.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/exercise_notice/bloc/exercise_bloc.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
@@ -24,11 +20,11 @@ class ExerciseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
+
 
     return BlocProvider(
       create: (context) => ExerciseBloc(
-        todayString: formatDateDrill.format(DateTime.now()),
+        todayString: DateTime.now().ddMMyyyyVN,
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
       ),
@@ -157,47 +153,3 @@ class ExerciseScreenView extends StatelessWidget {
     );
   }
 }
-
-// class ExerciseSkeleton extends StatelessWidget {
-//   const ExerciseSkeleton({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//         height: 500,
-//         child: ListView.builder(
-//           physics: const NeverScrollableScrollPhysics(),
-//           padding: const EdgeInsets.all(0),
-//           itemCount: 5,
-//           itemBuilder: (context, index) => Container(
-//             margin: const EdgeInsets.only(bottom: 16),
-//             padding: const EdgeInsets.fromLTRB(8, 12, 8, 12),
-//             decoration: BoxDecoration(
-//               borderRadius: AppRadius.rounded14,
-//               border: Border.all(color: AppColors.gray300),
-//             ),
-//             child: SkeletonItem(
-//                 child: Column(
-//               children: [
-//                 Row(
-//                   children: [
-//                     Expanded(
-//                       child: SkeletonParagraph(
-//                         style: SkeletonParagraphStyle(
-//                             lineStyle: SkeletonLineStyle(
-//                           randomLength: true,
-//                           height: 10,
-//                           borderRadius: BorderRadius.circular(8),
-//                         )),
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ],
-//             )),
-//           ),
-//         ));
-//   }
-// }

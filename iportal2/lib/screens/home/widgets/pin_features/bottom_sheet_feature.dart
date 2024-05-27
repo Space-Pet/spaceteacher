@@ -1,4 +1,4 @@
-import 'package:core/common/utils/snackbar.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
@@ -14,9 +14,9 @@ import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
 import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
-import 'package:iportal2/screens/school_fee/screen/school_fee_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
-import 'package:local_data_source/local_data_source.dart';
+
+import '../../../school_fee/screen/school_fee_screen.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({

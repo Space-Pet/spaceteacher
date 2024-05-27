@@ -1237,9 +1237,9 @@ class $AssetsIconsFeaturesGen {
   SvgGenImage get highSAlarm =>
       const SvgGenImage('assets/icons/features/highS_alarm.svg');
 
-  /// File path: assets/icons/features/highS_attendance copy.svg
-  SvgGenImage get highSAttendanceCopy =>
-      const SvgGenImage('assets/icons/features/highS_attendance copy.svg');
+  /// File path: assets/icons/features/highS_attend_time.svg
+  SvgGenImage get highSAttendTime =>
+      const SvgGenImage('assets/icons/features/highS_attend_time.svg');
 
   /// File path: assets/icons/features/highS_attendance.svg
   SvgGenImage get highSAttendance =>
@@ -1457,7 +1457,7 @@ class $AssetsIconsFeaturesGen {
         healthCopy,
         health,
         highSAlarm,
-        highSAttendanceCopy,
+        highSAttendTime,
         highSAttendance,
         highSBusCopy,
         highSBus,
@@ -1568,69 +1568,33 @@ class $AssetsImagesLogoAppGen {
 class $AssetsImagesMainBackgroundGen {
   const $AssetsImagesMainBackgroundGen();
 
-  /// File path: assets/images/main_background/iec_highS copy.png
-  AssetGenImage get iecHighSCopy =>
-      const AssetGenImage('assets/images/main_background/iec_highS copy.png');
-
   /// File path: assets/images/main_background/iec_highS.png
   AssetGenImage get iecHighS =>
       const AssetGenImage('assets/images/main_background/iec_highS.png');
-
-  /// File path: assets/images/main_background/iec_preS copy.png
-  AssetGenImage get iecPreSCopy =>
-      const AssetGenImage('assets/images/main_background/iec_preS copy.png');
 
   /// File path: assets/images/main_background/iec_preS.png
   AssetGenImage get iecPreS =>
       const AssetGenImage('assets/images/main_background/iec_preS.png');
 
-  /// File path: assets/images/main_background/ischool_highS copy.png
-  AssetGenImage get ischoolHighSCopy => const AssetGenImage(
-      'assets/images/main_background/ischool_highS copy.png');
-
   /// File path: assets/images/main_background/ischool_highS.png
   AssetGenImage get ischoolHighS =>
       const AssetGenImage('assets/images/main_background/ischool_highS.png');
-
-  /// File path: assets/images/main_background/ischool_preS copy.png
-  AssetGenImage get ischoolPreSCopy => const AssetGenImage(
-      'assets/images/main_background/ischool_preS copy.png');
 
   /// File path: assets/images/main_background/ischool_preS.png
   AssetGenImage get ischoolPreS =>
       const AssetGenImage('assets/images/main_background/ischool_preS.png');
 
-  /// File path: assets/images/main_background/sga_preS copy.png
-  AssetGenImage get sgaPreSCopy =>
-      const AssetGenImage('assets/images/main_background/sga_preS copy.png');
-
   /// File path: assets/images/main_background/sga_preS.png
   AssetGenImage get sgaPreS =>
       const AssetGenImage('assets/images/main_background/sga_preS.png');
-
-  /// File path: assets/images/main_background/sna_highS copy.png
-  AssetGenImage get snaHighSCopy =>
-      const AssetGenImage('assets/images/main_background/sna_highS copy.png');
 
   /// File path: assets/images/main_background/sna_highS.png
   AssetGenImage get snaHighS =>
       const AssetGenImage('assets/images/main_background/sna_highS.png');
 
-  /// File path: assets/images/main_background/sna_preS.png
-  AssetGenImage get snaPreS =>
-      const AssetGenImage('assets/images/main_background/sna_preS.png');
-
-  /// File path: assets/images/main_background/uka_highS copy.png
-  AssetGenImage get ukaHighSCopy =>
-      const AssetGenImage('assets/images/main_background/uka_highS copy.png');
-
   /// File path: assets/images/main_background/uka_highS.png
   AssetGenImage get ukaHighS =>
       const AssetGenImage('assets/images/main_background/uka_highS.png');
-
-  /// File path: assets/images/main_background/uka_preS copy.png
-  AssetGenImage get ukaPreSCopy =>
-      const AssetGenImage('assets/images/main_background/uka_preS copy.png');
 
   /// File path: assets/images/main_background/uka_preS.png
   AssetGenImage get ukaPreS =>
@@ -1638,22 +1602,13 @@ class $AssetsImagesMainBackgroundGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        iecHighSCopy,
         iecHighS,
-        iecPreSCopy,
         iecPreS,
-        ischoolHighSCopy,
         ischoolHighS,
-        ischoolPreSCopy,
         ischoolPreS,
-        sgaPreSCopy,
         sgaPreS,
-        snaHighSCopy,
         snaHighS,
-        snaPreS,
-        ukaHighSCopy,
         ukaHighS,
-        ukaPreSCopy,
         ukaPreS
       ];
 }

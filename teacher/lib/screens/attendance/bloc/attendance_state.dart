@@ -13,7 +13,6 @@ enum AttendanceStatus {
 }
 
 class AttendanceState extends Equatable {
-  final ProfileInfo user;
   final List<AttendanceDay>? attendanceday;
   final AttendanceWeek? attendanceWeek;
   final AttendanceWeek? attendanceMonth;
@@ -21,8 +20,7 @@ class AttendanceState extends Equatable {
   final DateTime? selectDate;
   final String? type;
   const AttendanceState(
-      {required this.user,
-      this.selectDate,
+      {this.selectDate,
       this.type,
       this.attendanceday,
       this.attendanceWeek,
@@ -34,7 +32,6 @@ class AttendanceState extends Equatable {
         attendanceStatus,
         attendanceday,
         selectDate,
-        user,
         attendanceWeek,
         attendanceMonth
       ];
@@ -42,7 +39,6 @@ class AttendanceState extends Equatable {
   AttendanceState copyWith(
       {List<AttendanceDay>? attendanceday,
       AttendanceStatus? attendanceStatus,
-      ProfileInfo? user,
       String? type,
       DateTime? date,
       AttendanceWeek? attendanceWeek,
@@ -52,7 +48,6 @@ class AttendanceState extends Equatable {
         selectDate: date ?? this.selectDate,
         attendanceMonth: attendanceMonth ?? this.attendanceMonth,
         attendanceWeek: attendanceWeek ?? this.attendanceWeek,
-        user: user ?? this.user,
         attendanceStatus: attendanceStatus ?? this.attendanceStatus,
         attendanceday: attendanceday ?? this.attendanceday);
   }

@@ -9,7 +9,7 @@ class WeeklyLessonData {
     if (map['weeklylesson_data'] == null) {
       return WeeklyLessonData(lessonDataList: []);
     }
-    
+
     return WeeklyLessonData(
       lessonDataList: List<LessonData>.from(
         map['weeklylesson_data']?.map(
@@ -40,16 +40,16 @@ class WeeklyLessonData {
 
 class LessonData {
   final Ngay ngay;
-  final List<Data> dataList;
+  final List<LessonDataItem> dataList;
 
   LessonData({required this.ngay, required this.dataList});
 
   factory LessonData.fromMap(Map<String, dynamic> map) {
     return LessonData(
       ngay: Ngay.fromMap(map['Ngay']),
-      dataList: List<Data>.from(
+      dataList: List<LessonDataItem>.from(
         map['Data']?.map(
-          (x) => Data.fromMap(x),
+          (x) => LessonDataItem.fromMap(x),
         ),
       ),
     );
@@ -110,7 +110,7 @@ class Ngay {
   String toString() => 'Ngay(date: $date, dateName: $dateName, day: $day)';
 }
 
-class Data {
+class LessonDataItem {
   final String lessonId;
   final String? lessonName;
   final String subjectId;
@@ -129,7 +129,7 @@ class Data {
   final String tietStatusNote;
   final List<LessonRank> lessonRank;
 
-  Data({
+  LessonDataItem({
     required this.lessonId,
     this.lessonName,
     required this.subjectId,
@@ -149,8 +149,8 @@ class Data {
     required this.lessonRank,
   });
 
-  factory Data.fromMap(Map<String, dynamic> map) {
-    return Data(
+  factory LessonDataItem.fromMap(Map<String, dynamic> map) {
+    return LessonDataItem(
       lessonId: map['lesson_id'],
       lessonName: map['lesson_name'],
       subjectId: map['subject_id'],
@@ -201,7 +201,8 @@ class Data {
     };
   }
 
-  factory Data.fromJson(String source) => Data.fromMap(json.decode(source));
+  factory LessonDataItem.fromJson(String source) =>
+      LessonDataItem.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
 

@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'nutrition_event.dart';
 part 'nutrition_state.dart';
@@ -17,7 +16,7 @@ class NutritionBloc extends Bloc<NutritionEvent, NutritionState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(NutritionState(user: userRepository.notSignedIn())) {
+      : super(const NutritionState()) {
     on<GetNutrition>(_onGetNutrition);
     add(GetNutrition());
   }

@@ -1,6 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:teacher/app_config/domain_saver.dart';
+import 'package:core/core.dart';
 import 'package:repository/repository.dart';
 
 part 'setting_screen_event.dart';
@@ -28,7 +26,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
     try {
       final isSuccess = await authRepository.logOut();
       if (isSuccess) {
-        final domainSaver = SingletonDomainSaver();
+        final domainSaver = Injection.get<DomainSaver>();
         await domainSaver.clearDomain();
         await userRepository.clearLocalUser();
         emit(

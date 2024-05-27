@@ -15,6 +15,10 @@ class ScoreFetchPrimaryConduct extends ScoreEvent {
   ScoreFetchPrimaryConduct();
 }
 
+class ScoreFetchOtherScore extends ScoreEvent {
+  ScoreFetchOtherScore();
+}
+
 class ScoreTxtTermChange extends ScoreEvent {
   ScoreTxtTermChange(this.txtHocKy);
 

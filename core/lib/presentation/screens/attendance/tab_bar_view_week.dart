@@ -5,7 +5,7 @@ import 'package:timeline_tile/timeline_tile.dart';
 import '../../../data/models/models.dart';
 import '../../../resources/assets.gen.dart';
 import '../../../resources/resources.dart';
-import '../../extentions/date_formatter.dart';
+import '../../extentions/extention.dart';
 
 class CTabBarViewWeek extends StatefulWidget {
   final AttendanceWeek? attendanceWeek;
@@ -45,7 +45,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
 
   int getWeekNumber(DateTime date) {
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    // ignore: unused_local_variable
     final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
     final firstDayOfYear = DateTime(firstDayOfWeek.year);
     final daysOffset = firstDayOfYear.weekday;

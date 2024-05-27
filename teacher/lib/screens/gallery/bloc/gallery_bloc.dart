@@ -1,8 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:local_data_source/local_data_source.dart';
+import 'package:core/core.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 
@@ -34,8 +31,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     final user = currentUserBloc.state.user;
 
     final albumData = await appFetchApiRepo.getAlbum(
-      // pupilId: '10044568',
-      pupilId: user.pupil_id.toString(),
+      user.teacher_id.toString(),
     );
     emit(state.copyWith(
       albumData: albumData,
@@ -45,21 +41,17 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
 
   _onGetPinnedAlbumIdList(
       GalleryGetPinnedAlbumIdList event, Emitter<GalleryState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten()) {
+    if (currentUserBloc.state.user.isKinderGarten) {
       final user = currentUserBloc.state.user;
-      final featuresLocal = await userRepository.getFeatures();
+      final featuresLocal = await userRepository.getLoggedUsers();
 
       final pinnedAlbumIdList = featuresLocal
           ?.firstWhere(
             (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(
-              user_key: '',
-              features: [],
-              pinnedAlbumIdList: [],
-            ),
+            orElse: () => LoggedUser.empty(),
           )
           .pinnedAlbumIdList;
-      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList ?? []));
+      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList));
     }
   }
 

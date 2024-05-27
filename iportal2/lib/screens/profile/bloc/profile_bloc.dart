@@ -17,8 +17,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           studentData: StudentData.empty(),
           parentData: ParentData.empty(),
         )) {
-    on<CurrentUserUpdated>(_onUpdateUser);
+    on<GetProfileInfo>(_onGetProfileData);
+    add(const GetProfileInfo());
 
+    on<GetProfileStudent>(_onGetProfileStudent);
+    on<GetProfileParent>(_onGetProfileParent);
+
+    on<CurrentUserUpdated>(_onUpdateUser);
     on<UpdatePhone>(_updatePhone);
     on<CancelUpdatePhone>(_cancelUpdatePhone);
     on<UpdateStudentPhone>(_onUpdateStudentPhone);
@@ -27,6 +32,55 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   final UserRepository userRepository;
   final CurrentUserBloc currentUserBloc;
+
+  void _onGetProfileData(
+    GetProfileInfo event,
+    Emitter<ProfileState> emit,
+  ) {
+    final isStudent = currentUserBloc.state.user.isStudent();
+
+    if (isStudent) {
+      add(const GetProfileStudent());
+    } else {
+      add(const GetProfileParent());
+    }
+  }
+
+  void _onGetProfileStudent(
+    GetProfileStudent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(profileStatus: ProfileStatus.init));
+      final data = await userRepository.getProfileStudent(
+          pupilId: currentUserBloc.state.user.pupil_id.toString());
+      emit(state.copyWith(
+        profileStatus: ProfileStatus.success,
+        studentData: data,
+      ));
+    } catch (e) {
+      print('err: $e');
+    }
+  }
+
+  void _onGetProfileParent(
+    GetProfileParent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(profileStatus: ProfileStatus.init));
+      final data = await userRepository.getProfileParent(
+          pupilId: currentUserBloc.state.user.pupil_id.toString());
+      emit(state.copyWith(
+        profileStatus: ProfileStatus.success,
+        parentData: data,
+      ));
+
+      add(const GetProfileStudent());
+    } catch (e) {
+      print('err: $e');
+    }
+  }
 
   Future<dynamic> _onUpdateUser(
     CurrentUserUpdated event,

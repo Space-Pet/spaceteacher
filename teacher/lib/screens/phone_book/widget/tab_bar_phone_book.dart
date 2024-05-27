@@ -1,7 +1,7 @@
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/phone_book/widget/tab_bar_view_phone_book.dart';
 
 class TabBarPhoneBook extends StatelessWidget {

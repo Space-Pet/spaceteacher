@@ -14,18 +14,14 @@ class DomainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(Duration.zero, () async {
       SingletonDomainSaver().getDomain().then((value) {
-
         if (value.isNotEmpty) {
           context.push(const LoginScreen());
         }
-        
-      }
-      );
+      });
     });
     return CDomainScreen(
       onDomainSaved: ((isSaved, domain) {
         if (isSaved) {
-     
           context.push(const LoginScreen());
         } else {
           Fluttertoast.showToast(

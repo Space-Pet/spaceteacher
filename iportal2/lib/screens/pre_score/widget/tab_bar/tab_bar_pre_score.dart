@@ -1,7 +1,5 @@
-import 'package:core/data/models/models.dart';
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:iportal2/screens/pre_score/widget/tab_bar/tab_bar_view_comment.dart';
 import 'package:iportal2/screens/pre_score/widget/tab_bar/tav_bar_view_report.dart';

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 
@@ -34,7 +34,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       GetPhoneBookStudent event, Emitter<MessageState> emit) async {
     emit(state.copyWith(messageStatus: MessageStatus.loading));
     final data = await appApiRepository.getPhoneBookStudent(
-        classId: currentUserBloc.state.user.children?.class_id ?? 0,);
+      //TODO: bind API teacher
+      classId: currentUserBloc.state.user.teacher_id,
+    );
     emit(state.copyWith(
         messageStatus: MessageStatus.success, phoneBookStudent: data));
   }

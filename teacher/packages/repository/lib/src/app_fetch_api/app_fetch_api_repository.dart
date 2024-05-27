@@ -2,7 +2,6 @@ import 'package:core/data/models/models.dart';
 import 'package:intl/intl.dart';
 import 'package:network_data_source/network_data_source.dart';
 
-
 import '../models/bus_schedule.dart';
 
 class AppFetchApiRepository {
@@ -182,8 +181,8 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<AlbumData> getAlbum({required String pupilId}) =>
-      _appFetchApi.getAlbum(pupilId: pupilId);
+  Future<AlbumData> getAlbum(String teacherId) =>
+      _appFetchApi.getAlbum(teacherId);
 
   Future<Menu> getMenu({
     required String userKey,

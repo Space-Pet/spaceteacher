@@ -1,8 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:network_data_source/network_data_source.dart';
+import 'package:core/core.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
 part 'attendance_event.dart';
@@ -16,7 +13,7 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(AttendanceState(user: userRepository.notSignedIn())) {
+      : super(const AttendanceState()) {
     on<GetAttendanceDay>(_onGetAttendanceDay);
     on<GetAttendanceWeek>(_onGetAttendanceWeek);
     on<GetAttendanceMonth>(_onGetAttendanceMonth);
@@ -45,8 +42,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
       final data = await appFetchApiRepo.getAttendanceDay(
           type: state.type ?? '',
           date: event.date,
-          pupilId: currentUserBloc.state.user.pupil_id,
-          classId: currentUserBloc.state.user.children?.class_id ?? 0,
+          // TODO: bind api teacher
+          pupilId: currentUserBloc.state.user.teacher_id,
+          classId: currentUserBloc.state.user.teacher_id,
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand);
       emit(state.copyWith(
@@ -65,8 +63,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         attendanceStatus: AttendanceStatus.initWeek,
       ));
       final data = await appFetchApiRepo.getAttendanceWeek(
-          pupilId: currentUserBloc.state.user.pupil_id,
-          classId: currentUserBloc.state.user.children?.class_id ?? 0,
+          // TODO: bind api teacher
+          pupilId: currentUserBloc.state.user.teacher_id,
+          classId: currentUserBloc.state.user.teacher_id,
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand,
           startDate: event.startDate,
@@ -84,8 +83,9 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
     try {
       emit(state.copyWith(attendanceStatus: AttendanceStatus.initMonth));
       final data = await appFetchApiRepo.getAttendanceMonth(
-          pupilId: currentUserBloc.state.user.pupil_id,
-          classId: currentUserBloc.state.user.children?.class_id ?? 0,
+          // TODO: bind api teacher
+          pupilId: currentUserBloc.state.user.teacher_id,
+          classId: currentUserBloc.state.user.teacher_id,
           schoolId: currentUserBloc.state.user.school_id,
           schoolBrand: currentUserBloc.state.user.school_brand,
           startDate: event.startDate,

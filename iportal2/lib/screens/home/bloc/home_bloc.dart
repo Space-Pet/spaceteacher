@@ -1,9 +1,6 @@
 import 'package:core/core.dart';
-
-import 'package:equatable/equatable.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/notifications/bloc/notification_bloc.dart';
-import 'package:local_data_source/local_data_source.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 
@@ -25,6 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         )) {
     on<HomeFetchExercise>(_onFetchExercise);
     add(HomeFetchExercise());
+    on<HomeExerciseSelectDate>(_onSelectDate);
 
     on<HomeFetchNotificationData>(_onFetchNotifications);
     add(HomeFetchNotificationData());
@@ -35,8 +33,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeGetPinnedAlbumIdList>(_onGetPinnedAlbumIdList);
     add(HomeGetPinnedAlbumIdList());
     on<HomeUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
-
-    on<HomeExerciseSelectDate>(_onSelectDate);
 
     on<HomeRefresh>(_onRefresh);
   }
@@ -55,9 +51,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     emit(
-      state.copyWith(
-        exerciseDueDateDataList: exerciseDueDateDataList,
-      ),
+      state.copyWith(exerciseDueDateDataList: exerciseDueDateDataList),
     );
 
     final exerciseInDayDataList = await appFetchApiRepo.getExercises(
@@ -85,14 +79,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // txtDate: '18-03-2024',
         // userKey: '0723210020',
       );
-      if (isNullOrEmpty(exerciseDataList)) {
-        return emit(
-          state.copyWith(
-            exerciseDueDateToday: [],
-            exerciseDueDateDataList: [],
-          ),
-        );
-      }
+
       if (event.isDueDate) {
         emit(
           state.copyWith(
@@ -127,7 +114,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       viewed: 0,
       orderBy: NotificationOrderBy.desc.value,
     );
-    if (isNullOrEmpty(notificationData.data)) return emit(state.copyWith());
     emit(state.copyWith(
         notificationData: notificationData, statusNoti: HomeStatus.success));
   }
@@ -142,7 +128,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // pupilId: '10044568',
         pupilId: user.pupil_id.toString(),
       );
-      if (isNullOrEmpty(albumData)) return emit(state.copyWith());
       emit(state.copyWith(
         albumData: albumData,
         statusAlbum: HomeStatus.success,

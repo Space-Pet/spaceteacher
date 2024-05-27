@@ -1,4 +1,9 @@
 include: package:flutter_lints/flutter.yaml
-
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+linter:
+  rules:
+    - avoid_redundant_argument_values: false
+    - avoid_print: false
+    - prefer_single_quotes: true 
+    - unused_local_variable: false
+    - unused_field: false
+    - non_constant_identifier_names: false

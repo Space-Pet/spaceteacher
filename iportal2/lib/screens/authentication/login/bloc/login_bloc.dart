@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:core/core.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:local_data_source/local_data_source.dart';
+import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'login_event.dart';
@@ -164,7 +163,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           .firstWhere((element) => element.value == user.school_brand);
 
       final userLocal = user.copyWith(
-        features: isNullOrEmpty(listFeatures) ? listFeatures : featuresByType,
+        features:
+            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
         pinnedAlbumIdList: pinnedAlbumIdList,
         background: bgSchoolBrand,
       );
@@ -172,9 +172,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       userRepository.saveUser(userLocal);
       currentUserBloc.add(CurrentUserUpdated(user: userLocal));
       return emit(state.copyWith(status: LoginStatus.success));
-    } catch (e) {
-      emit(state.copyWith(status: LoginStatus.failure));
-      rethrow;
+    } on LoginFailure catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.failure, failureMessage: e.message));
+    } catch (_) {
+      emit(state.copyWith(
+          status: LoginStatus.failure, failureMessage: 'Unknown error'));
     }
   }
 
@@ -235,9 +238,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       userRepository.saveUser(userLocal);
       currentUserBloc.add(CurrentUserUpdated(user: userLocal));
       return emit(state.copyWith(status: LoginStatus.success));
-    } catch (e) {
-      emit(state.copyWith(status: LoginStatus.failure));
-      rethrow;
+    } on LoginFailure catch (e) {
+      emit(state.copyWith(
+          status: LoginStatus.failure, failureMessage: e.message));
+    } catch (_) {
+      emit(state.copyWith(
+          status: LoginStatus.failure, failureMessage: 'Unknown error'));
     }
   }
 }

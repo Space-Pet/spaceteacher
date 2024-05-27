@@ -1,13 +1,9 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/svg.dart';
-
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/weekly_tabs.dart';
 import 'package:iportal2/screens/week_schedule/bloc/week_schedule_bloc.dart';
 import 'package:repository/repository.dart';
@@ -34,10 +30,10 @@ class _WeekScheduleScreenState extends State<WeekScheduleScreen>
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
     weekScheduleBloc.add(GetWeekSchedule(
-        date: DateTime.now(),
-        txtDate: widget.date != null
-            ? widget.date ?? ''
-            : DateFormat('dd-MM-yyy').format(DateTime.now()).toString()));
+      date: DateTime.now(),
+      txtDate:
+          widget.date != null ? widget.date ?? '' : DateTime.now().ddMMyyyyDash,
+    ));
     return BlocProvider.value(
       value: weekScheduleBloc,
       child: const WeekScheduleView(),
@@ -201,13 +197,12 @@ class WeekSelectWidget extends StatefulWidget {
 class _WeekSelectWidgetState extends State<WeekSelectWidget> {
   DateTime now = DateTime.now();
 
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
   late String datePicked;
 
   @override
   void initState() {
     super.initState();
-    datePicked = formatDate.format(DateTime.now());
+    datePicked = DateTime.now().ddMMyyyyDash;
   }
 
   @override
@@ -261,8 +256,7 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
                 );
 
                 if (pickedDate != null) {
-                  String formattedDate =
-                      DateFormat('dd-MM-yyy').format(pickedDate);
+                  String formattedDate = pickedDate.ddMMyyyyDash;
                   setState(() {
                     datePicked = formattedDate;
                     context.read<WeekScheduleBloc>().add(

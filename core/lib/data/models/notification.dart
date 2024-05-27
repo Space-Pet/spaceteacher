@@ -17,13 +17,9 @@ class NotificationData {
         meta: NotificationMeta.empty(),
       );
 
-  factory NotificationData.fromMap(Map<String, dynamic> map) {
-    if (map['data'].isEmpty || map['data'] == null) {
-      return NotificationData(
-        data: [],
-        links: NotificationLinks.empty(),
-        meta: NotificationMeta.empty(),
-      );
+  factory NotificationData.fromMap(dynamic map) {
+    if (map == null || map['data'].isEmpty || map['data'] == null) {
+      return NotificationData.empty();
     }
 
     return NotificationData(

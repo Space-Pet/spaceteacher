@@ -23,7 +23,7 @@ class HomeState extends Equatable {
   final List<ExerciseItem> exerciseDueDateDataList;
   final List<ExerciseItem> exerciseInDayDataList;
   final AlbumData albumData;
-  final StudentData userData;
+  final TeacherDetail userData;
   final List<int> pinnedAlbumIdList;
 
   final DateTime datePicked;
@@ -60,7 +60,7 @@ class HomeState extends Equatable {
     HomeStatus? statusAlbum,
     AlbumData? albumData,
     List<int>? pinnedAlbumIdList,
-    StudentData? userData,
+    TeacherDetail? userData,
     HomeStatus? profileStatus,
   }) {
     return HomeState(

@@ -1,11 +1,8 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_detail/gallery_detail.dart';
@@ -160,49 +157,3 @@ class ImagesLibrary extends StatelessWidget {
     );
   }
 }
-
-// class HomeGallerySkeleton extends StatelessWidget {
-//   const HomeGallerySkeleton({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       itemCount: 3,
-//       scrollDirection: Axis.horizontal,
-//       itemBuilder: (context, index) => Container(
-//         padding: const EdgeInsets.only(top: 12),
-//         width: 120,
-//         height: 200,
-//         child: Column(
-//           children: [
-//             const SkeletonAvatar(
-//               style: SkeletonAvatarStyle(
-//                   width: 105,
-//                   height: 105,
-//                   borderRadius: BorderRadius.all(Radius.circular(14))),
-//             ),
-//             const SizedBox(height: 4),
-//             Expanded(
-//               child: Column(
-//                 children: [
-//                   SkeletonParagraph(
-//                     style: SkeletonParagraphStyle(
-//                         lines: 2,
-//                         lineStyle: SkeletonLineStyle(
-//                           randomLength: true,
-//                           alignment: Alignment.centerLeft,
-//                           height: 14,
-//                           borderRadius: BorderRadius.circular(8),
-//                         )),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

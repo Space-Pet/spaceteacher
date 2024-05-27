@@ -1,8 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:network_data_source/network_data_source.dart';
+import 'package:core/core.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
 part 'week_schedule_event.dart';
@@ -13,7 +10,7 @@ class WeekScheduleBloc extends Bloc<WeekScheduleEvent, WeekScheduleState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(WeekScheduleState(user: userRepository.notSignedIn())) {
+      : super(const WeekScheduleState()) {
     on<GetWeekSchedule>(_onGetWeekSchedule);
   }
   final AppFetchApiRepository appFetchApiRepo;

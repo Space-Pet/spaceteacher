@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:core/resources/resources.dart';
 import 'package:teacher/screens/authentication/domain/view/domain_screen.dart';
 import 'package:teacher/screens/splash/bloc/splash_cubit.dart';

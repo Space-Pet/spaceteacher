@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/menu/bloc/menu_bloc.dart';
 import 'package:iportal2/screens/menu/widgets/tab_menu.dart';
 import 'package:repository/repository.dart';
@@ -23,7 +21,7 @@ class MenuScreen extends StatelessWidget {
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
     menuBloc.add(GetMenu(
-      txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+      txtDate: DateTime.now().ddMMyyyyDash,
       date: DateTime.now(),
     ));
     return BlocProvider.value(
@@ -41,7 +39,7 @@ class MenuView extends StatefulWidget {
 }
 
 class _MenuViewState extends State<MenuView> {
-  late String currentDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
+  late String currentDate = DateTime.now().ddMMyyyyDash;
   List<DataMenu?>? filteredData;
 
   @override
@@ -85,8 +83,7 @@ class _MenuViewState extends State<MenuView> {
                         child: CustomRefresh(
                           onRefresh: () async {
                             context.read<MenuBloc>().add(GetMenu(
-                                  txtDate: DateFormat('dd-MM-yyyy')
-                                      .format(DateTime.now()),
+                                  txtDate: DateTime.now().ddMMyyyyDash,
                                   date: DateTime.now(),
                                 ));
                           },
@@ -147,17 +144,17 @@ class SelectDate extends StatefulWidget {
 class _SelectDateState extends State<SelectDate> {
   DateTime now = DateTime.now();
 
-  DateFormat formatDate = DateFormat("EEEE, dd/MM/yyyy", 'vi_VN');
-  DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
+  // DateFormat formatDate = DateFormat("EEEE, dd/MM/yyyy", 'vi_VN');
+  // DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
   late String datePickedFormat;
 
   @override
   void initState() {
     super.initState();
     if (widget.datePicked != null) {
-      datePickedFormat = formatDate.format(widget.datePicked!);
+      datePickedFormat = widget.datePicked!.EEEEddMMyyyyVN;
     } else {
-      datePickedFormat = formatDate.format(now);
+      datePickedFormat = now.EEEEddMMyyyyVN;
     }
   }
 
@@ -192,7 +189,7 @@ class _SelectDateState extends State<SelectDate> {
         );
 
         if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
+          String formattedDate = pickedDate.EEEEddMMyyyyVN;
           setState(() {
             datePickedFormat = formattedDate;
           });
@@ -266,13 +263,12 @@ class MenuSelectWidget extends StatefulWidget {
 class _MenuSelectWidgetState extends State<MenuSelectWidget> {
   DateTime now = DateTime.now();
 
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
   late String datePicked;
 
   @override
   void initState() {
     super.initState();
-    datePicked = formatDate.format(DateTime.now());
+    datePicked = DateTime.now().ddMMyyyyDash;
   }
 
   @override
@@ -331,8 +327,7 @@ class _MenuSelectWidgetState extends State<MenuSelectWidget> {
                     );
 
                     if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('dd-MM-yyy').format(pickedDate);
+                      String formattedDate = pickedDate.ddMMyyyyDash;
                       setState(() {
                         datePicked = formattedDate;
                         context.read<MenuBloc>().add(

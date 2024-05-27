@@ -36,8 +36,8 @@ class ShowDialogLogout {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor:
-                            WidgetStateProperty.all<Color?>(AppColors.white),
-                        side: WidgetStateProperty.all<BorderSide>(
+                            MaterialStateProperty.all<Color?>(AppColors.white),
+                        side: MaterialStateProperty.all<BorderSide>(
                           const BorderSide(color: AppColors.gray400),
                         ),
                       ),
@@ -55,7 +55,7 @@ class ShowDialogLogout {
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor:
-                          WidgetStateProperty.all<Color?>(AppColors.red900),
+                          MaterialStateProperty.all<Color?>(AppColors.red900),
                     ),
                     onPressed: onLogout,
                     child: const SizedBox(

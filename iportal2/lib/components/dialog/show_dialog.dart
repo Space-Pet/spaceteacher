@@ -49,8 +49,8 @@ class ShowDialog extends StatelessWidget {
               child: ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor:
-                      WidgetStateProperty.all<Color?>(AppColors.red90001),
-                  side: WidgetStateProperty.all<BorderSide>(
+                      MaterialStateProperty.all<Color?>(AppColors.red90001),
+                  side: MaterialStateProperty.all<BorderSide>(
                     const BorderSide(color: AppColors.red90001),
                   ),
                 ),

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-typedef Json = Map<String, dynamic>;
+import '../../../data/types/types.dart';
 
 abstract class ShowingNotification {
   static late Function(Json? data) onHandleNotification;
@@ -67,10 +67,10 @@ class FlutterLocalShowingNotification extends ShowingNotification {
         ?.requestNotificationsPermission();
 
     channel = const AndroidNotificationChannel(
-      'FixMe_android_push_channel',
-      'FixMe Notification',
+      'Iportal2_android_push_channel',
+      'Iportal2 Notification',
       description:
-          'This channel is used for the notifications of the FixMe application.',
+          'This channel is used for the notifications of the Iportal2 application.',
       importance: Importance.high,
     );
     await flutterLocalNotificationsPlugin

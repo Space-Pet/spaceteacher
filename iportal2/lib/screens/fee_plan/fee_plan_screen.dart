@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
 
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -65,13 +64,12 @@ class SelectDate extends StatefulWidget {
 class _SelectDateState extends State<SelectDate> {
   DateTime now = DateTime.now();
 
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
   late String datePicked;
 
   @override
   void initState() {
     super.initState();
-    datePicked = formatDate.format(now);
+    datePicked = now.ddMMyyyyDash;
   }
 
   @override
@@ -83,7 +81,7 @@ class _SelectDateState extends State<SelectDate> {
           helpText: 'Chọn ngày',
           cancelText: 'Trở về',
           confirmText: 'Xong',
-          initialDate: formatDate.parse(datePicked),
+          initialDate: datePicked.toDDMMYYYY,
           firstDate: DateTime(now.year, now.month, now.day - 7),
           lastDate: DateTime(now.year, now.month, now.day + 7),
           builder: (context, child) {
@@ -100,7 +98,7 @@ class _SelectDateState extends State<SelectDate> {
         );
 
         if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
+          String formattedDate = pickedDate.ddMMyyyyDash;
           setState(() {
             datePicked = formattedDate;
           });

@@ -6,9 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/register_notebook/bloc/register_notebook_bloc.dart';
 import 'package:iportal2/screens/register_notebook/register_lesson.dart';
@@ -38,7 +36,7 @@ class RegisterNoteBoookScreen extends StatelessWidget {
             final lesson = lessonData[index];
 
             return RegisterItem(
-              lesson: lesson,
+              lessonDataItem: lesson,
               noBoder: index == lessonData.length - 1,
             );
           });
@@ -98,47 +96,3 @@ class RegisterNoteBoookScreen extends StatelessWidget {
     );
   }
 }
-
-// class RegisterNotebookSkeleton extends StatelessWidget {
-//   const RegisterNotebookSkeleton({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       physics: const NeverScrollableScrollPhysics(),
-//       padding: const EdgeInsets.all(0),
-//       itemCount: 5,
-//       itemBuilder: (context, index) => Container(
-//         padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-//         decoration: BoxDecoration(
-//           border: Border(
-//             bottom: index == 4
-//                 ? BorderSide.none
-//                 : const BorderSide(color: AppColors.gray300),
-//           ),
-//         ),
-//         child: SkeletonItem(
-//             child: Column(
-//           children: [
-//             Row(
-//               children: [
-//                 Expanded(
-//                   child: SkeletonParagraph(
-//                     style: SkeletonParagraphStyle(
-//                         lineStyle: SkeletonLineStyle(
-//                       randomLength: true,
-//                       height: 10,
-//                       borderRadius: BorderRadius.circular(8),
-//                     )),
-//                   ),
-//                 )
-//               ],
-//             ),
-//           ],
-//         )),
-//       ),
-//     );
-//   }
-// }

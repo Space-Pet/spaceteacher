@@ -1,11 +1,9 @@
 import 'dart:developer';
 import 'package:core/common/constants/app_locale.dart';
 import 'package:core/common/services/firebase_notification_service.dart';
-import 'package:core/resources/app_size.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -65,6 +63,7 @@ class _IPortal2AppState extends State<IPortal2App> {
           ),
         );
         break;
+
       case 'message':
         mainNavKey.currentContext?.push(
           const MessageScreen(),

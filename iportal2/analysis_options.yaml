@@ -4,4 +4,7 @@ linter:
     - avoid_redundant_argument_values: false
     - avoid_print: false
     - prefer_single_quotes: true 
-    - unused_local_variable: false
+    - unused_field: false
+analyzer:
+  errors:
+    unused_local_variable: ignore

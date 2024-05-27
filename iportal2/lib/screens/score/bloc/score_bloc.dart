@@ -18,6 +18,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
             moetScore: ScoreModel.empty(),
             eslScore: EslScore.empty(),
             primaryConduct: PrimaryConduct.empty(),
+            otherScore: ScoreOther.empty(),
             txtLearnYear: ScoreState._calculateYearRange(),
           ),
         ) {
@@ -27,9 +28,11 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     on<ScoreFetchPrimaryConduct>(_onFetchPrimaryConduct);
 
     add(ScoreFetchMoet());
+
+    on<ScoreFetchOtherScore>(_onFetchOtherScore);
+    add(ScoreFetchOtherScore());
   }
 
-  // final RegisterNotebookRepository registerNoteBookRepo;
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
 
@@ -60,6 +63,24 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     if (int.tryParse(scoreData.txtKhoiLevel)! < 6) {
       add(ScoreFetchPrimaryConduct());
     }
+  }
+
+  _onFetchOtherScore(
+      ScoreFetchOtherScore event, Emitter<ScoreState> emit) async {
+    emit(state.copyWith(otherScoreStatus: OtherScoreStatus.loading));
+
+    final scoreData = await appFetchApiRepo.getScoreOther(
+      // userKey: currentUserBloc.state.user.user_key,
+      userKey: '02033200186',
+      txtYear: state.txtLearnYear,
+    );
+
+    emit(
+      state.copyWith(
+        otherScore: scoreData,
+        otherScoreStatus: OtherScoreStatus.loaded,
+      ),
+    );
   }
 
   _onFetchPrimaryConduct(
@@ -136,8 +157,12 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     if (newScoreType == ScoreType.moet.text()) {
       add(ScoreFetchMoet());
-    } else {
+    } else if (newScoreType == ScoreType.esl.text()) {
       add(ScoreFetchEsl());
+    } else {
+      // Fetch other score
+      final otherScore = state.otherScore.data!
+          .firstWhere((element) => element.ctName == newScoreType);
     }
   }
 }

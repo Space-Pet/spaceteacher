@@ -1,8 +1,7 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class BackGroundContainer extends StatelessWidget {

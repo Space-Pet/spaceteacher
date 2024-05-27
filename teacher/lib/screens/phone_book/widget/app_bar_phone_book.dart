@@ -2,7 +2,7 @@ import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../profile_iportal2/widget/profile_bottom_sheet.dart';
+import '../../profile_teacher/widget/profile_bottom_sheet.dart';
 
 class AppBarPhoneBook extends StatelessWidget {
   const AppBarPhoneBook({super.key});

@@ -1,6 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/models.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class AppFetchApi extends AbstractAppFetchApi {
@@ -78,6 +76,7 @@ class AppFetchApi extends AbstractAppFetchApi {
         '/api/v1/member/announce/notifications?orderBy=$orderBy&$viewedParam',
         headers: headers,
       );
+      
       final notiData = NotificationData.fromMap(res['data']);
       if (isNullOrEmpty(notiData)) return NotificationData.empty();
       return notiData;
@@ -150,6 +149,19 @@ class AppFetchApi extends AbstractAppFetchApi {
       return scoreRes;
     } catch (e) {
       throw GetScoreFailure();
+    }
+  }
+
+  Future<ScoreOther> getScoreOther(String userKey, String txtYear) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php?act=list_chuong_trinh_khac&user_key=$userKey&txt_learn_year=$txtYear',
+      );
+
+      final scoreRes = ScoreOther.fromMap(data);
+      return scoreRes;
+    } catch (e) {
+      throw GetOtherScoreFailure();
     }
   }
 
@@ -730,6 +742,8 @@ class GetMenuFailure implements Exception {}
 class GetPrimaryConductFailure implements Exception {}
 
 class GetScoreFailure implements Exception {}
+
+class GetOtherScoreFailure implements Exception {}
 
 class GetExerciseFailure implements Exception {}
 

@@ -1,4 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:core/core.dart';
 
 import '../../auth_local_storage.dart';
 

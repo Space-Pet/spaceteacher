@@ -1,8 +1,8 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:core/core.dart';
 import 'package:local_data_source/src/user_local_storage/user_local_storage.dart';
 
 class UserHiveStorage implements UserLocalStorage {
-  late Box<LocalProfile> _userBox;
+  late Box<LocalIPortalProfile> _userBox;
   late Box<List> _featuresBox;
 
   UserHiveStorage();
@@ -25,13 +25,12 @@ class UserHiveStorage implements UserLocalStorage {
     Hive.registerAdapter(LocalFeaturesAdapter());
     Hive.registerAdapter(SchoolBrandAdapter());
 
-
-    _userBox = await Hive.openBox<LocalProfile>(userBoxName);
+    _userBox = await Hive.openBox<LocalIPortalProfile>(userBoxName);
     _featuresBox = await Hive.openBox<List>(featuresBoxName);
   }
 
   @override
-  Future<LocalProfile?> getUser() async {
+  Future<LocalIPortalProfile?> getUser() async {
     return _userBox.get(userKey);
   }
 
@@ -43,7 +42,7 @@ class UserHiveStorage implements UserLocalStorage {
   }
 
   @override
-  Future saveUser(LocalProfile user) async {
+  Future saveUser(LocalIPortalProfile user) async {
     await _userBox.clear();
     await _userBox.put(userKey, user);
 

@@ -1,22 +1,18 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dropdown/dropdown.dart';
-import 'package:iportal2/components/empty_screen.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/score/bloc/score_bloc.dart';
 import 'package:iportal2/screens/score/widgets/esl/esl_view.dart';
 import 'package:iportal2/screens/score/widgets/moet/moet_view.dart';
 import 'package:iportal2/screens/score/widgets/moet/moet_view_primary.dart';
 import 'package:iportal2/screens/score/widgets/score_filter.dart';
-import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
 
 class ScoreScreen extends StatelessWidget {
@@ -37,6 +33,10 @@ class ScoreScreen extends StatelessWidget {
         final scoreBloc = context.read<ScoreBloc>();
         final scoreData = state.moetScore;
         final eslScore = state.eslScore;
+        final otherScore = state.otherScore;
+
+        final otherScoreList =
+            state.otherScore.data!.map((e) => e.ctName).toList();
 
         final khoiLevel = int.parse(
             scoreData.txtKhoiLevel.isEmpty ? '0' : scoreData.txtKhoiLevel);
@@ -85,6 +85,7 @@ class ScoreScreen extends StatelessWidget {
                     children: [
                       ScoreFilter(
                         isPrimary: isPrimary,
+                        otherScoreData: otherScoreList,
                         onSelectedOption: (ViewScoreSelectedParam newOption) {
                           scoreBloc
                               .add(ScoreFilterChange(newOption, isPrimary));
@@ -208,42 +209,6 @@ class ScoreAppbar extends StatelessWidget {
     );
   }
 }
-
-// class SkeletonScore extends StatelessWidget {
-//   const SkeletonScore({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final listSkeleton = List.generate(
-//         6,
-//         (index) => SkeletonAvatar(
-//               style: SkeletonAvatarStyle(
-//                   padding: const EdgeInsets.only(bottom: 12),
-//                   width: double.infinity,
-//                   height: 44,
-//                   borderRadius: AppRadius.rounded10),
-//             ));
-
-//     return SkeletonItem(
-//       child: Column(
-//         children: [
-//           Column(
-//             children: listSkeleton,
-//           ),
-//           SkeletonAvatar(
-//             style: SkeletonAvatarStyle(
-//                 padding: const EdgeInsets.only(bottom: 12),
-//                 width: double.infinity,
-//                 height: 90,
-//                 borderRadius: AppRadius.rounded10),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class ViewScoreSelectedParam {
   final String selectedYear;

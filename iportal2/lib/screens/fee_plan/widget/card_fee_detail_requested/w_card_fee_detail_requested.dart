@@ -1,7 +1,7 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
+
+import '../w_field_row_card_detail.dart';
 
 class CardFeeDetailRequested extends StatelessWidget {
   const CardFeeDetailRequested({
@@ -9,6 +9,12 @@ class CardFeeDetailRequested extends StatelessWidget {
     required this.feeItem,
   });
   final FeeItem feeItem;
+
+  // Format date from dd-MM-yyyy to dd/MM/yyyy
+  String get date {
+    final tryParseDate = (feeItem.date ?? '').toDDMMYYYY;
+    return tryParseDate?.ddMMyyyySlash ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +104,7 @@ class CardFeeDetailRequested extends StatelessWidget {
                           AppTextStyles.semiBold12(color: AppColors.gray300),
                       valueStyle:
                           AppTextStyles.semiBold12(color: AppColors.gray300),
-                      value: DateFormat("dd/MM/yyyy")
-                          .format(
-                            DateFormat("dd-MM-yyyy").parse(feeItem.date ?? ""),
-                          )
-                          .toString(),
+                      value: date,
                       isLastItem: true),
                 ],
               ),

@@ -1,14 +1,11 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/empty_screen.dart';
 
 import 'package:iportal2/screens/bus/bloc/bus_bloc.dart';
 import 'package:iportal2/screens/bus/bus_card/card_bus_item.dart';
@@ -132,7 +129,7 @@ class _SelectDateState extends State<SelectDate> {
   @override
   void initState() {
     super.initState();
-    datePicked = formatDate.format(now);
+    datePicked = now.ddMMyyyyDash;
   }
 
   @override
@@ -161,7 +158,7 @@ class _SelectDateState extends State<SelectDate> {
         );
 
         if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
+          String formattedDate = pickedDate.ddMMyyyyDash;
           widget.onDateChanged(pickedDate);
           setState(() {
             datePicked = formattedDate;

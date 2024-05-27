@@ -1,9 +1,10 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
 import 'package:teacher/screens/exercise_notice/exercise_screen.dart';
 import 'package:teacher/screens/fee_plan/fee_plan_screen.dart';
@@ -18,8 +19,6 @@ import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:teacher/screens/survey_iportal2/survey_screen.dart';
-import 'package:local_data_source/local_data_source.dart';
-import 'package:repository/repository.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
@@ -54,12 +53,8 @@ class _PinFeaturesState extends State<PinFeatures> {
 
     Navigator.of(context).pop();
     await Future.delayed(const Duration(milliseconds: 500));
-    setState(() {
-      pinnedFeatures = newListFeatures
-          .where((element) => element.pinned)
-          .toList()
-        ..sort((a, b) => a.order.compareTo(b.order));
-    });
+    pinnedFeatures = newListFeatures.where((element) => element.pinned).toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
 
     addBtnAllFeatureByDefault();
 
@@ -177,9 +172,7 @@ class _PinFeaturesState extends State<PinFeatures> {
     return Container(
       margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       width: double.infinity,
-      child: Wrap(
-        children: listFeature,
-      ),
+      child: Wrap(children: listFeature),
     );
   }
 }

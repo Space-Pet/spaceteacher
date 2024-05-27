@@ -1,8 +1,8 @@
-import 'models/models.dart';
+import 'package:core/core.dart';
 
 abstract class UserLocalStorage {
-  Future saveUser(LocalProfile user);
-  Future<LocalProfile?> getUser();
+  Future saveUser(LocalIPortalProfile user);
+  Future<LocalIPortalProfile?> getUser();
   Future clearUser();
 
   Future<List<LocalFeatures>?> getFeaturesLocal();

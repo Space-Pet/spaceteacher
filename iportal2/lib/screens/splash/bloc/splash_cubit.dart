@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
@@ -54,6 +52,10 @@ class SplashCubit extends Cubit<SplashState> {
   }
 
   Future<void> splashCleanToken() async {
-    await authRepository.logOut();
+    try {
+      await authRepository.logOut();
+    } catch (e) {
+      Log.e(e.toString());
+    }
   }
 }

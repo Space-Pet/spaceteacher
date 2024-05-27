@@ -6,16 +6,19 @@ class ScoreState extends Equatable {
     required this.eslScore,
     required this.primaryConduct,
     required this.txtLearnYear,
+    required this.otherScore,
     this.txtHocKy = TermType.term1,
     this.txtTihHocKy = PrimaryTermType.midTerm1,
     this.scoreType = 'Điểm MOET',
     this.status = ScoreStatus.initial,
+    this.otherScoreStatus = OtherScoreStatus.initial,
     this.conducStatus = ScoreStatus.initial,
   });
 
   final ScoreModel moetScore;
   final EslScore eslScore;
   final PrimaryConduct primaryConduct;
+  final ScoreOther otherScore;
 
   final TermType txtHocKy;
   final PrimaryTermType txtTihHocKy;
@@ -24,6 +27,7 @@ class ScoreState extends Equatable {
   final String scoreType;
 
   final ScoreStatus status;
+  final OtherScoreStatus otherScoreStatus;
   final ScoreStatus conducStatus;
 
   @override
@@ -31,11 +35,13 @@ class ScoreState extends Equatable {
         scoreType,
         moetScore,
         primaryConduct,
+        otherScore,
         txtHocKy,
         txtTihHocKy,
         txtLearnYear,
         scoreType,
         status,
+        otherScoreStatus,
         conducStatus,
       ];
 
@@ -50,12 +56,14 @@ class ScoreState extends Equatable {
     ScoreModel? moetScore,
     EslScore? eslScore,
     PrimaryConduct? primaryConduct,
+    ScoreOther? otherScore,
     List<String>? yearList,
     TermType? txtHocKy,
     PrimaryTermType? txtTihHocKy,
     String? txtLearnYear,
     String? scoreType,
     ScoreStatus? status,
+    OtherScoreStatus? otherScoreStatus,
     ScoreStatus? conducStatus,
   }) {
     return ScoreState(
@@ -63,16 +71,20 @@ class ScoreState extends Equatable {
       moetScore: moetScore ?? this.moetScore,
       eslScore: eslScore ?? this.eslScore,
       primaryConduct: primaryConduct ?? this.primaryConduct,
+      otherScore: otherScore ?? this.otherScore,
       txtHocKy: txtHocKy ?? this.txtHocKy,
       txtTihHocKy: txtTihHocKy ?? this.txtTihHocKy,
       txtLearnYear: txtLearnYear ?? this.txtLearnYear,
       status: status ?? this.status,
+      otherScoreStatus: otherScoreStatus ?? this.otherScoreStatus,
       conducStatus: conducStatus ?? this.conducStatus,
     );
   }
 }
 
 enum ScoreStatus { initial, loading, loaded, error }
+
+enum OtherScoreStatus { initial, loading, loaded, error }
 
 enum PrimaryTermType {
   midTerm1,

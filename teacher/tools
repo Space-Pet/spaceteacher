@@ -1,19 +1,42 @@
 #! /bin/bash
 
-function gen_localization() {
-	dart run easy_localization:generate --source-dir ./assets/i18n --output-dir lib/resources/i18n/
-	dart run easy_localization:generate -f keys -o locale_keys.g.dart --source-dir ./assets/i18n --output-dir lib/resources/i18n/
-}
-
 function run_pub_gen() {
 	flutter pub get
 	dart run build_runner build -d
-	gen_localization
+	fluttergen -c pubspec.yaml
 }
 
 function clean() {
 	run_clean_packages
 	run_clean
+}
+
+function flutter_pub_add() {
+	echo "Adding package to core"
+	cd ../core
+	echo "Enter package name:"
+	read package_name
+	flutter pub add $package_name
+	if ! grep -q "package:$package_name/$package_name.dart" lib/core.dart; then
+		echo "Adding package to core.dart"
+		echo "export 'package:$package_name/$package_name.dart';" >>lib/core.dart
+	fi
+	cd $(pwd)
+	echo "flutter pub get"
+	flutter pub get
+}
+
+function flutter_pub_get() {
+	cd packages
+	for d in */ ; do
+		echo "run in $d directory"
+		cd $d
+		flutter pub get
+		cd ../
+	done
+	cd ../
+	echo "run flutter pub get in $(pwd)"
+	flutter pub get
 }
 
 function run_clean() {
@@ -29,23 +52,36 @@ function run_clean() {
 }
 
 function run_clean_packages() {
-	echo "This app dont have custom packages."
+	cd packages
+	for d in */ ; do
+		echo "Cleaning in $d directory"
+		cd $d
+		flutter clean
+		flutter pub get
+		dart run build_runner build -d
+		cd ../
+	done
+	cd ../
 }
 
 function main() {
 	echo "Choose function to run:"
-	select app in "gen_localization" "run_pub_gen" "clean" ; do
+	select app in "run_pub_gen" "clean" "flutter pub add" "flutter pub get"; do
 		case $app in
-			gen_localization)
-				gen_localization
-				break
-				;;
-			run_pub_gen)
+			"run_pub_gen")
 				run_pub_gen
 				break
 				;;
-			clean)
+			"clean")
 				clean
+				break
+				;;
+			"flutter pub add")
+				flutter_pub_add
+				break
+				;;
+			"flutter pub get")
+				flutter_pub_get
 				break
 				;;
 			*)
@@ -55,4 +91,9 @@ function main() {
 	done
 }
 
-main
+# if no arguments are passed, run the main function
+if [ $# -eq 0 ]; then
+	main
+else
+	$@
+fi

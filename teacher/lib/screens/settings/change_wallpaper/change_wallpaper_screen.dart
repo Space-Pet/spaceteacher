@@ -1,15 +1,11 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/check_box/check_box.dart';
-
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:local_data_source/local_data_source.dart';
-import 'package:repository/repository.dart';
 
 import '../../../resources/assets.gen.dart';
 

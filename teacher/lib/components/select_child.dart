@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_text_styles.dart';
 
-import '../screens/profile_iportal2/widget/profile_bottom_sheet.dart';
+import '../screens/profile_teacher/widget/profile_bottom_sheet.dart';
 
 class SelectChild extends StatelessWidget {
   const SelectChild({super.key});
@@ -27,7 +27,7 @@ class SelectChild extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          user.name,
+                          user.teacher_id.toString(),
                           style: AppTextStyles.semiBold16(),
                         ),
                         const SizedBox(
@@ -61,7 +61,7 @@ class SelectChild extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(),
                               child: Text(
-                                user.class_name,
+                                user.school_brand,
                                 style: AppTextStyles.normal12(
                                   color: AppColors.gray500,
                                 ),

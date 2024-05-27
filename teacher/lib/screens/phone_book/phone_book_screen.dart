@@ -1,16 +1,13 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/screens/phone_book/bloc/phone_book_bloc.dart';
 import 'package:teacher/screens/phone_book/widget/tab_bar_phone_book.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   const PhoneBookScreen({super.key});
@@ -71,56 +68,9 @@ class PhoneBookView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 12),
                   child: Column(
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.symmetric(horizontal: 12),
-                      //   child: SelectChild(),
-                      // ),
-                      // const SizedBox(height: 8),
                       Flexible(
                         child: AppSkeleton(
                           isLoading: isLoading,
-                          skeleton: SizedBox(
-                            height: 500,
-                            child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(0),
-                              itemCount: 5,
-                              itemBuilder: (context, index) => Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: index == 4
-                                        ? BorderSide.none
-                                        : const BorderSide(
-                                            color: AppColors.gray300),
-                                  ),
-                                ),
-                                child: SkeletonItem(
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: SkeletonParagraph(
-                                              style: SkeletonParagraphStyle(
-                                                lineStyle: SkeletonLineStyle(
-                                                  randomLength: true,
-                                                  height: 10,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
                           child: TabBarPhoneBook(
                             currentUserBloc: currentUserBloc,
                             phoneBookTeacher: phoneBookTeacher,

@@ -5,6 +5,7 @@ analyzer:
     # allow having TODOs in the code
     todo: ignore
     invalid_annotation_target: ignore
+    unused_local_variable: ignore
   exclude:
     # exclude files
     - lib/generated_plugin_registrant.dart
@@ -112,3 +113,4 @@ linter:
     # - lines_longer_than_80_chars
     - prefer_foreach
     - use_to_and_as_if_applicable
+    - prefer_is_empty: false

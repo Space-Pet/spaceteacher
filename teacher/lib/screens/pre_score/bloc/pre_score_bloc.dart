@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
 part 'pre_score_event.dart';
@@ -43,10 +43,12 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
   }
 
   void _onGetListReportStudent(
-      GetListReportStudent event, Emitter<PreScoreState> emit) async {
+      // bind API teacher
+      GetListReportStudent event,
+      Emitter<PreScoreState> emit) async {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingListReport));
     final data = await appFetchApiRepo.getListReportStudent(
-        pupilId: currentUserBloc.state.user.pupil_id,
+        pupilId: currentUserBloc.state.user.teacher_id,
         schoolId: currentUserBloc.state.user.school_id,
         schoolBrand: currentUserBloc.state.user.school_brand,
         semester: event.semester,
@@ -57,11 +59,13 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
   }
 
   void _onGetReportStudent(
-      GetReportStudent event, Emitter<PreScoreState> emit) async {
+      // bind API teacher
+      GetReportStudent event,
+      Emitter<PreScoreState> emit) async {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingReportStudent));
     final data = await appFetchApiRepo.getReportStudent(
       id: event.id,
-      pupilId: currentUserBloc.state.user.pupil_id,
+      pupilId: currentUserBloc.state.user.teacher_id,
       schoolId: currentUserBloc.state.user.school_id,
       schoolBrand: currentUserBloc.state.user.school_brand,
     );

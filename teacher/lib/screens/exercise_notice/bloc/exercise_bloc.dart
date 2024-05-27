@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/exercise_data.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 

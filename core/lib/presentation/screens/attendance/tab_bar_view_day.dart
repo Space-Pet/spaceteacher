@@ -1,4 +1,3 @@
-import 'package:core/presentation/common_widget/empty_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -6,8 +5,9 @@ import 'package:intl/intl.dart';
 
 import '../../../data/models/models.dart';
 import '../../../resources/resources.dart';
+import '../../common_widget/export.dart';
 import '../../common_widget/select_date.dart';
-import '../../extentions/date_formatter.dart';
+import '../../extentions/extention.dart';
 
 class CTabBarViewDay extends StatefulWidget {
   const CTabBarViewDay({
@@ -165,9 +165,9 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
             ),
           ),
         if (widget.lessons?.length == null || widget.lessons?.length == 0)
-          Expanded(
+          const Expanded(
               child: Padding(
-            padding: const EdgeInsets.only(bottom: 200),
+            padding:  EdgeInsets.only(bottom: 200),
             child: EmptyScreen(text: 'Bạn chưa có điểm danh theo ngày'),
           ))
       ],

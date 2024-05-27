@@ -7,11 +7,11 @@ import 'package:iportal2/components/dialog/dialog_view_exercise.dart';
 class RegisterItem extends StatelessWidget {
   const RegisterItem({
     super.key,
-    required this.lesson,
+    required this.lessonDataItem,
     required this.noBoder,
   });
 
-  final Data lesson;
+  final LessonDataItem lessonDataItem;
   final bool noBoder;
 
   @override
@@ -37,18 +37,18 @@ class RegisterItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Tiết ${lesson.tietNum}',
+                  'Tiết ${lessonDataItem.tietNum}',
                   style: AppTextStyles.normal14(color: AppColors.black24),
                 ),
                 const SizedBox(height: 4),
-                if ((lesson.danDoBaoBai ?? '').isNotEmpty)
+                if ((lessonDataItem.danDoBaoBai ?? '').isNotEmpty)
                   GestureDetector(
                     onTap: () {
                       showDialog(
                         context: context,
                         builder: (_) => DialogViewExercise(
                           title: 'Nhận xét',
-                          content: lesson.lessonNote ?? '',
+                          content: lessonDataItem.lessonNote ?? '',
                         ),
                       );
                     },
@@ -84,15 +84,15 @@ class RegisterItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        lesson.subjectName,
+                        lessonDataItem.subjectName,
                         overflow: TextOverflow.ellipsis,
                         style:
                             AppTextStyles.semiBold14(color: AppColors.black24),
                       ),
                       const SizedBox(height: 4),
-                      if (lesson.lessonName != null)
+                      if (lessonDataItem.lessonName != null)
                         Text(
-                          lesson.lessonName ?? '',
+                          lessonDataItem.lessonName ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style:
@@ -100,7 +100,7 @@ class RegisterItem extends StatelessWidget {
                         ),
                       const SizedBox(height: 4),
                       Text(
-                        'GV: ${lesson.teacherName}',
+                        'GV: ${lessonDataItem.teacherName}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.normal12(color: AppColors.gray61),

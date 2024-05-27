@@ -11,7 +11,7 @@ class RegisterItem extends StatelessWidget {
     required this.noBoder,
   });
 
-  final Data lesson;
+  final LessonDataItem lesson;
   final bool noBoder;
 
   @override

@@ -5,10 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:iportal2/screens/gallery/widget/gallery_card/card_gallery.dart';
 import 'package:repository/repository.dart';
@@ -141,42 +139,6 @@ class GalleryScreen extends StatelessWidget {
     );
   }
 }
-
-// class GallerySkeleton extends StatelessWidget {
-//   const GallerySkeleton({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GalleryListView(
-//       itemCount: 6,
-//       itemBuilder: (context, index) => Column(
-//         children: [
-//           const SkeletonAvatar(
-//             style: SkeletonAvatarStyle(
-//                 width: 160,
-//                 height: 160,
-//                 borderRadius: BorderRadius.all(
-//                   Radius.circular(14),
-//                 )),
-//           ),
-//           const SizedBox(height: 4),
-//           SkeletonParagraph(
-//             style: SkeletonParagraphStyle(
-//                 lines: 2,
-//                 lineStyle: SkeletonLineStyle(
-//                   randomLength: true,
-//                   alignment: Alignment.centerLeft,
-//                   height: 12,
-//                   borderRadius: BorderRadius.circular(8),
-//                 )),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 class GalleryListView extends StatelessWidget {
   const GalleryListView({

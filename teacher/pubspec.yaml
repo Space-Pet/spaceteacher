@@ -17,12 +17,10 @@ dependencies:
   core:
     path: ../core
 
-  equatable: ^2.0.5
   json_annotation: ^4.8.1
   fluttertoast: ^8.2.4
   google_fonts: ^6.2.1
   country_flags: ^2.2.0
-  easy_localization: ^3.0.5
   flutter_svg: ^2.0.10+1
   bottom_sheet: ^4.0.2
   smooth_page_indicator: ^1.1.0
@@ -36,9 +34,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   pull_to_refresh_flutter3: ^2.0.2
   qr_code_scanner: ^1.0.1
-  skeletons: ^0.0.3
   expandable: ^5.0.1
-  intl: ^0.18.1
+  # intl: 0.18.1
   weekly_date_picker: ^1.4.2
   getwidget: ^4.0.0
   custom_refresh_indicator: ^3.1.0

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/screens/home/bloc/home_bloc.dart';
 import 'package:teacher/screens/message/message_screen.dart';
-import 'package:teacher/screens/profile_iportal2/profile_screen.dart';
+import 'package:teacher/screens/profile_teacher/profile_screen.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -16,13 +16,13 @@ class HomeAppBar extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         final userData = state.userData;
-        final urlImage = userData.avatar.mobile;
+        final urlImage = userData.info.urlImage.mobile;
 
         return Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
           child: InkWell(
             onTap: () {
-              context.push(const ProfileScreen());
+              context.push(ProfileScreen(teacherInfo: userData));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,13 +48,13 @@ class HomeAppBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            userData.pupil.name,
+                            userData.info.fullName,
                             style: AppTextStyles.semiBold12(
                               color: AppColors.white,
                             ),
                           ),
                           Text(
-                            'Lớp ${userData.classInfo.name}',
+                            userData.info.mainSubject,
                             style: AppTextStyles.normal12(
                               color: AppColors.white,
                             ),

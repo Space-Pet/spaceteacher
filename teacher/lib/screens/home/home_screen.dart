@@ -2,7 +2,8 @@ import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
 import 'package:teacher/screens/home/bloc/home_bloc.dart';
@@ -11,7 +12,6 @@ import 'package:teacher/screens/home/widgets/images_library.dart';
 import 'package:teacher/screens/home/widgets/instruction_notebook/instruction_notebook_view.dart';
 import 'package:teacher/screens/home/widgets/noti_slider.dart';
 import 'package:teacher/screens/home/widgets/pin_features/pin_features_view.dart';
-import 'package:repository/repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
           builder: (context, state) {
-        final isKinderGarten = state.user.isKinderGarten();
+        final isKinderGarten = state.user.isKinderGarten;
         final listFeatures = state.user.features;
         final homeBloc = context.read<HomeBloc>();
 
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen>
                   top: isKinderGarten ? 500 : 468,
                   child: PinFeatures(
                     isKinderGarten: isKinderGarten,
-                    userFeatures: listFeatures!,
+                    userFeatures: listFeatures,
                   ),
                 ),
                 // Widget can be expanded and overlapped

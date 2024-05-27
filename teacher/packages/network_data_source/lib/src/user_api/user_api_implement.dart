@@ -1,3 +1,5 @@
+import 'package:core/core.dart';
+
 import '../../network_data_source.dart';
 
 class UserApi extends AbstractUserApi {
@@ -13,15 +15,16 @@ class UserApi extends AbstractUserApi {
   final RestApiClient _authRestClient;
   final RestApiClient _partnerTokenRestClient;
 
-  Future<bool> changePassword({
-    required String oldPassword,
-    required String newPassword,
-    required String confirmPassword,
-  }) async {
-    throw UnimplementedError();
+  Future<TeacherDetail> getTeacherDetail(String teacherId) async {
+    try {
+      final data = await _client.doHttpGet('/api/v1/staff/teacher/$teacherId');
+      final studentInfo = TeacherDetail.fromMap(data['data']);
+      return studentInfo;
+    } catch (e) {
+      throw GetTeacherInfoFailure();
+    }
   }
 
-  /// Chuyển sang author
   Future<void> logOut() async {
     try {
       await _client.clearToken();
@@ -29,66 +32,6 @@ class UserApi extends AbstractUserApi {
       _authRestClient.clearDomain();
     } catch (_) {}
   }
-
-  Future<Map<String, dynamic>?> updateStudentPhone(
-      {required String phone,
-      required String motherName,
-      required String fatherPhone,
-      required String pupilId}) async {
-    try {
-      final data = await _client.doHttpPut(
-        url: '/api/v1/member/pupil/$pupilId',
-        requestBody: {
-          "mother_name": motherName,
-          "phone": phone,
-          "father_phone": fatherPhone,
-        },
-      );
-      return data;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<Map<String, dynamic>?> updateParentPhone(
-      Map<String, dynamic> body, String pupilId) async {
-    try {
-      final data = await _client.doHttpPut(
-        url: '/api/v1/member/pupil/$pupilId/parent',
-        requestBody: body,
-      );
-      return data;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<StudentData> getProfileStudent({required String pupilId}) async {
-    try {
-      final data = await _client.doHttpGet('/api/v1/member/pupil/$pupilId');
-      final studentInfo = StudentData.fromMap(data['data']);
-      return studentInfo;
-    } catch (e) {
-      throw GetStudentInfoFailure();
-    }
-  }
-
-  Future<ParentData> getProfileParent({required String pupilId}) async {
-    try {
-      final data =
-          await _client.doHttpGet('/api/v1/member/pupil/$pupilId/parent');
-      final parentInfo = ParentData.fromMap(data['data']);
-      return parentInfo;
-    } catch (e) {
-      throw GetParentInfoFailure();
-    }
-  }
 }
 
-class ChangePasswordFailure implements Exception {}
-
-class GetStudentInfoFailure implements Exception {}
-
-class GetParentInfoFailure implements Exception {}
-
-class UpdataProfileFailure implements Exception {}
+class GetTeacherInfoFailure implements Exception {}

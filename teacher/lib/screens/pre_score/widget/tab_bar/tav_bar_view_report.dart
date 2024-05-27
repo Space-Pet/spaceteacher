@@ -1,16 +1,13 @@
 import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:teacher/components/app_skeleton.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 import 'package:teacher/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:teacher/screens/pre_score/widget/select_button/score_filter.dart';
 import 'package:teacher/screens/survey_iportal2/widget/list_view_report.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 enum TermType {
   term1,
@@ -149,45 +146,6 @@ class _TabBarReportState extends State<TabBarReport> {
           Expanded(
             child: AppSkeleton(
               isLoading: isLoading,
-              skeleton: SizedBox(
-                height: 500,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(0),
-                  itemCount: 5,
-                  itemBuilder: (context, index) => Container(
-                    padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: index == 4
-                            ? BorderSide.none
-                            : const BorderSide(color: AppColors.gray300),
-                      ),
-                    ),
-                    child: SkeletonItem(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SkeletonParagraph(
-                                  style: SkeletonParagraphStyle(
-                                    lineStyle: SkeletonLineStyle(
-                                      randomLength: true,
-                                      height: 10,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               child: Container(
                 alignment: Alignment.topCenter,
                 width: double.infinity,
@@ -253,54 +211,6 @@ class _TabBarReportState extends State<TabBarReport> {
                                   ),
                                 ),
                                 contentChild: AppSkeleton(
-                                    skeleton: SizedBox(
-                                      height: 500,
-                                      child: ListView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        padding: const EdgeInsets.all(0),
-                                        itemCount: 5,
-                                        itemBuilder: (context, index) =>
-                                            Container(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 12, 0, 12),
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: index == 4
-                                                  ? BorderSide.none
-                                                  : const BorderSide(
-                                                      color: AppColors.gray300),
-                                            ),
-                                          ),
-                                          child: SkeletonItem(
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: SkeletonParagraph(
-                                                        style:
-                                                            SkeletonParagraphStyle(
-                                                          lineStyle:
-                                                              SkeletonLineStyle(
-                                                            randomLength: true,
-                                                            height: 10,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                     isLoading: isLoadingReport,
                                     child: Container(
                                       decoration: const BoxDecoration(

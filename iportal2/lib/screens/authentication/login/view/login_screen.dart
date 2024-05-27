@@ -53,12 +53,14 @@ class LoginScreen extends StatelessWidget {
                 backgroundColor: AppColors.black,
                 textColor: AppColors.white);
           } else if (state.status == LoginStatus.failure) {
-            Fluttertoast.showToast(
-                msg: 'Tài khoản không hợp lệ',
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: AppColors.black,
-                textColor: AppColors.white);
+            if(state.failureMessage != null){
+              Fluttertoast.showToast(
+                  msg: state.failureMessage!,
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: AppColors.black,
+                  textColor: AppColors.white);
+            }
             LoadingDialog.hide(context);
           } else if (state.status == LoginStatus.init ||
               state.status == LoginStatus.loading) {

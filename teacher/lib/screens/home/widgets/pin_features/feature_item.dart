@@ -1,8 +1,6 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:local_data_source/local_data_source.dart';
 
 class FeatureItem extends StatelessWidget {
   const FeatureItem({

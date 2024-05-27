@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:teacher/app_config/domain_saver.dart';
 import 'package:teacher/app_config/network_client_setup.dart';
 import 'package:teacher/boostrap.dart';
 import 'package:teacher/firebase_options.dart';
 import 'package:local_data_source/local_data_source.dart';
-import 'package:network_data_source/network_client/interceptors/authorize_interceptor.dart';
-import 'package:network_data_source/network_client/interceptors/partner_token_interceptor.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -39,13 +35,15 @@ class AppDelegate {
     initializeDateFormatting();
 
     // initialize domain saver
-    final instanceDomainSaver = SingletonDomainSaver();
+    Injection.put<DomainSaver>(DomainSaver());
 
     // Not yet implemented
     // await Firebase.initializeApp();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    final instanceDomainSaver = Injection.get<DomainSaver>();
 
     // Not yet implemented
     // await configureDependencies();
@@ -78,15 +76,12 @@ class AppDelegate {
       partnerTokenRestClient: partnerTokenRestClient,
     );
 
-    final authLocalStorage = AuthHiveStorage();
-    await authLocalStorage.init();
     final userLocalStorage = UserHiveStorage();
     await userLocalStorage.init();
 
     HttpOverrides.global = MyHttpOverrides();
     bootstrap(
       authApi: authApi,
-      authLocalStorage: authLocalStorage,
       userApi: userApi,
       appFetchApi: appFetchApi,
       userLocalStorage: userLocalStorage,

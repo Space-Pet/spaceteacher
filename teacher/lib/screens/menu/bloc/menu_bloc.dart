@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'menu_event.dart';
 part 'menu_state.dart';
@@ -16,8 +15,7 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(
-            MenuState(menu: Menu.empty(), user: userRepository.notSignedIn())) {
+      : super(MenuState(menu: Menu.empty())) {
     on<GetMenu>(_onGetMenu);
   }
   void _onGetMenu(

@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -36,7 +37,7 @@ class UserRepository {
   }
 
   Future saveUser(ProfileInfo user) async {
-    final localUser = LocalProfile(
+    final localUser = LocalIPortalProfile(
       name: user.name,
       user_key: user.user_key,
       user_id: user.user_id,

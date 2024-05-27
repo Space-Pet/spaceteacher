@@ -1,9 +1,10 @@
+// ignore_for_file: unused_field
+
 import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';

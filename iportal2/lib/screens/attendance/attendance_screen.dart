@@ -1,11 +1,9 @@
 import 'package:core/core.dart';
-import 'package:core/presentation/common_widget/empty_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/app_skeleton.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/attendance/bloc/attendance_bloc.dart';
@@ -25,7 +23,6 @@ class _AttendanceScreenState extends State<AttendanceScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    DateFormat formatDate = DateFormat("yyyy-MM-dd");
     DateTime currentDate = DateTime.now();
     DateTime firstDayOfWeek =
         currentDate.subtract(Duration(days: currentDate.weekday - 1));
@@ -41,11 +38,13 @@ class _AttendanceScreenState extends State<AttendanceScreen>
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
     attendanceBloc.add(GetAttendanceWeek(
-        endDate: formatDate.format(lastDayOfWeek),
-        startDate: formatDate.format(firstDayOfWeek)));
+      endDate: lastDayOfWeek.yyyyMMdd,
+      startDate: firstDayOfWeek.yyyyMMdd,
+    ));
     attendanceBloc.add(GetAttendanceMonth(
-        endDate: formatDate.format(lastDayOfMonth),
-        startDate: formatDate.format(firstDayOfMonth)));
+      endDate: lastDayOfMonth.yyyyMMdd,
+      startDate: firstDayOfMonth.yyyyMMdd,
+    ));
     return BlocProvider.value(
       value: attendanceBloc,
       child: BlocListener<AttendanceBloc, AttendanceState>(
@@ -55,8 +54,9 @@ class _AttendanceScreenState extends State<AttendanceScreen>
         listener: (context, state) {
           if (state.attendanceStatus == AttendanceStatus.successType) {
             attendanceBloc.add(GetAttendanceDay(
-                date: formatDate.format(DateTime.now()),
-                selectDate: DateTime.now()));
+              date: DateTime.now().yyyyMMdd,
+              selectDate: DateTime.now(),
+            ));
           }
         },
         child: const AttendanceView(),
@@ -98,7 +98,6 @@ class _AttendanceViewState extends State<AttendanceView> {
                     (state.attendanceStatus == AttendanceStatus.initType) ||
                     (state.attendanceStatus == AttendanceStatus.successType);
             final type = state.type;
-            print('type: $type');
             return Expanded(
               child: Container(
                 padding: const EdgeInsets.all(12),
@@ -107,11 +106,9 @@ class _AttendanceViewState extends State<AttendanceView> {
                   borderRadius: AppRadius.roundedTop28,
                 ),
                 child: AppSkeleton(
-                  
                   isLoading: isLoading,
                   child: CustomRefresh(
                     onRefresh: () async {
-                      DateFormat formatDate = DateFormat("yyyy-MM-dd");
                       DateTime currentDate = DateTime.now();
                       DateTime firstDayOfWeek = currentDate
                           .subtract(Duration(days: currentDate.weekday - 1));
@@ -131,14 +128,17 @@ class _AttendanceViewState extends State<AttendanceView> {
                           userRepository: userRepository);
 
                       attendanceBloc.add(GetAttendanceDay(
-                          date: formatDate.format(DateTime.now()),
-                          selectDate: DateTime.now()));
+                        date: DateTime.now().yyyyMMdd,
+                        selectDate: DateTime.now(),
+                      ));
                       attendanceBloc.add(GetAttendanceWeek(
-                          endDate: formatDate.format(lastDayOfWeek),
-                          startDate: formatDate.format(firstDayOfWeek)));
+                        endDate: lastDayOfWeek.yyyyMMdd,
+                        startDate: firstDayOfWeek.yyyyMMdd,
+                      ));
                       attendanceBloc.add(GetAttendanceMonth(
-                          endDate: formatDate.format(lastDayOfMonth),
-                          startDate: formatDate.format(firstDayOfMonth)));
+                        endDate: lastDayOfMonth.yyyyMMdd,
+                        startDate: firstDayOfMonth.yyyyMMdd,
+                      ));
                     },
                     child: Stack(
                       children: [

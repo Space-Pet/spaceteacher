@@ -13,6 +13,7 @@ class LoginState extends Equatable {
     required this.deviceInfo,
     this.status = LoginStatus.init,
     this.passwordVisible = false,
+    this.failureMessage,
   });
 
   final String userName;
@@ -24,9 +25,10 @@ class LoginState extends Equatable {
   final bool passwordVisible;
   final String domain;
   final DeviceInfo deviceInfo;
+  final String? failureMessage;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         userName,
         password,
         isSaveLoginInfo,
@@ -36,6 +38,7 @@ class LoginState extends Equatable {
         passwordVisible,
         domain,
         deviceInfo,
+        failureMessage,
       ];
 
   LoginState copyWith({
@@ -48,6 +51,7 @@ class LoginState extends Equatable {
     bool? passwordVisible,
     String? domain,
     DeviceInfo? deviceInfo,
+    String? failureMessage,
   }) {
     return LoginState(
       userName: userName ?? this.userName,
@@ -59,6 +63,7 @@ class LoginState extends Equatable {
       passwordVisible: passwordVisible ?? this.passwordVisible,
       domain: domain ?? this.domain,
       deviceInfo: deviceInfo ?? this.deviceInfo,
+      failureMessage: failureMessage ?? this.failureMessage,
     );
   }
 }

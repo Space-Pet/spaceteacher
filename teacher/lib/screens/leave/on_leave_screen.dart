@@ -1,19 +1,16 @@
-import 'package:core/data/models/models.dart';
-import 'package:core/resources/resources.dart';
+// ignore_for_file: unused_local_variable
+
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/buttons/buttons.dart';
-import 'package:teacher/components/empty_screen.dart';
 import 'package:teacher/screens/leave/bloc/leave_bloc.dart';
 import 'package:teacher/screens/leave/leave_application_screen.dart';
 import 'package:teacher/screens/leave/widget/application_item.dart';
-import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class OnLeaveScreen extends StatelessWidget {
   const OnLeaveScreen({super.key});
@@ -152,47 +149,6 @@ class _OnLeaveViewState extends State<OnLeaveView>
                         Expanded(
                           child: AppSkeleton(
                             isLoading: isLoading,
-                            skeleton: Container(
-                                color: Colors.white,
-                                height: double.infinity,
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  padding: const EdgeInsets.all(0),
-                                  itemCount: 5,
-                                  itemBuilder: (context, index) => Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 12, 0, 12),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: index == 4
-                                            ? BorderSide.none
-                                            : const BorderSide(
-                                                color: AppColors.gray300),
-                                      ),
-                                    ),
-                                    child: SkeletonItem(
-                                        child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: SkeletonParagraph(
-                                                style: SkeletonParagraphStyle(
-                                                    lineStyle:
-                                                        SkeletonLineStyle(
-                                                  randomLength: true,
-                                                  height: 10,
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                )),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    )),
-                                  ),
-                                )),
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
@@ -281,31 +237,30 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                       child: CircularProgressIndicator(),
                                     ),
                                   const SizedBox(height: 10),
-                                  if (!user.isStudent())
-                                    SafeArea(
-                                      child: RoundedButton(
-                                        onTap: () {
-                                          context.push(LeaveApplicationScreen(
-                                            onOk: () {
-                                              context
-                                                  .read<LeaveBloc>()
-                                                  .add(GetLeaves(page: 1));
-                                            },
-                                          ));
-                                        },
-                                        borderRadius: 70,
-                                        buttonColor: AppColors.primaryRedColor,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 18,
-                                          vertical: 10,
-                                        ),
-                                        child: Text(
-                                          'Xin nghỉ phép',
-                                          style: AppTextStyles.semiBold16(
-                                              color: AppColors.white),
-                                        ),
+                                  SafeArea(
+                                    child: RoundedButton(
+                                      onTap: () {
+                                        context.push(LeaveApplicationScreen(
+                                          onOk: () {
+                                            context
+                                                .read<LeaveBloc>()
+                                                .add(GetLeaves(page: 1));
+                                          },
+                                        ));
+                                      },
+                                      borderRadius: 70,
+                                      buttonColor: AppColors.primaryRedColor,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 18,
+                                        vertical: 10,
                                       ),
-                                    )
+                                      child: Text(
+                                        'Duyệt nghỉ phép',
+                                        style: AppTextStyles.semiBold16(
+                                            color: AppColors.white),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),

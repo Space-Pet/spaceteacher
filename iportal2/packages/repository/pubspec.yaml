@@ -16,7 +16,6 @@ dependencies:
     path: ../local_data_source
   core: 
     path: ../../../core
-  equatable: ^2.0.3
   freezed: ^2.5.1
   freezed_annotation: ^2.4.1
   firebase_auth: ^4.19.4

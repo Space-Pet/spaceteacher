@@ -1,19 +1,14 @@
-import 'package:core/resources/app_colors.dart';
-import 'package:core/resources/app_decoration.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
-import 'package:teacher/components/empty_screen.dart';
 import 'package:teacher/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:teacher/screens/gallery/widget/gallery_card/card_gallery.dart';
 import 'package:repository/repository.dart';
-import 'package:skeletons/skeletons.dart';
 
 class GalleryScreen extends StatelessWidget {
   const GalleryScreen({super.key});
@@ -79,7 +74,6 @@ class GalleryScreen extends StatelessWidget {
                                   ListView(),
                                   AppSkeleton(
                                     isLoading: isLoading,
-                                    skeleton: const GallerySkeleton(),
                                     child: isEmptyData
                                         ? const Center(
                                             child: EmptyScreen(
@@ -140,42 +134,6 @@ class GalleryScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class GallerySkeleton extends StatelessWidget {
-  const GallerySkeleton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GalleryListView(
-      itemCount: 6,
-      itemBuilder: (context, index) => Column(
-        children: [
-          const SkeletonAvatar(
-            style: SkeletonAvatarStyle(
-                width: 160,
-                height: 160,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(14),
-                )),
-          ),
-          const SizedBox(height: 4),
-          SkeletonParagraph(
-            style: SkeletonParagraphStyle(
-                lines: 2,
-                lineStyle: SkeletonLineStyle(
-                  randomLength: true,
-                  alignment: Alignment.centerLeft,
-                  height: 12,
-                  borderRadius: BorderRadius.circular(8),
-                )),
-          ),
-        ],
       ),
     );
   }

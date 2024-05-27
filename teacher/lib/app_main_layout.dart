@@ -2,7 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/custom_loading_logo.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/screens/attendance/attendance_screen.dart';
@@ -108,7 +108,7 @@ class _AppMainLayoutState extends State<AppMainLayout>
               return TabBarView(
                 controller: tabBarController,
                 physics: const NeverScrollableScrollPhysics(),
-                children: state.user.isKinderGarten()
+                children: state.user.isKinderGarten
                     ? widgetOptionKinderGarten
                     : widgetOptions,
               );
@@ -142,7 +142,7 @@ class _AppMainLayoutState extends State<AppMainLayout>
                       iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                       text: 'Trang chủ',
                     ),
-                    state.user.isKinderGarten()
+                    state.user.isKinderGarten
                         ? Tab(
                             icon: SvgPicture.asset(
                               'assets/icons/calendar.svg',

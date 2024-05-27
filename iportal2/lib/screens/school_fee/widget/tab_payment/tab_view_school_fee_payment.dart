@@ -1,9 +1,7 @@
 import 'package:core/core.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_payment/w_card_detail_school_fee_payment.dart';
 
 class TabViewSchoolFeePayment extends StatefulWidget {

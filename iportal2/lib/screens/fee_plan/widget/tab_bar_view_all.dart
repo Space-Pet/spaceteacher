@@ -1,12 +1,11 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dialog/show_dialog.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 
-import 'package:iportal2/screens/fee_plan/widget/card_fee_detail/w_card_topic_fee_detal.dart';
+import 'card_fee_detail/w_card_topic_fee_detail.dart';
 
 class TabBarViewAll extends StatefulWidget {
   const TabBarViewAll({

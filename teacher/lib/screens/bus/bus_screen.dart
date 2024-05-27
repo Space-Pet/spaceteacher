@@ -1,18 +1,14 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:teacher/app_config/router_configuration.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
-import 'package:teacher/components/app_skeleton.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
-import 'package:teacher/components/empty_screen.dart';
 
 import 'package:teacher/screens/bus/bloc/bus_bloc.dart';
 import 'package:teacher/screens/bus/bus_card/card_bus_item.dart';
-import 'package:teacher/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:repository/repository.dart';
 
 class BusScreen extends StatelessWidget {
@@ -24,7 +20,8 @@ class BusScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => BusBloc(
         context.read<AppFetchApiRepository>(),
-        pupilId: currentUser.pupil_id,
+        // TODO: bind API teacher
+        pupilId: currentUser.teacher_id,
         schoolId: currentUser.school_id,
         schoolBrand: currentUser.school_brand,
       ),
@@ -84,7 +81,6 @@ class BusView extends StatelessWidget {
                               ListView(),
                               AppSkeleton(
                                 isLoading: isLoading,
-                                skeleton: const InstructrionSkeleton(),
                                 child: isEmptyData
                                     ? const Center(
                                         child: EmptyScreen(

@@ -1,4 +1,4 @@
-import 'package:core/common/utils/snackbar.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
@@ -15,7 +15,6 @@ import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
-import 'package:local_data_source/local_data_source.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({

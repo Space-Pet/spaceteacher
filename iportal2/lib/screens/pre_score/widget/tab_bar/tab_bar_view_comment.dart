@@ -1,9 +1,7 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:iportal2/components/app_skeleton.dart';
-import 'package:iportal2/components/empty_screen.dart';
 import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:iportal2/screens/pre_score/widget/Component/badge_pre_school.dart';
 import 'package:iportal2/screens/pre_score/widget/Component/feedback_group.dart';

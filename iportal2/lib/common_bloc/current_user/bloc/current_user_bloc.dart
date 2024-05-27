@@ -1,6 +1,4 @@
 import 'package:core/core.dart';
-import 'package:equatable/equatable.dart';
-import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
@@ -25,11 +23,13 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     CurrentUserUpdated event,
     Emitter<CurrentUserState> emit,
   ) async {
+    final activeChildIndex =
+        event.user.children.indexWhere((element) => element.isActive);
+
     emit(state.copyWith(
       user: event.user,
-      activeChild: event.user.children.isNotEmpty
-          ? event.user.children.first
-          : Children.empty(),
+      activeChild:
+          activeChildIndex == -1 ? null : event.user.children[activeChildIndex],
       background: event.user.background,
     ));
   }

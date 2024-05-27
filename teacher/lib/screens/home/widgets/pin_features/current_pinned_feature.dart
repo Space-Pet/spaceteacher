@@ -1,10 +1,8 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/screens/home/widgets/pin_features/feature_item.dart';
-import 'package:local_data_source/local_data_source.dart';
 
 class CurrentPinnedFeature extends StatelessWidget {
   const CurrentPinnedFeature({

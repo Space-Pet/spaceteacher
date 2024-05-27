@@ -16,7 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^9.0.0
-  intl: ^0.18.1
+  # intl: ^0.18.1
   freezed: ^2.5.1
   freezed_annotation: ^2.4.1
 

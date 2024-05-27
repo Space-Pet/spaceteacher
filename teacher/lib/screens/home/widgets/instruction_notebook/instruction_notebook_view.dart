@@ -1,16 +1,10 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:teacher/components/app_skeleton.dart';
-import 'package:teacher/components/empty_screen.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/screens/home/bloc/home_bloc.dart';
 import 'package:teacher/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:teacher/utils/validation_functions.dart';
-import 'package:skeletons/skeletons.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class InstructionNotebook extends StatefulWidget {
   const InstructionNotebook({
@@ -203,9 +197,8 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                           Expanded(
                             child: AppSkeleton(
                               isLoading: isLoading,
-                              skeleton: const InstructrionSkeleton(),
                               child: isDataEmpty
-                                  ? const EmptyScreen(text: 'Sổ báo bài trống')
+                                  ? const EmptyScreen(text: 'Chưa có báo bài')
                                   : Column(
                                       children: lessonsW,
                                     ),
@@ -218,41 +211,6 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
           ),
         );
       },
-    );
-  }
-}
-
-class InstructrionSkeleton extends StatelessWidget {
-  const InstructrionSkeleton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return const SkeletonItem(
-      child: Expanded(
-        child: Column(
-          children: [
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-            SizedBox(height: 8),
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-            SizedBox(height: 8),
-            Expanded(
-              child: SkeletonAvatar(
-                style: SkeletonAvatarStyle(width: double.infinity),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

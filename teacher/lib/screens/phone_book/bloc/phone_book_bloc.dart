@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
-import 'package:teacher/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'phone_book_event.dart';
 part 'phone_book_state.dart';
@@ -16,18 +15,20 @@ class PhoneBookBloc extends Bloc<PhoneBookEvent, PhoneBookState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(PhoneBookState(
-            phoneBookTeacher: const [],
-            user: userRepository.notSignedIn(),
-            phoneBookStudent: const [])) {
+      : super(const PhoneBookState(
+          phoneBookTeacher: [],
+          phoneBookStudent: [],
+        )) {
     on<GetPhoneBookStudent>(_onGetPhoneBookStudent);
     on<GetPhoneBookTeacher>(_onGetPhoneBookTeacher);
   }
   void _onGetPhoneBookTeacher(
-      GetPhoneBookTeacher event, Emitter<PhoneBookState> emit) async {
+      // TODO bind API teacher
+      GetPhoneBookTeacher event,
+      Emitter<PhoneBookState> emit) async {
     emit(state.copyWith(phoneBookStatus: PhoneBookStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookTeacher(
-        pupilId: currentUserBloc.state.user.pupil_id);
+        pupilId: currentUserBloc.state.user.teacher_id);
     emit(state.copyWith(
         phoneBookStatus: PhoneBookStatus.success, phoneBookTeacher: data));
   }
@@ -36,7 +37,8 @@ class PhoneBookBloc extends Bloc<PhoneBookEvent, PhoneBookState> {
       GetPhoneBookStudent event, Emitter<PhoneBookState> emit) async {
     emit(state.copyWith(phoneBookStatus: PhoneBookStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookStudent(
-        classId: currentUserBloc.state.user.children?.class_id ?? 0);
+        // TODO bind API teacher
+        classId: currentUserBloc.state.user.teacher_id);
     emit(state.copyWith(
         phoneBookStatus: PhoneBookStatus.success, phoneBookStudent: data));
   }

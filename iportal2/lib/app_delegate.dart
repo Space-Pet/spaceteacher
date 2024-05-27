@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/app_config/network_client_setup.dart';
 import 'package:iportal2/boostrap.dart';
 import 'package:iportal2/firebase_options.dart';
 import 'package:local_data_source/local_data_source.dart';
-import 'package:network_data_source/network_client/interceptors/authorize_interceptor.dart';
-import 'package:network_data_source/network_client/interceptors/partner_token_interceptor.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -54,7 +51,8 @@ class AppDelegate {
       domainSaver: instanceDomainSaver,
     );
 
-    final AuthRestClient authRestClient = AuthRestClient(AuthorizeInterceptor(),
+    final AuthRestClient authRestClient = AuthRestClient(
+        AuthorizeInterceptor(),
         domainSaver: instanceDomainSaver);
 
     final PartnerTokenRestClient partnerTokenRestClient =

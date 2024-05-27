@@ -1,4 +1,4 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 
 import '../../network_data_source.dart';
 
@@ -74,16 +74,13 @@ class AppFetchApi extends AbstractAppFetchApi {
       final viewedParam = viewed != -1 ? 'viewed=$viewed' : '';
 
       final res = await _authRestClient.doHttpGet(
-        '/api/v1/member/announce/notifications?orderBy=$orderBy&$viewedParam',
+        '/api/v1/staff/announce/notifications/list-received?orderBy=$orderBy&$viewedParam',
         headers: headers,
       );
-
-      print(res);
 
       final notiData = NotificationData.fromMap(res['data']);
       return notiData;
     } catch (e) {
-      print(e);
       throw GetNotificationsFailure();
     }
   }
@@ -252,13 +249,13 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<AlbumData> getAlbum({
-    required String pupilId,
-  }) async {
+  Future<AlbumData> getAlbum(String teacherId) async {
     try {
+      const teacherIdTest = '10007548';
       final data = await _authRestClient.doHttpGet(
-        '/api/v1/member/gallery/pupil?pupil_id=$pupilId',
+        '/api/v1/staff/gallery/teacher?teacher_id=$teacherIdTest',
       );
+
       final albumData = AlbumData.fromJson(data['data']);
       return albumData;
     } catch (e) {

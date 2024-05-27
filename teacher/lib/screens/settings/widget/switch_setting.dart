@@ -4,9 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-class SwitchSetting extends StatefulWidget {
-  const SwitchSetting(
+class SettingFeature extends StatefulWidget {
+  const SettingFeature(
       {super.key,
       required this.text,
       required this.iconAsset,
@@ -19,82 +18,87 @@ class SwitchSetting extends StatefulWidget {
   final Function()? onPressed;
   final bool showDottedLine;
   @override
-  State<SwitchSetting> createState() => _SwitchSettingState();
+  State<SettingFeature> createState() => _SettingFeatureState();
 }
 
-class _SwitchSettingState extends State<SwitchSetting> {
+class _SettingFeatureState extends State<SettingFeature> {
   bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.5, right: 10.5, bottom: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      widget.iconAsset,
-                      height: 20,
-                      width: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                        widget.text,
-                        style: AppTextStyles.normal16(color: AppColors.gray600),
+    return InkWell(
+      onTap: widget.onPressed,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.5, right: 10.5, bottom: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        widget.iconAsset,
+                        height: 20,
+                        width: 20,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              if (widget.onPressed == null)
-                Transform.scale(
-                  scale: 0.6,
-                  child: CupertinoSwitch(
-                    value: isSwitched,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitched = value;
-                      });
-                    },
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          widget.text,
+                          style:
+                              AppTextStyles.normal14(color: AppColors.gray600),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              if (widget.onPressed != null)
-                Row(
-                  children: [
-                    if (widget.textRight != null)
-                      Text(
-                        widget.textRight!,
-                        style: AppTextStyles.normal16(),
-                      ),
-                    IconButton(
-                        onPressed: widget.onPressed,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_right,
-                          color: AppColors.gray400,
-                        )),
-                  ],
-                ),
-            ],
-          ),
-          if (widget.showDottedLine)
-            const Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: SizedBox(
-                width: double.infinity,
-                child: DottedLine(
-                  dashLength: 2,
-                  dashColor: AppColors.gray300,
+                if (widget.onPressed == null)
+                  Transform.scale(
+                    scale: 0.6,
+                    child: CupertinoSwitch(
+                      value: isSwitched,
+                      onChanged: (value) {
+                        setState(() {
+                          isSwitched = value;
+                        });
+                      },
+                    ),
+                  ),
+                if (widget.onPressed != null)
+                  Row(
+                    children: [
+                      if (widget.textRight != null)
+                        Text(
+                          widget.textRight!,
+                          style:
+                              AppTextStyles.normal14(color: AppColors.gray600),
+                        ),
+                      IconButton(
+                          onPressed: widget.onPressed,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_right,
+                            color: AppColors.gray400,
+                          )),
+                    ],
+                  ),
+              ],
+            ),
+            if (widget.showDottedLine)
+              const Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: DottedLine(
+                    dashLength: 2,
+                    dashColor: AppColors.gray300,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

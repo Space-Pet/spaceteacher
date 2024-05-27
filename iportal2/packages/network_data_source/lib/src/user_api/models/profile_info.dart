@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:local_data_source/local_data_source.dart';
+import 'package:core/core.dart';
 
 class ProfileInfo {
   final String name;
@@ -154,6 +154,13 @@ class ProfileInfo {
             .toList()
         : [Children.fromMap(childrenData as Map<String, dynamic>)];
 
+    final cap_dao_tao_data = map['cap_dao_tao'];
+    TrainingLevel? cap_dao_tao;
+    if (cap_dao_tao_data != null &&
+        (cap_dao_tao_data is Map<String, dynamic>)) {
+      cap_dao_tao = TrainingLevel.fromMap(cap_dao_tao_data);
+    }
+
     return ProfileInfo(
       name: map['name'] as String? ?? '',
       user_key: map['user_key'] as String? ?? '',
@@ -172,9 +179,7 @@ class ProfileInfo {
       school_brand: map['school_brand'] as String? ?? '',
       semester: map['semester']?.toInt() as int? ?? 0,
       children: children,
-      cap_dao_tao: map['cap_dao_tao'] != null
-          ? TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>)
-          : null,
+      cap_dao_tao: cap_dao_tao,
     );
   }
 
@@ -210,7 +215,7 @@ class ProfileInfo {
       ProfileInfo.fromMap(json.decode(source) as Map<String, dynamic>);
 
   factory ProfileInfo.fromLocalUser({
-    required LocalProfile localProfile,
+    required LocalIPortalProfile localProfile,
   }) {
     return ProfileInfo(
       name: localProfile.name,
