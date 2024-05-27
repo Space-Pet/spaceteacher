@@ -14,7 +14,7 @@ class UserHiveStorage implements UserLocalStorage {
   static const featuresKey = '__NGH_Features_Key__';
 
   init() async {
-    Hive.registerAdapter(LocalProfileAdapter());
+    Hive.registerAdapter(LocalIPortalProfileAdapter());
     Hive.registerAdapter(LocalChildrenAdapter());
     Hive.registerAdapter(LocalUrlImageAdapter());
     Hive.registerAdapter(LocalTrainingLevelAdapter());

@@ -1,11 +1,14 @@
 // ignore_for_file: unused_field
 import 'dart:io';
+import 'package:core/core.dart';
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iportal2/app.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/resources/assets.gen.dart';
@@ -149,112 +152,141 @@ class _ChatRoomViewState extends State<ChatRoomView> {
     }
   }
 
+  List<MessageDetail> messages = [];
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  int currentPage = 1;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MessageBloc, MessageState>(
-      builder: (context, state) {
-        // ignore: unused_local_variable
-        final isLoading = state.messageStatus == MessageStatus.loading;
-        final List<MessageDetail> messages = state.messageDetail;
-        final profileInfo = state.profileInfo;
-        final messageStatus = state.messageStatus;
-        final userId = state.profileInfo?.user_id.toString();
-        final messagePin = state.messagePin;
-        String recipient = '';
-        if (messages.isNotEmpty && messages.first.id != 0) {
-          if (messages.first.recipient.toString() == userId) {
-            recipient = messages.first.userId.toString();
-          } else {
-            recipient = messages.first.recipient.toString();
-          }
-        } else {
-          recipient = widget.phoneBookStudent?.userId.toString() ?? '';
+    return BlocListener<MessageBloc, MessageState>(
+      listener: (context, state) {
+        if (state.messageStatus == MessageStatus.success) {
+          messages.addAll(state.messageDetail);
         }
+      },
+      child: BlocBuilder<MessageBloc, MessageState>(
+        builder: (context, state) {
+          // ignore: unused_local_variable
+          final isLoading = state.messageStatus == MessageStatus.loading;
 
-        print('ih: ${widget.phoneBookStudent?.userId.toString()}');
-        print('id: ${widget.messageChatRoom!.id}');
-        return Scaffold(
-          body: BackGroundContainer(
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ScreenAppBar(
-                    title: widget.messageChatRoom?.fullName ?? '',
-                    canGoback: true,
-                    onBack: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  Flexible(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
+          final profileInfo = state.profileInfo;
+          final messageStatus = state.messageStatus;
+          final userId = state.profileInfo?.user_id.toString();
+          final messagePin = state.messagePin;
+          String recipient = '';
+          if (messages.isNotEmpty && messages.first.id != 0) {
+            if (messages.first.recipient.toString() == userId) {
+              recipient = messages.first.userId.toString();
+            } else {
+              recipient = messages.first.recipient.toString();
+            }
+          } else {
+            recipient = widget.phoneBookStudent?.userId.toString() ?? '';
+          }
+          return Scaffold(
+            body: BackGroundContainer(
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ScreenAppBar(
+                      title: widget.messageChatRoom?.fullName ?? '',
+                      canGoback: true,
+                      onBack: () {
+                        mainNavKey.currentContext!.pop(true);
+                      },
+                    ),
+                    Flexible(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
                         ),
-                      ),
-                      padding: const EdgeInsets.symmetric(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          if (messagePin?.content != '')
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _scrollToPinnedMessage(messages);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.blackTransparent,
-                                    borderRadius: BorderRadius.circular(15),
-                                    border: Border.all(
-                                      color: AppColors.gray200,
+                        padding: const EdgeInsets.symmetric(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (messagePin?.content != '')
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _scrollToPinnedMessage(messages);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.blackTransparent,
+                                      borderRadius: BorderRadius.circular(15),
+                                      border: Border.all(
+                                        color: AppColors.gray200,
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Icon(Icons.message),
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: Text(
-                                            messagePin?.content ?? '',
-                                            softWrap: true,
-                                            overflow: TextOverflow.visible,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(Icons.message),
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: Text(
+                                              messagePin?.content ?? '',
+                                              softWrap: true,
+                                              overflow: TextOverflow.visible,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          context.read<MessageBloc>().add(
-                                              DeletePinMessage(
-                                                  idMessage:
-                                                      messagePin?.id ?? 0));
-                                        },
-                                        child: const Icon(
-                                          Icons.close,
-                                          color: AppColors.red,
+                                        GestureDetector(
+                                          onTap: () {
+                                            context.read<MessageBloc>().add(
+                                                DeletePinMessage(
+                                                    idMessage:
+                                                        messagePin?.id ?? 0));
+                                          },
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: AppColors.red,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          Expanded(
-                            child: messages.isNotEmpty
-                                ? ListView.builder(
+                            Expanded(
+                              child: AppSkeleton(
+                                isLoading: isLoading,
+                                child: SmartRefresher(
+
+                                  controller: _refreshController,
+                                  onLoading: () {
+                                    if (state.hasMoreData == true) {
+                                      context.read<MessageBloc>().add(
+                                            GetMessageDetail(
+                                              conversationId: widget
+                                                      .messageChatRoom
+                                                      ?.conversationId
+                                                      .toString() ??
+                                                  '',
+                                              page: currentPage += 1,
+                                            ),
+                                          );
+                                    } else if (state.hasMoreData == false) {
+                                      _refreshController.loadComplete();
+                                    }
+                                  },
+                                  enablePullUp: state.hasMoreData == true,
+                                  enablePullDown: false,
+                                  child: ListView.builder(
                                     controller: _scrollController,
                                     padding: const EdgeInsets.only(bottom: 8),
                                     reverse: true,
@@ -262,7 +294,8 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                     itemBuilder: (context, index) {
                                       final message = messages[index];
                                       final messageKey = GlobalKey();
-                                      _messageKeys[message.id] = messageKey;
+                                      _messageKeys[message.id ?? 0] =
+                                          messageKey;
                                       return ListMessageDetail(
                                         key: messageKey,
                                         messageDatail: message,
@@ -272,47 +305,42 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                             widget.phoneBookStudent,
                                       );
                                     },
-                                  )
-                                : const Center(
-                                    child: Text(
-                                      'No messages yet',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                          ),
-                          if (messageStatus == MessageStatus.loadingMessage ||
-                              messageStatus == MessageStatus.loadingRestart)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.blue600,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all((messageStatus ==
-                                              MessageStatus.successMessage ||
-                                          messageStatus ==
-                                              MessageStatus.success)
-                                      ? 0
-                                      : 8),
-                                  child: const Text(
-                                    'Đang gửi',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          Container(
-                            height: 60,
-                            width: double.infinity,
-                            color: AppColors.primarySurface,
-                            child: Padding(
+                            if (messageStatus == MessageStatus.loadingMessage ||
+                                messageStatus == MessageStatus.loadingRestart)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, top: 10),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.blue600,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all((messageStatus ==
+                                                MessageStatus.successMessage ||
+                                            messageStatus ==
+                                                MessageStatus.success)
+                                        ? 0
+                                        : 8),
+                                    child: const Text(
+                                      'Đang gửi',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            Container(
+                              height: 60,
+                              width: double.infinity,
+                              color: AppColors.primarySurface,
                               padding: const EdgeInsets.all(8),
                               child: Row(
                                 children: [
@@ -360,6 +388,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                                     textFieldController.text,
                                                 recipient: recipient,
                                               ));
+
                                           textFieldController.clear();
                                         }
                                       },
@@ -370,17 +399,17 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                 ],
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -320,15 +320,17 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<List<MessageDetail>> getMessageDetail({
+  Future<Map<String, dynamic>> getMessageDetail({
     required String conversationId,
     required String schoolId,
     required String schoolBrand,
+    int? page,
   }) async {
     final data = await _appFetchApi.getMessageDetail(
       conversationId: conversationId,
       schoolId: schoolId,
       schoolBrand: schoolBrand,
+      page: page
     );
     return data;
   }
@@ -337,7 +339,7 @@ class AppFetchApiRepository {
     required String content,
     required String classId,
     required String recipient,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
   }) async {
     final data = await _appFetchApi.postMessage(

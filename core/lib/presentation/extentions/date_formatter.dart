@@ -6,6 +6,7 @@ extension DateTimeFormatter on DateTime {
 
   /// dd-MM-yyyy
   String get ddMMyyyyDash => DateFormat('dd-MM-yyyy').format(this);
+
   /// dd/MM/yyyy
   String get ddMMyyyySlash => DateFormat('dd/MM/yyyy').format(this);
 
@@ -14,6 +15,7 @@ extension DateTimeFormatter on DateTime {
   String get MM => DateFormat('MM').format(this);
   String get EEEEddMMyyyyVN =>
       DateFormat('EEEE, dd/MM/yyyy', 'vi_VN').format(this);
+  String get hhMM => DateFormat('hh:mm').format(this);
 }
 
 // tryParse String to DateTime

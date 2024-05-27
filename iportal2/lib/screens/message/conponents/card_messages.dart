@@ -1,9 +1,6 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/utils/utils_export.dart';
@@ -47,7 +44,7 @@ class ChatRoomItem extends StatelessWidget {
                         fit: BoxFit.cover,
                         image: NetworkImage(
                           chatRoom != null
-                              ? chatRoom!.avatarUrl
+                              ? chatRoom!.avatarUrl ?? ""
                               : newMessages!.urlImage.mobile,
                         ),
                       ),
@@ -66,14 +63,16 @@ class ChatRoomItem extends StatelessWidget {
                       children: [
                         Text(
                           chatRoom != null
-                              ? chatRoom!.fullName
+                              ? chatRoom!.fullName ?? ""
                               : newMessages!.fullName,
                           style: AppTextStyles.normal14(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          'Lớp ${chatRoom != null ? chatRoom!.content : newMessages!.className}',
+                          chatRoom != null
+                              ? "${chatRoom!.content}"
+                              : 'Lớp ${newMessages!.className}',
                           style: AppTextStyles.normal12(
                             fontWeight: chatRoom?.unRead != null
                                 ? FontWeight.w600
@@ -97,9 +96,9 @@ class ChatRoomItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              DateFormat('hh:mm')
-                                  .format(chatRoom!.createAt)
-                                  .toString(),
+                              DateTime.parse(
+                                chatRoom!.createAt ?? "",
+                              ).hhMM,
                               style: AppTextStyles.normal12(
                                 color: AppColors.gray500,
                               ),

@@ -51,8 +51,7 @@ class AppDelegate {
       domainSaver: instanceDomainSaver,
     );
 
-    final AuthRestClient authRestClient = AuthRestClient(
-        AuthorizeInterceptor(),
+    final AuthRestClient authRestClient = AuthRestClient(AuthorizeInterceptor(),
         domainSaver: instanceDomainSaver);
 
     final PartnerTokenRestClient partnerTokenRestClient =

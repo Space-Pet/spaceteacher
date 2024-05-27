@@ -164,7 +164,7 @@ class _ListNewMessagesViewState extends State<ListNewMessagesView> {
                                                   routeName:
                                                       ChatRoomScreen.routeName,
                                                   arguments: {
-                                                    'message': Message.empty(),
+                                                    'message': const Message(),
                                                     'phoneBookStudent':
                                                         newMessage,
                                                   },
