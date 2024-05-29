@@ -28,6 +28,7 @@ class MessageState {
   final ProfileInfo? profileInfo;
   final int? currentPage;
   final bool? hasMoreData;
+
   const MessageState({
     this.messagePin,
     this.messages = const [],
@@ -36,7 +37,7 @@ class MessageState {
     this.messageDetail = const [],
     this.phoneBookStudent = const [],
     this.currentPage = 1,
-    this.hasMoreData = false,
+    this.hasMoreData = true,
   });
 
   List<Object?> get props => [

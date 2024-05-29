@@ -150,7 +150,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
             return MessageDetail.fromJson(e);
           }).toList(),
           currentPage: data['current_page'],
-          hasMoreData: data['current_page'] < data['last_page'] ? true : false,
+          hasMoreData: data['current_page'] < data['last_page'] ?? false,
           profileInfo: currentUserBloc.state.user),
     );
   }
@@ -164,12 +164,18 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       conversationId: event.conversationId,
       schoolId: currentUserBloc.state.user.school_id.toString(),
       schoolBrand: currentUserBloc.state.user.school_brand,
+      page: event.page,
     );
-    emit(state.copyWith(
-        messageStatus: MessageStatus.successRestart,
-        messageDetail: data['data'],
-        hasMoreData: true,
-        profileInfo: currentUserBloc.state.user));
+    emit(
+      state.copyWith(
+          messageStatus: MessageStatus.successRestart,
+          messageDetail: data['data'].map<MessageDetail>((e) {
+            return MessageDetail.fromJson(e);
+          }).toList(),
+          currentPage: data['current_page'],
+          hasMoreData: data['current_page'] < data['last_page'] ?? false,
+          profileInfo: currentUserBloc.state.user),
+    );
   }
 
   _onGetMessageResart(

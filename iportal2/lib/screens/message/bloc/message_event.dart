@@ -25,8 +25,9 @@ class PostMessage extends MessageEvent {
 
 class GetMessageDetailRestart extends MessageEvent {
   final String conversationId;
-  GetMessageDetailRestart({required this.conversationId});
-  List<Object> get props => [conversationId];
+  final int page;
+  GetMessageDetailRestart({required this.conversationId, this.page = 1});
+  List<Object> get props => [conversationId, page];
 }
 
 class DeleteMessageDetail extends MessageEvent {
