@@ -28,6 +28,7 @@ class MessageState {
   final ProfileInfo? profileInfo;
   final int? currentPage;
   final bool? hasMoreData;
+  final int? conversationID;
 
   const MessageState({
     this.messagePin,
@@ -38,6 +39,7 @@ class MessageState {
     this.phoneBookStudent = const [],
     this.currentPage = 1,
     this.hasMoreData = true,
+    this.conversationID,
   });
 
   List<Object?> get props => [
@@ -49,6 +51,7 @@ class MessageState {
         messagePin,
         currentPage,
         hasMoreData,
+        conversationID
       ];
   MessageState copyWith({
     List<Message>? messages,
@@ -59,6 +62,7 @@ class MessageState {
     MessageDetail? messagePin,
     int? currentPage,
     bool? hasMoreData,
+    int? conversationID,
   }) {
     return MessageState(
       messagePin: messagePin ?? this.messagePin,
@@ -69,6 +73,7 @@ class MessageState {
       messages: messages ?? this.messages,
       currentPage: currentPage ?? this.currentPage,
       hasMoreData: hasMoreData ?? this.hasMoreData,
+      conversationID: conversationID ?? this.conversationID,
     );
   }
 }

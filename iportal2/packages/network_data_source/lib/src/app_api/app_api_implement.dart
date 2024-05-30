@@ -556,7 +556,7 @@ class AppFetchApi extends AbstractAppFetchApi {
             'School_Brand': schoolBrand,
           }),
           data: formData);
-      return res.data['code'];
+      return res.data['data']['conversation_id'];
     } catch (e) {
       Log.e(e.toString());
       return 0;
