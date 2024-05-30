@@ -11,8 +11,9 @@ class GetPhoneBookStudent extends MessageEvent {}
 
 class GetMessageDetail extends MessageEvent {
   final String conversationId;
-  GetMessageDetail({required this.conversationId});
-  List<Object> get props => [conversationId];
+  final int page;
+  GetMessageDetail({required this.conversationId, this.page = 1});
+  List<Object> get props => [conversationId, page];
 }
 
 class PostMessage extends MessageEvent {
@@ -24,8 +25,9 @@ class PostMessage extends MessageEvent {
 
 class GetMessageDetailRestart extends MessageEvent {
   final String conversationId;
-  GetMessageDetailRestart({required this.conversationId});
-  List<Object> get props => [conversationId];
+  final int page;
+  GetMessageDetailRestart({required this.conversationId, this.page = 1});
+  List<Object> get props => [conversationId, page];
 }
 
 class DeleteMessageDetail extends MessageEvent {

@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
-import 'package:iportal2/screens/school_fee/model/history_school_fee_payment.dart';
 
 class SchoolFeeDetailHistoryPayment extends StatelessWidget {
   const SchoolFeeDetailHistoryPayment({required this.item, super.key});
@@ -35,12 +34,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                         AppTextStyles.normal14(color: AppColors.gray700),
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
-                    value: DateFormat("dd/MM/yyyy")
-                        .format(
-                          DateFormat("dd-MM-yyyy")
-                              .parse(item.paymentDate ?? ""),
-                        )
-                        .toString(),
+                    value: DateTime.parse("31-07-2023").ddMMyyyySlash,
                     isLastItem: false),
                 FieldRowCardDetail(
                     title: "Hình thức thu",

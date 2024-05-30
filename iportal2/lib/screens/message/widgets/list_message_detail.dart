@@ -1,6 +1,7 @@
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/utils/utils_export.dart';
 import 'package:network_data_source/network_data_source.dart';
@@ -39,9 +40,8 @@ class _ListMessageDetailState extends State<ListMessageDetail> {
             ListTile(
               leading: const Icon(Icons.delete),
               title: const Text('Xoá tin nhắn'),
-              onTap: () {
-                Navigator.of(context).pop();
-                _deleteMessage(message);
+              onTap: () async {
+                _deleteMessage(message).whenComplete(() => context.pop());
               },
             ),
             ListTile(
@@ -58,13 +58,13 @@ class _ListMessageDetailState extends State<ListMessageDetail> {
   }
 
   void _pinMessage(MessageDetail message) {
-    context.read<MessageBloc>().add(PinMessage(idMessage: message.id));
+    context.read<MessageBloc>().add(PinMessage(idMessage: message.id ?? 0));
   }
 
-  void _deleteMessage(MessageDetail message) {
+  Future<void> _deleteMessage(MessageDetail message) async {
     context.read<MessageBloc>().add(DeleteMessageDetail(
-        content: message.content,
-        idMessage: message.id,
+        content: message.content ?? "",
+        idMessage: message.id ?? 0,
         recipient: message.recipient.toString()));
   }
 
@@ -133,7 +133,7 @@ class _ListMessageDetailState extends State<ListMessageDetail> {
                         maxWidth: 300,
                       ),
                       child: Text(
-                        widget.messageDatail.content,
+                        widget.messageDatail.content ?? "",
                         style: TextStyle(
                           color: widget.messageDatail.userId ==
                                   widget.profileInfo.user_id

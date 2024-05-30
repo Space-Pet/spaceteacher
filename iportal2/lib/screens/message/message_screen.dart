@@ -5,6 +5,7 @@ import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/screens/message/list_new_messages.dart';
@@ -55,7 +56,7 @@ class _MessageViewState extends State<MessageView> {
 
         final filteredChatRooms = message.where((chatRoom) {
           final searchText = search.toLowerCase();
-          return chatRoom.fullName.toLowerCase().contains(searchText);
+          return chatRoom.fullName?.toLowerCase().contains(searchText) ?? false;
         }).toList();
 
         return Scaffold(
@@ -93,28 +94,35 @@ class _MessageViewState extends State<MessageView> {
                       ),
                       child: ClipRRect(
                         borderRadius: AppRadius.rounded10,
-                        child: AppSkeleton(
-                          isLoading: isLoading,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: TitleAndInputText(
-                                  obscureText: true,
-                                  hintText: 'Tìm kiếm',
-                                  onChanged: (value) {
-                                    setState(() {
-                                      search = value;
-                                    });
-                                  },
-                                  prefixIcon: Assets.images.search.image(),
+                        child: CustomRefresh(
+                          onRefresh: () async {
+                            context
+                                .read<MessageBloc>()
+                                .add(GetListMessageResert());
+                          },
+                          child: AppSkeleton(
+                            isLoading: isLoading,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  child: TitleAndInputText(
+                                    obscureText: true,
+                                    hintText: 'Tìm kiếm',
+                                    onChanged: (value) {
+                                      setState(() {
+                                        search = value;
+                                      });
+                                    },
+                                    prefixIcon: Assets.images.search.image(),
+                                  ),
                                 ),
-                              ),
-                              if (filteredChatRooms.isNotEmpty)
-                                ListMessage(chatRooms: filteredChatRooms)
-                              else
-                                _buildEmptyState(search),
-                            ],
+                                if (filteredChatRooms.isNotEmpty)
+                                  ListMessage(chatRooms: filteredChatRooms)
+                                else
+                                  _buildEmptyState(search),
+                              ],
+                            ),
                           ),
                         ),
                       ),

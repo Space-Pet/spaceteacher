@@ -66,8 +66,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     GetPinMessage event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(
-        messageStatus: MessageStatus.loadingGetPinMessage));
+    emit(state.copyWith(messageStatus: MessageStatus.loadingGetPinMessage));
     final data = await appApiRepository.getMessagePin(
       schoolId: currentUserBloc.state.user.school_id.toString(),
       schoolBrand: currentUserBloc.state.user.school_brand,
@@ -126,7 +125,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     final data = await appApiRepository.postMessage(
       recipient: event.recipient,
       content: event.content,
-      schoolId: currentUserBloc.state.user.school_id.toString(),
+      schoolId: currentUserBloc.state.user.school_id,
       schoolBrand: currentUserBloc.state.user.school_brand,
       classId: currentUserBloc.state.user.children[0].class_id.toString(),
     );
@@ -142,11 +141,18 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       conversationId: event.conversationId,
       schoolId: currentUserBloc.state.user.school_id.toString(),
       schoolBrand: currentUserBloc.state.user.school_brand,
+      page: event.page,
     );
-    emit(state.copyWith(
-        messageStatus: MessageStatus.success,
-        messageDetail: data,
-        profileInfo: currentUserBloc.state.user));
+    emit(
+      state.copyWith(
+          messageStatus: MessageStatus.success,
+          messageDetail: data['data'].map<MessageDetail>((e) {
+            return MessageDetail.fromJson(e);
+          }).toList(),
+          currentPage: data['current_page'],
+          hasMoreData: data['current_page'] < data['last_page'] ?? false,
+          profileInfo: currentUserBloc.state.user),
+    );
   }
 
   _onGetMessageDetailRestart(
@@ -158,11 +164,18 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       conversationId: event.conversationId,
       schoolId: currentUserBloc.state.user.school_id.toString(),
       schoolBrand: currentUserBloc.state.user.school_brand,
+      page: event.page,
     );
-    emit(state.copyWith(
-        messageStatus: MessageStatus.successRestart,
-        messageDetail: data,
-        profileInfo: currentUserBloc.state.user));
+    emit(
+      state.copyWith(
+          messageStatus: MessageStatus.successRestart,
+          messageDetail: data['data'].map<MessageDetail>((e) {
+            return MessageDetail.fromJson(e);
+          }).toList(),
+          currentPage: data['current_page'],
+          hasMoreData: data['current_page'] < data['last_page'] ?? false,
+          profileInfo: currentUserBloc.state.user),
+    );
   }
 
   _onGetMessageResart(

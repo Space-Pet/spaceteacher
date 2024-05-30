@@ -71,7 +71,7 @@ class AuthApi extends AbstractAuthApi {
         requestBody: {
           "user_key": email,
           "password": password,
-          "login_app": 1,
+          "login_app": 0,
           "device_id": deviceId,
           "model": model,
           "platform": platform,

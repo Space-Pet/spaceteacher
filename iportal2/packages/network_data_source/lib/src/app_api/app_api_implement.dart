@@ -76,7 +76,7 @@ class AppFetchApi extends AbstractAppFetchApi {
         '/api/v1/member/announce/notifications?orderBy=$orderBy&$viewedParam',
         headers: headers,
       );
-      
+
       final notiData = NotificationData.fromMap(res['data']);
       if (isNullOrEmpty(notiData)) return NotificationData.empty();
       return notiData;
@@ -500,23 +500,30 @@ class AppFetchApi extends AbstractAppFetchApi {
     return dataType;
   }
 
-  Future<List<MessageDetail>> getMessageDetail({
+  Future<Map<String, dynamic>> getMessageDetail({
     required String conversationId,
     required String schoolId,
     required String schoolBrand,
+    int? page = 1,
   }) async {
     try {
-      final data = await _client.doHttpGet(
-        '/api/v1/staff/conversations/$conversationId',
-        headers: {
-          'School_Id': schoolId,
-          'School_Brand': schoolBrand,
-        },
-      );
+      final data = await _client
+          .doHttpGet('/api/v1/staff/conversations/$conversationId', headers: {
+        'School_Id': schoolId,
+        'School_Brand': schoolBrand,
+      }, queryParameters: {
+        'page': page,
+      });
       final dataList = data['data']['data'] as List<dynamic>?;
-      return dataList?.map((e) => MessageDetail.fromJson(e)).toList() ?? [];
+
+      final res = {
+        "data": dataList,
+        "last_page": data['data']['meta']['last_page'],
+        "current_page": data['data']['meta']['current_page'],
+      };
+      return res;
     } catch (e) {
-      return [];
+      return {};
     }
   }
 
@@ -524,21 +531,34 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String content,
     required String classId,
     required String recipient,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
   }) async {
     try {
-      final data =
-          await _client.doHttpPost(url: '/api/v1/member/messages', headers: {
-        'School_Id': schoolId,
-        'School_Brand': schoolBrand,
-      }, requestBody: {
-        "content": content,
-        "class_id": classId,
-        "recipient": [recipient]
-      });
-      return data['code'];
+      var formData = FormData.fromMap(
+        {
+          "content": content,
+          "class_id": classId,
+          "recipient": "${[recipient]}",
+        },
+      );
+      // final data = await _client.doHttpPost(
+      //     url: '/api/v1/member/messages',
+      //     headers: {
+      //       'School_Id': schoolId,
+      //       'School_Brand': schoolBrand,
+      //     },
+      //     requestBody: formData);
+
+      final res = await _client.dio.post('/api/v1/member/messages',
+          options: Options(headers: {
+            'School_Id': schoolId,
+            'School_Brand': schoolBrand,
+          }),
+          data: formData);
+      return res.data['code'];
     } catch (e) {
+      Log.e(e.toString());
       return 0;
     }
   }

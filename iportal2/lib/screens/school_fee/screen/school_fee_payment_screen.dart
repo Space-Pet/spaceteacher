@@ -88,11 +88,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                           titleStyle:
                               AppTextStyles.normal14(color: AppColors.gray700),
                           valueStyle: AppTextStyles.semiBold14(),
-                          value: DateFormat("dd/MM/yyyy")
-                              .format(
-                                DateFormat("dd-MM-yyyy").parse("31-07-2023"),
-                              )
-                              .toString(),
+                          value: DateTime.parse("31-07-2023").ddMMyyyySlash,
                           isLastItem: false),
                       FieldRowCardDetail(
                         title: "Hình thức thanh toán",
