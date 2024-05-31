@@ -33,7 +33,6 @@ class _ListMessageDetailState extends State<ListMessageDetail> {
               leading: const Icon(Icons.push_pin),
               title: const Text('Ghim tin nhắn'),
               onTap: () {
-                Navigator.of(context).pop();
                 _pinMessage(message);
               },
             ),

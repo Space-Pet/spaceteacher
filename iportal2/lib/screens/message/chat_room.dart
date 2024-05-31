@@ -35,6 +35,9 @@ class ChatRoomScreen extends StatelessWidget {
       listener: (context, state) {
         switch (state.messageStatus) {
           case MessageStatus.successMessage:
+            messageBloc.add(GetMessageDetailRestart(
+              conversationId: state.conversationID.toString(),
+            ));
           case MessageStatus.successDelete:
             messageBloc
                 .add(GetMessageDetailRestart(conversationId: conversationId));
@@ -45,6 +48,7 @@ class ChatRoomScreen extends StatelessWidget {
             LoadingDialog.hide(context);
             break;
           case MessageStatus.loadingGetPinMessage:
+            LoadingDialog.show(context);
           case MessageStatus.loadingDeletePinMessage:
             LoadingDialog.show(context);
             break;
@@ -130,7 +134,11 @@ class _ChatRoomViewState extends State<ChatRoomView> {
     if (messagePin != null) {
       final index =
           messageDetail.indexWhere((message) => message.id == messagePin.id);
-      if (index != -1) _scrollController.jumpTo(index * 50.0);
+      if (index != -1) {
+        _scrollController.animateTo(index * 50.0,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut);
+      }
     }
   }
 
@@ -142,17 +150,13 @@ class _ChatRoomViewState extends State<ChatRoomView> {
       child: BlocListener<MessageBloc, MessageState>(
         listener: (context, state) {
           if (state.messageStatus == MessageStatus.success) {
-            if (!isNullOrEmpty(
-                widget.messageChatRoom?.conversationId.toString())) {
-              messages.addAll(state.messageDetail);
-              currentPage = state.currentPage ?? 1;
-            }
+            messages.addAll(state.messageDetail);
+            currentPage = state.currentPage ?? 1;
           } else if (state.messageStatus == MessageStatus.successRestart) {
-            if (!isNullOrEmpty(
-                widget.messageChatRoom?.conversationId.toString())) {
-              messages = state.messageDetail;
-              currentPage = state.currentPage ?? 1;
-            }
+            messages = state.messageDetail;
+            currentPage = state.currentPage ?? 1;
+            _scrollController.animateTo(0,
+                duration: Durations.long2, curve: Curves.easeInOut);
           }
         },
         child: BlocBuilder<MessageBloc, MessageState>(
@@ -189,7 +193,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              if (!isNullOrEmpty(messagePin?.content))
+                              if (!isNullOrEmpty(messagePin?.content) &&
+                                  messagePin?.conversationId ==
+                                      widget.messageChatRoom?.conversationId)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: GestureDetector(
@@ -275,14 +281,10 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                   ),
                                 ),
                               ),
-                              if ((!isNullOrEmpty(widget
-                                          .messageChatRoom?.conversationId) &&
-                                      state.messageStatus ==
-                                          MessageStatus.loadingMessage) ||
-                                  (!isNullOrEmpty(widget
-                                          .messageChatRoom?.conversationId) &&
-                                      state.messageStatus ==
-                                          MessageStatus.loadingRestart))
+                              if (state.messageStatus ==
+                                      MessageStatus.loadingMessage ||
+                                  state.messageStatus ==
+                                      MessageStatus.loadingRestart)
                                 Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: Container(
@@ -295,27 +297,6 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                       child: Text(
                                         'Đang gửi',
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              if (state.messageStatus ==
-                                  MessageStatus.successMessage)
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.blue600,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        widget.messageChatRoom?.content ?? "",
-                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400),
@@ -370,24 +351,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                                       textFieldController.text,
                                                   recipient: recipient,
                                                 ));
-                                            if (!isNullOrEmpty(widget
-                                                .messageChatRoom?.conversationId
-                                                .toString())) {
-                                              messages.insert(
-                                                  0,
-                                                  MessageDetail(
-                                                      id: 0,
-                                                      userId: profileInfo
-                                                              ?.user_id ??
-                                                          0,
-                                                      content:
-                                                          textFieldController
-                                                              .text,
-                                                      avatarUrl: widget
-                                                              .messageChatRoom
-                                                              ?.avatarUrl ??
-                                                          ""));
-                                            }
+
                                             textFieldController.clear();
                                           }
                                         },

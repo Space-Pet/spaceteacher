@@ -129,7 +129,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       schoolBrand: currentUserBloc.state.user.school_brand,
       classId: currentUserBloc.state.user.children[0].class_id.toString(),
     );
-    emit(state.copyWith(messageStatus: MessageStatus.successMessage));
+    emit(state.copyWith(
+        messageStatus: MessageStatus.successMessage, conversationID: data));
   }
 
   _onGetMessageDetail(

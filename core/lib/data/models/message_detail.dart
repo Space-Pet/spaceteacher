@@ -21,6 +21,15 @@ class MessageDetail {
   final String? avatarUrl;
   @JsonKey(name: 'viewed_at')
   final String? viewedAt;
+  @JsonKey(name: 'conversation_id')
+  final int? conversationId;
+  @JsonKey(name: 'created_by')
+  final String? createdBy;
+  @JsonKey(name: 'created_at')
+  final String? createdAt;
+  @JsonKey(name: 'updated_at')
+  final String? updatedAt;
+  final int? sticky;
 
   const MessageDetail({
     this.avatarUrl,
@@ -33,6 +42,11 @@ class MessageDetail {
     this.userId,
     this.userType,
     this.viewedAt,
+    this.conversationId,
+    this.createdBy,
+    this.createdAt,
+    this.updatedAt,
+    this.sticky,
   });
 
   factory MessageDetail.fromJson(Map<String, dynamic> json) =>
@@ -56,6 +70,12 @@ class MessageDetail {
     String? fullName,
     String? avatarUrl,
     String? viewedAt,
+    int? conversationId,
+    String? createdBy,
+    String? createdAt,
+    String? updatedAt,
+    int? sticky,
+
   }) {
     return MessageDetail(
       id: id ?? this.id,
@@ -68,6 +88,11 @@ class MessageDetail {
       fullName: fullName ?? this.fullName,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       viewedAt: viewedAt ?? this.viewedAt,
+      conversationId: conversationId ?? this.conversationId,
+      createdBy: createdBy ?? this.createdBy,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      sticky: sticky ?? this.sticky,
     );
   }
 }
