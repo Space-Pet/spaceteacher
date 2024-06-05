@@ -6,7 +6,7 @@ import 'package:iportal2/screens/school_fee/widget/tab_history_payment/school_fe
 class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
   const CardDetailSchoolFeeHistoryPayment(
       {required this.item, this.isShowDetail = false, super.key});
-  final HistorySchoolFeePayment item;
+  final HistorySchoolFeeItem item;
 
   // Parse dd-MM-yyyy to dd/MM/yyyy
   String parseDate(String? date) {
@@ -42,7 +42,7 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                           AppTextStyles.normal14(color: AppColors.gray700),
                       valueStyle:
                           AppTextStyles.semiBold14(color: AppColors.gray700),
-                      value: "${item.billId}",
+                      value: "${item.soPhieuThu}",
                       isLastItem: false,
                     ),
                     FieldRowCardDetail(
@@ -51,7 +51,7 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                             AppTextStyles.normal14(color: AppColors.gray700),
                         valueStyle:
                             AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value: parseDate(item.paymentDate),
+                        value: parseDate("31-12-2021"),
                         isLastItem: false),
                     FieldRowCardDetail(
                         title: "Hình thức thu",
@@ -59,7 +59,7 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                             AppTextStyles.normal14(color: AppColors.gray700),
                         valueStyle:
                             AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value: '${item.paymentMethod}',
+                        value: '${item.hinhThucThanhToan}',
                         isLastItem: false),
                     FieldRowCardDetail(
                         title: "Số tiền",
@@ -68,7 +68,7 @@ class CardDetailSchoolFeeHistoryPayment extends StatelessWidget {
                         valueStyle:
                             AppTextStyles.semiBold14(color: AppColors.gray700),
                         value: NumberFormatUtils.displayMoney(
-                                double.parse('${item.amount}')) ??
+                                double.parse('${item.soTien ?? 0}')) ??
                             "",
                         isLastItem: false),
                   ],

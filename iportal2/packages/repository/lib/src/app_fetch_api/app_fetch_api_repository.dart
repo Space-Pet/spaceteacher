@@ -327,11 +327,10 @@ class AppFetchApiRepository {
     int? page,
   }) async {
     final data = await _appFetchApi.getMessageDetail(
-      conversationId: conversationId,
-      schoolId: schoolId,
-      schoolBrand: schoolBrand,
-      page: page
-    );
+        conversationId: conversationId,
+        schoolId: schoolId,
+        schoolBrand: schoolBrand,
+        page: page);
     return data;
   }
 
@@ -468,4 +467,17 @@ class AppFetchApiRepository {
         learnYear: learnYear,
         listFee: listFee,
       );
+
+  Future<SchoolFee> getSchoolFee({required int pupilId}) async =>
+      await _appFetchApi.getSchoolFee(pupilId: pupilId);
+
+  Future<HistorySchoolFee> getHistorySchoolFee({required int pupilId}) async =>
+      await _appFetchApi.getHistorySchoolFee(pupilId: pupilId);
+
+  Future<List<PaymentGateway>> getPaymentGateways() async =>
+      await _appFetchApi.getPaymentGateway();
+  Future<SchoolFeePaymentPreview> getSchoolFeePaymentPreview(
+          {required int pupilId, required int totalMoneyPayment}) async =>
+      await _appFetchApi.getSchoolFeePaymentPreview(
+          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
 }

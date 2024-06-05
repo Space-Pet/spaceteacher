@@ -1,13 +1,14 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+
 import 'package:iportal2/resources/assets.gen.dart';
+
 import 'package:iportal2/screens/school_fee/widget/dialog_noti/school_fee_payment_dialog_noti.dart';
 
 class MethodPaymentScreen extends StatefulWidget {
-  const MethodPaymentScreen({super.key});
-
+  const MethodPaymentScreen({required this.paymentGateways, super.key});
+  final List<PaymentGateway> paymentGateways;
   @override
   State<MethodPaymentScreen> createState() => _MethodPaymentScreenState();
 }
@@ -63,24 +64,29 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
           ),
           Column(
             children: List.generate(
-              MethodPayment.values.length,
+              widget.paymentGateways.length,
               (index) {
+                final it = widget.paymentGateways[index];
                 return RadioListTile<MethodPayment>(
                   controlAffinity: ListTileControlAffinity.trailing,
                   title: Text(
-                    MethodPayment.values[index].toText(),
+                    it.name ?? MethodPayment.values[index].toText(),
                     style: AppTextStyles.bold14(),
                   ),
-                  subtitle: MethodPayment.values[index].index ==
-                          MethodPayment.card.index
-                      ? Text(
-                          "Phí dịch vụ tối thiểu: 5.000 VND",
-                          style: AppTextStyles.bold12(
-                            color: AppColors.gray600,
-                          ),
-                        )
-                      : null,
-                  secondary: MethodPayment.values[index].getIcon(),
+                  subtitle: Text(
+                    "Phí dịch vụ tối thiểu: ${it.serviceCharge ?? 0}",
+                    style: AppTextStyles.bold12(
+                      color: AppColors.gray600,
+                    ),
+                  ),
+                  secondary: isNullOrEmpty(it.logo)
+                      ? MethodPayment.values[index].getIcon()
+                      : Image.network(
+                          it.logo ?? "",
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                        ),
                   value: MethodPayment.values[index],
                   groupValue: _methodPayment,
                   onChanged: (value) {

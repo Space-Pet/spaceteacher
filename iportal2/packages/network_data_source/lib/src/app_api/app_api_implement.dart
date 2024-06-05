@@ -745,6 +745,75 @@ class AppFetchApi extends AbstractAppFetchApi {
       return StudentFeesResponse();
     }
   }
+
+  Future<SchoolFee> getSchoolFee({
+    required int pupilId,
+  }) async {
+    try {
+      final data = await _authRestClient.doHttpPost(
+        url: '/api/v1/payments/need-payment',
+        requestBody: {
+          'pupil_id': pupilId,
+        },
+      );
+      if (isNullOrEmpty(data)) return SchoolFee();
+      final schoolFee = SchoolFee.fromJson(data);
+      return schoolFee;
+    } catch (e) {
+      throw GetSchoolFeeFailure();
+    }
+  }
+
+  Future<HistorySchoolFee> getHistorySchoolFee({
+    required int pupilId,
+  }) async {
+    try {
+      final data = await _authRestClient
+          .doHttpPost(url: '/api/v1/payments/history', requestBody: {
+        'pupil_id': pupilId,
+      });
+      if (isNullOrEmpty(data['data'])) return HistorySchoolFee();
+      final historySchoolFee = HistorySchoolFee.fromJson(data['data']);
+      return historySchoolFee;
+    } catch (e) {
+      Log.e(e.toString());
+      throw GetHistorySchoolFeeItemFailure();
+    }
+  }
+
+  Future<SchoolFeePaymentPreview> getSchoolFeePaymentPreview({
+    required int pupilId,
+    required int totalMoneyPayment,
+  }) async {
+    try {
+      final data = await _authRestClient
+          .doHttpPost(url: '/api/v1/payments/preview', requestBody: {
+        'pupil_id': pupilId,
+        'total_money_payment': totalMoneyPayment,
+      });
+      if (isNullOrEmpty(data)) return SchoolFeePaymentPreview();
+
+      final schoolFeePaymentPreview = SchoolFeePaymentPreview.fromJson(data);
+      return schoolFeePaymentPreview;
+    } catch (e) {
+      throw GetSchoolFeeFailure();
+    }
+  }
+
+  Future<List<PaymentGateway>> getPaymentGateway() async {
+    try {
+      final data = await _authRestClient.doHttpGet('/api/v1/payments');
+      if (isNullOrEmpty(data['data']['items'])) return [];
+      final paymentGateway = data['data']['items']
+          .map<PaymentGateway>((e) => PaymentGateway.fromJson(e))
+          .toList();
+      return paymentGateway;
+    } catch (e) {
+      Log.e(e.toString());
+
+      throw GetPaymentGatewayFailure();
+    }
+  }
 }
 
 class GetNotificationsFailure implements Exception {}
@@ -768,3 +837,9 @@ class GetOtherScoreFailure implements Exception {}
 class GetExerciseFailure implements Exception {}
 
 class GetRegisterNoteBookFailure implements Exception {}
+
+class GetSchoolFeeFailure implements Exception {}
+
+class GetHistorySchoolFeeItemFailure implements Exception {}
+
+class GetPaymentGatewayFailure implements Exception {}

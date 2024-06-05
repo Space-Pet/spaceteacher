@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:iportal2/components/custom_refresh.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_history_payment/w_card_detail_school_fee_history_payment.dart';
 
 class TabViewSchoolFeeHistoryPayment extends StatefulWidget {
@@ -25,32 +26,37 @@ class _TabViewSchoolFeeHistoryPayment
 
   @override
   Widget build(BuildContext context) {
-    return CustomRefresh(
-      onRefresh: () async {},
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: List.generate(
-            5,
-            (index) => GestureDetector(
-              onTap: () {
-                setState(() {
-                  _listIsShowDetail[index] = !_listIsShowDetail[index];
-                });
-              },
-              child: CardDetailSchoolFeeHistoryPayment(
-                item: HistorySchoolFeePayment(
-                    billId: " PMTM${index}789789789789",
-                    paymentDate: '1$index-10-2023',
-                    paymentMethod: 'Tiền mặt',
-                    amount: 1000000),
-                isShowDetail: _listIsShowDetail[index],
+    return BlocBuilder<SchoolFeeBloc, SchoolFeeState>(
+      builder: (context, state) {
+        return Skeletonizer(
+          enabled: state.schoolFeeStatus == SchoolFeeStatus.loading,
+          child: CustomRefresh(
+            onRefresh: () async {},
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: List.generate(
+                  5,
+                  (index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _listIsShowDetail[index] = !_listIsShowDetail[index];
+                      });
+                    },
+                    child: CardDetailSchoolFeeHistoryPayment(
+                      item: state.historySchoolFee
+                              ?.historySchoolFeeItems?[index] ??
+                          HistorySchoolFeeItem(),
+                      isShowDetail: _listIsShowDetail[index],
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

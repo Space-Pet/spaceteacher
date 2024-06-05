@@ -4,7 +4,7 @@ import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 
 class SchoolFeeDetailHistoryPayment extends StatelessWidget {
   const SchoolFeeDetailHistoryPayment({required this.item, super.key});
-  final HistorySchoolFeePayment item;
+  final HistorySchoolFeeItem item;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +25,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                   titleStyle: AppTextStyles.normal14(color: AppColors.gray700),
                   valueStyle:
                       AppTextStyles.semiBold14(color: AppColors.gray700),
-                  value: "${item.billId}",
+                  value: "${item.soPhieuThu}",
                   isLastItem: false,
                 ),
                 FieldRowCardDetail(
@@ -34,7 +34,8 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                         AppTextStyles.normal14(color: AppColors.gray700),
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
-                    value: DateTime.parse("31-07-2023").ddMMyyyySlash,
+                    // value: item.paymentDate?.ddMMYYYSlash ?? "",
+                    value: "31-12-2021",
                     isLastItem: false),
                 FieldRowCardDetail(
                     title: "Hình thức thu",
@@ -42,7 +43,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                         AppTextStyles.normal14(color: AppColors.gray700),
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
-                    value: '${item.paymentMethod}',
+                    value: '${item.hinhThucThanhToan}',
                     isLastItem: false),
                 FieldRowCardDetail(
                     title: "Số tiền",
@@ -51,7 +52,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
                     value: NumberFormatUtils.displayMoney(
-                            double.parse('${item.amount}')) ??
+                            double.parse('${item.soTien ?? 0}')) ??
                         "",
                     isLastItem: false),
               ],
@@ -59,8 +60,10 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
           ),
           Column(
               children: List.generate(
-            2,
-            ((index) => _CardDetailHistorySchoolFeePayment(item: item)),
+            item.chiTietPhiThu?.length ?? 0,
+            ((index) => _CardDetailHistorySchoolFeePayment(
+                  item: item.chiTietPhiThu![index],
+                )),
           )),
           Align(
             alignment: Alignment.bottomRight,
@@ -86,7 +89,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
 
 class _CardDetailHistorySchoolFeePayment extends StatelessWidget {
   const _CardDetailHistorySchoolFeePayment({required this.item});
-  final HistorySchoolFeePayment item;
+  final ChiTietPhieuThu item;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -106,7 +109,7 @@ class _CardDetailHistorySchoolFeePayment extends StatelessWidget {
                   titleStyle: AppTextStyles.normal14(color: AppColors.gray700),
                   valueStyle:
                       AppTextStyles.semiBold14(color: AppColors.gray700),
-                  value: "${item.billId}",
+                  value: "${item.noidung}",
                   isLastItem: false,
                 ),
                 FieldRowCardDetail(
@@ -116,7 +119,7 @@ class _CardDetailHistorySchoolFeePayment extends StatelessWidget {
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
                     value: NumberFormatUtils.displayMoney(
-                            double.parse('${item.amount}')) ??
+                            double.parse('${item.soTien ?? 0}')) ??
                         "",
                     isLastItem: false),
                 FieldRowCardDetail(
@@ -126,7 +129,7 @@ class _CardDetailHistorySchoolFeePayment extends StatelessWidget {
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
                     value: NumberFormatUtils.displayMoney(
-                            double.parse('${item.amount}')) ??
+                            double.parse('${item.giamGia ?? 0}')) ??
                         "",
                     isLastItem: false),
                 FieldRowCardDetail(
@@ -136,7 +139,7 @@ class _CardDetailHistorySchoolFeePayment extends StatelessWidget {
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
                     value: NumberFormatUtils.displayMoney(
-                            double.parse('${item.amount}')) ??
+                            double.parse('${item.thanhTien ?? 0}')) ??
                         "",
                     isLastItem: false),
               ],

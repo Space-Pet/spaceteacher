@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 
 class CardDetailSchoolFeePayment extends StatelessWidget {
-  const CardDetailSchoolFeePayment({this.isShowDetail = false, super.key});
+  const CardDetailSchoolFeePayment(
+      {required this.item, this.isShowDetail = false, super.key});
   final bool isShowDetail;
-
+  final SchoolFeeItem item;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +42,9 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          "Nộp 4 lần (Theo học phần)",
+                          "${item.noidung}",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style:
                               AppTextStyles.bold14(color: AppColors.brand600),
                         ),
@@ -80,7 +83,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: FieldRowCardDetail(
                 title: 'Hạn nộp',
-                value: '31-07-2023',
+                value: item.hanNop?.ddMMYYYSlash ?? "",
                 titleStyle: AppTextStyles.normal14(
                   color: AppColors.gray600,
                 ),
@@ -110,7 +113,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                     FieldRowCardDetail(
                       title: 'Phí niêm yết',
                       value:
-                          '${NumberFormatUtils.displayMoney(double.parse('10000'))}/học phần',
+                          '${NumberFormatUtils.displayMoney(double.parse('${item.phiNiemYet ?? 0}'))}/học phần',
                       titleStyle: AppTextStyles.normal16(
                         color: AppColors.gray600,
                       ),
@@ -122,7 +125,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                     FieldRowCardDetail(
                       title: 'Giảm giá',
                       value:
-                          '${NumberFormatUtils.displayMoney(double.parse('5000'))}',
+                          '${NumberFormatUtils.displayMoney(double.parse('${item.giamGia ?? 0}'))}',
                       titleStyle: AppTextStyles.normal16(
                         color: AppColors.gray600,
                       ),
@@ -133,7 +136,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                   FieldRowCardDetail(
                     title: 'Phải nộp',
                     value:
-                        '${NumberFormatUtils.displayMoney(double.parse('5000'))}',
+                        '${NumberFormatUtils.displayMoney(double.parse('${item.phaiNop ?? 0}'))}',
                     titleStyle: AppTextStyles.normal16(
                       color: AppColors.brand500,
                     ),

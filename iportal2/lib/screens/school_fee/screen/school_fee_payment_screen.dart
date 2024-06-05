@@ -1,13 +1,20 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
 import 'package:iportal2/screens/school_fee/widget/method_payment/method_payment_screen.dart';
+import 'package:repository/repository.dart';
 
 class SchoolFeePaymentScreen extends StatefulWidget {
   static const routeName = '/school-fee-payment';
-  const SchoolFeePaymentScreen({super.key});
-
+  const SchoolFeePaymentScreen(
+      {required this.schoolFeePaymentPreview,
+      required this.paymentGateways,
+      super.key});
+  final SchoolFeePaymentPreview schoolFeePaymentPreview;
+  final List<PaymentGateway> paymentGateways;
   @override
   State<SchoolFeePaymentScreen> createState() => _SchoolFeePaymentScreenState();
 }
@@ -24,13 +31,10 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (event) {
-        final currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
+    return BlocProvider(
+      create: (context) => SchoolFeeBloc(
+          appFetchApiRepo: context.read<AppFetchApiRepository>(),
+          currentUserBloc: context.read<CurrentUserBloc>()),
       child: Scaffold(
         backgroundColor: AppColors.white,
         body: SafeArea(
@@ -76,8 +80,8 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                       ),
                       FieldRowCardDetail(
                         title: "Số tiền thu",
-                        value: NumberFormatUtils.displayMoney(
-                                double.parse('${25000000}')) ??
+                        value: NumberFormatUtils.displayMoney(double.parse(
+                                '${widget.schoolFeePaymentPreview.tongPhaiNop ?? 0}')) ??
                             "",
                         titleStyle:
                             AppTextStyles.normal14(color: AppColors.gray700),
@@ -88,7 +92,8 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                           titleStyle:
                               AppTextStyles.normal14(color: AppColors.gray700),
                           valueStyle: AppTextStyles.semiBold14(),
-                          value: DateTime.parse("31-07-2023").ddMMyyyySlash,
+                          value:
+                              "31-07-2023".toDDMMYYYYSlash?.ddMMyyyySlash ?? "",
                           isLastItem: false),
                       FieldRowCardDetail(
                         title: "Hình thức thanh toán",
@@ -99,7 +104,9 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                       ),
 
                       // List card detail info payment
-                      _buildCardInfoPayment(),
+                      _buildCardInfoPayment(
+                        widget.schoolFeePaymentPreview.items ?? [],
+                      ),
                     ],
                   ),
                 ),
@@ -107,176 +114,116 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: _buildBottomBar(context),
+        bottomNavigationBar: _buildBottomBar(
+          context,
+          widget.paymentGateways,
+        ),
       ),
     );
   }
 
-  Widget _buildCardInfoPayment() {
+  Widget _buildCardInfoPayment(List<SchoolFeePaymentPreviewItem> items) {
     return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-            color: AppColors.gray200,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      children: List.generate(
+        items.length,
+        (index) {
+          final it = items[index];
+
+          return Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: AppColors.gray200,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(
-                    "Phí bán trú - Nộp 4 lần",
-                    style: AppTextStyles.bold16(
-                      color: AppColors.brand600,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Text(
+                      "${it.noiDung}",
+                      style: AppTextStyles.bold16(
+                        color: AppColors.brand600,
+                      ),
                     ),
                   ),
-                ),
-                const Divider(
-                  color: AppColors.gray300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Column(
-                    children: [
-                      FieldRowCardDetail(
-                        title: "Phí niêm yết",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${25000000}'))}/học phần",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Giảm giá",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${250000}'))}",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Phải nộp",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.brand500),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.brand500),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${25000000 - 250000}'))}",
-                        isLastItem: true,
-                      ),
-                    ],
+                  const Divider(
+                    color: AppColors.gray300,
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-            color: AppColors.gray200,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Text(
-                    "Phí nội trú - Nộp 1 lần (Cả năm)",
-                    style: AppTextStyles.bold16(
-                      color: AppColors.brand600,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Column(
+                      children: [
+                        FieldRowCardDetail(
+                          title: "Độ ưu tiên",
+                          titleStyle:
+                              AppTextStyles.normal14(color: AppColors.gray700),
+                          valueStyle: AppTextStyles.semiBold14(
+                              color: AppColors.gray700),
+                          value: "${it.doUuTien}",
+                          isLastItem: false,
+                        ),
+                        FieldRowCardDetail(
+                          title: "Phí niêm yết",
+                          titleStyle:
+                              AppTextStyles.normal14(color: AppColors.gray700),
+                          valueStyle: AppTextStyles.semiBold14(
+                              color: AppColors.gray700),
+                          value:
+                              "${NumberFormatUtils.displayMoney(double.parse('${it.phiNiemYet ?? 0}'))}",
+                          isLastItem: false,
+                        ),
+                        FieldRowCardDetail(
+                          title: "Giảm giá",
+                          titleStyle:
+                              AppTextStyles.normal14(color: AppColors.gray700),
+                          valueStyle: AppTextStyles.semiBold14(
+                              color: AppColors.gray700),
+                          value:
+                              "${NumberFormatUtils.displayMoney(double.parse('${it.giamGia ?? 0}'))}",
+                          isLastItem: false,
+                        ),
+                        FieldRowCardDetail(
+                          title: "Phải nộp",
+                          titleStyle:
+                              AppTextStyles.normal14(color: AppColors.gray700),
+                          valueStyle: AppTextStyles.semiBold14(
+                              color: AppColors.gray700),
+                          value:
+                              "${NumberFormatUtils.displayMoney(double.parse('${it.phaiNop ?? 0}'))}",
+                          isLastItem: false,
+                        ),
+                        FieldRowCardDetail(
+                          title: "Thực thu",
+                          titleStyle:
+                              AppTextStyles.normal14(color: AppColors.gray700),
+                          valueStyle: AppTextStyles.semiBold14(
+                              color: AppColors.gray700),
+                          value:
+                              "${NumberFormatUtils.displayMoney(double.parse('${it.thucThu ?? 0}'))}",
+                          isLastItem: it == items.last,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                const Divider(
-                  color: AppColors.gray300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: Column(
-                    children: [
-                      FieldRowCardDetail(
-                        title: "Độ ưu tiên",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value: "6.30",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Phí niêm yết",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${250000}'))}",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Giảm giá",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${250000}'))}",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Phải nộp",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${25000000 - 250000}'))}",
-                        isLastItem: false,
-                      ),
-                      FieldRowCardDetail(
-                        title: "Thực thu",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle:
-                            AppTextStyles.semiBold14(color: AppColors.gray700),
-                        value:
-                            "${NumberFormatUtils.displayMoney(double.parse('${25000000 - 250000}'))}",
-                        isLastItem: true,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildBottomBar(BuildContext context) {
+  Widget _buildBottomBar(
+      BuildContext context, List<PaymentGateway> paymentGateways) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -429,9 +376,13 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
           ElevatedButton(
             onPressed: () {
               showModalBottomSheet(
-                  context: context,
-                  builder: (ctx) =>
-                      const Material(child: MethodPaymentScreen()));
+                context: context,
+                builder: (ctx) => Material(
+                  child: MethodPaymentScreen(
+                    paymentGateways: paymentGateways,
+                  ),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.brand500, elevation: 0),
