@@ -6,6 +6,7 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 import 'package:iportal2/screens/profile/profile_screen.dart';
+import 'package:iportal2/screens/profile/widget/profile_bottom_sheet.dart';
 import 'package:repository/repository.dart';
 
 class HomeAppBar extends StatelessWidget {
@@ -25,7 +26,9 @@ class HomeAppBar extends StatelessWidget {
       child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
         builder: (context, state) {
           final activeChildData = state.activeChild;
+          final listChildren = state.user.children;
           final urlImage = activeChildData.url_image.mobile;
+
           final isStudent = state.user.isStudent();
 
           return BlocBuilder<ProfileBloc, ProfileState>(
@@ -77,7 +80,23 @@ class HomeAppBar extends StatelessWidget {
                                   ),
                                 )
                               ],
-                            )
+                            ),
+                            if (!isStudent && listChildren.length > 1)
+                              IconButton(
+                                padding: const EdgeInsets.only(left: 16),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: AppColors.white,
+                                ),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (BuildContext context) =>
+                                        const SelectChildrenBottomSheet(),
+                                  );
+                                },
+                              ),
                           ],
                         ),
                       ),

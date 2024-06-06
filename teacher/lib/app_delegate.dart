@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:teacher/app_config/network_client_setup.dart';
 import 'package:teacher/boostrap.dart';
 import 'package:teacher/firebase_options.dart';

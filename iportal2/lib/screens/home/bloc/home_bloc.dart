@@ -34,7 +34,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     add(HomeGetPinnedAlbumIdList());
     on<HomeUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
 
-    on<HomeRefresh>(_onRefresh);
+    on<HomeRefresh>(_onRefresh); 
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -45,7 +45,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(statusExercise: HomeStatus.loading));
 
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
-      // userKey: currentUserBloc.state.user.user_key,
+      // userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
       userKey: '0723210020',
     );
@@ -55,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     final exerciseInDayDataList = await appFetchApiRepo.getExercises(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
       isDueDate: false,
     );
@@ -69,11 +69,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   _onFetchExercise(HomeFetchExercise event, Emitter<HomeState> emit) async {
-    if (!currentUserBloc.state.user.isKinderGarten()) {
+    if (!currentUserBloc.state.activeChild.isMN) {
       emit(state.copyWith(statusExercise: HomeStatus.loading));
 
       final exerciseDataList = await appFetchApiRepo.getExercises(
-        userKey: currentUserBloc.state.user.user_key,
+        userKey: currentUserBloc.state.activeChild.user_key,
         datePicked: DateTime.now(),
         isDueDate: event.isDueDate,
         // txtDate: '18-03-2024',
@@ -103,7 +103,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeFetchNotificationData event, Emitter<HomeState> emit) async {
     emit(state.copyWith(statusNoti: HomeStatus.loading));
 
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
     final headers = {
       'School-Id': user.school_id,
       'School-Brand': user.school_brand,
@@ -119,10 +119,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   _onFetchAlbumData(HomeFetchAlbumData event, Emitter<HomeState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten()) {
+    if (currentUserBloc.state.activeChild.isMN) {
       emit(state.copyWith(statusAlbum: HomeStatus.loading));
 
-      final user = currentUserBloc.state.user;
+      final user = currentUserBloc.state.activeChild;
 
       final albumData = await appFetchApiRepo.getAlbum(
         // pupilId: '10044568',
@@ -137,35 +137,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   _onGetPinnedAlbumIdList(
       HomeGetPinnedAlbumIdList event, Emitter<HomeState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten()) {
-      final user = currentUserBloc.state.user;
-      final featuresLocal = await userRepository.getFeatures();
+    if (currentUserBloc.state.activeChild.isMN) {
+      final user = currentUserBloc.state.activeChild;
 
-      final pinnedAlbumIdList = featuresLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(
-              user_key: '',
-              features: [],
-              pinnedAlbumIdList: [],
-            ),
-          )
-          .pinnedAlbumIdList;
-      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList ?? []));
+      emit(state.copyWith(pinnedAlbumIdList: user.pinnedAlbumIdList));
     }
   }
 
   _onUpdatePinnedAlbum(HomeUpdatePinnedAlbum event, Emitter<HomeState> emit) {
     if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.user;
-      userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
+      final user = currentUserBloc.state.activeChild;
+      // TODO: Update pinned album
+      // userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
     }
 
     emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
   }
 
   _onRefresh(HomeRefresh event, Emitter<HomeState> emit) {
-    final isKinderGarten = currentUserBloc.state.user.isKinderGarten();
+    final isKinderGarten = currentUserBloc.state.activeChild.isMN;
     add(HomeFetchProfileData());
     add(HomeFetchNotificationData());
 

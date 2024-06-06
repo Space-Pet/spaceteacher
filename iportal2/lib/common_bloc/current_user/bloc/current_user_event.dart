@@ -1,13 +1,21 @@
 part of 'current_user_bloc.dart';
 
-abstract class CurrentUserEvent {}
+abstract class CurrentUserEvent {
+  // Cache user data
+}
 
 class CurrentUserUpdated extends CurrentUserEvent {
   CurrentUserUpdated({required this.user});
-  final ProfileInfo user;
+  final LocalIPortalProfile user;
+}
+
+class CurrentUserChangeActiveChild extends CurrentUserEvent {
+  CurrentUserChangeActiveChild(this.child);
+  final LocalChildren child;
 }
 
 class BackGroundUpdatedState extends CurrentUserEvent {
   BackGroundUpdatedState({required this.bg});
   final SchoolBrand bg;
 }
+

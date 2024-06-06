@@ -23,7 +23,7 @@ class ScoreOther {
       status: map['status'],
       statusNote: map['status_note'],
       data: List<ScoreOtherData>.from(
-        map['data']?.map((x) => ScoreOtherData.fromMap(x)),
+        map['data']?.map(ScoreOtherData.fromMap),
       ),
     );
   }

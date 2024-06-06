@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'setting_screen_event.dart';
 part 'setting_screen_state.dart';
@@ -8,12 +9,46 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
   SettingScreenBloc({
     required this.authRepository,
     required this.userRepository,
+    required this.appFetchApiRepo,
+    required this.currentUserBloc,
   }) : super(const SettingScreenState()) {
     on<SettingScreenLoggedOut>(_onLogout);
+    on<TurnOffNoti>(_onTurnOffNoti);
   }
 
   final AuthRepository authRepository;
   final UserRepository userRepository;
+  final AppFetchApiRepository appFetchApiRepo;
+  final CurrentUserBloc currentUserBloc;
+
+  Future<void> _onTurnOffNoti(
+    TurnOffNoti event,
+    Emitter<SettingScreenState> emit,
+  ) async {
+    final user = currentUserBloc.state.user;
+
+    final headers = {
+      'School-Id': user.school_id,
+      'School-Brand': user.school_brand,
+    };
+
+    try {
+      final data = await appFetchApiRepo.turnOffNoti(
+        pushNotify: event.pushNotify,
+        headers: headers,
+      );
+      print(data);
+      if (data!['code'] == 200) {
+        emit(state.copyWith(
+            logoutStatus: SettingScreenStatus.turnOffNotiSuccess));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(logoutStatus: SettingScreenStatus.failure),
+      );
+      rethrow;
+    }
+  }
 
   Future<void> _onLogout(
     SettingScreenLoggedOut event,
@@ -28,7 +63,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
       if (isSuccess) {
         final domainSaver = Injection.get<DomainSaver>();
         await domainSaver.clearDomain();
-        await userRepository.clearLocalUser();
+        await userRepository.logOut();
         emit(
           state.copyWith(logoutStatus: SettingScreenStatus.success),
         );

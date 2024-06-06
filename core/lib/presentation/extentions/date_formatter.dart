@@ -3,6 +3,9 @@ part of 'extention.dart';
 // Format DateTime to String
 extension DateTimeFormatter on DateTime {
   String get yyyyMMdd => DateFormat('yyyy-MM-dd').format(this);
+  String get ddMMSlash => DateFormat('dd/MM').format(this);
+
+  String get eeee => DateFormat('EEEE', 'vi_VN').format(this);
 
   /// dd-MM-yyyy
   String get ddMMyyyyDash => DateFormat('dd-MM-yyyy').format(this);
@@ -37,8 +40,8 @@ extension StringDateFormatter on String {
       return null;
     }
   }
-  // to DateTime with format dd/MM/yyyy
 
+  /// to DateTime with format dd/MM/yyyy
   DateTime? get toDDMMYYYYSlash {
     try {
       return DateFormat('dd-MM-yyyy').parse(this);

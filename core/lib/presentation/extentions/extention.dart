@@ -3,4 +3,4 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 part 'component_extention.dart';
-part 'date_formatter.dart';
+part './date_formatter.dart';

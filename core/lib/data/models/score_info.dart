@@ -19,7 +19,7 @@ class ScoreData {
 
   factory ScoreData.fromMap(Map<String, dynamic> map) {
     final lines = map['lines_step'] as List<dynamic>?;
-    final List<Lines> line = [];
+    final line = <Lines>[];
     if (lines != null) {
       for (final barcode in lines) {
         final barcodeSO = Lines.fromMap(barcode);

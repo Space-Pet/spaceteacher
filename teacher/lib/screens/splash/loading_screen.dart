@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/app_main_layout.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:teacher/screens/authentication/domain/view/domain_screen.dart';
+import 'package:teacher/screens/authentication/domain/view/login_screen.dart';
 import 'package:teacher/screens/splash/bloc/splash_cubit.dart';
 import 'package:teacher/screens/splash/curved_splash_screen.dart';
 import 'package:teacher/screens/splash/splash_content.dart';
@@ -49,7 +49,7 @@ class LoadingScreen extends StatelessWidget {
               break;
 
             case SplashStatus.unLogined:
-              context.pushReplacement(LoginScreen());
+              context.pushReplacement(const LoginScreen());
               break;
             default:
           }

@@ -1,8 +1,10 @@
-import 'package:core/data/models/models.dart';
-import 'package:intl/intl.dart';
-import 'package:network_data_source/network_data_source.dart';
+import 'dart:io';
 
-import '../models/bus_schedule.dart';
+import 'package:core/core.dart';
+import 'package:core/data/models/list_attendance_bus.dart';
+import 'package:network_data_source/network_data_source.dart';
+import 'package:repository/repository.dart';
+import 'package:intl/intl.dart';
 
 class AppFetchApiRepository {
   AppFetchApiRepository({
@@ -26,7 +28,7 @@ class AppFetchApiRepository {
   }) async {
     final exerciseData = await _appFetchApi.getExercises(
       userKey,
-      DateFormat('dd-MM-yyyy').format(datePicked),
+      datePicked.ddMMyyyyDash,
       isDueDate: isDueDate,
     );
 
@@ -34,10 +36,8 @@ class AppFetchApiRepository {
       return exerciseData.exerciseDataList;
     }
 
-    DateFormat formatDate = DateFormat("yyyy-MM-dd");
     final listExerciseDueDate = exerciseData.exerciseDataList
-        .where(
-            (element) => element.hanNopBaoBai == formatDate.format(datePicked))
+        .where((element) => element.hanNopBaoBai == datePicked.yyyyMMdd)
         .toList();
 
     return listExerciseDueDate;
@@ -106,14 +106,14 @@ class AppFetchApiRepository {
         id: id,
       );
 
-  Future<List<LeaveData>> getLeaves(
-      {required int classId,
-      required int pupilId,
+  Future<List<LeaveTeacher>> getLeavesTeacher(
+      {required String status,
+      required DateTime startDate,
       required int schoolId,
       required String schoolBrand}) async {
-    final data = _appFetchApi.getLeaves(
-        classId: classId,
-        pupilId: pupilId,
+    final data = _appFetchApi.getLeavesTeacher(
+        status: status,
+        startDate: DateFormat('yyyy-MM-dd').format(startDate),
         schoolId: schoolId,
         schoolBrand: schoolBrand);
     return data;
@@ -184,6 +184,29 @@ class AppFetchApiRepository {
   Future<AlbumData> getAlbum(String teacherId) =>
       _appFetchApi.getAlbum(teacherId);
 
+  Future<List<String>> getListYear(int number) =>
+      _appFetchApi.getListYear(number);
+
+  Future<List<GalleryClass>> getListClass(String learnYear) =>
+      _appFetchApi.getListClass(learnYear);
+
+  Future<Map<String, dynamic>> createNewAlbum({
+    required String learnYear,
+    required int classId,
+    required String galleryName,
+    required List<File> listFiles,
+    required int teacherId,
+  }) async {
+    final data = await _appFetchApi.createNewAlbum(
+      classId: classId,
+      learnYear: learnYear,
+      galleryName: galleryName,
+      listFiles: listFiles,
+      teacherId: teacherId,
+    );
+    return data;
+  }
+
   Future<Menu> getMenu({
     required String userKey,
     required String date,
@@ -204,23 +227,33 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<Map<String, dynamic>> postLeave({
-    String? content,
+  Future<Map<String, dynamic>> approveLeave({
     required int pupilId,
     required String startDate,
     required String endDate,
-    required int leaveType,
     required int schoolId,
     required String schoolBrand,
   }) async {
-    final data = await _appFetchApi.postLeave(
-        content: content,
-        pupilId: pupilId,
-        startDate: startDate,
-        endDate: endDate,
-        leaveType: leaveType,
-        schoolId: schoolId,
-        schoolBrand: schoolBrand);
+    final data = await _appFetchApi.approveLeave(
+      pupilId: pupilId,
+      startDate: startDate,
+      endDate: endDate,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> approveAllLeaves({
+    required List<int> ids,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.approveAllLeaves(
+      ids: ids,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
     return data;
   }
 
@@ -239,17 +272,119 @@ class AppFetchApiRepository {
       pupilId: pupilId,
       schoolId: schoolId,
       schoolBrand: schoolBrand,
-      startDate: DateFormat('yyyy-MM-dd').format(startDate),
+      startDate: startDate.yyyyMMdd,
     );
     return data.map((e) => BusSchedule.fromData(e)).toList();
   }
 
-  Future<List<Message>> getListMessage(
-      {required int page,
-      required int schoolId,
-      required String schoolBrand}) async {
+  Future<Map<String, dynamic>?> postPinMessage({
+    required String schoolBrand,
+    required int schoolId,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.postPinMessage(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      idMessage: idMessage,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> postDeletePinMessage({
+    required String schoolBrand,
+    required int schoolId,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.postDeletePinMessage(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      idMessage: idMessage,
+    );
+    return data;
+  }
+
+  Future<MessageDetail?> getMessagePin({
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.getMessagePin(
+        schoolBrand: schoolBrand, schoolId: schoolId);
+
+    return data;
+  }
+
+  Future<List<Message>> getListMessage({
+    required int schoolId,
+    required String classId,
+    required String userId,
+    required String schoolBrand,
+  }) async {
     final data = await _appFetchApi.getlistMessage(
-        page: page, schoolId: schoolId, schoolBrand: schoolBrand);
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      classId: classId,
+      userId: userId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> getMessageDetail({
+    required String conversationId,
+    required int schoolId,
+    required String schoolBrand,
+    int? page,
+  }) async {
+    final data = await _appFetchApi.getMessageDetail(
+        conversationId: conversationId,
+        schoolId: schoolId,
+        schoolBrand: schoolBrand,
+        page: page);
+    return data;
+  }
+
+  Future<int> postMessage({
+    required String content,
+    required String classId,
+    required String recipient,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.postMessage(
+      content: content,
+      classId: classId,
+      recipient: recipient,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<int> deleteMessageDetail({
+    required String content,
+    required int schoolId,
+    required String schoolBrand,
+    required String recipient,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.deleteMessageDetail(
+        content: content,
+        schoolId: schoolId,
+        schoolBrand: schoolBrand,
+        recipient: recipient,
+        idMessage: idMessage);
+    return data;
+  }
+
+  Future<int> deleteMessage({
+    required int schoolId,
+    required String schoolBrand,
+    required int idMessage,
+  }) async {
+    final data = await _appFetchApi.deleteMessage(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      idMessage: idMessage,
+    );
     return data;
   }
 
@@ -285,20 +420,221 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<List<SurveyData>> getSurvay() async {
-    final data = await _appFetchApi.getSurvay();
+  Future<List<Survey>> getSurveyList() async {
+    final data = await _appFetchApi.getSurveyList();
     return data;
   }
 
-  Future<void> postSurvey(
-      {required List<Map<String, dynamic>> listSurvey}) async {
-    _appFetchApi.postSurvey(listSurvey: listSurvey);
+  Future<SurveyDetail> getSurveyDetail(int khaoSatId) async {
+    final data = await _appFetchApi.getSurveyDetail(khaoSatId);
+    return data;
+  }
+
+  Future<void> postSurvey({
+    required List<Map<String, dynamic>> listSurvey,
+    required int khaoSatId,
+  }) async {
+    _appFetchApi.postSurvey(
+      listSurvey: listSurvey,
+      khaoSatId: khaoSatId,
+    );
   }
 
   Future<String> getAttendanceType(
       {required int schoolId, required String schoolBrand}) async {
     final data = await _appFetchApi.getAttendanceType(
         schoolId: schoolId, schoolBrand: schoolBrand);
+    return data;
+  }
+
+  Future<List<ClassTeacher>> getListClassTeacher(
+      {required int teacherId,
+      required int schoolId,
+      required String schoolBrand}) async {
+    final data = await _appFetchApi.getListClassTeacher(
+      teacherId: teacherId,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<AttendanceWeek> getAttendanceWeekTeacher({
+    required int classId,
+    required String startDate,
+    required String endDate,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getAttendanceWeekTeacher(
+      classId: classId,
+      startDate: startDate,
+      endDate: endDate,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<List<AttendanceTeacher>> getAttendanceClassTeacher({
+    required String date,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getAttendanceClassTeacher(
+      date: date,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<List<AttendanceTeacher>> getAttendanceClassLeader({
+    required String date,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getAttendanceClassLeader(
+      date: date,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<List<ListAttendanceModel>> getListAttendance({
+    required int classId,
+    required int numberOfClassPeriod,
+    int? subjectId,
+    required String date,
+    required String type,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getListAttendance(
+      classId: classId,
+      numberOfClassPeriod: numberOfClassPeriod,
+      subjectId: subjectId,
+      date: date,
+      type: type,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> postAttendance({
+    required String type,
+    required int numberOfClasspriod,
+    required int classId,
+    required int subject,
+    required int roomId,
+    required String roomTitle,
+    required String date,
+    required String schoolBrand,
+    required int schoolId,
+    required List<AttendanceDataList> attendanceData,
+  }) async {
+    final data = await _appFetchApi.postAttendance(
+      type: type,
+      numberOfClasspriod: numberOfClasspriod,
+      classId: classId,
+      subject: subject,
+      roomId: roomId,
+      roomTitle: roomTitle,
+      date: date,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      attendanceData: attendanceData,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postTakeAttendanceOfEachStudent({
+    required int schoolId,
+    required String schoolBrand,
+    required int pupilId,
+    required String type,
+    required int attendanceId,
+    required int scheduleId,
+  }) async {
+    final data = await _appFetchApi.postTakeAttendanceOfEachStudent(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      pupilId: pupilId,
+      type: type,
+      attendanceId: attendanceId,
+      scheduleId: scheduleId,
+    );
+    return data;
+  }
+
+  Future<List<ListAttendanceBus>> getListAttendanceBus({
+    required int schoolId,
+    required String schoolBrand,
+    required int busId,
+  }) async {
+    final data = await _appFetchApi.getListAttendanceBus(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      busId: busId,
+    );
+    return data;
+  }
+
+  Future<DetailBusSchedule> getDetailBusSchedule({
+    required int schoolId,
+    required String schoolBrand,
+    required int idBus,
+  }) async {
+    final data = await _appFetchApi.getDetailBusSchedule(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      idBus: idBus,
+    );
+    return data;
+  }
+
+  Future<List<BusScheduleTeacher>> getBusScheduleTeacher({
+    required String startDate,
+    required String endDate,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.getBusScheduleTeacher(
+      startDate: startDate,
+      endDate: endDate,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postUpdateAbsentBus({
+    required int schoolId,
+    required String schoolBrand,
+    required int pupilId,
+    required int attendanceId,
+    required int scheduleId,
+  }) async {
+    final data = await _appFetchApi.postUpdateAbsentBus(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      pupilId: pupilId,
+      attendanceId: attendanceId,
+      scheduleId: scheduleId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>?> turnOffNoti({
+    required bool pushNotify,
+    required Map<String, Object> headers,
+  }) async {
+    final data = await _appFetchApi.turnOffNoti(
+      pushNotify: pushNotify,
+      headers: headers,
+    );
     return data;
   }
 }

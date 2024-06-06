@@ -2,20 +2,32 @@ part of 'leave_bloc.dart';
 
 abstract class LeaveEvent {}
 
-class GetLeaves extends LeaveEvent {
-  final int page;
-  GetLeaves({required this.page});
-  List<Object> get props => [page];
+class GetLeaves extends LeaveEvent {}
+
+class LeaveSelectDate extends LeaveEvent {
+  LeaveSelectDate({required this.datePicked});
+
+  final DateTime datePicked;
 }
 
-class PostLeave extends LeaveEvent {
-  final String? content;
+class LeaveFilter extends LeaveEvent {
+  LeaveFilter({required this.newStatus});
+
+  final LeaveStatusValue newStatus;
+}
+
+class LeaveAprroveAll extends LeaveEvent {
+  LeaveAprroveAll();
+}
+
+class LeaveApprove extends LeaveEvent {
+  final int pupilId;
   final String startDate;
   final String endDate;
-  final int leaveType;
-  PostLeave(
-      {required this.endDate,
-      this.content,
-      required this.leaveType,
-      required this.startDate});
+
+  LeaveApprove({
+    required this.pupilId,
+    required this.endDate,
+    required this.startDate,
+  });
 }

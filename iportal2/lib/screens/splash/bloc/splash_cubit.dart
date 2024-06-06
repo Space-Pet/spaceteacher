@@ -18,7 +18,6 @@ class SplashCubit extends Cubit<SplashState> {
   final CurrentUserBloc currentUserBloc;
 
   Future<bool> checkLoggedIn() async {
-    // Thực hiện kiểm tra đăng nhập bằng AuthRepository
     final isLogin = await authRepository.initApp();
     return isLogin;
   }
@@ -36,7 +35,6 @@ class SplashCubit extends Cubit<SplashState> {
         emit(state.copyWith(status: SplashStatus.logined));
 
         final localUser = await userRepository.getLocalUser();
-
         if (localUser != null) {
           currentUserBloc.add(CurrentUserUpdated(user: localUser));
         }

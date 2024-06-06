@@ -11,6 +11,7 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
     on<ChangePassword>(_onChangePassword);
   }
   final AppFetchApiRepository appFetchApiRepo;
+
   _onChangePassword(
     ChangePassword event,
     Emitter<SettingState> emit,
@@ -21,10 +22,14 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
       currentPassword: event.currentPassword,
       passwordConfirmation: event.passwordConfirmation,
     );
-    if (data == 200) {
+
+    if (data!['code'] == 200 && data['status'] == 'success') {
       emit(state.copyWith(settingStatus: SettingStatus.success));
     } else {
-      emit(state.copyWith(settingStatus: SettingStatus.error));
+      emit(state.copyWith(
+        settingStatus: SettingStatus.error,
+        errorMsg: data['message'],
+      ));
     }
   }
 }

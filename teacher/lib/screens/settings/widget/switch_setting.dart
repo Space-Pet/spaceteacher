@@ -5,24 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SettingFeature extends StatefulWidget {
-  const SettingFeature(
-      {super.key,
-      required this.text,
-      required this.iconAsset,
-      this.onPressed,
-      this.showDottedLine = true,
-      this.textRight});
+  const SettingFeature({
+    super.key,
+    required this.text,
+    required this.iconAsset,
+    this.onPressed,
+    this.textRight,
+    this.showDottedLine = true,
+    this.isNotiSetting = false,
+    this.isDisableNoti = false,
+  });
   final String text;
   final String? textRight;
   final String iconAsset;
   final Function()? onPressed;
   final bool showDottedLine;
+  final bool isNotiSetting;
+  final bool isDisableNoti;
+
   @override
   State<SettingFeature> createState() => _SettingFeatureState();
 }
 
 class _SettingFeatureState extends State<SettingFeature> {
-  bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -49,33 +54,27 @@ class _SettingFeatureState extends State<SettingFeature> {
                         child: Text(
                           widget.text,
                           style:
-                              AppTextStyles.normal14(color: AppColors.gray600),
+                              AppTextStyles.normal16(color: AppColors.gray600),
                         ),
                       )
                     ],
                   ),
                 ),
-                if (widget.onPressed == null)
+                if (widget.isNotiSetting)
                   Transform.scale(
                     scale: 0.6,
                     child: CupertinoSwitch(
-                      value: isSwitched,
-                      onChanged: (value) {
-                        setState(() {
-                          isSwitched = value;
-                        });
-                      },
+                      value: widget.isDisableNoti,
+                      onChanged: (value) {},
                     ),
                   ),
-                if (widget.onPressed != null)
+                if (!widget.isNotiSetting)
                   Row(
                     children: [
-                      if (widget.textRight != null)
-                        Text(
-                          widget.textRight!,
-                          style:
-                              AppTextStyles.normal14(color: AppColors.gray600),
-                        ),
+                      Text(
+                        widget.textRight ?? '',
+                        style: AppTextStyles.normal16(),
+                      ),
                       IconButton(
                           onPressed: widget.onPressed,
                           icon: const Icon(

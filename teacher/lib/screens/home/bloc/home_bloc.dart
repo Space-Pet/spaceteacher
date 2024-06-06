@@ -1,7 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+import 'package:core/core.dart';
 import 'package:repository/repository.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/notifications/bloc/notification_bloc.dart';
@@ -35,10 +32,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeFetchAlbumData>(_onFetchAlbumData);
     add(HomeFetchAlbumData());
 
-    on<HomeGetPinnedAlbumIdList>(_onGetPinnedAlbumIdList);
-    add(HomeGetPinnedAlbumIdList());
-
-    on<HomeUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
     on<HomeExerciseSelectDate>(_onSelectDate);
 
     on<HomeRefresh>(_onRefresh);
@@ -148,34 +141,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(state.copyWith(
         albumData: albumData,
-        statusAlbum: HomeStatus.success,
       ));
+
+      await Future.delayed(const Duration(milliseconds: 500));
+      emit(state.copyWith(statusAlbum: HomeStatus.success));
     }
-  }
-
-  _onGetPinnedAlbumIdList(
-      HomeGetPinnedAlbumIdList event, Emitter<HomeState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten) {
-      final user = currentUserBloc.state.user;
-      final featuresLocal = await userRepository.getLoggedUsers() ?? [];
-
-      final pinnedAlbumIdList = featuresLocal
-          .firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LoggedUser.empty(),
-          )
-          .pinnedAlbumIdList;
-      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList));
-    }
-  }
-
-  _onUpdatePinnedAlbum(HomeUpdatePinnedAlbum event, Emitter<HomeState> emit) {
-    if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.user;
-      userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
-    }
-
-    emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
   }
 
   _onRefresh(HomeRefresh event, Emitter<HomeState> emit) {
@@ -185,7 +155,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (isKinderGarten) {
       add(HomeFetchAlbumData());
-      add(HomeGetPinnedAlbumIdList());
     } else {
       add(HomeFetchExercise());
     }

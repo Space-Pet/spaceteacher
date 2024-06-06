@@ -13,9 +13,9 @@ class ReportStudent {
         comment: CommentTeacher.fromJson(json['comment']),
         teacherName: TeacherName.fromJson(json['teacher_name']),
         dataItems: List<DataItem>.from(
-            json['data']['items']?.map((e) => DataItem.fromJson(e)) ?? []),
+            json['data']['items']?.map(DataItem.fromJson) ?? []),
         listMarks: List<ListMarks>.from(
-            json['list_marks']['items']?.map((e) => ListMarks.fromJson(e)) ??
+            json['list_marks']['items']?.map(ListMarks.fromJson) ??
                 []));
   }
 }
@@ -82,7 +82,7 @@ class DataItem {
   factory DataItem.fromJson(Map<String, dynamic> json) {
     return DataItem(
         childrenItems: List<ChildrenItems>.from(
-            json['children_items']?.map((e) => ChildrenItems.fromJson(e)) ??
+            json['children_items']?.map(ChildrenItems.fromJson) ??
                 []),
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
@@ -106,7 +106,7 @@ class ChildrenItems {
   factory ChildrenItems.fromJson(Map<String, dynamic> json) {
     return ChildrenItems(
         dataChildrenItems: List<DataChildrenItems>.from(
-            json['children_items']?.map((e) => DataChildrenItems.fromJson(e)) ??
+            json['children_items']?.map(DataChildrenItems.fromJson) ??
                 []),
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
@@ -130,7 +130,7 @@ class DataChildrenItems {
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         listCriterial: List<ListCriterial>.from(
-            json['list_criterial']?.map((e) => ListCriterial.fromJson(e)) ??
+            json['list_criterial']?.map(ListCriterial.fromJson) ??
                 []),
         title: json['title'] ?? '');
   }
@@ -155,7 +155,7 @@ class ListCriterial {
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         result: List<Result>.from(
-            json['result']?.map((e) => Result.fromJson(e)) ?? []));
+            json['result']?.map(Result.fromJson) ?? []));
   }
 }
 

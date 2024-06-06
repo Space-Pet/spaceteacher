@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
-import 'package:core/presentation/screens/domain/domain_saver.dart';
 import 'package:repository/repository.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
@@ -35,14 +34,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
 
       final isKinderGarten = user.isKinderGarten();
-      final loggedUsers = await userRepository.getLoggedUsers() ?? [];
 
-      final matchUser = loggedUsers.firstWhere(
-          (element) => element.user_key == user.userKey,
-          orElse: () => LoggedUser.empty());
-
-      final featuresByGrade =
-          isKinderGarten ? preSFeatures : hihgSFeatures;
+      final defaultFeatures =
+          isKinderGarten ? preSTeacherFeatures : hihgSTeacherFeatures;
 
       final bgSchoolBrand = SchoolBrand.values
           .firstWhere((element) => element.value == user.schoolBrand);
@@ -54,11 +48,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         school_id: user.schoolId,
         user_id: user.userId,
         school_brand: user.schoolBrand,
-        features: matchUser.features.isNotEmpty
-            ? matchUser.features
-            : featuresByGrade,
+        features: defaultFeatures,
         background: bgSchoolBrand,
-        pinnedAlbumIdList: matchUser.pinnedAlbumIdList,
+        pinnedAlbumIdList: [],
         isKinderGarten: isKinderGarten,
       );
 
@@ -76,18 +68,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> _onDomainSave(
       LoginDomainSave event, Emitter<LoginState> emit) async {
     if (state.cachedDomain.isNotEmpty && event.domain != state.cachedDomain) {
-      // clear cached domain
       emit(state.copyWith(status: LoginStatus.init, cachedDomain: ''));
     }
+
     final saved = await domainInputDebouncer.runAsync(() async {
+      emit(state.copyWith(status: LoginStatus.domainInit));
       final domain = event.domain;
       return await domainSaver.saveDomain(domain: domain);
     });
     if (saved) {
       if (!emit.isDone) {
         emit(state.copyWith(
-            status: LoginStatus.readyToSubmit, cachedDomain: event.domain));
+          showError: false,
+          status: LoginStatus.readyToSubmit,
+          cachedDomain: event.domain,
+        ));
       }
+    } else {
+      emit(state.copyWith(
+        status: LoginStatus.domainFailure,
+        showError: true,
+      ));
     }
   }
 }

@@ -26,7 +26,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       NotificationFetchData event, Emitter<NotificationState> emit) async {
     emit(state.copyWith(status: NotificationStatus.loading));
 
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
     final headers = {
       'School-Id': user.school_id,
       'School-Brand': user.school_brand,

@@ -14,7 +14,7 @@ class ExerciseData {
     return ExerciseData(
       exerciseDataList: List<ExerciseItem>.from(
         map['data']?.map(
-          (x) => ExerciseItem.fromMap(x),
+          ExerciseItem.fromMap,
         ),
       ),
     );
@@ -34,17 +34,17 @@ class ExerciseData {
       ExerciseData.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-  DateFormat formatDateDrill = DateFormat("dd-MM-yyyy", 'vi_VN');
+  DateFormat formatDateDrill = DateFormat('dd-MM-yyyy', 'vi_VN');
 
   String getInitTime() {
     return formatDateDrill.format(DateTime.now());
   }
 
   List<String> getSubjectList() {
-    Set<String> uniqueSubjects =
+    final uniqueSubjects =
         exerciseDataList.map((e) => e.subjectName).toSet();
-    List<String> subjectList = uniqueSubjects.toList();
-    subjectList.insert(0, "Tất cả các môn");
+    final subjectList = uniqueSubjects.toList();
+    subjectList.insert(0, 'Tất cả các môn');
     return subjectList;
   }
 
@@ -142,7 +142,7 @@ class ExerciseItem {
   String toString() =>
       'ExerciseItem(lessonId: $lessonId, lessonName: $lessonName, subjectId: $subjectId, subjectName: $subjectName, lessonNote: $lessonNote, danDoBaoBai: $danDoBaoBai, fileBaoBai: $fileBaoBai, fileBaoBaiDomain: $fileBaoBaiDomain, linkBaoBai: $linkBaoBai, hanNopBaoBai: $hanNopBaoBai, teacherId: $teacherId, teacherName: $teacherName, tietNum: $tietNum, className: $className, classId: $classId,classId: $lessonStatus)';
 
-  static empty() {
+  static ExerciseItem empty() {
     return ExerciseItem(
       lessonId: '',
       lessonName: '',

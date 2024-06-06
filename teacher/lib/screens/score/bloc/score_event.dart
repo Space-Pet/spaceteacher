@@ -1,6 +1,5 @@
 part of 'score_bloc.dart';
 
-@immutable
 sealed class ScoreEvent {}
 
 class ScoreFetchMoet extends ScoreEvent {

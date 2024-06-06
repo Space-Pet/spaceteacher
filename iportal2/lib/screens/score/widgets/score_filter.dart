@@ -36,8 +36,6 @@ class ScoreFilter extends StatelessWidget {
     final listScoreType = ScoreType.values.map((e) => e.text()).toList();
     listScoreType.addAll(otherScoreData);
 
-    print('listScoreType $listScoreType');
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(

@@ -1,8 +1,8 @@
 import 'package:core/core.dart';
 
 import 'package:flutter/material.dart';
-
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/screens/survey/bloc/survey_bloc.dart';
@@ -15,8 +15,11 @@ class SurveyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appFetchApiRepository = context.read<AppFetchApiRepository>();
-    final surveyBloc = SurveyBloc(appFetchApiRepository: appFetchApiRepository);
-    surveyBloc.add(GetSurvey());
+    final currentUserBloc = context.read<CurrentUserBloc>();
+    final surveyBloc = SurveyBloc(
+      appFetchApiRepository: appFetchApiRepository,
+      currentUserBloc: currentUserBloc,
+    );
     return BlocProvider.value(
       value: surveyBloc,
       child: const SurveyView(),
@@ -35,8 +38,10 @@ class _SurveyViewState extends State<SurveyView> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SurveyBloc, SurveyState>(builder: (context, state) {
+      final surveyList = state.surveyList;
+
       final isLoading = state.surveyStatus == SurveyStatus.loadingSurvey;
-      final surveyData = state.surveyData;
+      final isEmpty = surveyList.isEmpty && !isLoading;
 
       return Scaffold(
         body: BackGroundContainer(
@@ -55,23 +60,121 @@ class _SurveyViewState extends State<SurveyView> {
                 },
               ),
               Expanded(
-                  child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                child: Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: AppSkeleton(
+                    isLoading: isLoading,
+                    child: isEmpty
+                        ? const EmptyScreen(text: 'Chưa có khảo sát nào')
+                        : SurveyList(surveyList: surveyList),
                   ),
                 ),
-                child: AppSkeleton(
-                    isLoading: isLoading,
-                    child: SurveyPageView(surveyData: surveyData)),
-              ))
+              )
             ],
           ),
         )),
       );
     });
+  }
+}
+
+class SurveyList extends StatelessWidget {
+  const SurveyList({super.key, required this.surveyList});
+
+  final List<Survey> surveyList;
+
+  @override
+  Widget build(BuildContext context) {
+    final surveyListW = List.generate(surveyList.length, (index) {
+      final survey = surveyList[index];
+      final isCompleted = survey.status == 1;
+      return InkWell(
+        onTap: () {
+          context.push(
+            SurveyDetailScreen(
+              khaoSatId: survey.khaoSatId,
+            ),
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.gray100,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            children: [
+              Text(
+                survey.name,
+                style: AppTextStyles.semiBold16(color: AppColors.gray700),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (survey.hocKy != null && survey.hocKy != 0)
+                        Text(
+                          'Học kỳ: ${survey.hocKy}',
+                          style:
+                              AppTextStyles.normal12(color: AppColors.gray800),
+                        ),
+                      Text(
+                        survey.learnYear,
+                        style: AppTextStyles.normal12(color: AppColors.gray800),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                    decoration: BoxDecoration(
+                      color:
+                          isCompleted ? AppColors.green100 : AppColors.blue100,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      isCompleted
+                          ? 'Đã hoàn thành khảo sát'
+                          : 'Tham giao khảo sát',
+                      style: AppTextStyles.semiBold12(
+                          color: isCompleted
+                              ? AppColors.green600
+                              : AppColors.blue600),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    });
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text(
+            'Danh sách khảo sát',
+            style: AppTextStyles.semiBold20(color: AppColors.black24),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+              child:
+                  SingleChildScrollView(child: Column(children: surveyListW))),
+        ],
+      ),
+    );
   }
 }

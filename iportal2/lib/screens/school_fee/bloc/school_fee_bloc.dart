@@ -30,7 +30,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     emit(state.copyWith(schoolFeeStatus: SchoolFeeStatus.loading));
     try {
       final res = await appFetchApiRepo.getSchoolFee(
-          pupilId: currentUserBloc.state.user.pupil_id);
+          pupilId: currentUserBloc.state.activeChild.pupil_id);
 
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.loaded,
@@ -50,7 +50,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
 
     try {
       final res = await appFetchApiRepo.getHistorySchoolFee(
-        pupilId: currentUserBloc.state.user.pupil_id,
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
       );
 
       emit(state.copyWith(
@@ -72,7 +72,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
 
     try {
       final res = await appFetchApiRepo.getSchoolFeePaymentPreview(
-        pupilId: currentUserBloc.state.user.pupil_id,
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
       );
 

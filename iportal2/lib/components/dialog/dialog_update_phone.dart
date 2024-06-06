@@ -1,9 +1,6 @@
-import 'package:core/common/utils/snackbar.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iportal2/components/input_text.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 
 class PhoneUpdate extends StatefulWidget {
@@ -67,7 +64,6 @@ class _PhoneUpdateState extends State<PhoneUpdate> {
                   focusNode: _focusNode,
                   textInputType: false,
                   isValid: !errMsg.isNotEmpty,
-                  title: '',
                   hintText: 'Nhập số điện thoại mới',
                   onChanged: (value) {
                     widget.bloc.add(UpdatePhone(newPhoneNum: value));
@@ -120,8 +116,8 @@ class _PhoneUpdateState extends State<PhoneUpdate> {
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color?>(AppColors.white),
-                    side: MaterialStateProperty.all<BorderSide>(
+                        WidgetStateProperty.all<Color?>(AppColors.white),
+                    side: WidgetStateProperty.all<BorderSide>(
                       const BorderSide(color: AppColors.gray300),
                     ),
                   ),

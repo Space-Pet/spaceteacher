@@ -35,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen>
       ),
       child: BlocBuilder<CurrentUserBloc, CurrentUserState>(
           builder: (context, state) {
-        final isKinderGarten = state.user.isKinderGarten;
-        final listFeatures = state.user.features;
+        final localUser = state.user;
+        final isKinderGarten = localUser.isKinderGarten;
         final homeBloc = context.read<HomeBloc>();
 
         return BackGroundContainer(
@@ -59,14 +59,14 @@ class _HomeScreenState extends State<HomeScreen>
                   top: isKinderGarten ? 500 : 468,
                   child: PinFeatures(
                     isKinderGarten: isKinderGarten,
-                    userFeatures: listFeatures,
+                    userFeatures: localUser.features,
                   ),
                 ),
-                // Widget can be expanded and overlapped
                 CenterPositioned(
                   top: isKinderGarten ? 100 : 88,
                   child: isKinderGarten
-                      ? const ImagesLibrary()
+                      ? ImagesLibrary(
+                          pinnedAlbumIdList: localUser.pinnedAlbumIdList)
                       : const InstructionNotebook(),
                 ),
               ],

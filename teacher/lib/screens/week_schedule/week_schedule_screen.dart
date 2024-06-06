@@ -1,12 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/screens/home/widgets/instruction_notebook/weekly_tabs.dart';
 import 'package:teacher/screens/week_schedule/bloc/week_schedule_bloc.dart';
-import 'package:repository/repository.dart';
 
 class WeekScheduleScreen extends StatefulWidget {
   const WeekScheduleScreen({super.key, this.date});
@@ -64,7 +64,7 @@ class WeekScheduleView extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: AppRadius.roundedTop28,
@@ -98,13 +98,8 @@ class WeekScheduleView extends StatelessWidget {
                             if (weekData == null ||
                                 weekData.data.detailPlan!.isEmpty)
                               const Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: 200),
-                                  child: Center(
-                                    child: EmptyScreen(
-                                        text: 'Bạn chưa có kế hoạch tuần'),
-                                  ),
-                                ),
+                                child: EmptyScreen(
+                                    text: 'Chưa có dữ liệu cho tuần này'),
                               )
                           ],
                         )),

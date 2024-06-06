@@ -16,7 +16,7 @@ class BusScreen extends StatelessWidget {
   static const routeName = '/bus';
   @override
   Widget build(BuildContext context) {
-    final currentUser = context.read<CurrentUserBloc>().state.user;
+    final currentUser = context.read<CurrentUserBloc>().state.activeChild;
     return BlocProvider(
       create: (context) => BusBloc(
         context.read<AppFetchApiRepository>(),

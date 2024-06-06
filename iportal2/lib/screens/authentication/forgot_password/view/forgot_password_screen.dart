@@ -3,7 +3,6 @@ import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/components/input_text.dart';
 
 import 'package:iportal2/screens/authentication/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:iportal2/screens/authentication/send_opt/view/send_otp_screen.dart';
@@ -183,7 +182,6 @@ class ForgotPasswordView extends StatelessWidget {
                     child: TitleAndInputText(
                       isValid:
                           Validations.phoneNumber(phoneNumberController.text),
-                      title: 'title',
                       textInputType: false,
                       hintText: AppStrings.enterPhone,
                       prefixIcon: Assets.icons.phone.image(),

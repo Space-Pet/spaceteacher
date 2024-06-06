@@ -7,13 +7,13 @@ class CurrentUserState extends Equatable {
     this.background = SchoolBrand.uka,
   });
 
-  final ProfileInfo user;
+  final LocalIPortalProfile user;
   final SchoolBrand background;
-  final Children activeChild;
+  final LocalChildren activeChild;
 
   CurrentUserState copyWith({
-    ProfileInfo? user,
-    Children? activeChild,
+    LocalIPortalProfile? user,
+    LocalChildren? activeChild,
     SchoolBrand? background,
   }) {
     return CurrentUserState(

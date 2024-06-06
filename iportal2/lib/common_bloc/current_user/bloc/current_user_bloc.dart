@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'current_user_event.dart';
@@ -9,12 +8,13 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   CurrentUserBloc({required this.userRepository})
       : super(
           CurrentUserState(
-            activeChild: Children.empty(),
-            user: userRepository.notSignedIn(),
+            activeChild: LocalChildren.empty(),
+            user: LocalIPortalProfile.empty(),
           ),
         ) {
     on<CurrentUserUpdated>(_onUpdateUser);
     on<BackGroundUpdatedState>(updateBg);
+    on<CurrentUserChangeActiveChild>(_changeActiveChild);
   }
 
   final UserRepository userRepository;
@@ -23,14 +23,33 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     CurrentUserUpdated event,
     Emitter<CurrentUserState> emit,
   ) async {
-    final activeChildIndex =
-        event.user.children.indexWhere((element) => element.isActive);
+    final activeChild =
+        event.user.children.firstWhere((element) => element.isActive);
 
     emit(state.copyWith(
       user: event.user,
-      activeChild:
-          activeChildIndex == -1 ? null : event.user.children[activeChildIndex],
-      background: event.user.background,
+      activeChild: activeChild,
+      background: activeChild.background,
+    ));
+  }
+
+  void _changeActiveChild(
+    CurrentUserChangeActiveChild event,
+    Emitter<CurrentUserState> emit,
+  ) async {
+    final activeChild = event.child;
+
+    final newUser = state.user.copyWith(
+      children: state.user.children
+          .map((e) => e.copyWith(isActive: e.user_id == activeChild.user_id))
+          .toList(),
+    );
+
+    userRepository.saveUser(newUser);
+
+    emit(state.copyWith(
+      user: newUser,
+      activeChild: activeChild,
     ));
   }
 

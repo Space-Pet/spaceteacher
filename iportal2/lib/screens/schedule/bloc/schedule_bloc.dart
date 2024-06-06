@@ -31,7 +31,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   _onFetchDueDateExercises(
       ScheduleFetchExercise event, Emitter<ScheduleState> emit) async {
     final exerciseDataList = await appFetchApiRepo.getExercises(
-      // userKey: currentUserBloc.state.user.user_key,
+      // userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
       userKey: '0723210020',
     );
@@ -45,7 +45,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
   _onSelectDate(ScheduleSelectDate event, Emitter<ScheduleState> emit) async {
     final scheduleData = await appFetchApiRepo.getSchedule(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
       // userKey: '0563230098',
     );
@@ -62,7 +62,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     emit(state.copyWith(status: ScheduleStatus.loading));
 
     final scheduleData = await appFetchApiRepo.getSchedule(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
       // txtDate: '18-03-2024',
       // userKey: '0563230098',

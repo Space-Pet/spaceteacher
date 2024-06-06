@@ -3,7 +3,6 @@
 import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 part 'message_event.dart';
@@ -33,8 +32,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   ) async {
     emit(state.copyWith(messageStatus: MessageStatus.loadingPostPinMessage));
     final data = await appApiRepository.postPinMessage(
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       idMessage: event.idMessage,
     );
     if (data?['code'] == 200) {
@@ -50,8 +49,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   ) async {
     emit(state.copyWith(messageStatus: MessageStatus.loadingDeletePinMessage));
     final data = await appApiRepository.postDeletePinMessage(
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       idMessage: event.idMessage,
     );
     if (data?['code'] == 200) {
@@ -68,8 +67,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   ) async {
     emit(state.copyWith(messageStatus: MessageStatus.loadingGetPinMessage));
     final data = await appApiRepository.getMessagePin(
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
     );
     if (data != null) {
       emit(state.copyWith(
@@ -95,8 +94,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   ) async {
     emit(state.copyWith(messageStatus: MessageStatus.loadingDelete));
     await appApiRepository.deleteMessage(
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       idMessage: event.idMessage,
     );
     emit(state.copyWith(messageStatus: MessageStatus.successDelete));
@@ -109,8 +108,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     emit(state.copyWith(messageStatus: MessageStatus.loadingDelete));
     await appApiRepository.deleteMessageDetail(
       content: event.content,
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       recipient: event.recipient,
       idMessage: event.idMessage,
     );
@@ -125,8 +124,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     final data = await appApiRepository.postMessage(
       recipient: event.recipient,
       content: event.content,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       classId: currentUserBloc.state.user.children[0].class_id.toString(),
     );
     emit(state.copyWith(
@@ -140,8 +139,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     emit(state.copyWith(messageStatus: MessageStatus.loading));
     final data = await appApiRepository.getMessageDetail(
       conversationId: event.conversationId,
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       page: event.page,
     );
     emit(
@@ -163,8 +162,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     emit(state.copyWith(messageStatus: MessageStatus.loadingRestart));
     final data = await appApiRepository.getMessageDetail(
       conversationId: event.conversationId,
-      schoolId: currentUserBloc.state.user.school_id.toString(),
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
       page: event.page,
     );
     emit(
@@ -186,8 +185,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     try {
       emit(state.copyWith(messageStatus: MessageStatus.loadingRestart));
       final data = await appApiRepository.getListMessage(
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
+        schoolId: currentUserBloc.state.activeChild.school_id,
+        schoolBrand: currentUserBloc.state.activeChild.school_brand,
         classId: currentUserBloc.state.user.children[0].class_id.toString(),
         userId: currentUserBloc.state.user.user_id.toString(),
       );
@@ -206,8 +205,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     try {
       emit(state.copyWith(messageStatus: MessageStatus.loading));
       final data = await appApiRepository.getListMessage(
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
+        schoolId: currentUserBloc.state.activeChild.school_id,
+        schoolBrand: currentUserBloc.state.activeChild.school_brand,
         classId: currentUserBloc.state.user.children[0].class_id.toString(),
         userId: currentUserBloc.state.user.user_id.toString(),
       );

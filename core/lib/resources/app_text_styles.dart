@@ -139,6 +139,12 @@ class AppTextStyles {
         height: height,
       );
 
+  static TextStyle semiBold20({
+    Color color = AppColors.black,
+    double? height,
+  }) =>
+      normal20(fontWeight: FontWeight.w600, color: color, height: height);
+
   static TextStyle semiBold18({
     Color color = AppColors.black,
     double? height,

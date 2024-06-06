@@ -75,7 +75,6 @@ class MessageDetail {
     String? createdAt,
     String? updatedAt,
     int? sticky,
-
   }) {
     return MessageDetail(
       id: id ?? this.id,

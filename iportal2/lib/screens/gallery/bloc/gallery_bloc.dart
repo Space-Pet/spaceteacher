@@ -28,7 +28,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   _onFetchAlbumData(GalleryFetchData event, Emitter<GalleryState> emit) async {
     emit(state.copyWith(status: GalleryStatus.loading));
 
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
 
     final albumData = await appFetchApiRepo.getAlbum(
       // pupilId: '10044568',
@@ -42,29 +42,18 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
 
   _onGetPinnedAlbumIdList(
       GalleryGetPinnedAlbumIdList event, Emitter<GalleryState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten()) {
-      final user = currentUserBloc.state.user;
-      final featuresLocal = await userRepository.getFeatures();
+    if (currentUserBloc.state.activeChild.isMN) {
+      final user = currentUserBloc.state.activeChild;
 
-      final pinnedAlbumIdList = featuresLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(
-              user_key: '',
-              features: [],
-              pinnedAlbumIdList: [],
-            ),
-          )
-          .pinnedAlbumIdList;
-      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList ?? []));
+      emit(state.copyWith(pinnedAlbumIdList: user.pinnedAlbumIdList));
     }
   }
 
   _onUpdatePinnedAlbum(
       GalleryUpdatePinnedAlbum event, Emitter<GalleryState> emit) {
     if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.user;
-      userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
+      final user = currentUserBloc.state.activeChild;
+      // TODO: update pinned album
     }
 
     emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));

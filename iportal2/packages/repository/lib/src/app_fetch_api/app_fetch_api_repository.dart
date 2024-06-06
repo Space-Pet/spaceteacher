@@ -1,5 +1,4 @@
-import 'package:core/data/models/models.dart';
-import 'package:intl/intl.dart';
+import 'package:core/core.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 import '../models/bus_schedule.dart';
@@ -26,7 +25,7 @@ class AppFetchApiRepository {
   }) async {
     final exerciseData = await _appFetchApi.getExercises(
       userKey,
-      DateFormat('dd-MM-yyyy').format(datePicked),
+      datePicked.ddMMyyyyDash,
       isDueDate: isDueDate,
     );
 
@@ -34,10 +33,8 @@ class AppFetchApiRepository {
       return exerciseData.exerciseDataList;
     }
 
-    DateFormat formatDate = DateFormat("yyyy-MM-dd");
     final listExerciseDueDate = exerciseData.exerciseDataList
-        .where(
-            (element) => element.hanNopBaoBai == formatDate.format(datePicked))
+        .where((element) => element.hanNopBaoBai == datePicked.yyyyMMdd)
         .toList();
 
     return listExerciseDueDate;
@@ -251,7 +248,7 @@ class AppFetchApiRepository {
       pupilId: pupilId,
       schoolId: schoolId,
       schoolBrand: schoolBrand,
-      startDate: DateFormat('yyyy-MM-dd').format(startDate),
+      startDate: startDate.yyyyMMdd,
     );
     return data.map((e) => BusSchedule.fromData(e)).toList();
   }
@@ -303,14 +300,24 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<List<SurveyData>> getSurvay() async {
-    final data = await _appFetchApi.getSurvay();
+  Future<List<Survey>> getSurveyList({required String capDaoTaoId}) async {
+    final data = await _appFetchApi.getSurveyList(capDaoTaoId);
     return data;
   }
 
-  Future<void> postSurvey(
-      {required List<Map<String, dynamic>> listSurvey}) async {
-    _appFetchApi.postSurvey(listSurvey: listSurvey);
+  Future<SurveyDetail> getSurveyDetail(int khaoSatId) async {
+    final data = await _appFetchApi.getSurveyDetail(khaoSatId);
+    return data;
+  }
+
+  Future<void> postSurvey({
+    required List<Map<String, dynamic>> listSurvey,
+    required int khaoSatId,
+  }) async {
+    _appFetchApi.postSurvey(
+      listSurvey: listSurvey,
+      khaoSatId: khaoSatId,
+    );
   }
 
   Future<String> getAttendanceType(
@@ -322,7 +329,7 @@ class AppFetchApiRepository {
 
   Future<Map<String, dynamic>> getMessageDetail({
     required String conversationId,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     int? page,
   }) async {
@@ -353,7 +360,7 @@ class AppFetchApiRepository {
 
   Future<int> deleteMessageDetail({
     required String content,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     required String recipient,
     required int idMessage,
@@ -368,7 +375,7 @@ class AppFetchApiRepository {
   }
 
   Future<int> deleteMessage({
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     required int idMessage,
   }) async {
@@ -393,9 +400,20 @@ class AppFetchApiRepository {
     return data;
   }
 
+  Future<Map<String, dynamic>?> turnOffNoti({
+    required bool isDisableNoti,
+    required Map<String, Object> headers,
+  }) async {
+    final data = await _appFetchApi.turnOffNoti(
+      isDisableNoti: isDisableNoti,
+      headers: headers,
+    );
+    return data;
+  }
+
   Future<Map<String, dynamic>?> postPinMessage({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
     required int idMessage,
   }) async {
     final data = await _appFetchApi.postPinMessage(
@@ -408,7 +426,7 @@ class AppFetchApiRepository {
 
   Future<Map<String, dynamic>?> postDeletePinMessage({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
     required int idMessage,
   }) async {
     final data = await _appFetchApi.postDeletePinMessage(
@@ -421,7 +439,7 @@ class AppFetchApiRepository {
 
   Future<MessageDetail?> getMessagePin({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
   }) async {
     final data = await _appFetchApi.getMessagePin(
         schoolBrand: schoolBrand, schoolId: schoolId);

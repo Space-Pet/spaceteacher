@@ -17,7 +17,7 @@ class NutritionBloc extends Bloc<NutritionEvent, NutritionState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super( NutritionState(user: userRepository.notSignedIn())) {
+      : super(NutritionState(user: userRepository.notSignedIn())) {
     on<GetNutrition>(_onGetNutrition);
     add(GetNutrition());
   }
@@ -25,7 +25,7 @@ class NutritionBloc extends Bloc<NutritionEvent, NutritionState> {
     try {
       emit(state.copyWith(nutritionStatus: NutritionStatus.loading));
       final data = await appFetchApiRepo.getNutrition(
-          userKey: currentUserBloc.state.user.user_key);
+          userKey: currentUserBloc.state.activeChild.user_key);
       emit(state.copyWith(
           nutritionStatus: NutritionStatus.success, nutrition: data));
     } catch (e) {

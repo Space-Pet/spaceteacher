@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'splash_state.dart';
 
@@ -36,7 +36,6 @@ class SplashCubit extends Cubit<SplashState> {
     } else {
       if (isLogin) {
         emit(state.copyWith(status: SplashStatus.logined));
-
         final localUser = await userRepository.getLocalUser();
 
         if (localUser != null) {

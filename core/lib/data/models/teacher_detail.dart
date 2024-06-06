@@ -2,11 +2,13 @@ import 'dart:convert';
 
 class TeacherDetail {
   TeacherInfo info;
-  final LopChuNhiem lopChuNhiem;
+  LopChuNhiem lopChuNhiem;
+  int pushNotify;
 
   TeacherDetail({
     required this.info,
     required this.lopChuNhiem,
+    required this.pushNotify,
   });
 
   factory TeacherDetail.empty() {
@@ -16,6 +18,7 @@ class TeacherDetail {
         id: 0,
         name: '',
       ),
+      pushNotify: 0,
     );
   }
 
@@ -23,6 +26,7 @@ class TeacherDetail {
     return TeacherDetail(
       info: TeacherInfo.fromMap(map['info']),
       lopChuNhiem: LopChuNhiem.fromMap(map['lop_chu_nhiem']),
+      pushNotify: map['push_notify'],
     );
   }
 
@@ -30,6 +34,7 @@ class TeacherDetail {
     return {
       'info': info.toMap(),
       'lop_chu_nhiem': lopChuNhiem.toMap(),
+      'push_notify': pushNotify,
     };
   }
 
@@ -43,20 +48,20 @@ class TeacherDetail {
 }
 
 class TeacherInfo {
-  final int teacherId;
-  final String userId;
-  final String birthday;
-  final int schoolId;
-  final String schoolName;
-  final String fullName;
-  final String userKey;
-  final String positionName;
-  final String mainSubject;
-  final int subjectId;
-  final UrlImage urlImage;
-  final String address;
-  final String phone;
-  final CapDaoTao capDaoTao;
+  int teacherId;
+  String userId;
+  String birthday;
+  int schoolId;
+  String schoolName;
+  String fullName;
+  String userKey;
+  String positionName;
+  String mainSubject;
+  int subjectId;
+  UrlImage urlImage;
+  String address;
+  String phone;
+  CapDaoTao capDaoTao;
 
   TeacherInfo({
     required this.teacherId,
@@ -205,8 +210,9 @@ class LopChuNhiem {
   });
 
   factory LopChuNhiem.fromMap(Map<String, dynamic> map) {
+    final id = map['id'] is int ? map['id'] : 0;
     return LopChuNhiem(
-      id: map['id'],
+      id: id,
       name: map['name'],
     );
   }

@@ -1,13 +1,11 @@
-import 'package:core/resources/app_colors.dart';
+import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/authentication/change_password/bloc/change_password_bloc.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
-import 'package:iportal2/components/input_text.dart';
 import 'package:repository/repository.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
@@ -161,7 +159,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: TitleAndInputText(
-                          title: 'title',
                           hintText: 'Mật khẩu mới',
                           prefixIcon: Assets.icons.lock.image(),
                           onChanged: (value) {
@@ -171,7 +168,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: TitleAndInputText(
-                          title: 'title',
                           hintText: 'Xác nhận mật khẩu',
                           prefixIcon: Assets.icons.lock.image(),
                           onChanged: (value) {

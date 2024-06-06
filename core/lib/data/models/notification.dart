@@ -25,7 +25,7 @@ class NotificationData {
     return NotificationData(
       data: List<NotificationItem>.from(
         map['data']?.map(
-          (x) => NotificationItem.fromMap(x),
+          NotificationItem.fromMap,
         ),
       ),
       links: NotificationLinks.fromMap(map['links']),
@@ -131,7 +131,7 @@ class NotificationItem {
   String toString() =>
       'NotificationItem(id: $id, schoolId: $schoolId, title: $title, content: $content, attachment: $attachment, viewerId: $viewerId, pupilId: $pupilId, toUser: $toUser, createdAt: $createdAt, updatedAt: $updatedAt, viewedAt: $viewedAt, createdBy: $createdBy)';
 
-  static empty() {
+  static NotificationItem empty() {
     return NotificationItem(
       id: 0,
       schoolId: 0,
@@ -233,7 +233,7 @@ class NotificationMeta {
       lastPage: map['last_page'],
       links: List<NotificationMetaLink>.from(
         map['links']?.map(
-          (x) => NotificationMetaLink.fromMap(x),
+          NotificationMetaLink.fromMap,
         ),
       ),
       path: map['path'],

@@ -1,6 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/data/models/exercise_data.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';

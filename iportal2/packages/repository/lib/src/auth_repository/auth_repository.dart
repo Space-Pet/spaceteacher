@@ -2,22 +2,18 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/src/models/phone_number_verification_info.dart';
 
 class AuthRepository {
   AuthRepository({
     required AuthApi authApi,
-    required AbstractAuthLocalStorage authLocalStorage,
-  })  : _authApi = authApi,
-        _authLocalStorage = authLocalStorage;
+  }) : _authApi = authApi;
+
   final AuthApi _authApi;
-  final AbstractAuthLocalStorage _authLocalStorage;
 
   String userId = '';
-  Future<LocalLoginInfo?> getLocalLognInfo() =>
-      _authLocalStorage.getLoginInfo();
+
   Future<String> getPassword(
       {required String numberPhone,
       required String type,
@@ -58,11 +54,6 @@ class AuthRepository {
         tokenFirebase: tokenFirebase,
       );
 
-      await _authLocalStorage.clearLoginInfo();
-      await _authLocalStorage.saveLoginInfo(
-        email: userName,
-        password: password,
-      );
       return loginInfo;
     } catch (e) {
       rethrow;
@@ -88,9 +79,7 @@ class AuthRepository {
   Future<bool> logOut() async {
     try {
       final isSuccess = await _authApi.logOut();
-      if (isSuccess) {
-        await _authLocalStorage.clearLoginInfo();
-      }
+      if (isSuccess) {}
       return isSuccess;
     } catch (e) {
       throw LogOutFailure();

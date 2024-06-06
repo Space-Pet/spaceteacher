@@ -8,10 +8,6 @@ class GetLeaves extends LeaveEvent {
   List<Object> get props => [page];
 }
 
-class CurrentUserUpdated extends LeaveEvent {
-  CurrentUserUpdated({required this.user});
-  final ProfileInfo user;
-}
 
 class PostLeave extends LeaveEvent {
   final String? content;

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dialog_languages.dart';
-import 'package:teacher/screens/authentication/domain/view/domain_screen.dart';
+import 'package:teacher/screens/authentication/domain/view/login_screen.dart';
 import 'package:teacher/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
 import 'package:teacher/screens/settings/faq/faq_screen.dart';
 import 'package:teacher/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
@@ -18,7 +19,12 @@ import 'package:repository/repository.dart';
 import '../widget/switch_setting.dart';
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+  const SettingScreen({
+    super.key,
+    required this.pushNotify,
+  });
+
+  final int pushNotify;
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -26,13 +32,25 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   String? selectedLanguage;
+  late SettingScreenBloc settingBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    settingBloc = SettingScreenBloc(
+      appFetchApiRepo: context.read<AppFetchApiRepository>(),
+      authRepository: context.read<AuthRepository>(),
+      userRepository: context.read<UserRepository>(),
+      currentUserBloc: context.read<CurrentUserBloc>(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SettingScreenBloc(
-        authRepository: context.read<AuthRepository>(),
-        userRepository: context.read<UserRepository>(),
-      ),
+    final isDisableNoti = widget.pushNotify == 0;
+
+    return BlocProvider.value(
+      value: settingBloc,
       child: BlocListener<SettingScreenBloc, SettingScreenState>(
         listenWhen: (previous, current) =>
             previous.logoutStatus != current.logoutStatus,
@@ -82,6 +100,13 @@ class _SettingScreenState extends State<SettingScreen> {
                       child: SettingFeature(
                         text: AppStrings.turnOffNoti,
                         iconAsset: Assets.icons.bell,
+                        isDisableNoti: isDisableNoti,
+                        isNotiSetting: true,
+                        onPressed: () {
+                          settingBloc.add(TurnOffNoti(
+                            pushNotify: !isDisableNoti,
+                          ));
+                        },
                       ),
                     ),
                     SettingFeature(

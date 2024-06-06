@@ -2,53 +2,87 @@ part of 'attendance_bloc.dart';
 
 enum AttendanceStatus {
   init,
-  initType,
-  successType,
-  success,
-  error,
-  initWeek,
-  successWeek,
-  initMonth,
-  successMonth
+  loadingClass,
+  successClass,
+  failClass,
+  loadingAttendanceWeek,
+  loadingAttendanceMonth,
+  loadingAttendanceDay,
+  loadingAttendanceClassTeacher,
+  loadingAttendanceClassLeader,
+  successAttendanceWeek,
+  successAttendanceMonth,
+  successAttendanceDay,
+  successAttendanceClassTeacher,
+  successAttendanceClassLeader,
+  failWeek,
+  failMotnth,
+  failDay,
+  fail,
 }
 
+// ignore: must_be_immutable
 class AttendanceState extends Equatable {
-  final List<AttendanceDay>? attendanceday;
+  final List<AttendanceTeacher> attendanceClassTeacher;
+  final List<AttendanceTeacher> attendanceClassLeader;
+  final AttendanceStatus attendanceStatus;
+  final List<ClassTeacher> classTeacher;
   final AttendanceWeek? attendanceWeek;
   final AttendanceWeek? attendanceMonth;
-  final AttendanceStatus attendanceStatus;
-  final DateTime? selectDate;
-  final String? type;
-  const AttendanceState(
-      {this.selectDate,
-      this.type,
-      this.attendanceday,
-      this.attendanceWeek,
-      this.attendanceMonth,
-      this.attendanceStatus = AttendanceStatus.init});
+  final AttendanceWeek? attendanceDay;
+  final String? startDate;
+  final String? endDate;
+  late int showScreen;
+  AttendanceState({
+    this.attendanceStatus = AttendanceStatus.init,
+    this.classTeacher = const [],
+    this.attendanceClassTeacher = const [],
+    this.attendanceClassLeader = const [],
+    this.startDate,
+    this.endDate,
+    this.showScreen = 1,
+    this.attendanceWeek,
+    this.attendanceMonth,
+    this.attendanceDay,
+  });
   @override
   List<Object?> get props => [
-        type,
+        attendanceClassTeacher,
+        attendanceClassLeader,
         attendanceStatus,
-        attendanceday,
-        selectDate,
+        classTeacher,
         attendanceWeek,
-        attendanceMonth
+        attendanceMonth,
+        attendanceDay,
+        endDate,
+        startDate,
+        showScreen,
       ];
-
-  AttendanceState copyWith(
-      {List<AttendanceDay>? attendanceday,
-      AttendanceStatus? attendanceStatus,
-      String? type,
-      DateTime? date,
-      AttendanceWeek? attendanceWeek,
-      AttendanceWeek? attendanceMonth}) {
+  AttendanceState copyWith({
+    List<AttendanceTeacher>? attendanceClassLeader,
+    List<AttendanceTeacher>? attendanceClassTeacher,
+    AttendanceWeek? attendanceDay,
+    AttendanceWeek? attendanceMonth,
+    int? showScreen,
+    AttendanceStatus? attendanceStatus,
+    List<ClassTeacher>? classTeacher,
+    AttendanceWeek? attendanceWeek,
+    String? startDate,
+    String? endDate,
+  }) {
     return AttendanceState(
-        type: type ?? this.type,
-        selectDate: date ?? this.selectDate,
-        attendanceMonth: attendanceMonth ?? this.attendanceMonth,
-        attendanceWeek: attendanceWeek ?? this.attendanceWeek,
-        attendanceStatus: attendanceStatus ?? this.attendanceStatus,
-        attendanceday: attendanceday ?? this.attendanceday);
+      attendanceClassLeader:
+          attendanceClassLeader ?? this.attendanceClassLeader,
+      attendanceClassTeacher:
+          attendanceClassTeacher ?? this.attendanceClassTeacher,
+      attendanceDay: attendanceDay ?? this.attendanceDay,
+      attendanceMonth: attendanceMonth ?? this.attendanceMonth,
+      showScreen: showScreen ?? this.showScreen,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      attendanceWeek: attendanceWeek ?? this.attendanceWeek,
+      classTeacher: classTeacher ?? this.classTeacher,
+      attendanceStatus: attendanceStatus ?? this.attendanceStatus,
+    );
   }
 }

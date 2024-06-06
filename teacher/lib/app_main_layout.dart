@@ -1,11 +1,10 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/custom_loading_logo.dart';
 import 'package:teacher/components/home_shadow_box.dart';
-import 'package:teacher/screens/attendance/attendance_screen.dart';
+import 'package:teacher/screens/attendance/view/attendance_navigator.dart';
 import 'package:teacher/screens/home/home_navigator.dart';
 import 'package:teacher/screens/notifications/notifications_screen.dart';
 import 'package:teacher/screens/schedule/schedule_screen.dart';
@@ -31,14 +30,14 @@ class _AppMainLayoutState extends State<AppMainLayout>
   final List<Widget> widgetOptionKinderGarten = [
     const HomeNavigator(),
     const WeekScheduleScreen(),
-    const AttendanceScreen(),
+    const AttendanceNavigator(),
     const NotificationsScreen(),
   ];
 
   final List<Widget> widgetOptions = <Widget>[
     const HomeNavigator(),
     const ScheduleScreen(),
-    const AttendanceScreen(),
+    const AttendanceNavigator(),
     const NotificationsScreen(),
   ];
 

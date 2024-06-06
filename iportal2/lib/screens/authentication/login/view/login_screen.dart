@@ -1,14 +1,10 @@
-import 'package:core/resources/app_colors.dart';
-import 'package:core/resources/app_strings.dart';
-import 'package:core/resources/app_text_styles.dart';
+import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/app_main_layout.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/components/input_text.dart';
 import 'package:iportal2/screens/authentication/forgot_password/view/forgot_password_screen.dart';
 import 'package:iportal2/screens/authentication/login_qr/login_qr.dart';
 import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
@@ -53,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                 backgroundColor: AppColors.black,
                 textColor: AppColors.white);
           } else if (state.status == LoginStatus.failure) {
-            if(state.failureMessage != null){
+            if (state.failureMessage != null) {
               Fluttertoast.showToast(
                   msg: state.failureMessage!,
                   toastLength: Toast.LENGTH_LONG,
@@ -146,7 +142,6 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: TitleAndInputText(
-                              title: 'title',
                               hintText: AppStrings.account,
                               prefixIcon: Assets.icons.user.image(),
                               onChanged: (value) {
@@ -156,7 +151,6 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TitleAndInputText(
-                              title: 'title',
                               hintText: AppStrings.password,
                               prefixIcon: Assets.icons.lock.image(),
                               onChanged: (value) {
@@ -288,7 +282,7 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
-                            'iPortal version 1.0.0 (39) - 20240220',
+                            'iPortal version 1.0.0 (40) - 20240220',
                             style: AppTextStyles.normal12(
                               color: AppColors.gray400,
                             ),

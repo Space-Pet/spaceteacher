@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
@@ -35,7 +34,8 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
   void _onGetComment(GetComment event, Emitter<PreScoreState> emit) async {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loading));
     final data = await appFetchApiRepo.getComment(
-        userKey: currentUserBloc.state.user.user_key, txtDate: event.txtDate);
+        userKey: currentUserBloc.state.activeChild.user_key,
+        txtDate: event.txtDate);
     emit(state.copyWith(
         preScoreStatus: PreScoreStatus.success,
         comment: data,
@@ -47,9 +47,9 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
       GetListReportStudent event, Emitter<PreScoreState> emit) async {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingListReport));
     final data = await appFetchApiRepo.getListReportStudent(
-        pupilId: currentUserBloc.state.user.pupil_id,
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        schoolId: currentUserBloc.state.activeChild.school_id,
+        schoolBrand: currentUserBloc.state.activeChild.school_brand,
         semester: event.semester,
         learnYear: event.learnYear);
     emit(state.copyWith(
@@ -62,9 +62,9 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingReportStudent));
     final data = await appFetchApiRepo.getReportStudent(
       id: event.id,
-      pupilId: currentUserBloc.state.user.pupil_id,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      pupilId: currentUserBloc.state.activeChild.pupil_id,
+      schoolId: currentUserBloc.state.activeChild.school_id,
+      schoolBrand: currentUserBloc.state.activeChild.school_brand,
     );
     emit(state.copyWith(
         preScoreStatus: PreScoreStatus.successReportStudent,

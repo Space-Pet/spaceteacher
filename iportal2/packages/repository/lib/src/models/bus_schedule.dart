@@ -1,6 +1,5 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
 
 part 'bus_schedule.freezed.dart';
 
@@ -50,7 +49,7 @@ extension BusScheduleX on BusSchedule {
       (checkIn ?? '').isNotEmpty && (checkOut ?? '').isNotEmpty;
 
   String estimatedTime() {
-    return DateFormat('HH:mm').format(busStop.estimatedTime);
+    return busStop.estimatedTime.hhMM;
   }
 
   String title() {
@@ -59,7 +58,7 @@ extension BusScheduleX on BusSchedule {
   }
 
   String attendanceDateString() {
-    return DateFormat('dd/MM/yyyy').format(attendanceDate);
+    return attendanceDate.ddMMyyyySlash;
   }
 
   String pickupLocation() {

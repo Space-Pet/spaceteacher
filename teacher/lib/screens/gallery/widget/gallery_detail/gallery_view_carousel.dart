@@ -3,9 +3,7 @@ import 'dart:typed_data';
 
 import 'package:core/common/services/permission_service.dart';
 import 'package:core/core.dart';
-import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/components/back_ground_container.dart';

@@ -131,46 +131,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         tokenFirebase: deviceInfo.tokenFirebase,
       );
 
-      final dataLocal = await userRepository.getFeatures();
-      final listFeatures = dataLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(user_key: '', features: []),
-          )
-          .features;
+      final isStudentUser = user.isStudent();
+      final localChildren = user.children
+          .map((e) => e.toLocalChildren(
+                isDefaultActive: user.pupil_id == e.pupil_id,
+              ))
+          .toList();
 
-      final featuresByGrade =
-          user.isKinderGarten() ? preSFeatures : hihgSFeatures;
-
-      final featuresByType = user.isStudent()
-          ? featuresByGrade
-              .where((element) => element.key != FeatureKey.survey)
-              .toList()
-          : featuresByGrade;
-
-      final pinnedAlbumIdList = dataLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(
-              user_key: '',
-              features: [],
-              pinnedAlbumIdList: [],
-            ),
-          )
-          .pinnedAlbumIdList;
-
-      final bgSchoolBrand = SchoolBrand.values
-          .firstWhere((element) => element.value == user.school_brand);
-
-      final userLocal = user.copyWith(
-        features:
-            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
-        pinnedAlbumIdList: pinnedAlbumIdList,
-        background: bgSchoolBrand,
+      final localUser = LocalIPortalProfile(
+        name: user.name,
+        user_key: user.user_key,
+        user_id: user.user_id,
+        type: user.type,
+        type_text: user.type_text,
+        children: localChildren,
       );
 
-      userRepository.saveUser(userLocal);
-      currentUserBloc.add(CurrentUserUpdated(user: userLocal));
+      userRepository.saveUser(localUser);
+      currentUserBloc.add(CurrentUserUpdated(user: localUser));
       return emit(state.copyWith(status: LoginStatus.success));
     } on LoginFailure catch (e) {
       emit(state.copyWith(
@@ -193,50 +171,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         platform: deviceInfo.platform,
         tokenFirebase: deviceInfo.tokenFirebase,
       );
-      final dataLocal = await userRepository.getFeatures();
 
-      final listFeatures = dataLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(user_key: '', features: []),
-          )
-          .features;
+      final isStudentUser = user.isStudent();
+      final localChildren = user.children
+          .map((e) =>
+              e.toLocalChildren(isDefaultActive: user.pupil_id == e.pupil_id))
+          .toList();
 
-      final featuresByGrade =
-          user.isKinderGarten() ? preSFeatures : hihgSFeatures;
-
-      final featuresByType = user.isStudent()
-          ? featuresByGrade
-              .where((element) => element.key != FeatureKey.survey)
-              .toList()
-          : featuresByGrade;
-
-      final pinnedAlbumIdList = dataLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LocalFeatures(
-              user_key: '',
-              features: [],
-              pinnedAlbumIdList: [],
-            ),
-          )
-          .pinnedAlbumIdList;
-
-      final bgSchoolBrand = SchoolBrand.values
-          .firstWhere((element) => element.value == user.school_brand);
-
-      final userLocal = user.copyWith(
-        features:
-            (listFeatures ?? []).isNotEmpty ? listFeatures : featuresByType,
-        pinnedAlbumIdList: pinnedAlbumIdList,
-        background: bgSchoolBrand,
-        children: user.children
-            .map((e) => e.copyWith(isActive: user.pupil_id == e.pupil_id))
-            .toList(),
+      final localUser = LocalIPortalProfile(
+        name: user.name,
+        user_key: user.user_key,
+        user_id: user.user_id,
+        type: user.type,
+        type_text: user.type_text,
+        children: localChildren,
       );
 
-      userRepository.saveUser(userLocal);
-      currentUserBloc.add(CurrentUserUpdated(user: userLocal));
+      userRepository.saveUser(localUser);
+      currentUserBloc.add(CurrentUserUpdated(user: localUser));
       return emit(state.copyWith(status: LoginStatus.success));
     } on LoginFailure catch (e) {
       emit(state.copyWith(

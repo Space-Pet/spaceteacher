@@ -2,16 +2,17 @@ import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class DropdownButtonComponent extends StatefulWidget {
   final List<String> optionList;
   final String hint;
   final String? selectedOption;
   final bool isSelectYear;
   final void Function(String) onUpdateOption;
+  final Color? color;
 
   const DropdownButtonComponent({
     super.key,
+    this.color,
     required this.optionList,
     required this.hint,
     required this.onUpdateOption,
@@ -74,7 +75,7 @@ class _DropdownButtonComponentState extends State<DropdownButtonComponent> {
         borderRadius: BorderRadius.circular(40),
         color: widget.isSelectYear ? Colors.transparent : AppColors.gray100,
         border: Border.all(
-          color: AppColors.gray100,
+          color: AppColors.gray400,
         ),
       ),
       child: DropdownButton<String>(
@@ -87,9 +88,9 @@ class _DropdownButtonComponentState extends State<DropdownButtonComponent> {
         value: dropdownValue,
         isDense: true,
         icon: widget.isSelectYear
-            ? const Icon(
+            ? Icon(
                 Icons.keyboard_arrow_down_rounded,
-                color: AppColors.white,
+                color: widget.color ?? AppColors.white,
                 size: 24,
               )
             : SvgPicture.asset(

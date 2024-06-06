@@ -1,30 +1,29 @@
 import 'package:core/data/models/survay_data.dart';
 import 'package:core/resources/resources.dart';
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class TabViewSurvey extends StatefulWidget {
-  const TabViewSurvey(
-      {super.key,
-      required this.surveyData,
-      required this.isShow,
-      this.index,
-      required this.listSurvey,
-      required this.onNextPage,
-      this.indexQuestion});
-  final SurveyData surveyData;
-  final bool isShow;
+  const TabViewSurvey({
+    super.key,
+    this.index,
+    required this.surveyQuestion,
+    required this.listSurveyAnswer,
+    this.indexQuestion,
+  });
+
+  final SurveyQuestion surveyQuestion;
   final int? index;
-  final List<Map<String, dynamic>> listSurvey;
-  final Function(List<Map<String, dynamic>>) onNextPage;
+  final List<Map<String, dynamic>> listSurveyAnswer;
   final int? indexQuestion;
+
   @override
   State<TabViewSurvey> createState() => _TabViewSurveyState();
 }
 
 class _TabViewSurveyState extends State<TabViewSurvey> {
-  final TextEditingController textSurvey = TextEditingController();
+  late List<TextEditingController> textControllers;
+
   final Map<int, String> levelMap = {
     4: 'Rất hài lòng',
     3: 'Hài lòng',
@@ -34,151 +33,47 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
   };
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 12, bottom: 4),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          decoration: BoxDecoration(
-            color: AppColors.gray100,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Text(
-            widget.surveyData.nhomCauHoi,
-            style: AppTextStyles.semiBold16(
-              color: AppColors.gray700,
-            ),
-          ),
-        ),
-        if (widget.isShow)
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.zero,
-              itemCount: widget.surveyData.question.length,
-              itemBuilder: (context, index) {
-                final question = widget.surveyData.question[index];
-                // ignore: unused_local_variable
-                final isLastIndex =
-                    index == widget.surveyData.question.length - 1;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(26, 6, 4, 6),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${index + 1}. ',
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.brand600,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              question.noiDungCauHoi,
-                              style: AppTextStyles.semiBold14(
-                                color: AppColors.brand600,
-                              ),
-                              overflow: TextOverflow.visible,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    _buildCheckboxList(index),
-                    if (!isLastIndex)
-                      Container(
-                        margin: const EdgeInsets.only(top: 8, bottom: 4),
-                        width: double.infinity,
-                        child: const DottedLine(
-                          dashLength: 2,
-                          dashColor: AppColors.gray700,
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ),
-        if (!widget.isShow)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 26),
-                child: Row(
-                  children: [
-                    Text(
-                      '${widget.index! + 1}. Câu hỏi nhập text',
-                      style: AppTextStyles.semiBold14(
-                        color: AppColors.brand600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(
-                  controller: textSurvey,
-                  maxLines: 5,
-                  minLines: 3,
-                  onChanged: (content) {
-                    textSurvey.text = content;
-                    final newAnswer = {
-                      'cauHoiId': widget.indexQuestion,
-                      'traLoiKhac': textSurvey.text,
-                    };
-                    final existingAnswerIndex = widget.listSurvey.indexWhere(
-                        (answer) => answer['cauHoiId'] == widget.indexQuestion);
-                    if (existingAnswerIndex != -1) {
-                      widget.listSurvey[existingAnswerIndex] = newAnswer;
-                    } else {
-                      widget.listSurvey.add(newAnswer);
-                    }
-                  },
-                  style: AppTextStyles.normal16(),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 14,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.gray300,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.gray400,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    labelText: 'Nhập câu trả lời',
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.gray300,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        const SizedBox(height: 20),
-      ],
-    );
+  void initState() {
+    super.initState();
+    textControllers =
+        List.generate(widget.surveyQuestion.cauHoi.length, (index) {
+      return TextEditingController();
+    });
   }
 
-  Widget _buildCheckboxList(int questionIndex) {
-    final int cauHoiId = widget.surveyData.question[questionIndex].cauHoiId;
+  @override
+  dispose() {
+    for (var controller in textControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void updateCheckboxStates(int questionIndex, int levelKey) {
+    setState(() {
+      final question = widget.surveyQuestion.cauHoi[questionIndex];
+
+      final index = widget.listSurveyAnswer
+          .indexWhere((element) => element['cauHoiId'] == question.cauHoiId);
+
+      if (index != -1) {
+        widget.listSurveyAnswer[index] = {
+          'cauHoiId': question.cauHoiId,
+          'cauTraLoiId': levelKey,
+          'loaiCauHoi': question.loaiCauHoi,
+        };
+      } else {
+        widget.listSurveyAnswer.add({
+          'cauHoiId': question.cauHoiId,
+          'cauTraLoiId': levelKey,
+          'loaiCauHoi': question.loaiCauHoi,
+        });
+      }
+    });
+  }
+
+  Widget buildCheckboxList(int questionIndex) {
+    final int cauHoiId = widget.surveyQuestion.cauHoi[questionIndex].cauHoiId;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -187,16 +82,16 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
           final String levelValue = entry.value;
           final levelKey = entry.key;
 
-          final bool isChecked = widget.listSurvey.any((element) =>
+          final bool isChecked = widget.listSurveyAnswer.any((element) =>
               element['cauHoiId'] == cauHoiId &&
               element['cauTraLoiId'] == levelKey);
 
           return Container(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
             child: InkWell(
               onTap: () {
                 setState(() {
-                  _updateCheckboxStates(questionIndex, levelKey);
+                  updateCheckboxStates(questionIndex, levelKey);
                 });
               },
               child: Row(
@@ -207,7 +102,7 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
                     type: GFCheckboxType.circle,
                     onChanged: (value) {
                       setState(() {
-                        _updateCheckboxStates(questionIndex, levelKey);
+                        updateCheckboxStates(questionIndex, levelKey);
                       });
                     },
                     value: isChecked,
@@ -236,24 +131,128 @@ class _TabViewSurveyState extends State<TabViewSurvey> {
     );
   }
 
-  void _updateCheckboxStates(int questionIndex, int levelKey) {
-    setState(() {
-      final int cauHoiId = widget.surveyData.question[questionIndex].cauHoiId;
+  @override
+  Widget build(BuildContext context) {
+    final surveyQuestion = widget.surveyQuestion;
 
-      final index = widget.listSurvey
-          .indexWhere((element) => element['cauHoiId'] == cauHoiId);
+    print('listSurveyAnswer ${widget.listSurveyAnswer}');
 
-      if (index != -1) {
-        widget.listSurvey[index] = {
-          'cauHoiId': cauHoiId,
-          'cauTraLoiId': levelKey,
-        };
-      } else {
-        widget.listSurvey.add({
-          'cauHoiId': cauHoiId,
-          'cauTraLoiId': levelKey,
-        });
-      }
-    });
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 12, bottom: 4),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          decoration: BoxDecoration(
+            color: AppColors.gray100,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            surveyQuestion.nhomCauHoi,
+            style: AppTextStyles.semiBold16(
+              color: AppColors.gray700,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: surveyQuestion.cauHoi.length,
+            itemBuilder: (context, index) {
+              final question = surveyQuestion.cauHoi[index];
+              final isLastIndex = index == surveyQuestion.cauHoi.length - 1;
+              final TextEditingController textSurvey = textControllers[index];
+
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(26, 6, 6, 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              question.noiDungCauHoi,
+                              style: AppTextStyles.semiBold16(
+                                color: AppColors.brand600,
+                              ),
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    question.loaiCauHoi == 'option'
+                        ? buildCheckboxList(index)
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 24),
+                                child: TextField(
+                                  controller: textSurvey,
+                                  maxLines: 5,
+                                  minLines: 3,
+                                  onChanged: (content) {
+                                    textSurvey.text = content;
+                                    final newAnswer = {
+                                      'cauHoiId': question.cauHoiId,
+                                      'traLoiKhac': textSurvey.text,
+                                      'loaiCauHoi': question.loaiCauHoi,
+                                    };
+                                    final existingAnswerIndex = widget
+                                        .listSurveyAnswer
+                                        .indexWhere((answer) =>
+                                            answer['cauHoiId'] ==
+                                            widget.indexQuestion);
+
+                                    if (existingAnswerIndex != -1) {
+                                      widget.listSurveyAnswer[
+                                          existingAnswerIndex] = newAnswer;
+                                    } else {
+                                      widget.listSurveyAnswer.add(newAnswer);
+                                    }
+                                  },
+                                  style: AppTextStyles.normal14(),
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 14,
+                                      horizontal: 14,
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: AppColors.gray300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: AppColors.gray400,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    labelText: 'Nhập câu trả lời',
+                                    border: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                        color: AppColors.gray300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

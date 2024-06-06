@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/custom_loading_logo.dart';
@@ -29,19 +28,22 @@ class _AppMainLayoutState extends State<AppMainLayout>
   late TabController tabBarController;
 
   final List<Widget> widgetOptionKinderGarten = [
-    const HomeNavigator(),
+    HomeNavigator(
+      navkey: GlobalKey<NavigatorState>(),
+    ),
     const WeekScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
   ];
 
   final List<Widget> widgetOptions = <Widget>[
-    const HomeNavigator(),
+    HomeNavigator(
+      navkey: GlobalKey<NavigatorState>(),
+    ),
     const ScheduleScreen(),
     const AttendanceScreen(),
     const NotificationsScreen(),
   ];
-
   @override
   void initState() {
     super.initState();
@@ -60,12 +62,6 @@ class _AppMainLayoutState extends State<AppMainLayout>
         homeNavigatorKey.currentContext?.pop();
       }
     }
-
-    // TODO: improve this can not find HomeProvider to handle refresh
-    // if (index == 0 && _selectedIndex == 0) {
-    //   final homeBloc = homeNavigatorKey.currentContext?.read<HomeBloc>();
-    //   homeBloc?.add(HomeRefresh());
-    // }
 
     if (_selectedIndex != index) {
       setState(() {
@@ -108,7 +104,7 @@ class _AppMainLayoutState extends State<AppMainLayout>
               return TabBarView(
                 controller: tabBarController,
                 physics: const NeverScrollableScrollPhysics(),
-                children: state.user.isKinderGarten()
+                children: state.activeChild.isMN
                     ? widgetOptionKinderGarten
                     : widgetOptions,
               );
@@ -142,7 +138,7 @@ class _AppMainLayoutState extends State<AppMainLayout>
                       iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                       text: 'Trang chủ',
                     ),
-                    state.user.isKinderGarten()
+                    state.activeChild.isMN
                         ? Tab(
                             icon: SvgPicture.asset(
                               'assets/icons/calendar.svg',

@@ -10,7 +10,10 @@ import 'package:teacher/screens/home/bloc/home_bloc.dart';
 class ImagesLibrary extends StatelessWidget {
   const ImagesLibrary({
     super.key,
+    required this.pinnedAlbumIdList,
   });
+
+  final List<int> pinnedAlbumIdList;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +23,10 @@ class ImagesLibrary extends StatelessWidget {
             .where((element) => element.galleryImages.isNotEmpty)
             .toList();
 
-        final pinnedIdList = state.pinnedAlbumIdList;
-
-        final pinnedAlbumList = pinnedIdList.isNotEmpty
+        final pinnedAlbumList = pinnedAlbumIdList.isNotEmpty
             ? albumList
-                .where((element) => pinnedIdList.contains(element.galleryId))
+                .where(
+                    (element) => pinnedAlbumIdList.contains(element.galleryId))
                 .toList()
             : albumList;
 
@@ -64,17 +66,8 @@ class ImagesLibrary extends StatelessWidget {
                   isEmptyData
                       ? const SizedBox()
                       : RoundedButton(
-                          onTap: () async {
-                            final List<int>? listId =
-                                await context.push(const GalleryScreen());
-                            if (listId != null) {
-                              context.read<HomeBloc>().add(
-                                    HomeUpdatePinnedAlbum(
-                                      listId,
-                                      isOnlyUpdateState: true,
-                                    ),
-                                  );
-                            }
+                          onTap: () {
+                            context.push(const GalleryScreen());
                           },
                           margin: const EdgeInsets.only(right: 12),
                           padding: const EdgeInsets.symmetric(

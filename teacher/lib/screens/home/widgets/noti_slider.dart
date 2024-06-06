@@ -32,7 +32,6 @@ class _NotiSliderState extends State<NotiSlider> {
           final noti = notificationList[index];
 
           final date = DateTime.parse(noti.createdAt);
-          // parse 2024-05-14 11:44:30 to Thứ 3, 14 tháng 5, 2024 11:44
 
           final formattedDate = '${date.day} tháng ${date.month}, ${date.year} '
               '${date.hour}:${date.minute}';
@@ -90,10 +89,6 @@ class _NotiSliderState extends State<NotiSlider> {
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.normal12(
                                   color: AppColors.gray90002)),
-                          // Text('Xem chi tiết',
-                          //     style: AppTextStyles.normal12(
-                          //       color: AppColors.gray600,
-                          //     )),
                         ],
                       ),
                     )
@@ -104,22 +99,21 @@ class _NotiSliderState extends State<NotiSlider> {
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Stack(
-            children: [
-              isEmptyNoti
-                  ? const EmptyNoti()
-                  : SizedBox(
-                      height: 144,
-                      width: double.infinity,
-                      child: PageView.builder(
-                        controller: controller,
-                        itemCount: notiList.length,
-                        itemBuilder: (_, index) {
-                          return notiList[index % notiList.length];
-                        },
-                      ),
+          child: AppSkeleton(
+            isLoading: isLoading,
+            child: isEmptyNoti
+                ? const EmptyNoti()
+                : SizedBox(
+                    height: 144,
+                    width: double.infinity,
+                    child: PageView.builder(
+                      controller: controller,
+                      itemCount: notiList.length,
+                      itemBuilder: (_, index) {
+                        return notiList[index % notiList.length];
+                      },
                     ),
-            ],
+                  ),
           ),
         );
       },

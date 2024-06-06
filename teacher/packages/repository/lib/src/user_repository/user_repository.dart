@@ -27,20 +27,6 @@ class UserRepository {
     return localUser;
   }
 
-  Future<List<LoggedUser>?> getLoggedUsers() async {
-    final loggedUsers = await _userLocalStorage.getLoggedUsers();
-
-    if (loggedUsers == null) return null;
-
-    return loggedUsers;
-  }
-
-  Future updatePinnedAlbum(List<int> pinnedAlbumIdList, String userKey) async {
-    await _userLocalStorage.updatePinnedAlbum(pinnedAlbumIdList, userKey);
-  }
-
-  Future clearLocalUser() => _userLocalStorage.clearUser();
-
   Future<TeacherDetail> getTeacherDetail(String teacherId) async {
     try {
       final resProfile = await _userApi.getTeacherDetail(teacherId);

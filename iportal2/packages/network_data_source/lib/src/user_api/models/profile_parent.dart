@@ -1,14 +1,32 @@
+import 'models.dart';
 
 class ParentData {
   Parents parents;
   List<Job> jobs;
+  List<Children> children;
+  int pushNotify;
 
-  ParentData({required this.parents, required this.jobs});
+  ParentData({
+    required this.parents,
+    required this.jobs,
+    required this.children,
+    required this.pushNotify,
+  });
 
   factory ParentData.fromMap(Map<String, dynamic> map) {
+    final childrenData = map['children'];
+
+    final children = childrenData is List
+        ? childrenData
+            .map((e) => Children.fromMap(e as Map<String, dynamic>))
+            .toList()
+        : [Children.fromMap(childrenData as Map<String, dynamic>)];
+
     return ParentData(
       parents: Parents.fromMap(map['parents']),
       jobs: List<Job>.from(map['jobs'].map((x) => Job.fromMap(x))),
+      children: children,
+      pushNotify: map['push_notify'],
     );
   }
 
@@ -16,6 +34,8 @@ class ParentData {
     return {
       'parents': parents.toMap(),
       'jobs': List<dynamic>.from(jobs.map((x) => x.toMap())),
+      'children': List<dynamic>.from(children.map((x) => x.toMap())),
+      'push_notify': pushNotify,
     };
   }
 
@@ -23,6 +43,8 @@ class ParentData {
     return ParentData(
       parents: Parents.empty(),
       jobs: [],
+      children: [],
+      pushNotify: 0,
     );
   }
 }

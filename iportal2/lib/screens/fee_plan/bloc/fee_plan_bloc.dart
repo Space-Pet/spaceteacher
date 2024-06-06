@@ -31,13 +31,14 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
   Future<void> _onGetListFee(
       GetListFee event, Emitter<FeePlanState> emit) async {
     emit(state.copyWith(status: FeePlanStatus.loading));
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
     try {
       final studentFeesData = await appFetchApiRepo.getListFee(
-          schoolBrand: user.school_brand,
-          schoolId: user.school_id,
-          pupilId: user.parent_id,
-          learnYear: user.learn_year);
+        schoolBrand: user.school_brand,
+        schoolId: user.school_id,
+        pupilId: user.parent_id,
+        learnYear: 'user.learn_year',
+      );
       emit(state.copyWith(
         studentFeesData: studentFeesData,
         status: FeePlanStatus.loaded,
@@ -54,14 +55,15 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
   Future<void> _onGetFeeRequested(
       GetFeeRequested event, Emitter<FeePlanState> emit) async {
     emit(state.copyWith(status: FeePlanStatus.loading));
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
     try {
       final studentFeesRequestedData =
           await appFetchApiRepo.getListFeeRequested(
-              schoolBrand: user.school_brand,
-              schoolId: user.school_id,
-              pupilId: user.parent_id,
-              learnYear: user.learn_year);
+        schoolBrand: user.school_brand,
+        schoolId: user.school_id,
+        pupilId: user.parent_id,
+        learnYear: 'user.learn_year',
+      );
 
       emit(state.copyWith(
         studentFeesRequestedData: studentFeesRequestedData,
@@ -80,14 +82,14 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       SendFeeRequested event, Emitter<FeePlanState> emit) async {
     emit(state.copyWith(status: FeePlanStatus.loading));
 
-    final user = currentUserBloc.state.user;
+    final user = currentUserBloc.state.activeChild;
 
     try {
       final studentFeesData = await appFetchApiRepo.postFeeRequested(
         schoolBrand: user.school_brand,
         schoolId: user.school_id,
         pupilId: user.pupil_id,
-        learnYear: user.learn_year,
+        learnYear: 'user.learn_year',
         listFee: event.listItemFee,
       );
 

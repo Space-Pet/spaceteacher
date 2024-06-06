@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:core/resources/resources.dart';
 
 class DialogViewExercise extends StatefulWidget {
   const DialogViewExercise({

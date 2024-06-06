@@ -1,16 +1,16 @@
 part of 'leave_bloc.dart';
 
-enum LeaveStatus { init, success, error, loadMore, loadMoreSuccess }
+enum LeaveStatusEnum { init, success, error, loadMore, loadMoreSuccess }
 
 class LeaveState extends Equatable {
   const LeaveState(
       {this.leaveData,
-      required this.user,
+      // required this.user,
       this.message,
-      this.leaveStatus = LeaveStatus.init});
+      this.leaveStatus = LeaveStatusEnum.init});
   final List<LeaveData>? leaveData;
-  final LeaveStatus leaveStatus;
-  final ProfileInfo user;
+  final LeaveStatusEnum leaveStatus;
+  // final ProfileInfo user;
   final String? message;
 
   @override
@@ -18,13 +18,13 @@ class LeaveState extends Equatable {
 
   LeaveState copyWith({
     List<LeaveData>? leaveData,
-    LeaveStatus? leaveStatus,
-    ProfileInfo? user,
+    LeaveStatusEnum? leaveStatus,
+    // ProfileInfo? user,
     String? message,
   }) {
     return LeaveState(
         message: message ?? this.message,
-        user: user ?? this.user,
+        // user: user ?? this.user,
         leaveData: leaveData ?? this.leaveData,
         leaveStatus: leaveStatus ?? this.leaveStatus);
   }

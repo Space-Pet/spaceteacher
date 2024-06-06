@@ -17,11 +17,11 @@ class AttendanceWeek {
 
 class AbsentData {
   final int count;
-  final List<Items>? items;
+  final List<Items> items;
   const AbsentData({required this.count, required this.items});
   factory AbsentData.fromJson(Map<String, dynamic> json) {
-    final items = (json['items'] as List<dynamic>?)
-        ?.map((e) => Items.fromJson(e))
+    final items = (json['items'] as List<dynamic>)
+        .map((e) => Items.fromJson(e))
         .toList();
     return AbsentData(count: json['count'] ?? 0, items: items);
   }
@@ -29,20 +29,33 @@ class AbsentData {
 
 class Items {
   final String date;
-  final List<DataItems>? data;
+  final List<DataItems> data;
   const Items({required this.date, required this.data});
   factory Items.fromJson(Map<String, dynamic> json) {
-    final data = (json['data'] as List<dynamic>?)
-        ?.map((e) => DataItems.fromJson(e))
-        .toList();
-    return Items(date: json['date'] ?? '', data: data);
+    List<DataItems> dataItems = [];
+
+    if (json['data'] is Map) {
+      // Handle the case where data is a map
+      final dataMap = json['data'] as Map<String, dynamic>;
+      dataMap.forEach((_, value) {
+        if (value is List) {
+          dataItems.addAll(value.map((e) => DataItems.fromJson(e)).toList());
+        }
+      });
+    } else if (json['data'] is List) {
+      // Handle the case where data is a list
+      final dataList = json['data'] as List<dynamic>;
+      dataItems = dataList.map((e) => DataItems.fromJson(e)).toList();
+    }
+
+    return Items(date: json['date'] ?? '', data: dataItems);
   }
 }
 
 class DataItems {
   final int id;
-  final int subjectId;
-  final String subjectName;
+  final int? subjectId;
+  final String? subjectName;
   final String numberOfClassPeriod;
   final String description;
   final String date;
@@ -51,15 +64,15 @@ class DataItems {
       required this.id,
       required this.date,
       required this.numberOfClassPeriod,
-      required this.subjectId,
-      required this.subjectName});
+      this.subjectId,
+      this.subjectName});
   factory DataItems.fromJson(Map<String, dynamic> json) {
     return DataItems(
         description: json['description'] ?? '',
         id: json['id'] ?? 0,
         date: json['date'] ?? '',
         numberOfClassPeriod: json['number_of_class_period'] ?? '',
-        subjectId: json['subject_id'] ?? 0,
-        subjectName: json['subject_name'] ?? '');
+        subjectId: json['subject_id'],
+        subjectName: json['subject_name']);
   }
 }

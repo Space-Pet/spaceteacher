@@ -5,9 +5,7 @@ import 'dart:typed_data';
 
 import 'package:core/common/services/permission_service.dart';
 import 'package:core/core.dart';
-import 'package:core/data/models/models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -209,9 +207,10 @@ class GalleryDetailState extends State<GalleryDetail> {
                         padding: EdgeInsets.zero,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 6,
-                                mainAxisSpacing: 6),
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 6,
+                          mainAxisSpacing: 6,
+                        ),
                         itemCount: widget.galleryItem.galleryImages.length,
                         itemBuilder: (context, index) {
                           return CardGalleryDetail(

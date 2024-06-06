@@ -185,7 +185,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                             child: isEmptyData
                                 ? const Center(
                                     child: EmptyScreen(
-                                      text: 'Bạn chưa có thông báo mới',
+                                      text: 'Chưa có thông báo mới',
                                     ),
                                   )
                                 : SingleChildScrollView(

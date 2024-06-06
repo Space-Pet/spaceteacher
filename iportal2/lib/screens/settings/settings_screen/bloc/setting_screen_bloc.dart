@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
 part 'setting_screen_event.dart';
@@ -10,13 +11,16 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
   SettingScreenBloc({
     required this.authRepository,
     required this.userRepository,
+    required this.currentUserBloc,
     required this.appFetchApiRepo,
   }) : super(const SettingScreenState()) {
     on<SettingScreenLoggedOut>(_onLogout);
     on<ChangePassword>(_onChangePassword);
+    on<TurnOffNoti>(_onTurnOffNoti);
   }
   final AppFetchApiRepository appFetchApiRepo;
   final AuthRepository authRepository;
+  final CurrentUserBloc currentUserBloc;
   final UserRepository userRepository;
 
   Future<void> _onChangePassword(
@@ -38,7 +42,34 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
       emit(state.copyWith(
           logoutStatus: SettingScreenStatus.failureChangePassword,
           message: data?['message']));
-      print('oo: ${data?['message']}');
+    }
+  }
+
+  Future<void> _onTurnOffNoti(
+    TurnOffNoti event,
+    Emitter<SettingScreenState> emit,
+  ) async {
+    final user = currentUserBloc.state.activeChild;
+
+    final headers = {
+      'School-Id': user.school_id,
+      'School-Brand': user.school_brand,
+    };
+
+    try {
+      final data = await appFetchApiRepo.turnOffNoti(
+        isDisableNoti: event.isDisableNoti,
+        headers: headers,
+      );
+      if (data!['code'] == 200) {
+        emit(state.copyWith(
+            logoutStatus: SettingScreenStatus.turnOffNotiSuccess));
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(logoutStatus: SettingScreenStatus.failure),
+      );
+      rethrow;
     }
   }
 
@@ -52,7 +83,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
 
     try {
       final isSuccess = await authRepository.logOut();
-      if (isSuccess) {
+      if (true) {
         final domainSaver = SingletonDomainSaver();
         await domainSaver.clearDomain();
         await userRepository.clearLocalUser();

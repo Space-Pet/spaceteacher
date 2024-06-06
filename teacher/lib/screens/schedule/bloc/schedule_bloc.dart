@@ -1,9 +1,5 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
+import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
 
 part 'schedule_event.dart';
@@ -46,7 +42,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   _onSelectDate(ScheduleSelectDate event, Emitter<ScheduleState> emit) async {
     final scheduleData = await appFetchApiRepo.getSchedule(
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
+      txtDate: event.datePicked.ddMMyyyyDash,
       // userKey: '0563230098',
     );
     emit(
@@ -63,7 +59,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
 
     final scheduleData = await appFetchApiRepo.getSchedule(
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
+      txtDate: DateTime.now().ddMMyyyyDash,
       // txtDate: '18-03-2024',
       // userKey: '0563230098',
     );

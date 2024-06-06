@@ -65,6 +65,7 @@ class DomainSaver {
 
     try {
       final dio = Dio();
+      // TODO: Need to check incase user 's input include https
       final response = await dio.post(
         'https://$domain/api/v1/check-domain',
         data: {'domain': domain},
@@ -72,6 +73,7 @@ class DomainSaver {
       if (response.statusCode == 200 && response.data['code'] == 200) {
         return true;
       }
+
     } catch (_) {
       rethrow;
     }

@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/widgets/pin_features/feature_item.dart';
 

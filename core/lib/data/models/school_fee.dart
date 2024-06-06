@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'school_fee_item.dart';
 
 part 'school_fee.g.dart';
+
 @JsonSerializable(explicitToJson: true)
 class SchoolFee {
   @JsonKey(name: 'items')

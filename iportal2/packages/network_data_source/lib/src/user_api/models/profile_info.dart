@@ -51,6 +51,18 @@ class ProfileInfo {
     this.background = SchoolBrand.uka,
   });
 
+  // Mầm non:
+  // 'C_001', Nhà trẻ'
+  // 'C_002', Mẫu giáo
+  // Phổ thông
+  // 'C_003', Tiểu học
+  // 'C_004', Trung học cơ sở
+  // 'C_005', 'Trung học phổ thông
+
+  bool isKinderGarten() {
+    return ['C_001', 'C_002'].contains(cap_dao_tao?.id);
+  }
+
   ProfileInfo copyWith({
     String? name,
     String? user_key,
@@ -97,18 +109,6 @@ class ProfileInfo {
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
       background: background ?? this.background,
     );
-  }
-
-  // Mầm non:
-  // 'C_001', Nhà trẻ'
-  // 'C_002', Mẫu giáo
-  // Phổ thông
-  // 'C_003', Tiểu học
-  // 'C_004', Trung học cơ sở
-  // 'C_005', 'Trung học phổ thông
-
-  bool isKinderGarten() {
-    return ['C_001', 'C_002'].contains(cap_dao_tao?.id);
   }
 
   bool isStudent() {
@@ -214,35 +214,6 @@ class ProfileInfo {
   factory ProfileInfo.fromJson(String source) =>
       ProfileInfo.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  factory ProfileInfo.fromLocalUser({
-    required LocalIPortalProfile localProfile,
-  }) {
-    return ProfileInfo(
-      name: localProfile.name,
-      user_key: localProfile.user_key,
-      user_id: localProfile.user_id,
-      school_id: localProfile.school_id,
-      pupil_id: localProfile.pupil_id,
-      type: localProfile.type,
-      type_text: localProfile.type_text,
-      parent_id: localProfile.parent_id,
-      parent_name: localProfile.parent_name,
-      father_name: localProfile.father_name,
-      learn_year: localProfile.learn_year,
-      class_name: localProfile.class_name,
-      school_name: localProfile.school_name,
-      school_logo: localProfile.school_logo,
-      school_brand: localProfile.school_brand,
-      semester: localProfile.semester,
-      children:
-          localProfile.children.map((e) => Children.fromLocal(e)).toList(),
-      cap_dao_tao: TrainingLevel.fromLocal(localProfile.cap_dao_tao),
-      features: localProfile.features ?? [],
-      pinnedAlbumIdList: localProfile.pinnedAlbumIdList ?? [],
-      background: localProfile.background ?? SchoolBrand.uka,
-    );
-  }
-
   @override
   String toString() {
     return 'ProfileInfo(name: $name, user_key: $user_key, user_id: $user_id, school_id: $school_id, pupil_id: $pupil_id, type: $type, type_text: $type_text, parent_id: $parent_id, parent_name: $parent_name, father_name: $father_name, learn_year: $learn_year, class_name: $class_name, school_name: $school_name, school_logo: $school_logo, school_brand: $school_brand, semester: $semester, children: $children, cap_dao_tao: $cap_dao_tao)';
@@ -263,7 +234,8 @@ class Children {
   final int parent_id;
   final String class_name;
   final UrlImage url_image;
-  final bool isActive;
+  final TrainingLevel cap_dao_tao;
+  final String school_brand;
 
   Children({
     required this.pupil_id,
@@ -279,7 +251,8 @@ class Children {
     required this.parent_id,
     required this.class_name,
     required this.url_image,
-    this.isActive = false,
+    required this.cap_dao_tao,
+    this.school_brand = 'uka',
   });
 
   Children copyWith({
@@ -296,7 +269,7 @@ class Children {
     int? parent_id,
     String? class_name,
     UrlImage? url_image,
-    bool? isActive,
+    TrainingLevel? cap_dao_tao,
   }) {
     return Children(
       pupil_id: pupil_id ?? this.pupil_id,
@@ -312,8 +285,20 @@ class Children {
       parent_id: parent_id ?? this.parent_id,
       class_name: class_name ?? this.class_name,
       url_image: url_image ?? this.url_image,
-      isActive: isActive ?? this.isActive,
+      cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
     );
+  }
+
+  // Mầm non:
+  // 'C_001', Nhà trẻ'
+  // 'C_002', Mẫu giáo
+  // Phổ thông
+  // 'C_003', Tiểu học
+  // 'C_004', Trung học cơ sở
+  // 'C_005', 'Trung học phổ thông
+
+  bool isKinderGarten() {
+    return ['C_001', 'C_002'].contains(cap_dao_tao.id);
   }
 
   Map<String, dynamic> toMap() {
@@ -330,6 +315,7 @@ class Children {
       'user_key': user_key,
       'parent_id': parent_id,
       'class_name': class_name,
+      'cap_dao_tao': cap_dao_tao.toMap(),
       'url_image': url_image.toMap(),
     };
   }
@@ -349,6 +335,9 @@ class Children {
       parent_id: map['parent_id'].toInt() as int,
       class_name: map['class_name'] as String,
       url_image: UrlImage.fromMap(map['url_image'] as Map<String, dynamic>),
+      cap_dao_tao:
+          TrainingLevel.fromMap(map['cap_dao_tao'] as Map<String, dynamic>),
+      school_brand: map['school_brand'] as String,
     );
   }
 
@@ -373,30 +362,42 @@ class Children {
       parent_id: 0,
       class_name: '',
       url_image: UrlImage(web: '', mobile: ''),
+      cap_dao_tao: TrainingLevel(id: '', name: ''),
     );
   }
 
-  factory Children.fromLocal(LocalChildren localChildren) {
-    return Children(
-      pupil_id: localChildren.pupil_id,
-      user_id: localChildren.user_id,
-      birthday: localChildren.birthday,
-      school_id: localChildren.school_id,
-      school_name: localChildren.school_name,
-      class_id: localChildren.class_id,
-      customer_id: localChildren.customer_id,
-      learn_year: localChildren.learn_year,
-      full_name: localChildren.full_name,
-      user_key: localChildren.user_key,
-      parent_id: localChildren.parent_id,
-      class_name: localChildren.class_name,
-      url_image: UrlImage.fromLocal(localChildren.url_image),
-      isActive: localChildren.isActive,
+  LocalChildren toLocalChildren({
+    required bool isDefaultActive,
+  }) {
+    final defaultFeatureList = isKinderGarten() ? preSFeatures : hihgSFeatures;
+
+    return LocalChildren(
+      pupil_id: pupil_id,
+      user_id: user_id,
+      school_id: school_id,
+      school_name: school_name,
+      class_id: class_id,
+      customer_id: customer_id,
+      full_name: full_name,
+      user_key: user_key,
+      parent_id: parent_id,
+      class_name: class_name,
+      url_image: LocalUrlImage(
+        web: url_image.web,
+        mobile: url_image.mobile,
+      ),
+      cap_dao_tao: LocalTrainingLevel(
+        id: cap_dao_tao.id,
+        name: cap_dao_tao.name,
+      ),
+      isMN: isKinderGarten(),
+      isActive: isDefaultActive,
+      features: defaultFeatureList,
+      pinnedAlbumIdList: [],
+      background: SchoolBrand.values
+          .firstWhere((element) => element.value == school_brand),
+      learn_year: learn_year,
     );
-  }
-  @override
-  String toString() {
-    return 'Children(pupil_id: $pupil_id, user_id: $user_id, birthday: $birthday, school_id: $school_id, school_name: $school_name, class_id: $class_id, customer_id: $customer_id, learn_year: $learn_year, full_name: $full_name, user_key: $user_key, parent_id: $parent_id, class_name: $class_name, url_image: $url_image)';
   }
 }
 

@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
@@ -53,7 +52,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.init));
       final data = await userRepository.getProfileStudent(
-          pupilId: currentUserBloc.state.user.pupil_id.toString());
+          pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
       emit(state.copyWith(
         profileStatus: ProfileStatus.success,
         studentData: data,
@@ -70,7 +69,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     try {
       emit(state.copyWith(profileStatus: ProfileStatus.init));
       final data = await userRepository.getProfileParent(
-          pupilId: currentUserBloc.state.user.pupil_id.toString());
+          pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
       emit(state.copyWith(
         profileStatus: ProfileStatus.success,
         parentData: data,
@@ -99,7 +98,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           phone: event.phone,
           motherName: event.motherName,
           fatherPhone: event.fatherPhone,
-          pupilId: currentUserBloc.state.user.pupil_id.toString());
+          pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
 
       if (data!['code'] == 200) {
         add(const GetProfileStudent());
@@ -143,7 +142,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       };
 
       final data = await userRepository.updateParentPhone(
-          body, currentUserBloc.state.user.pupil_id.toString());
+          body, currentUserBloc.state.activeChild.pupil_id.toString());
 
       if (data!['code'] == 200) {
         add(const GetProfileParent());

@@ -49,6 +49,7 @@ class StudentData {
         status: 0,
         statusText: '',
         identifier: '',
+        pushNotify: 0,
       ),
       classInfo: ClassInfo(classId: 0, name: ''),
       school: School(schoolId: 0, name: ''),
@@ -85,6 +86,7 @@ class Pupil {
   final int status;
   final String statusText;
   final String identifier;
+  int pushNotify;
 
   Pupil({
     required this.pupilId,
@@ -100,6 +102,7 @@ class Pupil {
     required this.status,
     required this.statusText,
     required this.identifier,
+    required this.pushNotify,
   });
   factory Pupil.fromJson(Map<String, dynamic> json) {
     return Pupil(
@@ -116,6 +119,7 @@ class Pupil {
       status: json['status'] ?? 0,
       statusText: json['status_text'] ?? '',
       identifier: json['identifier'] ?? '',
+      pushNotify: json['push_notify'] ?? 0,
     );
   }
 }

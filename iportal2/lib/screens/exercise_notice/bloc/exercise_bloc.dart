@@ -36,7 +36,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     emit(state.copyWith(status: ExerciseStatus.loading));
 
     final exerciseDataList = await appFetchApiRepo.getExercises(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: DateTime.now(),
     );
 
@@ -57,7 +57,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
 
     final exerciseDataList = await appFetchApiRepo.getExercises(
       // userKey: '0723210020',
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
     );
 

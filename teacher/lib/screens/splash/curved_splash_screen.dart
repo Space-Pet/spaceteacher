@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:core/resources/resources.dart';
-import 'package:teacher/screens/authentication/domain/view/domain_screen.dart';
+import 'package:teacher/screens/authentication/domain/view/login_screen.dart';
 import 'package:teacher/screens/splash/bloc/splash_cubit.dart';
 import 'package:repository/repository.dart';
 
@@ -141,10 +141,10 @@ class _CurvedSplashViewState extends State<CurvedSplashView> {
             textColor: widget.textColor,
             backgroundColor: widget.backgroundColor,
             onPressedChange: () {
-              context.pushReplacement(LoginScreen());
+              context.pushReplacement(const LoginScreen());
             },
             skip: () {
-              context.pushReplacement(LoginScreen());
+              context.pushReplacement(const LoginScreen());
             },
             next: () {
               if (_pageController.page! < 2) {

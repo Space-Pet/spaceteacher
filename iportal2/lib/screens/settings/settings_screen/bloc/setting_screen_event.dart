@@ -14,3 +14,11 @@ class ChangePassword extends SettingScreenEvent {
     required this.passwordConfirmation,
   });
 }
+
+class TurnOffNoti extends SettingScreenEvent {
+  TurnOffNoti({
+    required this.isDisableNoti,
+  });
+
+  final bool isDisableNoti;
+}

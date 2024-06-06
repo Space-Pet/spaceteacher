@@ -1,7 +1,8 @@
-import 'package:core/core.dart';
-import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:bloc/bloc.dart';
+import 'package:core/data/models/models.dart';
+import 'package:equatable/equatable.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'gallery_event.dart';
 part 'gallery_state.dart';
@@ -14,9 +15,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   }) : super(GalleryState(albumData: AlbumData.empty)) {
     on<GalleryFetchData>(_onFetchAlbumData);
     add(GalleryFetchData());
-
-    on<GalleryGetPinnedAlbumIdList>(_onGetPinnedAlbumIdList);
-    add(GalleryGetPinnedAlbumIdList());
 
     on<GalleryUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
   }
@@ -33,35 +31,25 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     final albumData = await appFetchApiRepo.getAlbum(
       user.teacher_id.toString(),
     );
-    emit(state.copyWith(
-      albumData: albumData,
-      status: GalleryStatus.success,
-    ));
-  }
+    emit(state.copyWith(albumData: albumData));
 
-  _onGetPinnedAlbumIdList(
-      GalleryGetPinnedAlbumIdList event, Emitter<GalleryState> emit) async {
-    if (currentUserBloc.state.user.isKinderGarten) {
-      final user = currentUserBloc.state.user;
-      final featuresLocal = await userRepository.getLoggedUsers();
-
-      final pinnedAlbumIdList = featuresLocal
-          ?.firstWhere(
-            (element) => element.user_key == user.user_key,
-            orElse: () => LoggedUser.empty(),
-          )
-          .pinnedAlbumIdList;
-      emit(state.copyWith(pinnedAlbumIdList: pinnedAlbumIdList));
-    }
+    // delay 500ms
+    await Future.delayed(const Duration(milliseconds: 500));
+    emit(state.copyWith(status: GalleryStatus.success));
   }
 
   _onUpdatePinnedAlbum(
       GalleryUpdatePinnedAlbum event, Emitter<GalleryState> emit) {
-    if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.user;
-      userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
-    }
+    final currentPinnedAlbum = currentUserBloc.state.user.pinnedAlbumIdList;
+    final newPinnedAlbum = currentPinnedAlbum.contains(event.albumId)
+        ? currentPinnedAlbum
+            .where((element) => element != event.albumId)
+            .toList()
+        : [...currentPinnedAlbum, event.albumId];
+    final newUser =
+        currentUserBloc.state.user.copyWith(pinnedAlbumIdList: newPinnedAlbum);
 
-    emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
+    currentUserBloc.add(CurrentUserUpdated(user: newUser));
+    userRepository.saveUser(newUser);
   }
 }

@@ -19,7 +19,7 @@ class EslScore {
       hocKy: map['txt_hoc_ky'],
       learnYear: map['txt_learn_year'],
       data: List<EslScoreData>.from(
-        map['data']?.map((x) => EslScoreData.fromMap(x)) ?? [],
+        map['data']?.map(EslScoreData.fromMap) ?? [],
       ),
     );
   }

@@ -71,9 +71,9 @@ class ConductData {
     return ConductData(
       nangLucCotLoi: NangLucCotLoi.fromMap(map['nang_luc_cot_loi']),
       phamChatChuYeu: List<ConductItem>.from(
-          map['pham_chat_chu_yeu']?.map((x) => ConductItem.fromMap(x))),
+          map['pham_chat_chu_yeu']?.map(ConductItem.fromMap)),
       nhanXetChungCuaGvcn: List<ConductItem>.from(
-          map['nhan_xet_chung_cua_gvcn']?.map((x) => ConductItem.fromMap(x))),
+          map['nhan_xet_chung_cua_gvcn']?.map(ConductItem.fromMap)),
     );
   }
 
@@ -107,9 +107,9 @@ class NangLucCotLoi {
   factory NangLucCotLoi.fromMap(Map<String, dynamic> map) {
     return NangLucCotLoi(
       nangLucChung: List<ConductItem>.from(
-          map['nang_luc_chung']?.map((x) => ConductItem.fromMap(x))),
+          map['nang_luc_chung']?.map(ConductItem.fromMap)),
       nangLucDacThu: List<ConductItem>.from(
-          map['nang_luc_dac_thu']?.map((x) => ConductItem.fromMap(x))),
+          map['nang_luc_dac_thu']?.map(ConductItem.fromMap)),
     );
   }
 

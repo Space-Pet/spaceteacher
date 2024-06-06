@@ -7,7 +7,7 @@ class SnackBarUtils {
       content: Text(message),
       behavior: SnackBarBehavior.floating,
       duration: duration,
-      margin: const EdgeInsets.symmetric(vertical: 100.0, horizontal: 20.0),
+      margin: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
       elevation: 30,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

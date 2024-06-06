@@ -13,7 +13,7 @@ class WeeklyLessonData {
     return WeeklyLessonData(
       lessonDataList: List<LessonData>.from(
         map['weeklylesson_data']?.map(
-          (x) => LessonData.fromMap(x),
+          LessonData.fromMap,
         ),
       ),
     );
@@ -49,7 +49,7 @@ class LessonData {
       ngay: Ngay.fromMap(map['Ngay']),
       dataList: List<LessonDataItem>.from(
         map['Data']?.map(
-          (x) => LessonDataItem.fromMap(x),
+          LessonDataItem.fromMap,
         ),
       ),
     );
@@ -169,7 +169,7 @@ class LessonDataItem {
       tietStatusNote: map['tiet_status_note'],
       lessonRank: List<LessonRank>.from(
         map['lesson_rank']?.map(
-          (x) => LessonRank.fromMap(x),
+          LessonRank.fromMap,
         ),
       ),
     );

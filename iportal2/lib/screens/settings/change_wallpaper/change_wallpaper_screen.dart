@@ -69,7 +69,12 @@ class ChangeWallpaperScreen extends StatelessWidget {
                                   context.loaderOverlay.show();
 
                                   final newUser = state.user.copyWith(
-                                    background: bgState,
+                                    children: state.user.children
+                                        .map((e) => e.copyWith(
+                                            background: e.isActive
+                                                ? bgState
+                                                : e.background))
+                                        .toList(),
                                   );
 
                                   userRepository.saveUser(newUser);
@@ -83,9 +88,9 @@ class ChangeWallpaperScreen extends StatelessWidget {
                                 },
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all<Color>(
+                                      WidgetStateProperty.all<Color>(
                                           AppColors.redMenu),
-                                  shape: MaterialStateProperty.all<
+                                  shape: WidgetStateProperty.all<
                                       RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(25.0),

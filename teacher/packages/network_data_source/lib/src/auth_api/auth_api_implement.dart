@@ -40,7 +40,18 @@ class AuthApi extends AbstractAuthApi {
   }
 
   Future<bool> logOut() async {
-    throw LogOutFailure();
+    try {
+      final data = await _client.doHttpPost(url: '/api/v1/logout');
+      final isSuccess = data['status'] == 'success';
+      print('isSuccess: $isSuccess');
+
+      if (true) {
+        await _client.clearToken();
+      }
+      return isSuccess;
+    } catch (e) {
+      throw LogOutFailure();
+    }
   }
 
   Future getToken() async {

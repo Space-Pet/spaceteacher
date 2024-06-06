@@ -446,26 +446,50 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<List<SurveyData>> getSurvay() async {
+  Future<List<Survey>> getSurveyList(String capDaoTaoId) async {
     try {
-      final data =
-          await _authRestClient.doHttpGet('/api/v1/member/survey/question');
-      final jsonData = data['data'] as List<dynamic>;
-      return jsonData.map((e) => SurveyData.fromJson(e)).toList();
+      final data = await _client.doHttpGet(
+        '/api/v1/member/survey/list',
+        queryParameters: {
+          'cap_dao_tao': capDaoTaoId,
+        },
+      );
+      print(data);
+      final jsonData = data['data']['items'] as List<dynamic>;
+      return jsonData.map((e) => Survey.fromJson(e)).toList();
     } catch (e) {
       print('error: $e');
       return [];
     }
   }
 
-  Future<void> postSurvey(
-      {required List<Map<String, dynamic>> listSurvey}) async {
+  Future<SurveyDetail> getSurveyDetail(int khaoSatId) async {
+    try {
+      final data = await _authRestClient
+          .doHttpGet('/api/v1/member/survey/question', queryParameters: {
+        'khao_sat_id': khaoSatId,
+      });
+
+      print(data);
+
+      final surveyDetailData = SurveyDetail.fromMap(data['data']);
+      return surveyDetailData;
+    } catch (e) {
+      throw GetSurveyDetailFailure();
+    }
+  }
+
+  Future<void> postSurvey({
+    required List<Map<String, dynamic>> listSurvey,
+    required int khaoSatId,
+  }) async {
     try {
       List<Map<String, dynamic>> requestBody = [];
       for (var survey in listSurvey) {
         Map<String, dynamic> item = {
+          "KHAO_SAT_ID": khaoSatId,
           "CAU_HOI_ID": survey['cauHoiId'],
-          "KHAO_SAT_ID": 1
+          "LOAI_CAU_HOI": survey['loaiCauHoi'],
         };
         if (survey.containsKey('cauTraLoiId')) {
           item["MUC_DO_HAI_LONG"] = survey['cauTraLoiId'];
@@ -475,13 +499,12 @@ class AppFetchApi extends AbstractAppFetchApi {
         }
         requestBody.add(item);
       }
-      print('d: $requestBody');
+      print('requestBody: $requestBody');
       final data = await _authRestClient.doHttpPost(
         url: '/api/v1/member/survey/question',
         data: requestBody,
       );
-      print('jiji: $requestBody');
-      print('ok: $data');
+      print('data: $data');
     } catch (e) {
       print('error');
     }
@@ -502,7 +525,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<Map<String, dynamic>> getMessageDetail({
     required String conversationId,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     int? page = 1,
   }) async {
@@ -565,7 +588,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<int> deleteMessageDetail({
     required String content,
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     required String recipient,
     required int idMessage,
@@ -589,7 +612,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<int> deleteMessage({
-    required String schoolId,
+    required int schoolId,
     required String schoolBrand,
     required int idMessage,
   }) async {
@@ -604,6 +627,21 @@ class AppFetchApi extends AbstractAppFetchApi {
       return data['code'];
     } catch (e) {
       return 0;
+    }
+  }
+
+  Future<Map<String, dynamic>?> turnOffNoti(
+      {required bool isDisableNoti,
+      required Map<String, Object> headers}) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api/v1/staff/notifications/switch',
+        requestBody: {'status': isDisableNoti ? 1 : 0},
+        headers: headers,
+      );
+      return data;
+    } catch (e) {
+      return null;
     }
   }
 
@@ -629,7 +667,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<Map<String, dynamic>?> postPinMessage({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
     required int idMessage,
   }) async {
     try {
@@ -648,7 +686,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<Map<String, dynamic>?> postDeletePinMessage({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
     required int idMessage,
   }) async {
     try {
@@ -667,7 +705,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<MessageDetail?> getMessagePin({
     required String schoolBrand,
-    required String schoolId,
+    required int schoolId,
   }) async {
     try {
       final data = await _client.doHttpGet(
@@ -745,7 +783,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       return StudentFeesResponse();
     }
   }
-
+  
   Future<SchoolFee> getSchoolFee({
     required int pupilId,
   }) async {
@@ -837,6 +875,8 @@ class GetOtherScoreFailure implements Exception {}
 class GetExerciseFailure implements Exception {}
 
 class GetRegisterNoteBookFailure implements Exception {}
+
+class GetSurveyDetailFailure implements Exception {}
 
 class GetSchoolFeeFailure implements Exception {}
 

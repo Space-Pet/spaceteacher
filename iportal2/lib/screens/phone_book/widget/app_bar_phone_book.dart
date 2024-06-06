@@ -1,8 +1,6 @@
+import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import '../../profile/widget/profile_bottom_sheet.dart';
 
 class AppBarPhoneBook extends StatelessWidget {
   const AppBarPhoneBook({super.key});
@@ -84,20 +82,7 @@ class AppBarPhoneBook extends StatelessWidget {
                         color: AppColors.black,
                         size: 30,
                       ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isDismissible: true,
-                          enableDrag: true,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) {
-                            return ProfileBottomSheet(
-                              onIndexChanged: () {},
-                            );
-                          },
-                        );
-                      },
+                      onPressed: () {},
                     ),
                   ],
                 ),

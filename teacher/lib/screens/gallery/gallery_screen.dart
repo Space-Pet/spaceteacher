@@ -1,6 +1,8 @@
 import 'package:core/core.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
@@ -8,7 +10,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
 import 'package:teacher/screens/gallery/bloc/gallery_bloc.dart';
 import 'package:teacher/screens/gallery/widget/gallery_card/card_gallery.dart';
-import 'package:repository/repository.dart';
+import 'package:teacher/screens/gallery/widget/gallery_create/gallery_create.dart';
 
 class GalleryScreen extends StatelessWidget {
   const GalleryScreen({super.key});
@@ -29,8 +31,6 @@ class GalleryScreen extends StatelessWidget {
               .where((element) => element.galleryImages.isNotEmpty)
               .toList();
 
-          final pinnedAlbumIdList = state.pinnedAlbumIdList;
-
           final isLoading = state.status == GalleryStatus.loading;
           final isEmptyData = albumList.isEmpty && !isLoading;
 
@@ -42,7 +42,16 @@ class GalleryScreen extends StatelessWidget {
                   title: 'Thư viện ảnh (${albumList.length})',
                   canGoback: true,
                   onBack: () {
-                    context.pop(pinnedAlbumIdList);
+                    context.pop();
+                  },
+                  iconRight: Assets.icons.addMessage,
+                  onRight: () async {
+                    final bool? shouldRefresh =
+                        await context.push(const GalleryCreateNew());
+
+                    if (shouldRefresh ?? false) {
+                      galleryBloc.add(GalleryFetchData());
+                    }
                   },
                 ),
                 Expanded(
@@ -67,7 +76,6 @@ class GalleryScreen extends StatelessWidget {
                             child: CustomRefresh(
                               onRefresh: () async {
                                 galleryBloc.add(GalleryFetchData());
-                                galleryBloc.add(GalleryGetPinnedAlbumIdList());
                               },
                               child: Stack(
                                 children: [
@@ -80,46 +88,40 @@ class GalleryScreen extends StatelessWidget {
                                                 text:
                                                     'Thư viện ảnh của bạn trống!'),
                                           )
-                                        : GalleryListView(
-                                            itemCount: albumList.length,
-                                            itemBuilder: (context, index) {
-                                              final isPinned = pinnedAlbumIdList
-                                                  .contains(albumList[index]
-                                                      .galleryId);
+                                        : BlocBuilder<CurrentUserBloc,
+                                            CurrentUserState>(
+                                            builder: (context, state) {
+                                              final pinnedAlbumIdList =
+                                                  state.user.pinnedAlbumIdList;
 
-                                              return CardGallery(
-                                                galleryItem: albumList[index],
-                                                isPinned: isPinned,
-                                                onUpdatePinAlbum: () {
-                                                  final albumId =
-                                                      albumList[index]
-                                                          .galleryId;
-
-                                                  if (pinnedAlbumIdList
-                                                      .contains(albumId)) {
-                                                    final newList =
+                                              return GalleryListView(
+                                                  itemCount: albumList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final isPinned =
                                                         pinnedAlbumIdList
-                                                            .where((element) =>
-                                                                element !=
-                                                                albumId)
-                                                            .toList();
+                                                            .contains(
+                                                                albumList[index]
+                                                                    .galleryId);
 
-                                                    galleryBloc.add(
-                                                        GalleryUpdatePinnedAlbum(
-                                                            newList));
-                                                  } else {
-                                                    final newList = [
-                                                      ...pinnedAlbumIdList,
-                                                      albumId
-                                                    ];
+                                                    return CardGallery(
+                                                      galleryItem:
+                                                          albumList[index],
+                                                      isPinned: isPinned,
+                                                      onUpdatePinAlbum: () {
+                                                        final albumId =
+                                                            albumList[index]
+                                                                .galleryId;
 
-                                                    galleryBloc.add(
-                                                        GalleryUpdatePinnedAlbum(
-                                                            newList));
-                                                  }
-                                                },
-                                              );
-                                            }),
+                                                        galleryBloc.add(
+                                                            GalleryUpdatePinnedAlbum(
+                                                          albumId: albumId,
+                                                        ));
+                                                      },
+                                                    );
+                                                  });
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),

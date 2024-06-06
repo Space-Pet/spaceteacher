@@ -96,14 +96,14 @@ class TxtDiemMoetType {
           ? null
           : List<ScoreDataType>.from(
               map['score_data']?.map(
-                (x) => ScoreDataType.fromMap(x),
+                ScoreDataType.fromMap,
               ),
             ),
       diemData: map['diem_data'] == null
           ? null
           : List<DiemDataType>.from(
               map['diem_data']?.map(
-                (x) => DiemDataType.fromMap(x),
+                DiemDataType.fromMap,
               ),
             ),
       kqht: map['kqht']?.toString(),

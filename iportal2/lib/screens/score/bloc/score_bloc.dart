@@ -40,7 +40,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     emit(state.copyWith(status: ScoreStatus.loading));
 
     final scoreData = await appFetchApiRepo.getMoetScore(
-      // userKey: currentUserBloc.state.user.user_key,
+      // userKey: currentUserBloc.state.activeChild.user_key,
       userKey: '02033200186',
       txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
@@ -70,7 +70,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     emit(state.copyWith(otherScoreStatus: OtherScoreStatus.loading));
 
     final scoreData = await appFetchApiRepo.getScoreOther(
-      // userKey: currentUserBloc.state.user.user_key,
+      // userKey: currentUserBloc.state.activeChild.user_key,
       userKey: '02033200186',
       txtYear: state.txtLearnYear,
     );
@@ -89,7 +89,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       emit(state.copyWith(conducStatus: ScoreStatus.loading));
 
       final conductData = await appFetchApiRepo.getPrimaryConduct(
-        // userKey: currentUserBloc.state.user.user_key,
+        // userKey: currentUserBloc.state.activeChild.user_key,
         userKey: '02033200186',
         txtHocKy: state.txtHocKy.getValue(),
         txtYear: state.txtLearnYear,
@@ -108,7 +108,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     emit(state.copyWith(status: ScoreStatus.loading));
 
     final scoreData = await appFetchApiRepo.getEslScore(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       // userKey: '0253220010',
       txtTerm: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,

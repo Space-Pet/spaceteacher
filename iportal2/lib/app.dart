@@ -74,30 +74,36 @@ class _IPortal2AppState extends State<IPortal2App> {
 
   void onReceiveNotification(Map<String, dynamic>? data) async {
     log("IPortal2App - onReceiveNotification: $data");
-    final notiType = data?['conversation_id'];
-    final currentContext = mainNavKey.currentState!.context;
-    bool isMessageScreen = false;
-    bool isMessageDetail = false;
-    currentContext.popUntil(predicate: (Route route) {
-      log('navKey.currentState!.context.popUntil ${route.settings.name}');
-      if (route.settings.name == MessageScreen.routeName) {
-        isMessageScreen = true;
-      }
-      return true;
-    });
-    if (isMessageScreen) {
-      currentContext.read<MessageBloc>().add(GetListMessageResert());
-    }
-    currentContext.popUntil(predicate: (Route route) {
-      if (route.settings.name == ChatRoomScreen.routeName) {
-        isMessageDetail = true;
-      }
-      return true;
-    });
-    if (isMessageDetail) {
-      currentContext
-          .read<MessageBloc>()
-          .add(GetMessageDetail(conversationId: notiType));
+    final notiType = data?['type'];
+
+    switch (notiType) {
+      case 'message':
+        final conversationId = data?['conversation_id'];
+        final currentContext = mainNavKey.currentState!.context;
+        bool isMessageScreen = false;
+        bool isMessageDetail = false;
+        currentContext.popUntil(predicate: (Route route) {
+          log('navKey.currentState!.context.popUntil ${route.settings.name}');
+          if (route.settings.name == MessageScreen.routeName) {
+            isMessageScreen = true;
+          }
+          return true;
+        });
+        if (isMessageScreen) {
+          currentContext.read<MessageBloc>().add(GetListMessageResert());
+        }
+        currentContext.popUntil(predicate: (Route route) {
+          if (route.settings.name == ChatRoomScreen.routeName) {
+            isMessageDetail = true;
+          }
+          return true;
+        });
+        if (isMessageDetail) {
+          currentContext
+              .read<MessageBloc>()
+              .add(GetMessageDetail(conversationId: conversationId));
+        }
+      default:
     }
   }
 

@@ -24,7 +24,7 @@ class ProfileScreen extends StatelessWidget {
       value: profileBloc,
       child: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, profileState) {
-          final userData = profileState.studentData;
+          final studentData = profileState.studentData;
           final parentData = profileState.parentData;
 
           return BlocBuilder<CurrentUserBloc, CurrentUserState>(
@@ -35,7 +35,8 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     ProfileAppBar(
-                      user: userData,
+                      studentData: studentData,
+                      parentData: parentData,
                       isParent: isParent,
                       onBack: () {
                         context.pop();
@@ -55,12 +56,12 @@ class ProfileScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Image(
-                              image: state.user.brandLogo(),
+                              image: state.activeChild.brandLogo(),
                               height: 100,
                             ),
                             isParent
                                 ? TabBarParent(parentData: parentData)
-                                : TabBarStudent(studentData: userData)
+                                : TabBarStudent(studentData: studentData)
                           ],
                         ),
                       ),

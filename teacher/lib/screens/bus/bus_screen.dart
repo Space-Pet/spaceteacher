@@ -1,222 +1,135 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/widgets.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
-import 'package:teacher/components/custom_refresh.dart';
-
 import 'package:teacher/screens/bus/bloc/bus_bloc.dart';
-import 'package:teacher/screens/bus/bus_card/card_bus_item.dart';
-import 'package:repository/repository.dart';
+import 'package:teacher/screens/bus/bus_card/card_bus.dart';
+import 'package:teacher/screens/bus/widgets/week_select.dart';
 
 class BusScreen extends StatelessWidget {
   const BusScreen({super.key});
   static const routeName = '/bus';
   @override
   Widget build(BuildContext context) {
-    final currentUser = context.read<CurrentUserBloc>().state.user;
-    return BlocProvider(
-      create: (context) => BusBloc(
-        context.read<AppFetchApiRepository>(),
-        // TODO: bind API teacher
-        pupilId: currentUser.teacher_id,
-        schoolId: currentUser.school_id,
-        schoolBrand: currentUser.school_brand,
+    final currentUserBloc = context.read<CurrentUserBloc>();
+    final appFetchApiRepository = context.read<AppFetchApiRepository>();
+    return BlocProvider.value(
+      value: BusBloc(
+        userRepository: context.read<UserRepository>(),
+        appFetchApiRepository: appFetchApiRepository,
+        currentUserBloc: currentUserBloc,
       ),
       child: const BusView(),
     );
   }
 }
 
-class BusView extends StatelessWidget {
+class BusView extends StatefulWidget {
   const BusView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return BackGroundContainer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ScreenAppBar(
-            title: 'Xe đưa rước',
-            canGoback: true,
-            onBack: () {
-              context.pop();
-            },
-          ),
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  SelectDate(
-                    onDateChanged: (date) => context.read<BusBloc>().add(
-                          BusChangedDate(date: date),
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Expanded(
-                    child: BlocBuilder<BusBloc, BusState>(
-                      builder: (context, state) {
-                        final busSchedules = state.busSchedules;
-                        final isLoading = state.status == BusStatus.loading;
-                        final isEmptyData = busSchedules.isEmpty && !isLoading;
+  State<BusView> createState() => _BusViewState();
+}
 
-                        return CustomRefresh(
-                          onRefresh: () async {
-                            context.read<BusBloc>().add(BusFetchedSchedules());
-                          },
-                          child: Stack(
-                            children: [
-                              ListView(),
-                              AppSkeleton(
-                                isLoading: isLoading,
-                                child: isEmptyData
-                                    ? const Center(
-                                        child: EmptyScreen(
-                                            text: 'Chưa có dữ liệu'))
-                                    : ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        cacheExtent: 1000,
-                                        itemCount: busSchedules.length,
-                                        itemBuilder: (context, index) {
-                                          return CardBusItem(
-                                            busSchedule: busSchedules[index],
-                                          );
-                                        },
-                                      ),
-                              ),
-                            ],
-                          ),
-                        );
+class _BusViewState extends State<BusView> {
+  late DateTime dateSelect = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<BusBloc, BusState>(builder: (context, state) {
+      final busData = state.busSchedules;
+      final isLoading = state.status == BusStatus.loading;
+
+      return BackGroundContainer(
+        child: Column(
+          children: [
+            ScreenAppBar(
+              title: 'Lịch xe đưa đón',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
+            const SizedBox(height: 6),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    WeekSelect(
+                      date: DateTime.now(),
+                      onDatePicked: (date) {
+                        setState(() {
+                          dateSelect = date;
+                          context
+                              .read<BusBloc>()
+                              .add(BusChangedDate(date: date.yyyyMMdd));
+                        });
                       },
                     ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class SelectDate extends StatefulWidget {
-  const SelectDate({super.key, required this.onDateChanged});
-
-  final Function(DateTime date) onDateChanged;
-
-  @override
-  State<SelectDate> createState() => _SelectDateState();
-}
-
-class _SelectDateState extends State<SelectDate> {
-  DateTime now = DateTime.now();
-
-  DateFormat formatDate = DateFormat("dd/MM/yyyy");
-  late String datePicked;
-
-  @override
-  void initState() {
-    super.initState();
-    datePicked = formatDate.format(now);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
-          context: context,
-          helpText: 'Chọn ngày',
-          cancelText: 'Trở về',
-          confirmText: 'Xong',
-          initialDate: formatDate.parse(datePicked),
-          firstDate: DateTime(now.year - 2, now.month),
-          lastDate: DateTime(now.year + 2, now.month),
-          builder: (context, child) {
-            return Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(
-                  primary: AppColors.brand600,
-                  secondary: AppColors.white,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
-
-        if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
-          widget.onDateChanged(pickedDate);
-          setState(() {
-            datePicked = formattedDate;
-          });
-        } else {}
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          color: AppColors.white,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: AppColors.blueGray100),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          shadows: const [
-            BoxShadow(
-              color: AppColors.gray9000c,
-              blurRadius: 2,
-              offset: Offset(0, 1),
-            )
-          ],
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.calendar_month_outlined,
-                    size: 20,
-                    color: AppColors.gray500,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: SizedBox(
-                      child: Text(
-                        datePicked,
-                        style: AppTextStyles.normal16(color: AppColors.gray500),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      child: Row(
+                        children: [
+                          Text(
+                            dateSelect.ddMMyyyyDash,
+                            style: AppTextStyles.normal16(
+                              color: AppColors.brand600,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8),
+                            child: Text(
+                              dateSelect.eeee,
+                              style: AppTextStyles.normal14(
+                                color: AppColors.gray400,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: AppSkeleton(
+                        isLoading: isLoading,
+                        child: busData.isNotEmpty
+                            ? ListView.builder(
+                                padding: EdgeInsets.zero,
+                                itemCount: busData.length,
+                                itemBuilder: (context, index) {
+                                  final busScheduleData = busData[index];
+                                  return CardBus(
+                                    busScheduleTeacher: busScheduleData,
+                                  );
+                                },
+                              )
+                            : const Center(
+                                child: EmptyScreen(
+                                    text: 'Bạn không có lịch xe đưa đón'),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            const Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 24,
-              color: AppColors.gray900,
             ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -6,7 +6,6 @@ import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 import 'package:teacher/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:teacher/screens/pre_score/widget/select_button/score_filter.dart';
-import 'package:teacher/screens/survey_iportal2/widget/list_view_report.dart';
 import 'package:repository/repository.dart';
 
 enum TermType {
@@ -223,9 +222,9 @@ class _TabBarReportState extends State<TabBarReport> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          ListViewReport(
-                                            reportStudent: reportStudent,
-                                          ),
+                                          // ListViewReport(
+                                          //   reportStudent: reportStudent,
+                                          // ),
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Container(

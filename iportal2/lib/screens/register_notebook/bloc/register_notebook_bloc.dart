@@ -30,7 +30,7 @@ class RegisterNotebookBloc
       RegisterSelectDate event, Emitter<RegisterNotebookState> emit) async {
     emit(state.copyWith(status: RegisterNotebookStatus.loading));
     final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
     );
     emit(
@@ -48,7 +48,7 @@ class RegisterNotebookBloc
       Emitter<RegisterNotebookState> emit) async {
     emit(state.copyWith(status: RegisterNotebookStatus.loading));
     final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
-      userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
     );
     emit(

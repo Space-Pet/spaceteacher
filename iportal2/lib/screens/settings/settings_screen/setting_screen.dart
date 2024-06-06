@@ -1,15 +1,17 @@
+import 'package:core/common/utils.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/dialog/dialog_change_password.dart';
 import 'package:iportal2/components/dialog/dialog_languages.dart';
+import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
@@ -17,12 +19,22 @@ import 'package:iportal2/screens/settings/faq/faq_screen.dart';
 import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
 import 'package:iportal2/screens/settings/user_manual/user_manual_screen.dart';
 import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
+import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 
 import '../widget/switch_setting.dart';
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+  const SettingScreen({
+    super.key,
+    required this.userData,
+    required this.parentData,
+    this.isParent = false,
+  });
+
+  final StudentData userData;
+  final ParentData parentData;
+  final bool isParent;
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -31,28 +43,21 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   String? selectedLanguage;
 
-  late TextEditingController currentPassword = TextEditingController();
-  late TextEditingController password = TextEditingController();
-  late TextEditingController passwordConfirmation = TextEditingController();
-
-  void _handlePasswordChange(
-      String currentPassword, String newPassword, String confirmPassword) {
-    setState(() {
-      this.currentPassword.text = currentPassword;
-      password.text = newPassword;
-      passwordConfirmation.text = confirmPassword;
-    });
-    // Add logic to handle password change
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SettingScreenBloc(
-        appFetchApiRepo: context.read<AppFetchApiRepository>(),
-        authRepository: context.read<AuthRepository>(),
-        userRepository: context.read<UserRepository>(),
-      ),
+    final settingBloc = SettingScreenBloc(
+      appFetchApiRepo: context.read<AppFetchApiRepository>(),
+      authRepository: context.read<AuthRepository>(),
+      userRepository: context.read<UserRepository>(),
+      currentUserBloc: context.read<CurrentUserBloc>(),
+    );
+
+    final isDisableNoti = widget.isParent
+        ? widget.parentData.pushNotify == 0
+        : widget.userData.pupil.pushNotify == 0;
+
+    return BlocProvider.value(
+      value: settingBloc,
       child: BlocListener<SettingScreenBloc, SettingScreenState>(
         listenWhen: (previous, current) =>
             previous.logoutStatus != current.logoutStatus,
@@ -65,23 +70,8 @@ class _SettingScreenState extends State<SettingScreen> {
             );
           }
 
-          if (state.logoutStatus.isFailure) {
-            Fluttertoast.showToast(
-              msg: 'Vui lòng thử lại sau',
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: AppColors.black,
-              textColor: AppColors.white,
-            );
-          }
-          if (state.logoutStatus.isFailureChangePassword) {
-            Fluttertoast.showToast(
-              msg: state.message ?? 'Vui lòng thử lại sau',
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              backgroundColor: AppColors.black,
-              textColor: AppColors.white,
-            );
+          if (state.logoutStatus.isTurnOffNotiSuccess) {
+            SnackBarUtils.showFloatingSnackBar(context, 'Cập nhật thành công!');
           }
         },
         child: BackGroundContainer(
@@ -109,26 +99,33 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: Column(children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 18),
-                        child: SwitchSetting(
+                        child: AccountSetting(
                           text: AppStrings.turnOffNoti,
                           iconAsset: Assets.icons.bell,
+                          isDisableNoti: isDisableNoti,
+                          isNotiSetting: true,
+                          onPressed: () {
+                            settingBloc.add(TurnOffNoti(
+                              isDisableNoti: isDisableNoti,
+                            ));
+                          },
                         ),
                       ),
-                      SwitchSetting(
+                      AccountSetting(
                         text: AppStrings.userManual,
                         iconAsset: Assets.icons.userManual,
                         onPressed: () {
                           context.push(const UserManualScreen());
                         },
                       ),
-                      SwitchSetting(
+                      AccountSetting(
                         text: 'FAQ',
                         iconAsset: Assets.icons.faq,
                         onPressed: () {
                           context.push(const FaqScreen());
                         },
                       ),
-                      SwitchSetting(
+                      AccountSetting(
                         text: AppStrings.changeAccount,
                         iconAsset: Assets.icons.accountConversion,
                         onPressed: () {
@@ -137,35 +134,27 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                       BlocBuilder<SettingScreenBloc, SettingScreenState>(
                           builder: (context, state) {
-                        return SwitchSetting(
+                        return AccountSetting(
                           text: 'Đổi mật khẩu',
                           iconAsset: Assets.icons.lockPassword,
                           onPressed: () {
-                            DialogChangePassword.show(
-                              context,
-                              onClosePressed: () {
-                                context.pop();
-                              },
-                              onSavePressed: (currentPassword, newPassword,
-                                  confirmPassword) {
-                                context.read<SettingScreenBloc>().add(
-                                    ChangePassword(
-                                        currentPassword: currentPassword,
-                                        password: newPassword,
-                                        passwordConfirmation: confirmPassword));
-                              },
-                            );
+                            showDialog(
+                                context: context,
+                                builder: (_) => DialogScaleAnimated(
+                                        dialogContent: DialogChangePassword(
+                                      bloc: settingBloc,
+                                    )));
                           },
                         );
                       }),
-                      SwitchSetting(
+                      AccountSetting(
                         text: AppStrings.changeWallpaper,
                         iconAsset: Assets.icons.tablet,
                         onPressed: () {
                           context.push(const ChangeWallpaperScreen());
                         },
                       ),
-                      SwitchSetting(
+                      AccountSetting(
                         showDottedLine: false,
                         text: AppStrings.changeLanguage,
                         textRight: selectedLanguage ?? 'Tiếng Việt',

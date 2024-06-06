@@ -2,7 +2,6 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:network_data_source/network_data_source.dart';
 
 class BackGroundContainer extends StatelessWidget {
   const BackGroundContainer({super.key, required this.child});
@@ -13,7 +12,7 @@ class BackGroundContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentUserBloc, CurrentUserState>(
       builder: (context, state) {
-        final bgImage = state.user.mainBackGround();
+        final bgImage = state.activeChild.mainBackGround();
 
         return Container(
           width: double.infinity,
@@ -30,9 +29,9 @@ class BackGroundContainer extends StatelessWidget {
   }
 }
 
-extension UserBackGround on ProfileInfo {
+extension UserBackGround on LocalChildren {
   ImageProvider<Object> mainBackGround() {
-    if (isKinderGarten()) {
+    if (isMN) {
       switch (background) {
         case SchoolBrand.uka:
           return Assets.images.mainBackground.ukaPreS.provider();

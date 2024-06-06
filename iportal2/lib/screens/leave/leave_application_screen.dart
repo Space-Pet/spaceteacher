@@ -34,9 +34,9 @@ class LeaveApplicationScreen extends StatelessWidget {
           return previous.leaveStatus != current.leaveStatus;
         },
         listener: (context, state) async {
-          if (state.leaveStatus == LeaveStatus.init) {
+          if (state.leaveStatus == LeaveStatusEnum.init) {
             LoadingDialog.show(context);
-          } else if (state.leaveStatus == LeaveStatus.error) {
+          } else if (state.leaveStatus == LeaveStatusEnum.error) {
             LoadingDialog.hide(context);
             showDialog(
                 context: context,
@@ -58,7 +58,7 @@ class LeaveApplicationScreen extends StatelessWidget {
                     ),
                   );
                 });
-          } else if (state.leaveStatus == LeaveStatus.success) {
+          } else if (state.leaveStatus == LeaveStatusEnum.success) {
             LoadingDialog.hide(context);
             bool? isOk = await showDialog(
                 context: context,

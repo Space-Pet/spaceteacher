@@ -55,6 +55,12 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
   bool _obscureText = false;
 
   @override
+  initState() {
+    super.initState();
+    _obscureText = widget.obscureText;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,51 +87,48 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
           },
           cursorColor: widget.isValid ? null : Colors.black,
           decoration: InputDecoration(
-            constraints: const BoxConstraints(
-              maxHeight: 50,
-              minHeight: 42,
-            ),
-            contentPadding: EdgeInsets.zero,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: widget.isValid ? Colors.grey : Colors.transparent),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: widget.isValid ? Colors.blue : Colors.transparent),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: widget.isValid ? Colors.grey : Colors.transparent),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            hintText: widget.hintText,
-            hintStyle: const TextStyle(
-                color: AppColors.gray500,
-                fontSize: 15,
-                fontWeight: FontWeight.normal),
-            filled: true,
-            fillColor: widget.fillColor ?? Colors.white,
-            prefixIconColor: widget.isValid ? null : Colors.transparent,
-            prefixIcon: widget.prefixIcon,
-            suffixIcon: !widget.obscureText
-                ? GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                    child: Icon(
-                      _obscureText
-                          ? Icons.visibility_off_outlined
-                          : Icons.visibility_outlined,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-          ),
+              constraints: const BoxConstraints(
+                maxHeight: 50,
+                minHeight: 42,
+              ),
+              contentPadding: EdgeInsets.zero,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: widget.isValid ? Colors.grey : AppColors.red500),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: widget.isValid ? Colors.blue : AppColors.red500),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: widget.isValid ? Colors.grey : AppColors.red500),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              hintText: widget.hintText,
+              hintStyle: const TextStyle(
+                  color: AppColors.gray500,
+                  fontSize: 15,
+                  fontWeight: FontWeight.normal),
+              filled: true,
+              fillColor: widget.fillColor ?? Colors.white,
+              prefixIconColor: widget.isValid ? null : Colors.transparent,
+              prefixIcon: widget.prefixIcon,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: Colors.grey,
+                ),
+              )),
           obscureText: _obscureText,
         ),
       ],

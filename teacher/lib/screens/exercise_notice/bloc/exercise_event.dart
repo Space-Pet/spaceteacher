@@ -1,6 +1,5 @@
 part of 'exercise_bloc.dart';
 
-@immutable
 sealed class ExerciseEvent {}
 
 class ExerciseFetchData extends ExerciseEvent {

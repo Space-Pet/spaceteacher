@@ -5,6 +5,7 @@ enum SettingScreenStatus {
   loading,
   success,
   failure,
+  turnOffNotiSuccess,
 }
 
 extension SettingScreenStatusX on SettingScreenStatus {
@@ -12,6 +13,8 @@ extension SettingScreenStatusX on SettingScreenStatus {
   bool get isLoading => this == SettingScreenStatus.loading;
   bool get isSuccess => this == SettingScreenStatus.success;
   bool get isFailure => this == SettingScreenStatus.failure;
+  bool get isTurnOffNotiSuccess =>
+      this == SettingScreenStatus.turnOffNotiSuccess;
 }
 
 class SettingScreenState extends Equatable {
@@ -28,7 +31,5 @@ class SettingScreenState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        logoutStatus,
-      ];
+  List<Object?> get props => [logoutStatus];
 }

@@ -6,18 +6,20 @@ import 'package:network_data_source/network_data_source.dart';
 
 class ProfileAppBar extends StatefulWidget {
   final VoidCallback? onBack;
-  final StudentData user;
+  final StudentData studentData;
+  final ParentData parentData;
   final bool isParent;
 
   const ProfileAppBar({
     super.key,
     this.onBack,
-    required this.user,
+    required this.studentData,
+    required this.parentData,
     required this.isParent,
   });
 
   @override
-  _ProfileAppBarState createState() => _ProfileAppBarState();
+  State<ProfileAppBar> createState() => _ProfileAppBarState();
 }
 
 class _ProfileAppBarState extends State<ProfileAppBar> {
@@ -25,7 +27,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    final userData = widget.user;
+    final studentData = widget.studentData;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 12),
@@ -49,7 +51,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(userData.avatar.mobile)),
+                          image: NetworkImage(studentData.avatar.mobile)),
                       shape: BoxShape.circle,
                       color: AppColors.white,
                       border: Border.all(color: AppColors.white, width: 2)),
@@ -59,20 +61,29 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userData.pupil.name,
+                      studentData.pupil.name,
                       style: AppTextStyles.semiBold12(
                         color: AppColors.white,
                         height: 24 / 12,
                       ),
                     ),
                     Text(
-                      'Lớp ${userData.classInfo.name}',
+                      'Lớp ${studentData.classInfo.name}',
                       style: AppTextStyles.normal12(
                         color: AppColors.white,
                       ),
                     ),
                   ],
-                )
+                ),
+                if (widget.isParent)
+                  IconButton(
+                    padding: const EdgeInsets.only(left: 16),
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: AppColors.white,
+                    ),
+                    onPressed: () {},
+                  ),
               ],
             ),
           ),
@@ -81,33 +92,16 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             children: [
               IconButton(
                   onPressed: () {
-                    context.push(const SettingScreen());
+                    context.push(SettingScreen(
+                      userData: studentData,
+                      parentData: widget.parentData,
+                      isParent: widget.isParent,
+                    ));
                   },
                   icon: const Icon(
                     Icons.settings,
                     color: AppColors.white,
                   )),
-              // if (widget.role == 1)
-              //   IconButton(
-              //     icon: const Icon(
-              //       Icons.keyboard_arrow_down,
-              //       color: AppColors.white,
-              //     ),
-              //     onPressed: () {
-              //       showModalBottomSheet(
-              //         context: context,
-              //         isDismissible: false,
-              //         enableDrag: false,
-              //         isScrollControlled: true,
-              //         backgroundColor: Colors.transparent,
-              //         builder: (context) {
-              //           return ProfileBottomSheet(
-              //             onIndexChanged: () {},
-              //           );
-              //         },
-              //       );
-              //     },
-              //   ),
             ],
           )
         ],

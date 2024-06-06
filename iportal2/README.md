@@ -31,7 +31,7 @@ class YourWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CurrentUserBloc, CurrentUserState>(
         builder: (context, state) {
-          if (state.user.isKinderGarten()) {
+          if (state.activeChild.isMN) {
             return Widget();
           }
         }

@@ -64,11 +64,15 @@ class _PinFeaturesState extends State<PinFeatures> {
 
     addBtnAllFeatureByDefault();
 
-    final newUserFeatures = userBloc.state.user.copyWith(
-      features: newListFeatures,
+    final newUser = userBloc.state.user.copyWith(
+      children: userBloc.state.user.children
+          .map((e) => e.copyWith(
+                features: e.isActive ? newListFeatures : e.features,
+              ))
+          .toList(),
     );
-    userRepository.saveUser(newUserFeatures);
-    userBloc.add(CurrentUserUpdated(user: newUserFeatures));
+    userRepository.saveUser(newUser);
+    userBloc.add(CurrentUserUpdated(user: newUser));
   }
 
   void onTapFeature(FeatureModel feature) {
@@ -102,7 +106,7 @@ class _PinFeaturesState extends State<PinFeatures> {
         case FeatureKey.bus:
           context.push(const BusScreen());
           break;
-          
+
         case FeatureKey.tariff:
           context.push(const FeePlanScreen());
           break;
@@ -137,9 +141,11 @@ class _PinFeaturesState extends State<PinFeatures> {
         case FeatureKey.menu:
           context.push(const MenuScreen());
           break;
+          
         case FeatureKey.survey:
           mainNavKey.currentContext?.push(const SurveyScreen());
           break;
+
         case FeatureKey.tuition:
           context.push(const SchoolFeeScreen());
           break;

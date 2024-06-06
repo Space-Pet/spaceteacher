@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
-import 'package:core/data/models/teacher_login.dart';
 import 'package:flutter/material.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -37,7 +36,7 @@ class AuthRepository {
   Future<TeacherLogin?> loginWith365() async {
     String email = '';
     try {
-      // final accessToken = await oauth.getAccessToken();
+      final accessToken = await oauth.getAccessToken();
 
       // if (accessToken != null && accessToken.isNotEmpty) {
       //   final decodeRes = JwtUtils.decode(accessToken);
@@ -56,7 +55,8 @@ class AuthRepository {
       //   });
       // }
 
-      email = 'thaotnt@uka.edu.vn';
+      // email = 'liemlv.baria@uka.edu.vn';
+      email = 'vyntd@saigonacademy.com';
 
       if (email.isEmpty) {
         return null;

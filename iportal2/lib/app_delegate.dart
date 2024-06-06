@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/app_config/network_client_setup.dart';
 import 'package:iportal2/boostrap.dart';
@@ -75,15 +74,12 @@ class AppDelegate {
       partnerTokenRestClient: partnerTokenRestClient,
     );
 
-    final authLocalStorage = AuthHiveStorage();
-    await authLocalStorage.init();
     final userLocalStorage = UserHiveStorage();
     await userLocalStorage.init();
 
     HttpOverrides.global = MyHttpOverrides();
     bootstrap(
       authApi: authApi,
-      authLocalStorage: authLocalStorage,
       userApi: userApi,
       appFetchApi: appFetchApi,
       userLocalStorage: userLocalStorage,

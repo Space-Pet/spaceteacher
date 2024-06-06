@@ -45,7 +45,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
 
   int getWeekNumber(DateTime date) {
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
     final firstDayOfYear = DateTime(firstDayOfWeek.year);
     final daysOffset = firstDayOfYear.weekday;
     final daysOfYear = firstDayOfWeek.difference(firstDayOfYear).inDays + 1;
@@ -110,7 +109,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
         dataListAttendance.add({'day': attendance.date});
         isFirstDay = false;
       }
-      for (final itemData in attendance.data ?? []) {
+      for (final itemData in attendance.data) {
         final dayData = <String, dynamic>{
           'description': itemData.subjectName,
           'isAbsent': itemData.description

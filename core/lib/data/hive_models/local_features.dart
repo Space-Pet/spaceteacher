@@ -1,11 +1,8 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'dart:convert';
 
 import 'package:hive/hive.dart';
-
+import 'local_children.dart';
 import 'local_user_features.dart';
-
 
 part 'local_features.g.dart';
 
@@ -17,31 +14,28 @@ class LocalFeatures {
   final List<FeatureModel> features;
   @HiveField(2)
   final List<int>? pinnedAlbumIdList;
+  @HiveField(3)
+  final List<LocalChildren> children;
 
   LocalFeatures({
     required this.user_key,
     required this.features,
     this.pinnedAlbumIdList,
+    required this.children,
   });
 
   LocalFeatures copyWith({
     String? user_key,
     List<FeatureModel>? features,
     List<int>? pinnedAlbumIdList,
+    List<LocalChildren>? children,
   }) {
     return LocalFeatures(
       user_key: user_key ?? this.user_key,
       features: features ?? this.features,
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
+      children: children ?? this.children,
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'user_key': user_key,
-      'features': features.map((x) => x.toMap()).toList(),
-      'pinnedAlbumIdList': pinnedAlbumIdList ?? <int>[],
-    };
   }
 
   factory LocalFeatures.fromMap(Map<String, dynamic> map) {
@@ -51,10 +45,20 @@ class LocalFeatures {
               ?.map((x) => FeatureModel.fromMap(x as Map<String, dynamic>))
           as Iterable),
       pinnedAlbumIdList: List<int>.from(map['pinnedAlbumIdList'] as Iterable),
+      children: List<LocalChildren>.from(map['children']
+              ?.map((x) => LocalChildren.fromMap(x as Map<String, dynamic>))
+          as Iterable),
     );
   }
 
-  String toJson() => json.encode(toMap());
+  factory LocalFeatures.empty() {
+    return LocalFeatures(
+      user_key: '',
+      features: [],
+      pinnedAlbumIdList: [],
+      children: [],
+    );
+  }
 
   factory LocalFeatures.fromJson(String source) =>
       LocalFeatures.fromMap(json.decode(source) as Map<String, dynamic>);

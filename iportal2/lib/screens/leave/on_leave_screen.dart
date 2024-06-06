@@ -59,7 +59,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LeaveBloc, LeaveState>(builder: (context, state) {
-      final isLoading = state.leaveStatus == LeaveStatus.init;
+      final isLoading = state.leaveStatus == LeaveStatusEnum.init;
       final leave = state.leaveData;
       final leaveStatus = state.leaveStatus;
 
@@ -230,7 +230,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
                                       ],
                                     ),
                                   ),
-                                  if (leaveStatus == LeaveStatus.loadMore)
+                                  if (leaveStatus == LeaveStatusEnum.loadMore)
                                     const SizedBox(
                                       height: 50,
                                       child: CircularProgressIndicator(),

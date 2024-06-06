@@ -122,6 +122,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/call.svg
   SvgGenImage get call => const SvgGenImage('assets/icons/call.svg');
 
+  /// File path: assets/icons/call_bus.svg
+  SvgGenImage get callBus => const SvgGenImage('assets/icons/call_bus.svg');
+
   /// File path: assets/icons/car.svg
   SvgGenImage get car => const SvgGenImage('assets/icons/car.svg');
 
@@ -299,6 +302,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/global.svg
   SvgGenImage get global => const SvgGenImage('assets/icons/global.svg');
+
+  /// File path: assets/icons/history.svg
+  SvgGenImage get history => const SvgGenImage('assets/icons/history.svg');
 
   /// File path: assets/icons/home copy.svg
   SvgGenImage get homeCopy => const SvgGenImage('assets/icons/home copy.svg');
@@ -532,6 +538,10 @@ class $AssetsIconsGen {
   SvgGenImage get userManual =>
       const SvgGenImage('assets/icons/user_manual.svg');
 
+  /// File path: assets/icons/verified_check.svg
+  SvgGenImage get verifiedCheck =>
+      const SvgGenImage('assets/icons/verified_check.svg');
+
   /// File path: assets/icons/wallet-noti.svg
   SvgGenImage get walletNoti =>
       const SvgGenImage('assets/icons/wallet-noti.svg');
@@ -570,6 +580,7 @@ class $AssetsIconsGen {
         calendarLeave,
         callCopy,
         call,
+        callBus,
         car,
         checkCopy,
         checkAbsent,
@@ -619,6 +630,7 @@ class $AssetsIconsGen {
         filter,
         globalCopy,
         global,
+        history,
         homeCopy,
         homeNoneNoti,
         homeNotiWhiteCopy,
@@ -685,6 +697,7 @@ class $AssetsIconsGen {
         user,
         userManualCopy,
         userManual,
+        verifiedCheck,
         walletNoti,
         wallpaperCopy,
         wallpaper
@@ -728,6 +741,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/backgroundNoti.png
   AssetGenImage get backgroundNoti =>
       const AssetGenImage('assets/images/backgroundNoti.png');
+
+  /// File path: assets/images/background_border.png
+  AssetGenImage get backgroundBorder =>
+      const AssetGenImage('assets/images/background_border.png');
 
   $AssetsImagesBrandLogoGen get brandLogo => const $AssetsImagesBrandLogoGen();
 
@@ -1075,6 +1092,7 @@ class $AssetsImagesGen {
         avatar,
         backgroundDashb,
         backgroundNoti,
+        backgroundBorder,
         breakfastCopy,
         breakfast,
         brunchCopy,
@@ -1285,6 +1303,10 @@ class $AssetsIconsFeaturesGen {
   SvgGenImage get highSMessage =>
       const SvgGenImage('assets/icons/features/highS_message.svg');
 
+  /// File path: assets/icons/features/highS_observation.svg
+  SvgGenImage get highSObservation =>
+      const SvgGenImage('assets/icons/features/highS_observation.svg');
+
   /// File path: assets/icons/features/highS_phone-book copy.svg
   SvgGenImage get highSPhoneBookCopy =>
       const SvgGenImage('assets/icons/features/highS_phone-book copy.svg');
@@ -1469,6 +1491,7 @@ class $AssetsIconsFeaturesGen {
         highSInstructionNotebook,
         highSMenu,
         highSMessage,
+        highSObservation,
         highSPhoneBookCopy,
         highSPhoneBook,
         highSRegisterNotebookCopy,

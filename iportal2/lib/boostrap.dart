@@ -9,13 +9,11 @@ import 'package:repository/repository.dart';
 
 void bootstrap({
   required AuthApi authApi,
-  required AbstractAuthLocalStorage authLocalStorage,
   required UserApi userApi,
   required AppFetchApi appFetchApi,
   required UserLocalStorage userLocalStorage,
 }) async {
-  final authRepository =
-      AuthRepository(authApi: authApi, authLocalStorage: authLocalStorage);
+  final authRepository = AuthRepository(authApi: authApi);
 
   final userRepository =
       UserRepository(userApi: userApi, userLocalStorage: userLocalStorage);

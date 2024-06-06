@@ -35,7 +35,7 @@ class _SelectDateState extends State<SelectDate> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        DateTime? pickedDate = await showDatePicker(
+        final pickedDate = await showDatePicker(
           context: context,
           helpText: 'Chọn ngày',
           cancelText: 'Trở về',
@@ -58,7 +58,7 @@ class _SelectDateState extends State<SelectDate> {
         );
 
         if (pickedDate != null) {
-          String formattedDate = formatDate.format(pickedDate);
+          final formattedDate = formatDate.format(pickedDate);
           setState(() {
             datePickedFormat = formattedDate;
           });

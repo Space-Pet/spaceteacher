@@ -66,16 +66,7 @@ class ImagesLibrary extends StatelessWidget {
                       ? const SizedBox()
                       : RoundedButton(
                           onTap: () async {
-                            final List<int>? listId =
-                                await context.push(const GalleryScreen());
-                            if (listId != null) {
-                              context.read<HomeBloc>().add(
-                                    HomeUpdatePinnedAlbum(
-                                      listId,
-                                      isOnlyUpdateState: true,
-                                    ),
-                                  );
-                            }
+                            context.push(const GalleryScreen());
                           },
                           margin: const EdgeInsets.only(right: 12),
                           padding: const EdgeInsets.symmetric(

@@ -77,7 +77,9 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             children: [
               IconButton(
                   onPressed: () {
-                    context.push(const SettingScreen());
+                    context.push(SettingScreen(
+                      pushNotify: widget.user.pushNotify,
+                    ));
                   },
                   icon: const Icon(
                     Icons.settings,

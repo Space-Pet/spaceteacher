@@ -1,10 +1,7 @@
-import 'package:core/data/models/models.dart';
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
-import 'package:iportal2/utils/utils_export.dart';
-import 'package:network_data_source/network_data_source.dart';
 
 class ListMessageDetail extends StatefulWidget {
   const ListMessageDetail(
@@ -15,7 +12,7 @@ class ListMessageDetail extends StatefulWidget {
       this.message});
   final MessageDetail messageDatail;
   final Message? message;
-  final ProfileInfo profileInfo;
+  final LocalIPortalProfile profileInfo;
   final PhoneBookStudent? phoneBookStudent;
 
   @override

@@ -25,7 +25,7 @@ class MessageState {
   final List<PhoneBookStudent> phoneBookStudent;
   final List<MessageDetail> messageDetail;
   final MessageDetail? messagePin;
-  final ProfileInfo? profileInfo;
+  final LocalIPortalProfile? profileInfo;
   final int? currentPage;
   final bool? hasMoreData;
   final int? conversationID;
@@ -58,7 +58,7 @@ class MessageState {
     MessageStatus? messageStatus,
     List<PhoneBookStudent>? phoneBookStudent,
     List<MessageDetail>? messageDetail,
-    ProfileInfo? profileInfo,
+    LocalIPortalProfile? profileInfo,
     MessageDetail? messagePin,
     int? currentPage,
     bool? hasMoreData,

@@ -3,7 +3,6 @@ import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
-import 'package:iportal2/utils/utils_export.dart';
 
 class ChatRoomItem extends StatelessWidget {
   final Message? chatRoom;

@@ -1,4 +1,4 @@
-import 'package:core/core.dart';
+import 'package:core/core.dart' hide TitleAndInputText;
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app.dart';

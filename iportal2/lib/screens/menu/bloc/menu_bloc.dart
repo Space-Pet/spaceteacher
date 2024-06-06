@@ -1,6 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:core/data/models/models.dart';
-import 'package:equatable/equatable.dart';
+import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
@@ -27,8 +25,10 @@ class MenuBloc extends Bloc<MenuEvent, MenuState> {
     try {
       emit(state.copyWith(menuStatus: MenuStatus.init, date: DateTime.now()));
       final data = await appFetchApiRepo.getMenu(
-          userKey: currentUserBloc.state.user.user_key, date: event.txtDate);
-      emit(state.copyWith(menuStatus: MenuStatus.success, menu: data, date: event.date));
+          userKey: currentUserBloc.state.activeChild.user_key,
+          date: event.txtDate);
+      emit(state.copyWith(
+          menuStatus: MenuStatus.success, menu: data, date: event.date));
     } catch (e) {
       emit(state.copyWith(menuStatus: MenuStatus.error));
     }

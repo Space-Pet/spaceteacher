@@ -14,7 +14,7 @@ class AppSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
-      enabled: false,
+      enabled: isLoading,
       child: child,
     );
   }

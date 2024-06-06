@@ -1,12 +1,12 @@
 import 'package:core/presentation/screens/domain/domain_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/screens/authentication/domain/view/domain_screen.dart';
+import 'package:teacher/screens/authentication/domain/view/login_screen.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
 import 'package:teacher/screens/exercise_notice/exercise_screen.dart';
 import 'package:teacher/screens/fee_plan/fee_plan_screen.dart';
 import 'package:teacher/screens/gallery/gallery_screen.dart';
+import 'package:teacher/screens/gallery/widget/gallery_create/gallery_create.dart';
 import 'package:teacher/screens/home/home_screen.dart';
-import 'package:teacher/screens/leave/leave_application_screen.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
 import 'package:teacher/screens/notifications/detail/notification_detail_screen.dart';
@@ -16,6 +16,7 @@ import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:teacher/screens/splash/loading_screen.dart';
+import 'package:teacher/screens/survey/survey_screen.dart';
 
 class CustomRouter {
   static PageRouteBuilder transitionAnimation({
@@ -40,7 +41,7 @@ class CustomRouter {
     switch (settings!.name) {
       case CDomainScreen.routeName:
         return transitionAnimation(
-            child: LoginScreen(), routeName: CDomainScreen.routeName);
+            child: const LoginScreen(), routeName: CDomainScreen.routeName);
 
       case LoadingScreen.routeName:
         return transitionAnimation(
@@ -72,12 +73,6 @@ class CustomRouter {
           routeName: PhoneBookScreen.routeName,
         );
 
-      case LeaveApplicationScreen.routeName:
-        return transitionAnimation(
-          child: const LeaveApplicationScreen(),
-          routeName: LeaveApplicationScreen.routeName,
-        );
-
       case ExerciseScreen.routeName:
         return transitionAnimation(
           routeName: ExerciseScreen.routeName,
@@ -100,6 +95,11 @@ class CustomRouter {
         return transitionAnimation(
             child: const GalleryScreen(), routeName: GalleryScreen.routeName);
 
+      case GalleryCreateNew.routeName:
+        return transitionAnimation(
+            child: const GalleryCreateNew(),
+            routeName: GalleryCreateNew.routeName);
+
       case NutritionScreen.routeName:
         return transitionAnimation(
             child: const NutritionScreen(),
@@ -121,6 +121,12 @@ class CustomRouter {
         return transitionAnimation(
           child: const NotiDetailScreen(id: 0),
           routeName: NotiDetailScreen.routeName,
+        );
+
+      case SurveyScreen.routeName:
+        return transitionAnimation(
+          child: const SurveyScreen(),
+          routeName: SurveyScreen.routeName,
         );
 
       default:

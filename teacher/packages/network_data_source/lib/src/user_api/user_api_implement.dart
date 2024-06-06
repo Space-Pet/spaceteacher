@@ -18,8 +18,8 @@ class UserApi extends AbstractUserApi {
   Future<TeacherDetail> getTeacherDetail(String teacherId) async {
     try {
       final data = await _client.doHttpGet('/api/v1/staff/teacher/$teacherId');
-      final studentInfo = TeacherDetail.fromMap(data['data']);
-      return studentInfo;
+      final teacherDetail = TeacherDetail.fromMap(data['data']);
+      return teacherDetail;
     } catch (e) {
       throw GetTeacherInfoFailure();
     }
