@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:core/core.dart';
-import 'package:core/data/models/student_fees.dart';
-import 'package:equatable/equatable.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 

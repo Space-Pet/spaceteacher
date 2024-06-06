@@ -37,4 +37,15 @@ extension StringDateFormatter on String {
       return null;
     }
   }
+  // to DateTime with format dd/MM/yyyy
+
+  DateTime? get toDDMMYYYYSlash {
+    try {
+      return DateFormat('dd-MM-yyyy').parse(this);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String get ddMMYYYSlash => DateFormat('dd/MM/yyyy').format(toDDMMYYYYSlash!);
 }

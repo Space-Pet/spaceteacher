@@ -23,6 +23,7 @@ class FieldRowCardDetail extends StatelessWidget {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title,
@@ -32,12 +33,17 @@ class FieldRowCardDetail extends StatelessWidget {
                   ),
             ),
             const Spacer(),
-            Text(
-              value,
-              style: valueStyle ??
-                  AppTextStyles.semiBold12(
-                    color: AppColors.gray500,
-                  ),
+            Flexible(
+              flex: 3,
+              child: Text(
+                value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: valueStyle ??
+                    AppTextStyles.semiBold12(
+                      color: AppColors.gray500,
+                    ),
+              ),
             ),
           ],
         ),

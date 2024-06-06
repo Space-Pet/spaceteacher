@@ -22,7 +22,8 @@ class _CardFeeDetailState extends State<CardFeeDetail> {
 
   // Format date from dd-MM-yyyy to dd/MM/yyyy
   String parseDate(int index) {
-    final tryParseDate = (widget.feeItem.meta_data?.items?[index].date ?? '').toDDMMYYYY;
+    final tryParseDate =
+        (widget.feeItem.meta_data?.items?[index].date ?? '').toDDMMYYYY;
     return tryParseDate?.ddMMyyyySlash ?? '';
   }
 
