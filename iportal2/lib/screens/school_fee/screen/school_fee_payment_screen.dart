@@ -380,6 +380,8 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                 builder: (ctx) => Material(
                   child: MethodPaymentScreen(
                     paymentGateways: paymentGateways,
+                    totalMoneyPayment:
+                        widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
                   ),
                 ),
               );

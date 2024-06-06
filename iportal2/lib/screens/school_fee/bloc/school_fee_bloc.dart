@@ -20,6 +20,8 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
 
     on<GetPaymentGateways>(_onGetPaymentGateways);
     add(const GetPaymentGateways());
+
+    on<OpenPaymentGateway>(_openPaymentGateway);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -102,6 +104,27 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.loaded,
         paymentGateways: res,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        schoolFeeStatus: SchoolFeeStatus.error,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _openPaymentGateway(
+      OpenPaymentGateway event, Emitter<SchoolFeeState> emit) async {
+    try {
+      emit(state.copyWith(paymentStatus: PaymentStatus.loading));
+      final res = await appFetchApiRepo.choosePaymentGateway(
+        pupilId: 10053678,
+        totalMoneyPayment: 2599500,
+        paymentId: event.paymentId,
+      );
+      emit(state.copyWith(
+        paymentStatus: PaymentStatus.loaded,
+        gateway: res,
       ));
     } catch (e) {
       emit(state.copyWith(

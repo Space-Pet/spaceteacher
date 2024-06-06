@@ -28,3 +28,12 @@ class GetPaymentGateways extends SchoolFeeEvent {
   @override
   List<Object> get props => [];
 }
+
+class OpenPaymentGateway extends SchoolFeeEvent {
+  final int paymentId;
+  final int totalMoneyPayment;
+  const OpenPaymentGateway(
+      {required this.paymentId, required this.totalMoneyPayment});
+  @override
+  List<Object> get props => [paymentId, totalMoneyPayment];
+}
