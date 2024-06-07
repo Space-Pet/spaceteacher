@@ -16,39 +16,66 @@ class TabViewSchoolFeeHistoryPayment extends StatefulWidget {
 
 class _TabViewSchoolFeeHistoryPayment
     extends State<TabViewSchoolFeeHistoryPayment> {
-  late List<bool> _listIsShowDetail;
+  final List<bool> _listIsShowDetail = [];
 
   @override
   void initState() {
-    _listIsShowDetail = List.generate(5, (index) => false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SchoolFeeBloc, SchoolFeeState>(
+    return BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
+      listener: (context, state) {
+        switch (state.schoolFeeHistoryStatus) {
+          case SchoolFeeHistoryStatus.loaded:
+            _listIsShowDetail.clear();
+            _listIsShowDetail.addAll(
+              List.generate(
+                state.historySchoolFee?.historySchoolFeeItems?.length ?? 3,
+                (index) => false,
+              ),
+            );
+            break;
+          default:
+        }
+      },
       builder: (context, state) {
+        final itemsLength =
+            state.historySchoolFee?.historySchoolFeeItems?.length ?? 0;
+        if (_listIsShowDetail.length != itemsLength) {
+          _listIsShowDetail.clear();
+          _listIsShowDetail.addAll(List.filled(itemsLength, false));
+        }
+
         return Skeletonizer(
-          enabled: state.schoolFeeStatus == SchoolFeeStatus.loading,
+          enabled:
+              state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loading,
           child: CustomRefresh(
-            onRefresh: () async {},
+            onRefresh: () async {
+              context.read<SchoolFeeBloc>().add(const FetchSchoolFeeHistory());
+            },
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: List.generate(
-                  5,
+                  itemsLength,
                   (index) => GestureDetector(
                     onTap: () {
                       setState(() {
-                        _listIsShowDetail[index] = !_listIsShowDetail[index];
+                        if (index < _listIsShowDetail.length) {
+                          _listIsShowDetail[index] = !_listIsShowDetail[index];
+                        }
                       });
                     },
                     child: CardDetailSchoolFeeHistoryPayment(
                       item: state.historySchoolFee
                               ?.historySchoolFeeItems?[index] ??
                           HistorySchoolFeeItem(),
-                      isShowDetail: _listIsShowDetail[index],
+                      isShowDetail: _listIsShowDetail.length > index
+                          ? _listIsShowDetail[index]
+                          : false,
                     ),
                   ),
                 ),

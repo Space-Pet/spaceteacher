@@ -73,7 +73,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                     children: [
                       FieldRowCardDetail(
                         title: "Họ và tên học sinh",
-                        value: "Phan Thanh Phước Thịnh",
+                        value: "",
                         titleStyle:
                             AppTextStyles.normal14(color: AppColors.gray700),
                         valueStyle: AppTextStyles.semiBold14(),
@@ -92,8 +92,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                           titleStyle:
                               AppTextStyles.normal14(color: AppColors.gray700),
                           valueStyle: AppTextStyles.semiBold14(),
-                          value:
-                              "31-07-2023".toDDMMYYYYSlash?.ddMMyyyySlash ?? "",
+                          value: DateTime.now().ddMMyyyySlash,
                           isLastItem: false),
                       FieldRowCardDetail(
                         title: "Hình thức thanh toán",
@@ -318,7 +317,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                     style: AppTextStyles.normal14(),
                   ),
                   Text(
-                    "${NumberFormatUtils.displayMoney(double.parse('${25000000}'))}",
+                    "${NumberFormatUtils.displayMoney(double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'))}",
                     style: AppTextStyles.bold14(),
                   ),
                 ],

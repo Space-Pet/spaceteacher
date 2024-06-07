@@ -7,6 +7,13 @@ enum SchoolFeeStatus {
   error,
 }
 
+enum SchoolFeeHistoryStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}
+
 enum PaymentStatus {
   initial,
   loading,
@@ -17,6 +24,7 @@ enum PaymentStatus {
 class SchoolFeeState extends Equatable {
   const SchoolFeeState(
       {this.schoolFeeStatus = SchoolFeeStatus.initial,
+      this.schoolFeeHistoryStatus = SchoolFeeHistoryStatus.initial,
       this.paymentStatus = PaymentStatus.initial,
       this.schoolFee,
       this.historySchoolFee,
@@ -26,6 +34,7 @@ class SchoolFeeState extends Equatable {
       this.isLoading = false,
       this.error});
   final SchoolFeeStatus schoolFeeStatus;
+  final SchoolFeeHistoryStatus schoolFeeHistoryStatus;
   final PaymentStatus paymentStatus;
   final SchoolFee? schoolFee;
   final HistorySchoolFee? historySchoolFee;
@@ -38,6 +47,7 @@ class SchoolFeeState extends Equatable {
   @override
   List<Object?> get props => [
         schoolFeeStatus,
+        schoolFeeHistoryStatus,
         paymentStatus,
         schoolFee,
         historySchoolFee,
@@ -50,6 +60,7 @@ class SchoolFeeState extends Equatable {
 
   SchoolFeeState copyWith({
     SchoolFeeStatus? schoolFeeStatus,
+    SchoolFeeHistoryStatus? schoolFeeHistoryStatus,
     PaymentStatus? paymentStatus,
     SchoolFee? schoolFee,
     HistorySchoolFee? historySchoolFee,
@@ -61,6 +72,8 @@ class SchoolFeeState extends Equatable {
   }) {
     return SchoolFeeState(
       schoolFeeStatus: schoolFeeStatus ?? this.schoolFeeStatus,
+      schoolFeeHistoryStatus:
+          schoolFeeHistoryStatus ?? this.schoolFeeHistoryStatus,
       paymentStatus: paymentStatus ?? this.paymentStatus,
       schoolFee: schoolFee ?? this.schoolFee,
       historySchoolFee: historySchoolFee ?? this.historySchoolFee,

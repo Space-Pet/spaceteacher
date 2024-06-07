@@ -794,8 +794,9 @@ class AppFetchApi extends AbstractAppFetchApi {
           'pupil_id': pupilId,
         },
       );
-      if (isNullOrEmpty(data)) return SchoolFee();
-      final schoolFee = SchoolFee.fromJson(data);
+      if (isNullOrEmpty(data['data'])) return SchoolFee();
+      final schoolFee = SchoolFee.fromJson(data['data']);
+      Log.d(schoolFee.toString());
       return schoolFee;
     } catch (e) {
       throw GetSchoolFeeFailure();
@@ -829,11 +830,14 @@ class AppFetchApi extends AbstractAppFetchApi {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
       });
-      if (isNullOrEmpty(data)) return SchoolFeePaymentPreview();
+      if (isNullOrEmpty(data['data'])) return SchoolFeePaymentPreview();
 
-      final schoolFeePaymentPreview = SchoolFeePaymentPreview.fromJson(data);
+      final schoolFeePaymentPreview =
+          SchoolFeePaymentPreview.fromJson(data['data']);
+      Log.d(schoolFeePaymentPreview.toString());
       return schoolFeePaymentPreview;
     } catch (e) {
+      Log.e(e.toString());
       throw GetSchoolFeeFailure();
     }
   }

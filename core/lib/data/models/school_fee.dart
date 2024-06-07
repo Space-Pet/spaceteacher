@@ -11,7 +11,7 @@ class SchoolFee {
   final int? totalThanhTien;
   final int? totalDaDong;
   final int? totalChuaNop;
-  final int? totalCanTru;
+  final String? totalCanTru;
 
   SchoolFee({
     this.schoolFeeItems,
@@ -36,7 +36,7 @@ class SchoolFee {
     int? totalThanhTien,
     int? totalDaDong,
     int? totalChuaNop,
-    int? totalCanTru,
+    String? totalCanTru,
   }) {
     return SchoolFee(
       schoolFeeItems: schoolFeeItems ?? this.schoolFeeItems,

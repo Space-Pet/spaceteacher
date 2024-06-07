@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +22,7 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   final GlobalKey webViewKey = GlobalKey();
   InAppWebViewController? webViewController;
-  late PullToRefreshController pullToRefreshController;
+  PullToRefreshController pullToRefreshController = PullToRefreshController();
 
   InAppWebViewSettings settings = InAppWebViewSettings(
       isInspectable: kDebugMode,
@@ -29,7 +32,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       iframeAllowFullscreen: true);
   double _progress = 0;
   String _url = '';
-
+  String _statusPayment = '';
   @override
   void dispose() {
     // TODO: implement dispose
@@ -77,27 +80,33 @@ class _WebViewScreenState extends State<WebViewScreen> {
                       ),
                       pullToRefreshController: pullToRefreshController,
                       onWebViewCreated: (controller) {
+                        // Register event closeButtonClicked
+                        _registerEventCloseBtn(controller, context);
                         webViewController = controller;
                       },
-                      onLoadStart: (controller, url) {
-                        _url = url.toString();
-                        setState(() {});
-                      },
+                      // handle message content when submit payment
                       onLoadStop: (controller, url) async {
-                        _url = url.toString();
                         setState(() {});
                         await pullToRefreshController.endRefreshing();
+                        String res = await controller.evaluateJavascript(
+                            source: """document.body.innerText""");
+                        Log.d('res payment: $res');
+                        await _handleBtnCloseAfterPayment(controller);
                       },
-                      shouldOverrideUrlLoading:
-                          (controller, navigationAction) async {
-                        final uri = navigationAction.request.url!;
-                        if (uri.scheme == 'myapp') {
-                          // Handle custom scheme
-                          print('Custom scheme detected: $uri');
-                          return NavigationActionPolicy.CANCEL;
+
+                      // handle console message when submit payment
+                      onConsoleMessage: (controller, consoleMessage) {
+                        // Log.d(consoleMessage.message);
+                        if (consoleMessage.message.contains("SUCCESS")) {
+                          Log.d('Thanh toán thành công');
+                          _statusPayment = PaymentStatusResult.success.value;
+                        } else if (consoleMessage.message.contains("FAILED")) {
+                          Log.d('Thanh toán thất bại');
+                          _statusPayment = PaymentStatusResult.failed.value;
                         }
-                        return NavigationActionPolicy.ALLOW;
                       },
+
+                      // handle loading progress
                       onProgressChanged: (controller, progress) {
                         setState(() {
                           _progress = progress / 100;
@@ -145,7 +154,13 @@ class _WebViewScreenState extends State<WebViewScreen> {
                               ),
                               IconButton(
                                   onPressed: () {
-                                    context.pop();
+                                    if (_statusPayment ==
+                                        PaymentStatusResult.success.value) {
+                                      context.pop(true);
+                                    } else {
+                                      context.pop(false);
+                                    }
+                                    setState(() {});
                                   },
                                   icon: const Icon(Icons.close)),
                             ],
@@ -161,5 +176,49 @@ class _WebViewScreenState extends State<WebViewScreen> {
         ),
       ),
     );
+  }
+
+  void _registerEventCloseBtn(
+      InAppWebViewController controller, BuildContext context) {
+    return controller.addJavaScriptHandler(
+        handlerName: 'closeButtonClicked',
+        callback: (args) {
+          if (_statusPayment == PaymentStatusResult.success.value) {
+            context.pop(true);
+          } else {
+            context.pop(false);
+          }
+        });
+  }
+
+  Future<dynamic> _handleBtnCloseAfterPayment(
+      InAppWebViewController controller) {
+    return controller.evaluateJavascript(source: """
+            (function() {
+              var button = document.getElementsByClassName('btn btn-danger')[0];
+              if (button && button.innerText === 'Đóng') {
+                button.addEventListener('click', function() {
+                  window.flutter_inappwebview.callHandler('closeButtonClicked');
+                });
+                return true;
+              }
+              return false;
+            })();
+          """);
+  }
+}
+
+enum PaymentStatusResult { success, failed }
+
+extension PaymentStatusX on PaymentStatusResult {
+  String get value {
+    switch (this) {
+      case PaymentStatusResult.success:
+        return 'SUCCESS';
+      case PaymentStatusResult.failed:
+        return 'FAILED';
+      default:
+        return '';
+    }
   }
 }

@@ -17,18 +17,36 @@ class TabViewSchoolFeePayment extends StatefulWidget {
 
 class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
     with SingleTickerProviderStateMixin {
-  late List<bool> isShowDetailList;
+  late List<bool> isShowDetailList = [];
 
   @override
   void initState() {
-    isShowDetailList = List.generate(3, (index) => false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SchoolFeeBloc, SchoolFeeState>(
+    return BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
+      listener: (context, state) {
+        switch (state.schoolFeeStatus) {
+          case SchoolFeeStatus.loaded:
+            isShowDetailList.clear();
+            isShowDetailList.addAll(
+              List.generate(
+                state.schoolFee?.schoolFeeItems?.length ?? 0,
+                (index) => false,
+              ),
+            );
+            break;
+          default:
+        }
+      },
       builder: (context, state) {
+        final itemsLength = state.schoolFee?.schoolFeeItems?.length ?? 0;
+        if (isShowDetailList.length != itemsLength) {
+          isShowDetailList.clear();
+          isShowDetailList.addAll(List.filled(itemsLength, false));
+        }
         return Scaffold(
           backgroundColor: AppColors.white,
           body: Skeletonizer(
@@ -40,7 +58,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
               child: SingleChildScrollView(
                 child: Column(
                   children: List.generate(
-                    3,
+                    itemsLength,
                     (index) => GestureDetector(
                       onTap: () {
                         setState(() {
@@ -48,7 +66,9 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                         });
                       },
                       child: CardDetailSchoolFeePayment(
-                        isShowDetail: isShowDetailList[index],
+                        isShowDetail: isShowDetailList.length > index
+                            ? isShowDetailList[index]
+                            : false,
                         item: state.schoolFee?.schoolFeeItems?[index] ??
                             SchoolFeeItem(),
                       ),
@@ -122,8 +142,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
               ),
               ElevatedButton(
                 onPressed: () {
-                  context.read<SchoolFeeBloc>().add(GetSchoolFeePaymentPreview(
-                      totalMoneyPayment: state.schoolFee?.totalThanhTien ?? 0));
+               
 
                   context.push(
                     SchoolFeePaymentScreen(

@@ -1,10 +1,12 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/webview_screen.dart';
 
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
+import 'package:iportal2/screens/school_fee/widget/dialog_noti/school_fee_payment_dialog_noti.dart';
 import 'package:repository/repository.dart';
 
 class MethodPaymentScreen extends StatefulWidget {
@@ -112,7 +114,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
             ),
             const Spacer(),
             BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
-              listener: (context, state) {
+              listener: (context, state) async {
                 if (state.paymentStatus == PaymentStatus.error) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -121,13 +123,30 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                     ),
                   );
                 } else if (state.paymentStatus == PaymentStatus.loaded) {
-                  mainNavKey.currentState?.push(
+                  final res = await mainNavKey.currentState?.push(
                     MaterialPageRoute(
                       builder: (context) => WebViewScreen(
                         url: state.gateway?.urlGateway ?? "",
                       ),
                     ),
                   );
+
+                  if (res != null && (res == true || res == false)) {
+                    await showDialog(
+                      context: context,
+                      builder: (ctx) =>
+                          SchoolFeePaymentDialogNoti(isSuccess: res),
+                    ).then(
+                      (resDialog) {
+                        if (resDialog != null && resDialog == true) {
+                          context.pop();
+                          context.pop();
+                        } else if (resDialog != null && resDialog == false) {
+                          context.pop();
+                        }
+                      },
+                    );
+                  }
                 }
               },
               builder: (context, state) {
@@ -136,14 +155,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       // bool isPaymentSuccess = true;
-                      // final res = await showDialog(
-                      //     context: context,
-                      //     builder: (ctx) => SchoolFeePaymentDialogNoti(
-                      //         isSuccess: isPaymentSuccess));
-                      // if (res != null && res == true) {
-                      //   context.pop();
-                      //   context.pop();
-                      // }
+
                       context.read<SchoolFeeBloc>().add(
                             OpenPaymentGateway(
                               paymentId: _paymentId,

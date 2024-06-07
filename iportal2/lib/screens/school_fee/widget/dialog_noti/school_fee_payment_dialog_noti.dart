@@ -45,7 +45,11 @@ class SchoolFeePaymentDialogNoti extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                context.pop(true);
+                if (isSuccess == true) {
+                  context.pop(true);
+                }else {
+                  context.pop(false);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.brand500,
