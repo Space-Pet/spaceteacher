@@ -139,8 +139,8 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                     ).then(
                       (resDialog) {
                         if (resDialog != null && resDialog == true) {
-                          context.pop();
-                          context.pop();
+                          context.pop(true);
+                          context.pop(true);
                         } else if (resDialog != null && resDialog == false) {
                           context.pop();
                         }

@@ -124,8 +124,8 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     try {
       emit(state.copyWith(paymentStatus: PaymentStatus.loading));
       final res = await appFetchApiRepo.choosePaymentGateway(
-        pupilId: 10053678,
-        totalMoneyPayment: 2599500,
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        totalMoneyPayment: event.totalMoneyPayment,
         paymentId: event.paymentId,
       );
       emit(state.copyWith(

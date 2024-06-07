@@ -141,15 +141,23 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                 ),
               ),
               ElevatedButton(
-                onPressed: () {
-               
-
-                  context.push(
+                onPressed: () async {
+                  await context
+                      .push(
                     SchoolFeePaymentScreen(
                       schoolFeePaymentPreview: state.schoolFeePaymentPreview ??
                           SchoolFeePaymentPreview(),
                       paymentGateways: state.paymentGateways ?? [],
                     ),
+                  )
+                      .then(
+                    (res) {
+                      if (res == true) {
+                        context
+                            .read<SchoolFeeBloc>()
+                            .add(const FetchSchoolFee());
+                      }
+                    },
                   );
                 },
                 style: ElevatedButton.styleFrom(

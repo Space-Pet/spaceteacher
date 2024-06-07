@@ -24,6 +24,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
   bool _btnTypePayment2 = false;
 
   final TextEditingController _textController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -50,7 +51,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          context.pop();
+                          context.pop(true);
                         },
                         icon: const Icon(
                           Icons.close,
@@ -94,13 +95,6 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                           valueStyle: AppTextStyles.semiBold14(),
                           value: DateTime.now().ddMMyyyySlash,
                           isLastItem: false),
-                      FieldRowCardDetail(
-                        title: "Hình thức thanh toán",
-                        value: "Thanh toán online",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle: AppTextStyles.semiBold14(),
-                      ),
 
                       // List card detail info payment
                       _buildCardInfoPayment(
@@ -337,7 +331,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                       style: AppTextStyles.normal14(),
                     ),
                     Text(
-                      "${NumberFormatUtils.displayMoney(double.parse('${25000000}'))}",
+                      "${NumberFormatUtils.displayMoney(double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'))}",
                       style: AppTextStyles.bold14(),
                     ),
                   ],
@@ -345,24 +339,28 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                 const SizedBox(
                   height: 5,
                 ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  enabled: _btnTypePayment2,
-                  controller: _textController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: "Nhập số tiền cần thanh toán >/= 50.000đ",
-                    hintStyle: AppTextStyles.normal14(
-                      color: AppColors.gray500,
-                    ),
-                    contentPadding: const EdgeInsets.all(8.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(color: AppColors.gray300),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(color: AppColors.brand600),
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    enabled: _btnTypePayment2,
+                    controller: _textController,
+                    keyboardType: TextInputType.number,
+                    validator: _validatePayment,
+                    decoration: InputDecoration(
+                      hintText: "Nhập số tiền cần thanh toán >/= 50.000đ",
+                      hintStyle: AppTextStyles.normal14(
+                        color: AppColors.gray500,
+                      ),
+                      contentPadding: const EdgeInsets.all(8.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: AppColors.gray300),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: const BorderSide(color: AppColors.brand600),
+                      ),
                     ),
                   ),
                 ),
@@ -374,16 +372,29 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (ctx) => Material(
-                  child: MethodPaymentScreen(
-                    paymentGateways: paymentGateways,
-                    totalMoneyPayment:
-                        widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
+              if (_btnTypePayment2 == true) {
+                if (_formKey.currentState?.validate() ?? false) {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (ctx) => Material(
+                      child: MethodPaymentScreen(
+                          paymentGateways: paymentGateways,
+                          totalMoneyPayment: int.parse(_textController.text)),
+                    ),
+                  );
+                }
+              } else {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (ctx) => Material(
+                    child: MethodPaymentScreen(
+                      paymentGateways: paymentGateways,
+                      totalMoneyPayment:
+                          widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.brand500, elevation: 0),
@@ -395,5 +406,16 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
         ],
       ),
     );
+  }
+
+  String? _validatePayment(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập số tiền';
+    }
+    final numValue = int.tryParse(value);
+    if (numValue == null || numValue < 50000) {
+      return 'Số tiền phải lớn hơn hoặc bằng 50.000đ';
+    }
+    return null;
   }
 }
