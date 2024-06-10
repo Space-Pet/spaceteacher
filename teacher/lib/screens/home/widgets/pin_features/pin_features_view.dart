@@ -2,6 +2,7 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
@@ -13,9 +14,11 @@ import 'package:teacher/screens/home/widgets/pin_features/feature_item.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
 import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
+import 'package:teacher/screens/observation_schedule/screen/observation_schedule_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
+import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
 // import 'package:teacher/screens/survey_iportal2/survey_screen.dart';
@@ -133,6 +136,10 @@ class _PinFeaturesState extends State<PinFeatures> {
 
         case FeatureKey.survey:
           context.push(const SurveyScreen());
+          break;
+
+        case FeatureKey.observation:
+          mainNavKey.currentContext?.push(const ObservationSchedule());
           break;
 
         default:

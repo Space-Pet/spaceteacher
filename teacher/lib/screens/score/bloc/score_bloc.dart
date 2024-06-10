@@ -1,6 +1,6 @@
 import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:teacher/screens/score/score_screen.dart';
+import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:repository/repository.dart';
 
 part 'score_event.dart';

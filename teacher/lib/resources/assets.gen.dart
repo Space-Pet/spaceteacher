@@ -152,6 +152,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/check.svg
   SvgGenImage get check => const SvgGenImage('assets/icons/check.svg');
 
+  /// File path: assets/icons/check_box.svg
+  SvgGenImage get checkBox => const SvgGenImage('assets/icons/check_box.svg');
+
   /// File path: assets/icons/checked-noti.svg
   SvgGenImage get checkedNoti =>
       const SvgGenImage('assets/icons/checked-noti.svg');
@@ -296,6 +299,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
 
+  /// File path: assets/icons/fluent_apps-list-detail-20-filled.svg
+  SvgGenImage get fluentAppsListDetail20Filled =>
+      const SvgGenImage('assets/icons/fluent_apps-list-detail-20-filled.svg');
+
   /// File path: assets/icons/global copy.svg
   SvgGenImage get globalCopy =>
       const SvgGenImage('assets/icons/global copy.svg');
@@ -432,6 +439,10 @@ class $AssetsIconsGen {
   SvgGenImage get phoneBookCopy =>
       const SvgGenImage('assets/icons/phone-book copy.svg');
 
+  /// File path: assets/icons/phone-book-detail.svg
+  SvgGenImage get phoneBookDetail =>
+      const SvgGenImage('assets/icons/phone-book-detail.svg');
+
   /// File path: assets/icons/phone-book.svg
   SvgGenImage get phoneBook => const SvgGenImage('assets/icons/phone-book.svg');
 
@@ -538,6 +549,9 @@ class $AssetsIconsGen {
   SvgGenImage get userManual =>
       const SvgGenImage('assets/icons/user_manual.svg');
 
+  /// File path: assets/icons/vector.svg
+  SvgGenImage get vector => const SvgGenImage('assets/icons/vector.svg');
+
   /// File path: assets/icons/verified_check.svg
   SvgGenImage get verifiedCheck =>
       const SvgGenImage('assets/icons/verified_check.svg');
@@ -552,6 +566,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/wallpaper.svg
   SvgGenImage get wallpaper => const SvgGenImage('assets/icons/wallpaper.svg');
+
+  /// File path: assets/icons/x.svg
+  SvgGenImage get x => const SvgGenImage('assets/icons/x.svg');
 
   /// List of all assets
   List<dynamic> get values => [
@@ -589,6 +606,7 @@ class $AssetsIconsGen {
         checkDone,
         checkFull,
         check,
+        checkBox,
         checkedNoti,
         chevronDownCopy,
         chevronDown,
@@ -628,6 +646,7 @@ class $AssetsIconsGen {
         file,
         fileMessage,
         filter,
+        fluentAppsListDetail20Filled,
         globalCopy,
         global,
         history,
@@ -666,6 +685,7 @@ class $AssetsIconsGen {
         paperclip,
         phoneCopy,
         phoneBookCopy,
+        phoneBookDetail,
         phoneBook,
         phoneCallBus,
         phone,
@@ -697,10 +717,12 @@ class $AssetsIconsGen {
         user,
         userManualCopy,
         userManual,
+        vector,
         verifiedCheck,
         walletNoti,
         wallpaperCopy,
-        wallpaper
+        wallpaper,
+        x
       ];
 }
 

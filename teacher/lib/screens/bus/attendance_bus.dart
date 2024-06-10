@@ -40,12 +40,19 @@ class AttendanceBusScreen extends StatelessWidget {
           } else if (state.status == BusStatus.failure) {
             LoadingDialog.hide(context);
             Fluttertoast.showToast(
-                msg: state.message,
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: AppColors.black,
-                textColor: AppColors.white);
-          } else if (state.status == BusStatus.successGetListAttendance) {}
+              msg: state.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: AppColors.black,
+              textColor: AppColors.white,
+            );
+          } else if (state.status == BusStatus.successGetListAttendance) {
+            // Kiểm tra nếu danh sách học sinh đã điểm danh hết
+            if (state.listAttendanceBus == null) {
+              // Thực hiện back về trang trước
+              Navigator.pop(context);
+            }
+          }
         },
         child: const AttendanceBusView(),
       ),

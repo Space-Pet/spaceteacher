@@ -10,6 +10,7 @@ class RowContent extends StatelessWidget {
     super.key,
     required this.title,
     required this.content,
+    this.isHighlightContent = false,
     this.isEditPhone = false,
     this.isShowDottedLine = true,
     this.onTap,
@@ -17,6 +18,7 @@ class RowContent extends StatelessWidget {
   final String title;
   final String content;
   final bool isEditPhone;
+  final bool isHighlightContent;
   final Function()? onTap;
   final bool isShowDottedLine;
 
@@ -47,8 +49,14 @@ class RowContent extends StatelessWidget {
                       child: Text(
                         content,
                         textAlign: TextAlign.end,
-                        style: const TextStyle(
-                            color: AppColors.gray500, fontSize: 12),
+                        style: TextStyle(
+                            color: isHighlightContent
+                                ? AppColors.blue500
+                                : AppColors.gray500,
+                            fontSize: 12,
+                            fontWeight: isHighlightContent
+                                ? FontWeight.w600
+                                : FontWeight.w400),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),

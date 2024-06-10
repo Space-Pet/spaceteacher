@@ -141,8 +141,8 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                 ),
               ),
               ElevatedButton(
-                onPressed: () async {
-                  await context
+                onPressed: () {
+                  context
                       .push(
                     SchoolFeePaymentScreen(
                       schoolFeePaymentPreview: state.schoolFeePaymentPreview ??

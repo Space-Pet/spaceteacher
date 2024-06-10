@@ -1,8 +1,10 @@
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 class ScheduleTabs extends StatefulWidget {
   const ScheduleTabs({
@@ -40,6 +42,7 @@ class _ScheduleTabsState extends State<ScheduleTabs>
 
   @override
   Widget build(BuildContext context) {
+    final teacherId = context.read<CurrentUserBloc>().state.user.teacher_id;
     DateFormat formatDate = DateFormat("dd/MM");
 
     final startOfWeek = widget.datePicked
@@ -62,7 +65,7 @@ class _ScheduleTabsState extends State<ScheduleTabs>
         (widget.lessons ?? []).length,
         (index) => SingleChildScrollView(
               child: Column(
-                children: tabView(index, startOfWeek),
+                children: tabView(index, startOfWeek, teacherId.toString()),
               ),
             ));
 
@@ -105,7 +108,7 @@ class _ScheduleTabsState extends State<ScheduleTabs>
         ));
   }
 
-  List<Container> tabView(int index, DateTime startOfWeek) {
+  List<Container> tabView(int index, DateTime startOfWeek, String? teacherId) {
     return List.generate(widget.lessons?[index].dateSubject.length ?? 0,
         (innerIndex) {
       final lesson = widget.lessons?[index].dateSubject[innerIndex];
@@ -170,7 +173,9 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                       const SizedBox(height: 4),
                       lesson?.teacherName != null
                           ? Text(
-                              'GV: ${lesson?.teacherName}',
+                              lesson?.teacherId == teacherId
+                                  ? 'GVCN: ${lesson?.teacherName}'
+                                  : 'GV: ${lesson?.teacherName}',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.normal14(
@@ -179,16 +184,16 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                           : const SizedBox(height: 16),
                     ],
                   )),
-                  if (lesson?.subjectId != null)
-                    InkWell(
-                      onTap: () {
-                        widget.onViewExercise(
-                          startOfWeek.add(Duration(days: index)),
-                          lesson?.tietNum ?? 0,
-                        );
-                      },
-                      child: SvgPicture.asset('assets/icons/advice.svg'),
-                    ),
+                  // if (lesson?.subjectId != null)
+                  //   InkWell(
+                  //     onTap: () {
+                  //       widget.onViewExercise(
+                  //         startOfWeek.add(Duration(days: index)),
+                  //         lesson?.tietNum ?? 0,
+                  //       );
+                  //     },
+                  //     child: SvgPicture.asset('assets/icons/advice.svg'),
+                  //   ),
                 ],
               ),
             ),

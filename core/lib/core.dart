@@ -12,6 +12,7 @@ export 'package:firebase_crashlytics/firebase_crashlytics.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'package:flutter_hooks/flutter_hooks.dart';
+export 'package:flutter_inappwebview/flutter_inappwebview.dart';
 export 'package:flutter_svg/flutter_svg.dart';
 export 'package:hive/hive.dart';
 export 'package:hive_flutter/hive_flutter.dart';
@@ -22,7 +23,7 @@ export 'package:loader_overlay/loader_overlay.dart';
 export 'package:skeletonizer/skeletonizer.dart';
 export 'package:url_launcher/url_launcher.dart';
 
-export 'common/utils.dart';
+export 'common/common.dart';
 export 'data/data.dart';
 export 'presentation/common_widget/export.dart';
 export 'presentation/extentions/extention.dart';

@@ -14,7 +14,7 @@ import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
-import 'package:teacher/screens/score/score_screen.dart';
+import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:teacher/screens/splash/loading_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
 
@@ -105,10 +105,10 @@ class CustomRouter {
             child: const NutritionScreen(),
             routeName: NutritionScreen.routeName);
 
-      case ScoreScreen.routeName:
+      case EditScoreScreen.routeName:
         return transitionAnimation(
-          child: const ScoreScreen(),
-          routeName: ScoreScreen.routeName,
+          child: const EditScoreScreen(),
+          routeName: EditScoreScreen.routeName,
         );
 
       case PreScoreScreen.routeName:

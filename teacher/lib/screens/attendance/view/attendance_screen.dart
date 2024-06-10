@@ -21,10 +21,11 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen>
-    with AutomaticKeepAliveClientMixin {
+    // with AutomaticKeepAliveClientMixin 
+    {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final currentUserBloc = context.read<CurrentUserBloc>();
     final appFetchApiRepository = context.read<AppFetchApiRepository>();
     final attendanceBloc = AttendanceBloc(
@@ -158,7 +159,7 @@ class AttendanceView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ScreenAppBar(
-              canGoback: true,
+              canGoback: false,
               title: 'attendance',
               hasUpdateYear: true,
               iconWidget: Assets.icons.leaveAttendance.svg(),

@@ -20,15 +20,49 @@ class BusBloc extends Bloc<BusEvent, BusState> {
     on<BusFetchProfileData>(_onFetchTeacherDetail);
     add(BusFetchProfileData());
     on<DetailBus>(_onDetailBusSchedule);
-    add(BusChangedDate(date: DateTime.now().yyyyMMdd));
+    add(BusChangedDate(
+        date: DateTime.now().yyyyMMdd, selectDate: DateTime.now()));
     on<GetListAttendanceBus>(_onListAttendanceBus);
 
     on<PostTakeAttendanceOfEachStudent>(_onPostTakeAttendanceOfEachStudent);
     on<PostUpdateAbsentBus>(_onPostUpdateAvsentBus);
+    on<GetEditAttendance>(_onGetEditAttendance);
+    on<PostEditAttendance>(_onPostEditAttendance);
   }
   final AppFetchApiRepository appFetchApiRepository;
   final CurrentUserBloc currentUserBloc;
   final UserRepository userRepository;
+
+  void _onPostEditAttendance(
+    PostEditAttendance event,
+    Emitter<BusState> emit,
+  ) async {
+    emit(state.copyWith(status: BusStatus.loading));
+    final data = await appFetchApiRepository.postEditAttendanceBus(
+      type: event.type,
+      schedule: event.scheduleIdl,
+      listEdit: event.listEdit,
+    );
+    emit(
+      state.copyWith(
+        status: data['code'] == 200 ? BusStatus.success : BusStatus.failure,
+        message: data['message'],
+      ),
+    );
+  }
+
+  void _onGetEditAttendance(
+    GetEditAttendance event,
+    Emitter<BusState> emit,
+  ) async {
+    emit(state.copyWith(status: BusStatus.loadingPost));
+    final data = await appFetchApiRepository.getEditAttendanceBus(
+      schoolBrand: currentUserBloc.state.user.school_brand,
+      schoolId: currentUserBloc.state.user.school_id,
+      busId: event.busId,
+    );
+    emit(state.copyWith(status: BusStatus.successPost, editAttendance: data));
+  }
 
   void _onPostUpdateAvsentBus(
     PostUpdateAbsentBus event,
@@ -166,6 +200,7 @@ class BusBloc extends Bloc<BusEvent, BusState> {
     emit(state.copyWith(
       busSchedules: busSchedules,
       status: BusStatus.success,
+      selectedDate: event.selectDate
     ));
   }
 }

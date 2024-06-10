@@ -498,7 +498,7 @@ class AppFetchApiRepository {
           {required int pupilId, required int totalMoneyPayment}) async =>
       await _appFetchApi.getSchoolFeePaymentPreview(
           pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
-  Future<Gateway> choosePaymentGateway(
+           Future<Gateway> choosePaymentGateway(
           {required int pupilId,
           required int totalMoneyPayment,
           required int paymentId}) async =>

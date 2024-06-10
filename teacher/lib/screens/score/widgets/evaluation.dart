@@ -5,10 +5,24 @@ import 'package:teacher/screens/score/bloc/score_bloc.dart';
 import 'package:teacher/screens/score/widgets/evaluation_item.dart';
 import 'package:core/resources/resources.dart';
 
-class StudentEvaluation extends StatelessWidget {
+class StudentEvaluation extends StatefulWidget {
   const StudentEvaluation({
     super.key,
   });
+
+  @override
+  State<StudentEvaluation> createState() => _StudentEvaluationState();
+}
+
+class _StudentEvaluationState extends State<StudentEvaluation> {
+  late TextEditingController _commentController;
+  @override
+  void initState() {
+    super.initState();
+    _commentController = TextEditingController(
+        text:
+            'Thai rat toasdfsafhsalkfjhdslkfhsdlfkhdsfokldshfsdkljfhdskljfhdsljkfhdskjlfh  sdjklhdsjkldskljdsjklfhsdklt');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +37,12 @@ class StudentEvaluation extends StatelessWidget {
           ...primaryConduct.nangLucCotLoi.nangLucDacThu,
         ];
 
-        final listEvaluationW = List.generate(listEvaluation.length, (index) {
-          final conduct = listEvaluation[index];
+        final listEvaluationW = List.generate(4, (index) {
+          // final conduct = listEvaluation[index];
           return StudentEvaluationItem(
-            label: conduct.hanhKiemName,
-            result: conduct.hanhKiemValue,
-            isLast: index == listEvaluation.length - 1,
+            // label: conduct.hanhKiemName,
+            // result: conduct.hanhKiemValue,
+            isLast: index == 4 - 1,
           );
         });
 
@@ -147,7 +161,7 @@ class StudentEvaluation extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          'Nhận xét chung của GVCN',
+                          'Nhận xét',
                           style: AppTextStyles.semiBold14(
                               color: AppColors.brand600),
                         )
@@ -157,27 +171,29 @@ class StudentEvaluation extends StatelessWidget {
                       height: 8,
                     ),
                     Container(
-                        padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: AppColors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.10),
-                              offset: Offset(0.0, 5.0),
-                              blurRadius: 20.0,
-                            ),
-                          ],
+                      padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        color: AppColors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.10),
+                            offset: Offset(0.0, 5.0),
+                            blurRadius: 20.0,
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _commentController,
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
                         ),
-                        child: Text(
-                            primaryConduct.nhanXetChungCuaGvcn.isEmpty
-                                ? ''
-                                : primaryConduct
-                                    .nhanXetChungCuaGvcn[0].hanhKiemValue,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            ))),
+                        style: AppTextStyles.normal14(color: AppColors.gray600),
+                      ),
+                    ),
                   ],
                 ),
               )

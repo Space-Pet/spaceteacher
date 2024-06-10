@@ -73,9 +73,8 @@ class _BusViewState extends State<BusView> {
                       onDatePicked: (date) {
                         setState(() {
                           dateSelect = date;
-                          context
-                              .read<BusBloc>()
-                              .add(BusChangedDate(date: date.yyyyMMdd));
+                          context.read<BusBloc>().add(BusChangedDate(
+                              date: date.yyyyMMdd, selectDate: date));
                         });
                       },
                     ),

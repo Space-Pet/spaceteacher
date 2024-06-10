@@ -10,15 +10,6 @@ import 'package:iportal2/firebase_options.dart';
 import 'package:local_data_source/local_data_source.dart';
 import 'package:network_data_source/network_data_source.dart';
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
-  }
-}
-
 class AppDelegate {
   static Future<dynamic> run() async {
     WidgetsFlutterBinding.ensureInitialized();

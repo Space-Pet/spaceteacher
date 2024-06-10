@@ -20,6 +20,21 @@ class MoetView extends StatefulWidget {
 
 class _TabViewMonet extends State<MoetView> {
   int? expandedIndex;
+  TextEditingController diemTBM = TextEditingController();
+  TextEditingController kqht = TextEditingController();
+  TextEditingController kqrl = TextEditingController();
+  TextEditingController xlhl = TextEditingController();
+  TextEditingController xlhk = TextEditingController();
+  TextEditingController dh = TextEditingController();
+  late TextEditingController _commentController;
+  @override
+  void initState() {
+    super.initState();
+    _commentController = TextEditingController(
+        text:
+            'Thai rat toasdfsafhsalkfjhdslkfhsdlfkhdsfokldshfsdkljfhdskljfhdsljkfhdskjlfh  sdjklhdsjkldskljdsjklfhsdklt');
+  }
+
   void _handleExpansion(int index) {
     if (index == expandedIndex) {
       setState(() {
@@ -37,145 +52,178 @@ class _TabViewMonet extends State<MoetView> {
     return Column(children: [
       Column(
         children: [
-          if (widget.isSecondSemester)
-            SummaryGroup(
-              category: 'Điểm trung bình môn',
-              evaluation: widget.diemMoetTxt.dtbCn ?? 'N/A',
-              textColor: AppColors.red90001,
-            ),
+          SummaryGroup(
+            category: 'Điểm trung bình môn',
+            evaluation: widget.diemMoetTxt.dtbCn ?? diemTBM.text,
+            textColor: AppColors.red90001,
+            onSelected: (value) {
+              setState(() {
+                diemTBM.text = value;
+              });
+            },
+          ),
           SummaryGroup(
             category: 'Kết quả học tập',
-            evaluation: widget.diemMoetTxt.kqht ?? '',
+            evaluation: widget.diemMoetTxt.kqht ?? kqht.text,
             textColor: AppColors.brand600,
+            onSelected: (value) {
+              setState(() {
+                kqht.text = value;
+              });
+            },
           ),
           SummaryGroup(
             category: 'Kết quả rèn luyện',
-            evaluation: widget.diemMoetTxt.kqrl ?? '',
+            evaluation: widget.diemMoetTxt.kqrl ?? kqrl.text,
             textColor: AppColors.brand600,
+            onSelected: (value) {
+              setState(() {
+                kqrl.text = value;
+              });
+            },
           ),
-          if (widget.isSecondSemester)
-            Column(
-              children: [
-                SummaryGroup(
-                  category: 'Xếp loại học lực',
-                  evaluation: widget.diemMoetTxt.xlhlCn ?? '',
-                  textColor: AppColors.brand600,
-                ),
-                SummaryGroup(
-                  category: 'Xếp loại hạnh kiểm',
-                  evaluation: widget.diemMoetTxt.xlhkCn ?? '',
-                  textColor: AppColors.brand600,
-                ),
-                SummaryGroup(
-                  category: 'Danh hiệu',
-                  evaluation: widget.diemMoetTxt.danhHieuCn ?? '',
-                  textColor: AppColors.brand600,
-                ),
-              ],
-            ),
+          Column(
+            children: [
+              SummaryGroup(
+                category: 'Xếp loại học lực',
+                evaluation: widget.diemMoetTxt.xlhlCn ?? xlhl.text,
+                textColor: AppColors.brand600,
+                onSelected: (value) {
+                  setState(() {
+                    xlhl.text = value;
+                  });
+                },
+              ),
+              SummaryGroup(
+                category: 'Xếp loại hạnh kiểm',
+                evaluation: widget.diemMoetTxt.xlhkCn ?? xlhk.text,
+                textColor: AppColors.brand600,
+                onSelected: (value) {
+                  setState(() {
+                    xlhk.text = value;
+                  });
+                },
+              ),
+              SummaryGroup(
+                category: 'Danh hiệu',
+                evaluation: widget.diemMoetTxt.danhHieuCn ?? dh.text,
+                textColor: AppColors.brand600,
+                onSelected: (value) {
+                  setState(() {
+                    dh.text = value;
+                  });
+                },
+              ),
+            ],
+          ),
         ],
       ),
-      if ((widget.diemMoetTxt.nhanXetGvcnCn ?? '').isNotEmpty)
-        Container(
-          padding: const EdgeInsets.all(6),
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFFFEF0C7),
-                Color(0xFFFEF0C7),
-              ],
-              stops: [
-                0.0189,
-                0.9356,
+      Container(
+        padding: const EdgeInsets.all(6),
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFFFEF0C7),
+              Color(0xFFFEF0C7),
+            ],
+            stops: [
+              0.0189,
+              0.9356,
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.10),
+              offset: Offset(0.0, 5.0),
+              blurRadius: 20.0,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 10,
+                  backgroundColor: const Color(0xFFF88F33),
+                  child: SvgPicture.asset(
+                    'assets/icons/emoji-normal.svg',
+                    height: 12,
+                    width: 12,
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  'Nhận xét',
+                  style: AppTextStyles.bold14(color: AppColors.brand600),
+                )
               ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(0, 0, 0, 0.10),
-                offset: Offset(0.0, 5.0),
-                blurRadius: 20.0,
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 10,
-                    backgroundColor: const Color(0xFFF88F33),
-                    child: SvgPicture.asset(
-                      'assets/icons/emoji-normal.svg',
-                      height: 12,
-                      width: 12,
-                    ),
+            const SizedBox(
+              height: 8,
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                color: AppColors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.10),
+                    offset: Offset(0.0, 5.0),
+                    blurRadius: 20.0,
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    'Nhận xét',
-                    style: AppTextStyles.bold14(color: AppColors.brand600),
-                  )
                 ],
               ),
-              const SizedBox(
-                height: 8,
+              child: TextField(
+                controller: _commentController,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                ),
+                style: AppTextStyles.normal14(color: AppColors.gray600),
               ),
-              Container(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: AppColors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.10),
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 20.0,
-                      ),
-                    ],
-                  ),
-                  child: Text(widget.diemMoetTxt.nhanXetGvcnCn!,
-                      style: AppTextStyles.normal14(color: AppColors.gray600))),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       const SizedBox(
         height: 8,
       ),
-      if ((widget.diemMoetTxt.scoreData ?? []).isNotEmpty)
-        Container(
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              border: Border(
-                top: BorderSide(
-                  color: AppColors.gray300,
-                ),
-                left: BorderSide(
-                  color: AppColors.gray300,
-                ),
-                right: BorderSide(
-                  color: AppColors.gray300,
-                ),
-              )),
-          child: Column(
-            children: [
-              ...List.generate(
-                  widget.diemMoetTxt.scoreData!.length,
-                  (index) => CardScoreSubject(
-                      isExpanded: expandedIndex == index,
-                      index: index,
-                      onExpansionChanged: () => _handleExpansion(index),
-                      scoreCard: widget.diemMoetTxt.scoreData![index],
-                      lastIndex: widget.diemMoetTxt.scoreData!.length - 1))
-            ],
-          ),
+      Container(
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            border: Border(
+              top: BorderSide(
+                color: AppColors.gray300,
+              ),
+              left: BorderSide(
+                color: AppColors.gray300,
+              ),
+              right: BorderSide(
+                color: AppColors.gray300,
+              ),
+            )),
+        child: Column(
+          children: [
+            ...List.generate(
+                4,
+                (index) => CardScoreSubject(
+                    isExpanded: expandedIndex == index,
+                    index: index,
+                    onExpansionChanged: () => _handleExpansion(index),
+                    //scoreCard: widget.diemMoetTxt.scoreData![index],
+                    lastIndex: 4 - 1))
+          ],
         ),
-      // const StudentEvaluation()
+      ),
     ]);
   }
 }
@@ -186,11 +234,13 @@ class SummaryGroup extends StatelessWidget {
     required this.evaluation,
     required this.category,
     required this.textColor,
+    required this.onSelected,
   });
 
   final String evaluation;
   final String category;
   final Color textColor;
+  final ValueChanged<String> onSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -227,11 +277,33 @@ class SummaryGroup extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              evaluation,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.bold18(color: textColor),
-            ),
+            child: evaluation.isEmpty
+                ? DropdownButton<String>(
+                    hint: Text(
+                      'Chọn',
+                      style: AppTextStyles.normal12(
+                        color: AppColors.gray500,
+                      ),
+                    ),
+                    items: <String>['Tốt', 'Giỏi', 'Khá'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        onSelected(value);
+                      }
+                    },
+                    underline: Container(),
+                    isExpanded: true,
+                  )
+                : Text(
+                    evaluation,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.bold18(color: textColor),
+                  ),
           ),
         ],
       ),

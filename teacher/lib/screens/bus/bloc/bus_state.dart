@@ -12,7 +12,7 @@ enum BusStatus {
 }
 
 class BusState extends Equatable {
-  const BusState({
+   BusState({
     this.busSchedules = const [],
     required this.selectedDate,
     this.status = BusStatus.init,
@@ -21,6 +21,7 @@ class BusState extends Equatable {
     required this.userData,
     this.message = '',
     this.type = '',
+    this.editAttendance = const [],
   });
 
   final List<BusScheduleTeacher> busSchedules;
@@ -29,6 +30,7 @@ class BusState extends Equatable {
   final BusStatus status;
   final TeacherDetail userData;
   final Pupils? listAttendanceBus;
+  late List<Pupils> editAttendance;
   final String message;
   final String type;
   BusState copyWith({
@@ -40,8 +42,10 @@ class BusState extends Equatable {
     List<BusScheduleTeacher>? busSchedules,
     DateTime? selectedDate,
     BusStatus? status,
+    List<Pupils>? editAttendance,
   }) {
     return BusState(
+      editAttendance: editAttendance ?? this.editAttendance,
       type: type ?? this.type,
       message: message ?? this.message,
       listAttendanceBus: listAttendanceBus ?? this.listAttendanceBus,
@@ -55,6 +59,7 @@ class BusState extends Equatable {
 
   @override
   List<Object?> get props => [
+        editAttendance,
         busSchedules,
         selectedDate,
         status,

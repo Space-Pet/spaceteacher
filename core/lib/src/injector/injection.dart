@@ -1,7 +1,7 @@
 
 import '../../core.dart';
 
-export 'package:get_it/get_it.dart';
+export 'package:get_it/get_it.dart' hide Disposable;
 
 class Injection {
   static void init() {

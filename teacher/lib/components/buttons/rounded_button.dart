@@ -12,6 +12,7 @@ class RoundedButton extends StatelessWidget {
     this.margin,
     this.onTap,
     this.disabled = false,
+    this.icon,
   });
 
   final Widget child;
@@ -22,6 +23,7 @@ class RoundedButton extends StatelessWidget {
   final EdgeInsets? margin;
   final VoidCallback? onTap;
   final bool disabled;
+  final Widget? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,18 @@ class RoundedButton extends StatelessWidget {
           border: border,
         ),
         child: Center(
-          child: child,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 4),
+                  child: icon ?? Container(),
+                ),
+              child,
+            ],
+          ),
         ),
       ),
     );

@@ -42,6 +42,7 @@ export 'score_other.dart';
 export 'student_fees.dart';
 export 'survay_data.dart';
 export 'teacher_detail.dart';
+export 'teacher_item.dart';
 export 'teacher_login.dart';
 export 'week_schedule.dart';
 export 'weeky_lesson.dart';

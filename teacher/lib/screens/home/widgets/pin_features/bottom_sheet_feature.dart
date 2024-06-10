@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
 import 'package:teacher/screens/exercise_notice/exercise_screen.dart';
@@ -11,10 +12,11 @@ import 'package:teacher/screens/home/widgets/pin_features/list_feature.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
 import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
+import 'package:teacher/screens/observation_schedule/screen/observation_schedule_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
-import 'package:teacher/screens/score/score_screen.dart';
+import 'package:teacher/screens/score/edit_score_screen.dart';
 
 class BottomSheetFeature extends StatefulWidget {
   const BottomSheetFeature({
@@ -126,7 +128,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
 
         case FeatureKey.scores:
           homeNavigatorKey.currentContext
-              ?.pushNamed(routeName: ScoreScreen.routeName);
+              ?.pushNamed(routeName: EditScoreScreen.routeName);
           break;
 
         case FeatureKey.comment:
@@ -161,6 +163,9 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: FeePlanScreen.routeName);
           break;
+
+        case FeatureKey.observation:
+          mainNavKey.currentContext?.push(const ObservationSchedule());
 
         default:
       }

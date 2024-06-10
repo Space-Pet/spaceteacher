@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:core/data/models/list_attendance_bus.dart';
+import 'package:core/data/models/observation_model.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
 import 'package:intl/intl.dart';
@@ -636,5 +637,57 @@ class AppFetchApiRepository {
       headers: headers,
     );
     return data;
+  }
+
+  Future<List<Pupils>> getEditAttendanceBus({
+    required int schoolId,
+    required String schoolBrand,
+    required int busId,
+  }) async {
+    final data = await _appFetchApi.getEditAttendanceBus(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      busId: busId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postEditAttendanceBus({
+    required String type,
+    required int schedule,
+    required List<Map<String, dynamic>> listEdit,
+  }) async {
+    final data = await _appFetchApi.postEditAttendanceBus(
+      type: type,
+      schedule: schedule,
+      listEdit: listEdit,
+    );
+    return data;
+  }
+
+  Future<List<TeacherItem>> getTeacherListBySchool({
+    required int schoolId,
+  }) async {
+    final response = await _appFetchApi.getTeacherListBySchool(
+      schoolId: schoolId,
+    );
+
+    return response;
+  }
+
+  Future<List<ObservationData>> getLessonRegister({
+    required String userKey,
+    required int schoolId,
+    required String txtDate,
+    int? teacherId,
+  }) async {
+    final response = await _appFetchApi.getLessonRegister(
+      userKey: userKey,
+      schoolId: schoolId,
+      txtDate: txtDate,
+      teacherId: teacherId,
+    );
+
+    return response;
   }
 }

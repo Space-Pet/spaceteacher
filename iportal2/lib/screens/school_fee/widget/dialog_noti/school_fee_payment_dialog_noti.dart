@@ -47,7 +47,7 @@ class SchoolFeePaymentDialogNoti extends StatelessWidget {
               onPressed: () {
                 if (isSuccess == true) {
                   context.pop(true);
-                }else {
+                } else {
                   context.pop(false);
                 }
               },

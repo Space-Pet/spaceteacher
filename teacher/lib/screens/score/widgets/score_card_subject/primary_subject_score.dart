@@ -6,15 +6,15 @@ import 'package:core/resources/resources.dart';
 class PrimarySubjectScore extends StatelessWidget {
   const PrimarySubjectScore({
     super.key,
-    required this.subjectScore,
-    required this.subjectName,
+    // required this.subjectScore,
+    this.subjectName,
     required this.index,
     required this.lastIndex,
     required this.isExpanded,
     required this.onExpansionChanged,
   });
-  final DiemItemType? subjectScore;
-  final String subjectName;
+  // final DiemItemType? subjectScore;
+  final String? subjectName;
   final num index;
   final num lastIndex;
   final bool isExpanded;
@@ -77,7 +77,7 @@ class PrimarySubjectScore extends StatelessWidget {
                         constraints:
                             const BoxConstraints(minWidth: 2, maxWidth: 170),
                         child: Text(
-                          subjectName,
+                          'Toán',
                           style: AppTextStyles.semiBold12(
                             color: AppColors.blueGray800,
                             height: 20 / 14,
@@ -121,7 +121,7 @@ class PrimarySubjectScore extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  subjectScore!.diemKtdk ?? '',
+                                  'Tốt',
                                   style: AppTextStyles.semiBold14(
                                     color: AppColors.brand600,
                                   ),
@@ -143,46 +143,45 @@ class PrimarySubjectScore extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  subjectScore!.mucDatDuoc ?? '',
+                                  'OK',
                                   style: AppTextStyles.semiBold14(
                                     color: AppColors.brand600,
                                   ),
                                 ),
                               ],
                             ),
-                            if ((subjectScore!.nhanXet ?? '').isNotEmpty)
-                              Container(
-                                margin: const EdgeInsets.only(top: 6),
-                                decoration: const BoxDecoration(
-                                    color: AppColors.gray,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(4))),
-                                padding: const EdgeInsets.all(6),
-                                child: Column(children: [
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/conversation-icon.svg',
-                                        width: 16,
-                                        height: 16,
+                            Container(
+                              margin: const EdgeInsets.only(top: 6),
+                              decoration: const BoxDecoration(
+                                  color: AppColors.gray,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4))),
+                              padding: const EdgeInsets.all(6),
+                              child: Column(children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icons/conversation-icon.svg',
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      'Nhận xét của giáo viên',
+                                      style: AppTextStyles.normal12(
+                                        color: AppColors.brand600,
                                       ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'Nhận xét của giáo viên',
-                                        style: AppTextStyles.normal12(
-                                          color: AppColors.brand600,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    subjectScore!.nhanXet ?? '',
-                                    style: AppTextStyles.normal12(
-                                        color: AppColors.gray700),
-                                  ),
-                                ]),
-                              )
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'ddđ',
+                                  style: AppTextStyles.normal12(
+                                      color: AppColors.gray700),
+                                ),
+                              ]),
+                            )
                           ],
                         ),
                       )

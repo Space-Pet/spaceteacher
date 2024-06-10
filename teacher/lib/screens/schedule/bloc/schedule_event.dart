@@ -6,6 +6,11 @@ class ScheduleFetchData extends ScheduleEvent {
   ScheduleFetchData();
 }
 
+class ScheduleFilterChanged extends ScheduleEvent {
+  ScheduleFilterChanged({required this.filter});
+  final ScheduleFilter filter;
+}
+
 class ScheduleFetchExercise extends ScheduleEvent {
   ScheduleFetchExercise({required this.datePicked});
 

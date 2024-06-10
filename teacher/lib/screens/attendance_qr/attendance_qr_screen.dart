@@ -167,7 +167,6 @@ class _AttendanceQRViewState extends State<AttendanceQRView> {
                   ),
                   child: AppSkeleton(
                     isLoading: isLoading,
-                  
                     child: Column(
                       children: [
                         if (widget.type == 1)
@@ -474,7 +473,7 @@ class _AttendanceQRViewState extends State<AttendanceQRView> {
   void _handleQRCodeScan(String? code) {
     if (code != null) {
       for (int index = 0; index < phoneBook.length; index++) {
-        if (phoneBook[index].id == code) {
+        if (phoneBook[index].userId.toString() == code) {
           setState(() {
             widget.isAbsent[index] = false;
           });

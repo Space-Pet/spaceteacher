@@ -39,8 +39,7 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<key>NSAllowsLocalNetworking</key>
-		<true/>
+		<key>NSAllowsLocalNetworking</key><true/>
 		<key>NSAllowsArbitraryLoads</key><true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>

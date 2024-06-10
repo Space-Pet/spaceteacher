@@ -95,7 +95,9 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                 hasUpdateYear: true,
                 iconWidget: Assets.icons.history.svg(),
                 onOpenIcon: () {
-                  context.push(const ListAttendanceBusScreen());
+                  context.push(ListAttendanceBusScreen(
+                    busScheduleTeacher: widget.busScheduleTeacher,
+                  ));
                 },
               ),
               Expanded(
@@ -185,7 +187,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.all(6),
+                                                padding:
+                                                    const EdgeInsets.all(6),
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(20),
@@ -204,7 +207,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                           ),
                                           RowContentBus(
                                             title: 'Tuyến',
-                                            content: detailBus?.route?.name ?? '',
+                                            content:
+                                                detailBus?.route?.name ?? '',
                                             isShowDottedLine: true,
                                             color: AppColors.blue600,
                                           ),
@@ -232,21 +236,23 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                           ),
                                           RowContentBus(
                                             title: 'Bảo mẫu',
-                                            content:
-                                                detailBus?.teacher?.teacherName ??
-                                                    '',
+                                            content: detailBus
+                                                    ?.teacher?.teacherName ??
+                                                '',
                                             isShowDottedLine: true,
                                           ),
                                           RowContentBus(
                                             title: 'Tổng số học sinh cần đón',
                                             content:
-                                                detailBus?.total.toString() ?? '',
+                                                detailBus?.total.toString() ??
+                                                    '',
                                             isShowDottedLine: true,
                                             color: AppColors.blue600,
                                           ),
                                           const RowContentBus(
                                             title: 'Điểm đón',
-                                            content: '14 Trần Hưng Đạo, Vũng Tàu',
+                                            content:
+                                                '14 Trần Hưng Đạo, Vũng Tàu',
                                             isShowDottedLine: true,
                                           ),
                                           // RowContentBus(
@@ -295,8 +301,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                                           'Có mặt',
                                                           style: AppTextStyles
                                                               .normal14(
-                                                            color:
-                                                                AppColors.gray500,
+                                                            color: AppColors
+                                                                .gray500,
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -313,14 +319,14 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                                     child: Column(
                                                       children: [
                                                         Text(
-                                                          detailBus
-                                                                  ?.absence?.count
+                                                          detailBus?.absence
+                                                                  ?.count
                                                                   .toString() ??
                                                               '0',
                                                           style: AppTextStyles
                                                               .normal18(
-                                                            color:
-                                                                AppColors.red700,
+                                                            color: AppColors
+                                                                .red700,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                           ),
@@ -329,8 +335,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                                           'Vắng',
                                                           style: AppTextStyles
                                                               .normal14(
-                                                            color:
-                                                                AppColors.gray500,
+                                                            color: AppColors
+                                                                .gray500,
                                                             fontWeight:
                                                                 FontWeight.w400,
                                                           ),
@@ -345,7 +351,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                           ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
-                                            itemCount: detailBus?.absence?.count,
+                                            itemCount:
+                                                detailBus?.absence?.count,
                                             itemBuilder: (context, index) {
                                               final items = detailBus
                                                   ?.absence?.pupils?[index];
@@ -375,7 +382,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                                                           ),
                                                         ),
                                                         Text(
-                                                          items?.id.toString() ??
+                                                          items?.id
+                                                                  .toString() ??
                                                               '',
                                                           style: AppTextStyles
                                                               .normal14(
@@ -441,7 +449,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
@@ -473,8 +482,8 @@ class _ChooseAttendanceBusViewState extends State<ChooseAttendanceBusView>
                         ),
                         Text(
                           'Điểm danh',
-                          style:
-                              AppTextStyles.semiBold14(color: AppColors.redMenu),
+                          style: AppTextStyles.semiBold14(
+                              color: AppColors.redMenu),
                         ),
                       ],
                     ),

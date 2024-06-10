@@ -5,6 +5,7 @@ import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dialog_view_exercise.dart';
+import 'package:teacher/components/dropdown/dropdown.dart';
 import 'package:teacher/screens/schedule/bloc/schedule_bloc.dart';
 import 'package:teacher/screens/schedule/schedule_tabs.dart';
 import 'package:teacher/screens/schedule/select_week.dart';
@@ -22,6 +23,8 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen>
     with AutomaticKeepAliveClientMixin {
+  String _selectedFilter = 'Lớp giảng dạy';
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -78,10 +81,21 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ScreenAppBar(
-                  title: 'Thời khóa biểu',
-                  onBack: () {
-                    context.pop();
+                BlocBuilder<ScheduleBloc, ScheduleState>(
+                  builder: (context, state) {
+                    return ScheduleAppbar(
+                      optionList:
+                          ScheduleFilter.values.map((e) => e.name).toList(),
+                      selectedOption: state.filter.name,
+                      onUpdateOption: (value) {
+                        final filter = ScheduleFilter.values.firstWhere(
+                          (element) => element.name == value,
+                        );
+                        bloc.add(
+                          ScheduleFilterChanged(filter: filter),
+                        );
+                      },
+                    );
                   },
                 ),
                 Expanded(
@@ -127,4 +141,44 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class ScheduleAppbar extends StatelessWidget {
+  const ScheduleAppbar({
+    super.key,
+    required this.optionList,
+    required this.selectedOption,
+    required this.onUpdateOption,
+  });
+
+  final List<String> optionList;
+  final String selectedOption;
+  final Function(String) onUpdateOption;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Expanded(
+          child: ScreenAppBar(
+            title: 'Thời khóa biểu',
+            onBack: () {
+              context.pop();
+            },
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 28, right: 16),
+          width: 130,
+          child: DropdownButtonComponent(
+            selectedOption: selectedOption,
+            onUpdateOption: onUpdateOption,
+            hint: 'Chọn năm học',
+            optionList: optionList,
+          ),
+        ),
+      ],
+    );
+  }
 }

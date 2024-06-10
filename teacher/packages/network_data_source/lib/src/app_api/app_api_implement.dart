@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:core/data/models/list_attendance_bus.dart';
+import 'package:core/data/models/observation_model.dart';
 
 import '../../network_data_source.dart';
 
@@ -41,7 +43,8 @@ class AppFetchApi extends AbstractAppFetchApi {
   ) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=timetable_week&user_key=$userKey&txt_date=$txtDate');
+          // '/api.php?act=timetable_week&user_key=$userKey&txt_date=$txtDate');
+          '/api.php?act=timetable_week&user_key=02033200186&txt_date=$txtDate');
 
       final scheduleData = Schedule.fromMap(data);
       return scheduleData;
@@ -460,13 +463,22 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<List<PhoneBookStudent>> getPhoneBookStudent(
       {required int classId}) async {
     try {
-      final data = await _authRestClient
-          .doHttpGet('/api/v1/member/class/$classId/pupils');
-      final dataList = data['data'] as List<dynamic>;
+      // final data = await _authRestClient
+      //     .doHttpGet('/api/v1/member/class/$classId/pupils');
+      final data = await _authRestClient.doHttpGet('/api/v1/staff/pupil/class');
+      log(data.toString());
+      final dataList = data['data'] as List<dynamic>?;
+
+      if (dataList == null) {
+        return [];
+      }
+
       List<PhoneBookStudent> dataPhoneBook = [];
       for (final item in dataList) {
         dataPhoneBook.add(PhoneBookStudent.fromJson(item));
       }
+      log('dataPhoneBook: $dataPhoneBook');
+
       return dataPhoneBook;
     } catch (e) {
       return [];
@@ -757,19 +769,19 @@ class AppFetchApi extends AbstractAppFetchApi {
     required int schoolId,
   }) async {
     try {
-      // DateTime now = DateTime.now();
-      // String learnYear;
-      // if (now.month > 8) {
-      //   learnYear = '${now.year}-${now.year + 1}';
-      // } else {
-      //   learnYear = '${now.year - 1}-${now.year}';
-      // }
+      DateTime now = DateTime.now();
+      String learnYear;
+      if (now.month > 8) {
+        learnYear = '${now.year}-${now.year + 1}';
+      } else {
+        learnYear = '${now.year - 1}-${now.year}';
+      }
 
       final data = await _authRestClient.doHttpGet(
-        '/api/v1/staff/class/teacher?teacher_id=10003354&learn_year=2023-2024',
+        '/api/v1/staff/class/teacher?teacher_id=$teacherId&learn_year=$learnYear',
         headers: {
-          'School-Id': 109,
-          'School-Brand': 'ischool',
+          'School-Id': schoolId,
+          'School-Brand': schoolBrand,
         },
       );
       final jsonData = data['data']['data'] as List<dynamic>;
@@ -790,7 +802,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     print('$token');
     try {
       final data = await _client.doHttpGet(
-          '/api/v1/staff/attendance/report?class_id=5729&start_date=$startDate&end_date=$endDate',
+          '/api/v1/staff/attendance/report?class_id=$classId&start_date=$startDate&end_date=$endDate',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
       final attendanceData = AttendanceWeek.fromJson(data['data']);
       return attendanceData;
@@ -806,7 +818,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _client.doHttpGet(
-        '/api/v1/staff/timetable/get_by_teacher?date=2024-05-27',
+        '/api/v1/staff/timetable/get_by_teacher?date=$date',
         headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
       );
       final jsonData = data['data'] as List<dynamic>;
@@ -845,7 +857,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     try {
       String subjectId;
       subjectId = '';
-          final data = await _client.doHttpGet(
+      final data = await _client.doHttpGet(
         '/api/v1/staff/attendance/pupils?class_id=$classId&number_of_class_period=$numberOfClassPeriod$subjectId&date=$date&type=$type',
         headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
       );
@@ -999,6 +1011,77 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<List<Pupils>> getEditAttendanceBus({
+    required int schoolId,
+    required String schoolBrand,
+    required int busId,
+  }) async {
+    final data = await _client.doHttpGet(
+      '/api/v1/staff/school-bus/bus-schedules/list-attendance?bus_schedule_id=$busId',
+      headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+    );
+    final jsonData = data['data']['data'] as List<dynamic>;
+    return jsonData.map((e) => Pupils.fromJson(e)).toList();
+  }
+
+  Future<Map<String, dynamic>> postEditAttendanceBus({
+    required String type,
+    required int schedule,
+    required List<Map<String, dynamic>> listEdit,
+  }) async {
+    final data = await _client.doHttpPost(
+        url: '/api/v1/staff/school-bus/bus-attendance/mass-update',
+        requestBody: {
+          "type": type,
+          "schedule_id": schedule,
+          "data": listEdit,
+        });
+    return data;
+  }
+
+  Future<List<ObservationData>> getLessonRegister({
+    required String userKey,
+    required int schoolId,
+    required String txtDate,
+    int? teacherId,
+  }) async {
+    final response = await _authRestClient.doHttpGet(
+      '/api/api.php',
+      queryParameters: {
+        'act': 'get_lesson_register',
+        'user_key': userKey,
+        'school_id': schoolId,
+        'txt_date': txtDate,
+        if (teacherId != null) 'teacher_id': teacherId,
+      },
+    );
+
+    final data = response['data'] as List<dynamic>;
+
+    return data
+        .map<ObservationData>((e) => ObservationData.fromMap(e))
+        .toList();
+  }
+
+  Future<List<TeacherItem>> getTeacherListBySchool({
+    required int schoolId,
+  }) async {
+    final response = await _authRestClient.doHttpGet(
+      '/api.php',
+      queryParameters: {
+        'act': 'list_teacher',
+        'school_id': schoolId,
+      },
+    );
+
+    if (response['trang_thai'] == false) {
+      throw Exception(response['noi_dung_trang_thai']);
+    }
+
+    final data = response['data'] as List<dynamic>;
+    return data.map((e) => TeacherItem.fromMap(e)).toList();
   }
 }
 

@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'schedule_event.dart';
 part 'schedule_state.dart';
@@ -17,6 +18,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<ScheduleFetchData>(_onFetchScheduleData);
     on<ScheduleSelectDate>(_onSelectDate);
     on<ScheduleFetchExercise>(_onFetchDueDateExercises);
+    on<ScheduleFilterChanged>(_onScheduleFilterChange);
 
     add(ScheduleFetchData());
   }
@@ -69,5 +71,16 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         status: ScheduleStatus.success,
       ),
     );
+  }
+
+  void _onScheduleFilterChange(
+    ScheduleFilterChanged event,
+    Emitter<ScheduleState> emit,
+  ) {
+    emit(
+      state.copyWith(filter: event.filter),
+    );
+
+    //TODO: Fetch list when filter changed
   }
 }

@@ -37,14 +37,13 @@ class CardBus extends StatelessWidget {
                   height: 50,
                   width: 200,
                   decoration: BoxDecoration(
+                    color: busScheduleTeacher.isCompleted == true
+                        ? AppColors.gray200
+                        : AppColors.brand600,
                     // color: AppColors.brand600,
-                    borderRadius: const BorderRadius.only(
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
-                    ),
-                    image: DecorationImage(
-                      image: Assets.images.backgroundBorder.provider(),
-                      fit: BoxFit.cover,
                     ),
                   ),
                   child: Center(
@@ -57,24 +56,25 @@ class CardBus extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.observationStatusSuccessdBg,
+                if (busScheduleTeacher.isCompleted == true)
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: AppColors.observationStatusSuccessdBg,
+                    ),
+                    child: Row(
+                      children: [
+                        Assets.icons.checkCircleGreen.svg(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text('Đã điểm danh',
+                              style: AppTextStyles.normal12(
+                                  color: AppColors.greenSwitch)),
+                        )
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      Assets.icons.verifiedCheck.svg(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text('Đã điểm danh',
-                            style: AppTextStyles.normal12(
-                                color: AppColors.greenSwitch)),
-                      )
-                    ],
-                  ),
-                ),
               ],
             ),
             Container(
@@ -99,7 +99,9 @@ class CardBus extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
-                          color: AppColors.observationStatusSuccessText,
+                          color: busScheduleTeacher.isCompleted == true
+                              ? AppColors.gray200
+                              : AppColors.observationStatusSuccessText,
                         ),
                         child: Text(
                           '${formatTime(busScheduleTeacher.departureTime ?? '')} - ${formatTime(busScheduleTeacher.endTime ?? '')}',
@@ -234,7 +236,11 @@ class CardBus extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  Assets.icons.absent.svg()
+                                  Text(
+                                    'Vắng',
+                                    style: AppTextStyles.normal14(
+                                        color: AppColors.red),
+                                  )
                                 ],
                               ),
                             ),

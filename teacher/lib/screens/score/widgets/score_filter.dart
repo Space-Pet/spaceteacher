@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teacher/components/dropdown/dropdown.dart';
 import 'package:teacher/screens/score/bloc/score_bloc.dart';
-import 'package:teacher/screens/score/score_screen.dart';
+import 'package:teacher/screens/score/edit_score_screen.dart';
 
 class ScoreFilter extends StatelessWidget {
   const ScoreFilter({

@@ -40,7 +40,7 @@ class Pupils {
   final int pupliId;
   @JsonKey(name: 'attendance_date')
   final String attendanceDate;
-  final int? attendance;
+  late int? attendance;
   @JsonKey(name: 'attendance_type')
   final int attendancetype;
   @JsonKey(name: 'attendance_fee_type_text')
@@ -59,6 +59,8 @@ class Pupils {
   final String pupilName;
   @JsonKey(name: 'phone_number')
   final String phoneNumber;
+  @JsonKey(name: 'leave_application')
+  late int? leaveApplication;
   final Thumbnail thumbnail;
   Pupils(
       {required this.thumbnail,
@@ -73,6 +75,7 @@ class Pupils {
       required this.busStopAddress,
       required this.busStopId,
       required this.busStopName,
+      this.leaveApplication,
       required this.id,
       required this.phoneNumber,
       required this.pupilName,

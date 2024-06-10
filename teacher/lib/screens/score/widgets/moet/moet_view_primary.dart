@@ -54,35 +54,35 @@ class _MoetViewPrimary extends State<MoetViewPrimary> {
             )),
         child: Column(
           children: [
-            ...List.generate(widget.diemMoetTxt.diemData!.length, (index) {
+            ...List.generate(5, (index) {
               final DiemItemType? subjectScoreData;
 
               switch (widget.semester) {
                 case PrimaryTermType.midTerm1:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemGiuaHk1;
+                  // subjectScoreData =
+                  //     widget.diemMoetTxt.diemData![index].diemGiuaHk1;
                   break;
                 case PrimaryTermType.term1:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemCuoiHk1;
+                  // subjectScoreData =
+                  //     widget.diemMoetTxt.diemData![index].diemCuoiHk1;
                   break;
                 case PrimaryTermType.midTerm2:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemGiuaHk2;
+                  // subjectScoreData =
+                  //     widget.diemMoetTxt.diemData![index].diemGiuaHk2;
                   break;
                 default:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemCuoiNam;
+                  // subjectScoreData =
+                  //     widget.diemMoetTxt.diemData![index].diemCuoiNam;
                   break;
               }
 
               return PrimarySubjectScore(
-                subjectName: widget.diemMoetTxt.diemData![index].subjectName,
-                subjectScore: subjectScoreData,
+                subjectName: 'widget.diemMoetTxt.diemData![index].subjectName',
+                // subjectScore: subjectScoreData,
                 isExpanded: expandedIndex == index,
                 index: index,
                 onExpansionChanged: () => _handleExpansion(index),
-                lastIndex: widget.diemMoetTxt.diemData!.length - 1,
+                lastIndex: 5 - 1,
               );
             })
           ],
@@ -147,14 +147,19 @@ class ScoreComment extends StatelessWidget {
             height: 8,
           ),
           Container(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                color: AppColors.white,
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              color: AppColors.white,
+            ),
+            child: Text(
+              'comment',
+              style: AppTextStyles.normal14(
+                color: AppColors.gray600,
               ),
-              child: Text(comment,
-                  style: AppTextStyles.normal14(color: AppColors.gray600))),
+            ),
+          ),
         ],
       ),
     );

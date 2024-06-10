@@ -783,7 +783,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       return StudentFeesResponse();
     }
   }
-
+  
   Future<SchoolFee> getSchoolFee({
     required int pupilId,
   }) async {
@@ -830,14 +830,11 @@ class AppFetchApi extends AbstractAppFetchApi {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
       });
-      if (isNullOrEmpty(data['data'])) return SchoolFeePaymentPreview();
+      if (isNullOrEmpty(data)) return SchoolFeePaymentPreview();
 
-      final schoolFeePaymentPreview =
-          SchoolFeePaymentPreview.fromJson(data['data']);
-      Log.d(schoolFeePaymentPreview.toString());
+      final schoolFeePaymentPreview = SchoolFeePaymentPreview.fromJson(data);
       return schoolFeePaymentPreview;
     } catch (e) {
-      Log.e(e.toString());
       throw GetSchoolFeeFailure();
     }
   }
@@ -856,7 +853,6 @@ class AppFetchApi extends AbstractAppFetchApi {
       throw GetPaymentGatewayFailure();
     }
   }
-
   Future<Gateway> choosePaymentGateway({
     required int pupilId,
     required int totalMoneyPayment,

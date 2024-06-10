@@ -36,6 +36,8 @@ class BusScheduleTeacher {
   final Teacher? teacher;
   @JsonKey(name: 'total_pupil')
   final int? totalPupil;
+  @JsonKey(name: 'is_completed')
+  final bool? isCompleted;
   final Absence? absence;
 
   BusScheduleTeacher({
@@ -56,6 +58,7 @@ class BusScheduleTeacher {
     this.teacher,
     this.totalPupil,
     this.absence,
+    this.isCompleted,
   });
 
   factory BusScheduleTeacher.fromJson(Map<String, dynamic> json) =>

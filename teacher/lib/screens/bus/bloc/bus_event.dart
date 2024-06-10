@@ -7,8 +7,10 @@ class BusFetchedSchedules extends BusEvent {}
 
 class BusChangedDate extends BusEvent {
   final String date;
+  final DateTime selectDate;
   BusChangedDate({
     required this.date,
+    required this.selectDate,
   });
 }
 
@@ -47,5 +49,21 @@ class PostUpdateAbsentBus extends BusEvent {
     required this.attendanceId,
     required this.pupilId,
     required this.scheduleId,
+  });
+}
+
+class GetEditAttendance extends BusEvent {
+  final int busId;
+  GetEditAttendance({required this.busId});
+}
+
+class PostEditAttendance extends BusEvent {
+  final String type;
+  final int scheduleIdl;
+  final List<Map<String, dynamic>> listEdit;
+  PostEditAttendance({
+    required this.listEdit,
+    required this.scheduleIdl,
+    required this.type,
   });
 }

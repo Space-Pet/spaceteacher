@@ -7,13 +7,13 @@ import 'package:core/resources/resources.dart';
 class CardScoreSubject extends StatefulWidget {
   const CardScoreSubject({
     super.key,
-    required this.scoreCard,
+    this.scoreCard,
     required this.index,
     required this.lastIndex,
     required this.isExpanded,
     required this.onExpansionChanged,
   });
-  final ScoreDataType scoreCard;
+  final ScoreDataType? scoreCard;
   final num index;
   final num lastIndex;
   final bool isExpanded;
@@ -38,7 +38,7 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
 
   @override
   Widget build(BuildContext context) {
-    final tbmhk = widget.scoreCard.tbmhk ?? 'n/a';
+    final tbmhk = widget.scoreCard?.tbmhk ?? 'n/a';
     final isEmptyTbmhk = tbmhk == 'n/a';
     final isStringScore = isStringType(tbmhk);
 
@@ -47,7 +47,7 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-        height: widget.isExpanded ? 138 : 48,
+        height: widget.isExpanded ? 230 : 50,
         decoration: BoxDecoration(
             color: Colors.white,
             border: const Border(
@@ -86,7 +86,7 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
                         constraints:
                             const BoxConstraints(minWidth: 2, maxWidth: 170),
                         child: Text(
-                          widget.scoreCard.subjectName,
+                          widget.scoreCard?.subjectName ?? '',
                           style: AppTextStyles.semiBold12(
                             color: AppColors.blueGray800,
                             height: 20 / 14,
@@ -99,35 +99,34 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
                 ),
                 Row(
                   children: [
-                    isEmptyTbmhk
-                        ? const SizedBox()
-                        : Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 6),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                              border: Border.all(color: AppColors.gray300),
+                    // isEmptyTbmhk
+                    //     ? const SizedBox()
+                    //     :
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 2, horizontal: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                        border: Border.all(color: AppColors.gray300),
+                      ),
+                      child: Row(
+                        children: [
+                          Text('Điểm đạt: ',
+                              style: AppTextStyles.normal12(
+                                  color: AppColors.gray600)),
+                          Text(
+                            '9.0',
+                            style: AppTextStyles.bold12(
+                              color: isStringScore
+                                  ? AppColors.brand600
+                                  : AppColors.red900,
                             ),
-                            child: Row(
-                              children: [
-                                Text('${isStringScore ? 'Mức' : 'Điểm'} đạt: ',
-                                    style: AppTextStyles.normal12(
-                                        color: AppColors.gray600)),
-                                Text(
-                                  isStringScore
-                                      ? tbmhk
-                                      : double.parse(tbmhk).toString(),
-                                  style: AppTextStyles.bold12(
-                                    color: isStringScore
-                                        ? AppColors.brand600
-                                        : AppColors.red900,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                          )
+                        ],
+                      ),
+                    ),
                     const SizedBox(width: 8),
                     SvgPicture.asset(
                         'assets/icons/${widget.isExpanded ? 'chevron-up' : 'chevron-down'}.svg',

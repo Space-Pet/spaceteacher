@@ -17,8 +17,10 @@ class DetailBusScheduleScreen extends StatelessWidget {
   const DetailBusScheduleScreen({
     super.key,
     required this.busScheduleTeacher,
+   
   });
   final BusScheduleTeacher busScheduleTeacher;
+  
   @override
   Widget build(BuildContext context) {
     final currentUserBloc = context.read<CurrentUserBloc>();
@@ -96,7 +98,9 @@ class _DetailBusScheduleViewState extends State<DetailBusScheduleView>
               hasUpdateYear: true,
               iconWidget: Assets.icons.history.svg(),
               onOpenIcon: () {
-                context.push(const ListAttendanceBusScreen());
+                context.push(ListAttendanceBusScreen(
+                  busScheduleTeacher: widget.busScheduleTeacher,
+                ));
               },
             ),
             Expanded(
@@ -405,79 +409,127 @@ class _DetailBusScheduleViewState extends State<DetailBusScheduleView>
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(6),
-                  backgroundColor: AppColors.red900,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 5, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Assets.icons.qrCode.svg(
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                            Colors.white, BlendMode.srcIn),
+            if (widget.busScheduleTeacher.isCompleted == false)
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(6),
+                        backgroundColor: AppColors.red900,
                       ),
-                      const SizedBox(
-                        width: 8,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.qrCode.svg(
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'Điểm danh QR',
+                              style:
+                                  AppTextStyles.semiBold14(color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        'Điểm danh QR',
-                        style: AppTextStyles.semiBold14(color: Colors.white),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.push(AttendanceBusScreen(
+                          busScheduleTeacher: widget.busScheduleTeacher,
+                        ));
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all<Color?>(
+                          AppColors.white,
+                        ),
+                        side: WidgetStateProperty.all<BorderSide>(
+                          const BorderSide(color: AppColors.gray300),
+                        ),
                       ),
-                    ],
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 11, bottom: 11),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Assets.icons.checkAbsent.svg(
+                              width: 24,
+                              height: 24,
+                              colorFilter: const ColorFilter.mode(
+                                  AppColors.redMenu, BlendMode.srcIn),
+                            ),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              'Điểm danh',
+                              style: AppTextStyles.semiBold14(
+                                  color: AppColors.redMenu),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            if (widget.busScheduleTeacher.isCompleted == true)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.push(ListAttendanceBusScreen(
+                        busScheduleTeacher: widget.busScheduleTeacher,
+                      ));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(6),
+                      backgroundColor: AppColors.red900,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Assets.icons.editProfile.svg(
+                            width: 24,
+                            height: 24,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.white, BlendMode.srcIn),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            'Chỉnh sửa điểm danh',
+                            style:
+                                AppTextStyles.semiBold14(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  context.push(AttendanceBusScreen(
-                    busScheduleTeacher: widget.busScheduleTeacher,
-                  ));
-                },
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all<Color?>(
-                    AppColors.white,
-                  ),
-                  side: WidgetStateProperty.all<BorderSide>(
-                    const BorderSide(color: AppColors.gray300),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 11, bottom: 11),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Assets.icons.checkAbsent.svg(
-                        width: 24,
-                        height: 24,
-                        colorFilter: const ColorFilter.mode(
-                            AppColors.redMenu, BlendMode.srcIn),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Text(
-                        'Điểm danh',
-                        style:
-                            AppTextStyles.semiBold14(color: AppColors.redMenu),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       );

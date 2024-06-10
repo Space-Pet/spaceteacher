@@ -1,9 +1,8 @@
-import 'package:core/data/models/models.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:teacher/components/textfield/input_text.dart';
+import 'package:teacher/screens/phone_book/model/list_phone_book.dart';
 
 class TabBarViewPhoneBook extends StatefulWidget {
   const TabBarViewPhoneBook({
@@ -11,19 +10,25 @@ class TabBarViewPhoneBook extends StatefulWidget {
     this.phoneBookStudent,
     required this.title,
     this.phoneBookTeacher,
+    this.onStudentTap,
+    this.onParentTap,
+    required this.index,
   });
 
-  final List<PhoneBookStudent>? phoneBookStudent;
-  final List<PhoneBookTeacher>? phoneBookTeacher;
+  final List<PhoneBook>? phoneBookStudent;
+  final List<PhoneBook>? phoneBookTeacher;
   final String title;
+  final void Function(PhoneBook)? onStudentTap;
+  final void Function(PhoneBook)? onParentTap;
+  final int index;
 
   @override
   State<TabBarViewPhoneBook> createState() => _TabBarViewPhoneBookState();
 }
 
 class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
-  late List<PhoneBookStudent>? _filteredPhoneBookStudent;
-  late List<PhoneBookTeacher>? _filteredPhoneBookTeacher;
+  late List<PhoneBook>? _filteredPhoneBookStudent;
+  late List<PhoneBook>? _filteredPhoneBookTeacher;
   String _searchKeyword = '';
 
   @override
@@ -45,76 +50,108 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
             entry.fullName.toLowerCase().contains(_searchKeyword.toLowerCase()))
         .toList();
 
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        gradient: LinearGradient(
-          colors: [
-            AppColors.lightBlue,
-            AppColors.white,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      height: double.infinity,
-      width: double.infinity,
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(Assets.icons.phoneBook),
-              Padding(
-                padding: const EdgeInsets.only(left: 4),
-                child: Text(
-                  '${widget.title} (${_filteredPhoneBookTeacher == null ? _filteredPhoneBookStudent?.length : _filteredPhoneBookTeacher?.length})',
-                  style: AppTextStyles.normal16(
-                    color: AppColors.brand600,
-                    fontWeight: FontWeight.w600,
+    Widget tabStudent() {
+      return _filteredPhoneBookStudent != null &&
+              _filteredPhoneBookStudent!.isEmpty
+          ? Container()
+          : ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: _filteredPhoneBookStudent?.length,
+              itemBuilder: (BuildContext context, index) {
+                final info = _filteredPhoneBookStudent?[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    info?.urlImage.mobile ?? '',
+                                  ),
+                                ),
+                                shape: BoxShape.circle,
+                                color: AppColors.white,
+                                border: Border.all(
+                                  color: AppColors.white,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    info?.fullName ?? '',
+                                    style: AppTextStyles.normal14(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    info?.userKey.toString() ?? '',
+                                    style: AppTextStyles.normal12(),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.onStudentTap != null) {
+                              widget.onStudentTap!(
+                                widget.phoneBookStudent![index],
+                              );
+                            } else {
+                              return;
+                            }
+                          },
+                          child: SvgPicture.asset(Assets.icons.send),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: TitleAndInputText(
-              obscureText: true,
-              hintText: 'Tìm kiếm',
-              onChanged: (value) {
-                setState(() {
-                  _searchKeyword = value;
-                });
+                );
               },
-              prefixIcon: Assets.images.search.image(),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: _filteredPhoneBookStudent?.length ??
-                    _filteredPhoneBookTeacher?.length,
-                itemBuilder: (BuildContext context, index) {
-                  final info = _filteredPhoneBookStudent?[index];
-                  final infoTeacher = _filteredPhoneBookTeacher?[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+            );
+    }
+
+    Widget tabParent() {
+      return _filteredPhoneBookTeacher != null &&
+              _filteredPhoneBookTeacher!.isEmpty
+          ? Container()
+          : ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: _filteredPhoneBookTeacher?.length,
+              itemBuilder: (BuildContext context, index) {
+                final info = _filteredPhoneBookTeacher?[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.white,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Row(
                             children: [
                               Container(
                                 height: 40,
@@ -123,8 +160,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                      info?.urlImage.mobile ??
-                                          infoTeacher!.urlImageTeacher.mobile,
+                                      info?.urlImage.mobile ?? '',
                                     ),
                                   ),
                                   shape: BoxShape.circle,
@@ -135,44 +171,71 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      info?.fullName ??
-                                          infoTeacher?.fullName ??
-                                          '',
-                                      style: AppTextStyles.normal14(
-                                        fontWeight: FontWeight.w600,
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        info?.parentName ?? '',
+                                        style: AppTextStyles.normal14(
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      info?.pupilId.toString() ??
-                                          infoTeacher?.teacherId.toString() ??
-                                          '',
-                                      style: AppTextStyles.normal12(),
-                                    )
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2),
+                                        child: Text(
+                                          'Cha mẹ học sinh: ${info?.fullName.toString()}',
+                                          style: AppTextStyles.normal12(),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text(
+                                        info?.phoneNumber ?? '',
+                                        style: AppTextStyles.semiBold12(
+                                          color: AppColors.secondary,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               )
                             ],
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: SvgPicture.asset(Assets.icons.send),
-                          )
-                        ],
-                      ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.onParentTap != null) {
+                              widget.onParentTap!(
+                                widget.phoneBookTeacher![index],
+                              );
+                            } else {
+                              return;
+                            }
+                          },
+                          child: SvgPicture.asset(Assets.icons.send),
+                        )
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  ),
+                );
+              },
+            );
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: (widget.index == 0) ? tabStudent() : tabParent(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

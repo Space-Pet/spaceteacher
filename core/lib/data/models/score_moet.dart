@@ -152,7 +152,7 @@ class TxtDiemMoetType {
         scoreData: [],
         diemData: [],
         kqht: null,
-        kqrl: '-----',
+        kqrl: null,
         hocKy: null,
         dtbCn: null,
         xlhlCn: null,
