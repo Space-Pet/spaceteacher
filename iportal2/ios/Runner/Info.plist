@@ -41,6 +41,7 @@
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSAllowsArbitraryLoads</key><true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Ứng dụng cần truy cập vào máy ảnh để quét mã QR</string>

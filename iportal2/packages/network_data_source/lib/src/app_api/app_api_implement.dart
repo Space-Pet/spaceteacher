@@ -783,7 +783,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       return StudentFeesResponse();
     }
   }
-  
+
   Future<SchoolFee> getSchoolFee({
     required int pupilId,
   }) async {
@@ -794,8 +794,9 @@ class AppFetchApi extends AbstractAppFetchApi {
           'pupil_id': pupilId,
         },
       );
-      if (isNullOrEmpty(data)) return SchoolFee();
-      final schoolFee = SchoolFee.fromJson(data);
+      if (isNullOrEmpty(data['data'])) return SchoolFee();
+      final schoolFee = SchoolFee.fromJson(data['data']);
+      Log.d(schoolFee.toString());
       return schoolFee;
     } catch (e) {
       throw GetSchoolFeeFailure();
@@ -829,11 +830,14 @@ class AppFetchApi extends AbstractAppFetchApi {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
       });
-      if (isNullOrEmpty(data)) return SchoolFeePaymentPreview();
+      if (isNullOrEmpty(data['data'])) return SchoolFeePaymentPreview();
 
-      final schoolFeePaymentPreview = SchoolFeePaymentPreview.fromJson(data);
+      final schoolFeePaymentPreview =
+          SchoolFeePaymentPreview.fromJson(data['data']);
+      Log.d(schoolFeePaymentPreview.toString());
       return schoolFeePaymentPreview;
     } catch (e) {
+      Log.e(e.toString());
       throw GetSchoolFeeFailure();
     }
   }
@@ -849,6 +853,26 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       Log.e(e.toString());
 
+      throw GetPaymentGatewayFailure();
+    }
+  }
+
+  Future<Gateway> choosePaymentGateway({
+    required int pupilId,
+    required int totalMoneyPayment,
+    required int paymentId,
+  }) async {
+    try {
+      final data = await _authRestClient
+          .doHttpPost(url: '/api/v1/payments/choose', requestBody: {
+        'pupil_id': pupilId,
+        'payment_id': paymentId,
+        'total_money_payment': totalMoneyPayment,
+      });
+      Log.d(data['data']['items']);
+      return Gateway.fromJson(data['data']['items']);
+    } catch (e) {
+      Log.e(e.toString());
       throw GetPaymentGatewayFailure();
     }
   }

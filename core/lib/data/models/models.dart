@@ -10,6 +10,7 @@ export 'comment.dart';
 export 'detail_bus_schedule.dart';
 export 'exercise_data.dart';
 export 'gallery_class.dart';
+export 'gateway.dart';
 export 'history_school_fee.dart';
 export 'history_school_fee_item.dart';
 export 'leaves.dart';
