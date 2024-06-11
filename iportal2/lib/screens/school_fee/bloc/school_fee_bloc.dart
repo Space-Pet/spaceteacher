@@ -16,14 +16,16 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
             schoolFeeHistoryStatus: SchoolFeeHistoryStatus.initial,
             paymentStatus: PaymentStatus.initial)) {
     on<FetchSchoolFee>(_onFetchSchoolFee);
-    add(const FetchSchoolFee());
     on<FetchSchoolFeeHistory>(_onFetchSchoolFeeHistory);
-    add(const FetchSchoolFeeHistory());
 
     on<GetPaymentGateways>(_onGetPaymentGateways);
     add(const GetPaymentGateways());
 
     on<OpenPaymentGateway>(_openPaymentGateway);
+    on<GetSchoolFeeClearingDebtPreview>(
+      _onGetPreviewSchoolFeeClearingDebt,
+    );
+    on<PaymentClearingDebt>(_onPaymentClearingDebt);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -109,6 +111,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       }
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.loaded,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         paymentGateways: res,
       ));
     } catch (e) {
@@ -135,6 +138,48 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     } catch (e) {
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.error,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onGetPreviewSchoolFeeClearingDebt(
+      GetSchoolFeeClearingDebtPreview event,
+      Emitter<SchoolFeeState> emit) async {
+    try {
+      final resPreview = await appFetchApiRepo.getPreviewSchoolFeeClearingDebt(
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        totalMoneyPayment: event.totalMoneyPayment,
+      );
+      Log.d('result: ${resPreview.hinhThucThanhToan}');
+      emit(state.copyWith(
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.loaded,
+        schoolFeePaymentClearingDebtPreview: resPreview,
+      ));
+    } catch (e) {
+      Log.e(e.toString());
+      emit(state.copyWith(
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.error,
+        error: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> _onPaymentClearingDebt(
+      PaymentClearingDebt event, Emitter<SchoolFeeState> emit) async {
+    try {
+      final res = await appFetchApiRepo.paymentClearingDebt(
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        totalMoneyPayment: event.totalMoneyPayment,
+      );
+
+      emit(state.copyWith(
+        paymentStatus: PaymentStatus.loaded,
+        isClearingDebt: res,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        paymentStatus: PaymentStatus.error,
         error: e.toString(),
       ));
     }

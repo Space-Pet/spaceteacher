@@ -37,3 +37,17 @@ class OpenPaymentGateway extends SchoolFeeEvent {
   @override
   List<Object> get props => [paymentId, totalMoneyPayment];
 }
+
+class GetSchoolFeeClearingDebtPreview extends SchoolFeeEvent {
+  const GetSchoolFeeClearingDebtPreview({required this.totalMoneyPayment});
+  final int totalMoneyPayment;
+  @override
+  List<Object> get props => [totalMoneyPayment];
+}
+
+class PaymentClearingDebt extends SchoolFeeEvent {
+  const PaymentClearingDebt({required this.totalMoneyPayment});
+  final int totalMoneyPayment;
+  @override
+  List<Object> get props => [totalMoneyPayment];
+}

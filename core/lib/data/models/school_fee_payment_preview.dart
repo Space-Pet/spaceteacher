@@ -14,6 +14,12 @@ class SchoolFeePaymentPreview {
   final int? tongPhaiNop;
   @JsonKey(name: 'tong_thanh_toan')
   final int? tongThanhToan;
+  @JsonKey(name: 'ngay_thanh_toan')
+  final String? ngayThanhToan;
+  @JsonKey(name: 'pupil')
+  final _PupilPreviewItem? pupil;
+  @JsonKey(name: 'hinh_thuc_thanh_toan')
+  final String? hinhThucThanhToan;
 
   SchoolFeePaymentPreview({
     this.items,
@@ -21,6 +27,9 @@ class SchoolFeePaymentPreview {
     this.tongGiamGia,
     this.tongPhaiNop,
     this.tongThanhToan,
+    this.ngayThanhToan,
+    this.pupil,
+    this.hinhThucThanhToan,
   });
 
   factory SchoolFeePaymentPreview.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +48,9 @@ class SchoolFeePaymentPreview {
     int? tongGiamGia,
     int? tongPhaiNop,
     int? tongThanhToan,
+    String? ngayThanhToan,
+    _PupilPreviewItem? pupil,
+    String? hinhThucThanhToan,
   }) {
     return SchoolFeePaymentPreview(
       items: items ?? this.items,
@@ -46,6 +58,9 @@ class SchoolFeePaymentPreview {
       tongGiamGia: tongGiamGia ?? this.tongGiamGia,
       tongPhaiNop: tongPhaiNop ?? this.tongPhaiNop,
       tongThanhToan: tongThanhToan ?? this.tongThanhToan,
+      ngayThanhToan: ngayThanhToan ?? this.ngayThanhToan,
+      pupil: pupil ?? this.pupil,
+      hinhThucThanhToan: hinhThucThanhToan ?? this.hinhThucThanhToan,
     );
   }
 }
@@ -100,5 +115,28 @@ class SchoolFeePaymentPreviewItem {
       phaiNop: phaiNop ?? this.phaiNop,
       thucThu: thucThu ?? this.thucThu,
     );
+  }
+}
+
+@JsonSerializable()
+class _PupilPreviewItem {
+  @JsonKey(name: 'pupil_id')
+  final int? id;
+  @JsonKey(name: 'full_name')
+  final String? fullName;
+
+  _PupilPreviewItem({
+    this.id,
+    this.fullName,
+  });
+
+  factory _PupilPreviewItem.fromJson(Map<String, dynamic> json) =>
+      _$PupilPreviewItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PupilPreviewItemToJson(this);
+
+  @override
+  String toString() {
+    return '_PupilPreviewItem{id: $id, fullName: $fullName}';
   }
 }

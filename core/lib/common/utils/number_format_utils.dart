@@ -21,7 +21,7 @@ class NumberFormatUtils {
       mantissaLength: 0,
       trailingSymbol: 'đ',
       useSymbolPadding: true,
-      thousandSeparator: ThousandSeparator.Period,
+      thousandSeparator: ThousandSeparator.Comma,
     );
   }
 
