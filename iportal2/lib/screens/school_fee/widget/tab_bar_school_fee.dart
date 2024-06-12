@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_history_payment/tab_view_school_fee_history_payment.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_payment/tab_view_school_fee_payment.dart';
 
-class TabBarSchoolFee extends StatefulWidget {
+class TabBarSchoolFee extends StatelessWidget {
   final List<String> tabTitles;
 
   const TabBarSchoolFee({
@@ -11,19 +11,9 @@ class TabBarSchoolFee extends StatefulWidget {
     required this.tabTitles,
   });
   @override
-  State<TabBarSchoolFee> createState() => _TabBarSchoolFee();
-}
-
-class _TabBarSchoolFee extends State<TabBarSchoolFee> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: widget.tabTitles.length,
+      length: tabTitles.length,
       child: Column(
         children: [
           Padding(
@@ -77,7 +67,7 @@ class _TabBarSchoolFee extends State<TabBarSchoolFee> {
   }
 
   List<Widget> _buildTabs() {
-    return widget.tabTitles.map((title) {
+    return tabTitles.map((title) {
       return SizedBox(
         height: 32,
         child: Tab(

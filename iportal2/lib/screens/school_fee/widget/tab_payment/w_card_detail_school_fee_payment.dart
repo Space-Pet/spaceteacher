@@ -23,7 +23,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -79,6 +79,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                 ],
               ),
             ),
+            deadlineTuitionBuild(item.hanNop ?? ""),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FieldRowCardDetail(
@@ -136,7 +137,7 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
                   FieldRowCardDetail(
                     title: 'Phải nộp',
                     value:
-                        '${NumberFormatUtils.displayMoney(double.parse('${item.phaiNop ?? 0}'))}',
+                        '${NumberFormatUtils.displayMoney(double.parse('${item.chuaNop ?? 0}'))}',
                     titleStyle: AppTextStyles.normal16(
                       color: AppColors.brand500,
                     ),
@@ -152,5 +153,54 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget deadlineTuitionBuild(String deadlineTuition) {
+    final deadline = DateTime.tryParse(deadlineTuition) ?? DateTime.now();
+    final now = DateTime.now();
+    final daysDifference = deadline.difference(now).inDays;
+
+    Widget buildMessage(String message, Color color) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
+          decoration: BoxDecoration(
+            color: daysDifference < 0
+                ? AppColors.observationCardDetailDotted
+                : color.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                Icons.info,
+                color: daysDifference < 0 ? AppColors.primaryRedColor : color,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                message,
+                style: AppTextStyles.bold14(
+                    color:
+                        daysDifference < 0 ? AppColors.primaryRedColor : color),
+              ),
+              const SizedBox(width: 5),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (daysDifference < 0) {
+      return buildMessage("Đã quá hạn", AppColors.observationCardDetailDotted);
+    } else if (daysDifference == 0) {
+      return buildMessage("Tới hạn đóng", AppColors.amberWarn);
+    } else if (daysDifference <= 5) {
+      return buildMessage("Sắp tới hạn đóng", AppColors.amberWarn);
+    } else {
+      return const SizedBox();
+    }
   }
 }

@@ -9,12 +9,17 @@ import 'package:repository/repository.dart';
 
 class SchoolFeePaymentScreen extends StatefulWidget {
   static const routeName = '/school-fee-payment';
-  const SchoolFeePaymentScreen(
-      {required this.schoolFeePaymentPreview,
-      required this.paymentGateways,
-      super.key});
+  const SchoolFeePaymentScreen({
+    required this.schoolFeePaymentPreview,
+    required this.paymentGateways,
+    this.isClearingDebt,
+    super.key,
+  });
+
   final SchoolFeePaymentPreview schoolFeePaymentPreview;
   final List<PaymentGateway> paymentGateways;
+  final bool? isClearingDebt;
+
   @override
   State<SchoolFeePaymentScreen> createState() => _SchoolFeePaymentScreenState();
 }
@@ -22,13 +27,8 @@ class SchoolFeePaymentScreen extends StatefulWidget {
 class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
   bool _btnTypePayment1 = true;
   bool _btnTypePayment2 = false;
-
   final TextEditingController _textController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,181 +36,172 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
       create: (context) => SchoolFeeBloc(
           appFetchApiRepo: context.read<AppFetchApiRepository>(),
           currentUserBloc: context.read<CurrentUserBloc>()),
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.gray200,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          context.pop(true);
-                        },
-                        icon: const Icon(
-                          Icons.close,
-                          color: AppColors.gray500,
-                        ),
-                        splashColor: Colors.transparent,
-                        padding: EdgeInsets.zero,
+      child: BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
+        listener: (context, state) {
+          if (state.paymentStatus == PaymentStatus.loaded &&
+              state.isClearingDebt == true) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Thanh toán thành công"),
+              ),
+            );
+            context.pop(true);
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: AppColors.white,
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildHeader(context),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        children: [
+                          _buildFieldRowCardDetail(
+                            title: "Họ và tên học sinh",
+                            value: widget
+                                    .schoolFeePaymentPreview.pupil?.fullName ??
+                                "",
+                          ),
+                          _buildFieldRowCardDetail(
+                            title: "Số tiền thu",
+                            value: NumberFormatUtils.displayMoney(
+                                  double.parse(
+                                      '${widget.schoolFeePaymentPreview.tongPhaiNop ?? 0}'),
+                                ) ??
+                                "",
+                          ),
+                          _buildFieldRowCardDetail(
+                            title: "Ngày thu",
+                            value:
+                                widget.schoolFeePaymentPreview.ngayThanhToan ??
+                                    DateTime.now().ddMMyyyySlash,
+                          ),
+                          _buildCardInfoPayment(
+                              widget.schoolFeePaymentPreview.items ?? []),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Text(
-                        "Xem trước nội dung thu tiền",
-                        style: AppTextStyles.bold14(),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      FieldRowCardDetail(
-                        title: "Họ và tên học sinh",
-                        value: "",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle: AppTextStyles.semiBold14(),
-                      ),
-                      FieldRowCardDetail(
-                        title: "Số tiền thu",
-                        value: NumberFormatUtils.displayMoney(double.parse(
-                                '${widget.schoolFeePaymentPreview.tongPhaiNop ?? 0}')) ??
-                            "",
-                        titleStyle:
-                            AppTextStyles.normal14(color: AppColors.gray700),
-                        valueStyle: AppTextStyles.semiBold14(),
-                      ),
-                      FieldRowCardDetail(
-                          title: "Ngày thu",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(),
-                          value: DateTime.now().ddMMyyyySlash,
-                          isLastItem: false),
-
-                      // List card detail info payment
-                      _buildCardInfoPayment(
-                        widget.schoolFeePaymentPreview.items ?? [],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-        bottomNavigationBar: _buildBottomBar(
-          context,
-          widget.paymentGateways,
-        ),
+            bottomNavigationBar:
+                _buildBottomBar(context, widget.paymentGateways),
+          );
+        },
       ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: AppColors.gray200,
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => context.pop(true),
+            icon: const Icon(
+              Icons.close,
+              color: AppColors.gray500,
+            ),
+            splashColor: Colors.transparent,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            "Xem trước nội dung thu tiền",
+            style: AppTextStyles.bold14(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFieldRowCardDetail(
+      {required String title, required String? value}) {
+    return FieldRowCardDetail(
+      title: title,
+      value: value ?? "",
+      titleStyle: AppTextStyles.normal14(color: AppColors.gray700),
+      valueStyle: AppTextStyles.semiBold14(),
     );
   }
 
   Widget _buildCardInfoPayment(List<SchoolFeePaymentPreviewItem> items) {
     return Column(
-      children: List.generate(
-        items.length,
-        (index) {
-          final it = items[index];
+      children: items.map((item) => _buildCardDetail(item)).toList(),
+    );
+  }
 
-          return Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: BoxDecoration(
-              color: AppColors.gray200,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+  Widget _buildCardDetail(SchoolFeePaymentPreviewItem item) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+        color: AppColors.gray200,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Text(
+                item.noiDung ?? '',
+                style: AppTextStyles.bold16(color: AppColors.brand600),
               ),
+            ),
+            const Divider(color: AppColors.gray300),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Text(
-                      "${it.noiDung}",
-                      style: AppTextStyles.bold16(
-                        color: AppColors.brand600,
-                      ),
+                  _buildFieldRowCardDetail(
+                    title: "Độ ưu tiên",
+                    value: item.doUuTien ?? '',
+                  ),
+                  _buildFieldRowCardDetail(
+                    title: "Phí niêm yết",
+                    value: NumberFormatUtils.displayMoney(
+                      double.parse('${item.phiNiemYet ?? 0}'),
                     ),
                   ),
-                  const Divider(
-                    color: AppColors.gray300,
+                  _buildFieldRowCardDetail(
+                    title: "Giảm giá",
+                    value: NumberFormatUtils.displayMoney(
+                      double.parse('${item.giamGia ?? 0}'),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Column(
-                      children: [
-                        FieldRowCardDetail(
-                          title: "Độ ưu tiên",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(
-                              color: AppColors.gray700),
-                          value: "${it.doUuTien}",
-                          isLastItem: false,
-                        ),
-                        FieldRowCardDetail(
-                          title: "Phí niêm yết",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(
-                              color: AppColors.gray700),
-                          value:
-                              "${NumberFormatUtils.displayMoney(double.parse('${it.phiNiemYet ?? 0}'))}",
-                          isLastItem: false,
-                        ),
-                        FieldRowCardDetail(
-                          title: "Giảm giá",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(
-                              color: AppColors.gray700),
-                          value:
-                              "${NumberFormatUtils.displayMoney(double.parse('${it.giamGia ?? 0}'))}",
-                          isLastItem: false,
-                        ),
-                        FieldRowCardDetail(
-                          title: "Phải nộp",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(
-                              color: AppColors.gray700),
-                          value:
-                              "${NumberFormatUtils.displayMoney(double.parse('${it.phaiNop ?? 0}'))}",
-                          isLastItem: false,
-                        ),
-                        FieldRowCardDetail(
-                          title: "Thực thu",
-                          titleStyle:
-                              AppTextStyles.normal14(color: AppColors.gray700),
-                          valueStyle: AppTextStyles.semiBold14(
-                              color: AppColors.gray700),
-                          value:
-                              "${NumberFormatUtils.displayMoney(double.parse('${it.thucThu ?? 0}'))}",
-                          isLastItem: it == items.last,
-                        ),
-                      ],
+                  _buildFieldRowCardDetail(
+                    title: "Phải nộp",
+                    value: NumberFormatUtils.displayMoney(
+                      double.parse('${item.phaiNop ?? 0}'),
+                    ),
+                  ),
+                  _buildFieldRowCardDetail(
+                    title: "Thực thu",
+                    value: NumberFormatUtils.displayMoney(
+                      double.parse('${item.thucThu ?? 0}'),
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -224,183 +215,148 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "Chọn số tiền cần thanh toán",
+            widget.isClearingDebt == false
+                ? "Chọn số tiền cần thanh toán"
+                : "${widget.schoolFeePaymentPreview.hinhThucThanhToan}",
             style: AppTextStyles.bold14(),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _btnTypePayment1 = true;
-                      _btnTypePayment2 = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _btnTypePayment1 == true
-                        ? AppColors.brand600
-                        : AppColors.white,
-                    side: _btnTypePayment1 == false
-                        ? const BorderSide(color: AppColors.brand600)
-                        : BorderSide.none,
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    "Nộp toàn bộ",
-                    style: AppTextStyles.bold14(
-                        color: _btnTypePayment1 == false
-                            ? AppColors.brand600
-                            : AppColors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _btnTypePayment1 = false;
-                      _btnTypePayment2 = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _btnTypePayment2 == true
-                        ? AppColors.brand600
-                        : AppColors.white,
-                    side: _btnTypePayment2 == false
-                        ? const BorderSide(color: AppColors.brand600)
-                        : BorderSide.none,
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    "Nộp một phần",
-                    style: AppTextStyles.bold14(
-                        color: _btnTypePayment2 == false
-                            ? AppColors.brand600
-                            : AppColors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          AnimatedCrossFade(
-            duration: const Duration(milliseconds: 200),
-            crossFadeState: _btnTypePayment1
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
-            firstChild: Container(
-              decoration: BoxDecoration(
-                color: AppColors.gray200,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              padding: const EdgeInsets.all(13),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Số tiền cần thanh toán: ",
-                    style: AppTextStyles.normal14(),
-                  ),
-                  Text(
-                    "${NumberFormatUtils.displayMoney(double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'))}",
-                    style: AppTextStyles.bold14(),
-                  ),
-                ],
-              ),
-            ),
-            secondChild: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          const SizedBox(height: 10),
+          if (widget.isClearingDebt == false)
+            Row(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                    ),
-                    Text(
-                      "Tổng:",
-                      style: AppTextStyles.normal14(),
-                    ),
-                    Text(
-                      "${NumberFormatUtils.displayMoney(double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'))}",
-                      style: AppTextStyles.bold14(),
-                    ),
-                  ],
+                _buildPaymentButton(
+                  context,
+                  label: "Nộp toàn bộ",
+                  isSelected: _btnTypePayment1,
+                  onPressed: () => _selectPaymentType(1),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    textAlign: TextAlign.center,
-                    enabled: _btnTypePayment2,
-                    controller: _textController,
-                    keyboardType: TextInputType.number,
-                    validator: _validatePayment,
-                    decoration: InputDecoration(
-                      hintText: "Nhập số tiền cần thanh toán >/= 50.000đ",
-                      hintStyle: AppTextStyles.normal14(
-                        color: AppColors.gray500,
-                      ),
-                      contentPadding: const EdgeInsets.all(8.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: AppColors.gray300),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: const BorderSide(color: AppColors.brand600),
-                      ),
-                    ),
-                  ),
+                const SizedBox(width: 5),
+                _buildPaymentButton(
+                  context,
+                  label: "Nộp một phần",
+                  isSelected: _btnTypePayment2,
+                  onPressed: () => _selectPaymentType(2),
                 ),
               ],
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
+          _buildPaymentAmount(),
+          const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () {
-              if (_btnTypePayment2 == true) {
-                if (_formKey.currentState?.validate() ?? false) {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (ctx) => Material(
-                      child: MethodPaymentScreen(
-                          paymentGateways: paymentGateways,
-                          totalMoneyPayment: int.parse(_textController.text)),
-                    ),
-                  );
-                }
-              } else {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (ctx) => Material(
-                    child: MethodPaymentScreen(
-                      paymentGateways: paymentGateways,
-                      totalMoneyPayment:
-                          widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
-                    ),
-                  ),
-                );
-              }
+              _handlePayment(context);
             },
             style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.brand500, elevation: 0),
+              backgroundColor: AppColors.brand500,
+              elevation: 0,
+            ),
             child: Text(
               "Thanh toán",
               style: AppTextStyles.bold14(color: AppColors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPaymentButton(
+    BuildContext context, {
+    required String label,
+    required bool isSelected,
+    required VoidCallback onPressed,
+  }) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isSelected ? AppColors.brand600 : AppColors.white,
+          side: !isSelected
+              ? const BorderSide(color: AppColors.brand600)
+              : BorderSide.none,
+          elevation: 0,
+        ),
+        child: Text(
+          label,
+          style: AppTextStyles.bold14(
+            color: isSelected ? AppColors.white : AppColors.brand600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _selectPaymentType(int type) {
+    setState(() {
+      _btnTypePayment1 = type == 1;
+      _btnTypePayment2 = type == 2;
+    });
+  }
+
+  Widget _buildPaymentAmount() {
+    return AnimatedCrossFade(
+      duration: const Duration(milliseconds: 200),
+      crossFadeState: _btnTypePayment1
+          ? CrossFadeState.showFirst
+          : CrossFadeState.showSecond,
+      firstChild: Container(
+        decoration: BoxDecoration(
+          color: AppColors.gray200,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        padding: const EdgeInsets.all(13),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Số tiền cần thanh toán: ", style: AppTextStyles.normal14()),
+            Text(
+              "${NumberFormatUtils.displayMoney(
+                double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'),
+              )}",
+              style: AppTextStyles.bold14(),
+            ),
+          ],
+        ),
+      ),
+      secondChild: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(width: MediaQuery.of(context).size.width * 0.3),
+              Text("Tổng:", style: AppTextStyles.normal14()),
+              Text(
+                "${NumberFormatUtils.displayMoney(
+                  double.parse(
+                      '${widget.schoolFeePaymentPreview.tongThanhToan}'),
+                )}",
+                style: AppTextStyles.bold14(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 5),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              textAlign: TextAlign.center,
+              enabled: _btnTypePayment2,
+              controller: _textController,
+              keyboardType: TextInputType.number,
+              validator: _validatePayment,
+              decoration: InputDecoration(
+                hintText: "Nhập số tiền cần thanh toán >/= 50.000đ",
+                hintStyle: AppTextStyles.normal14(color: AppColors.gray500),
+                contentPadding: const EdgeInsets.all(8.0),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: AppColors.gray300),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: AppColors.brand600),
+                ),
+              ),
             ),
           ),
         ],
@@ -417,5 +373,38 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
       return 'Số tiền phải lớn hơn hoặc bằng 50.000đ';
     }
     return null;
+  }
+
+  void _handlePayment(BuildContext context) {
+    if (widget.isClearingDebt == true) {
+      context.read<SchoolFeeBloc>().add(
+            PaymentClearingDebt(
+                totalMoneyPayment:
+                    widget.schoolFeePaymentPreview.tongThanhToan ?? 0),
+          );
+    } else {
+      if (_btnTypePayment2 == true) {
+        if (_formKey.currentState?.validate() ?? false) {
+          _showMethodPaymentScreen(context, int.parse(_textController.text));
+        }
+      } else {
+        _showMethodPaymentScreen(
+          context,
+          widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
+        );
+      }
+    }
+  }
+
+  void _showMethodPaymentScreen(BuildContext context, int totalMoneyPayment) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Material(
+        child: MethodPaymentScreen(
+          paymentGateways: widget.paymentGateways,
+          totalMoneyPayment: totalMoneyPayment,
+        ),
+      ),
+    );
   }
 }

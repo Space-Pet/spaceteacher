@@ -498,7 +498,7 @@ class AppFetchApiRepository {
           {required int pupilId, required int totalMoneyPayment}) async =>
       await _appFetchApi.getSchoolFeePaymentPreview(
           pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
-           Future<Gateway> choosePaymentGateway(
+  Future<Gateway> choosePaymentGateway(
           {required int pupilId,
           required int totalMoneyPayment,
           required int paymentId}) async =>
@@ -506,4 +506,12 @@ class AppFetchApiRepository {
           pupilId: pupilId,
           totalMoneyPayment: totalMoneyPayment,
           paymentId: paymentId);
+  Future<SchoolFeePaymentPreview> getPreviewSchoolFeeClearingDebt(
+          {required int pupilId, required int totalMoneyPayment}) async =>
+      await _appFetchApi.getPreviewSchoolFeeClearingDebt(
+          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
+  Future<bool> paymentClearingDebt(
+          {required int pupilId, required int totalMoneyPayment}) async =>
+      await _appFetchApi.paymentClearingDebt(
+          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
 }

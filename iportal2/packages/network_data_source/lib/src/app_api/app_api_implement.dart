@@ -783,7 +783,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       return StudentFeesResponse();
     }
   }
-  
+
   Future<SchoolFee> getSchoolFee({
     required int pupilId,
   }) async {
@@ -830,11 +830,13 @@ class AppFetchApi extends AbstractAppFetchApi {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
       });
-      if (isNullOrEmpty(data)) return SchoolFeePaymentPreview();
+      if (isNullOrEmpty(data['data'])) return SchoolFeePaymentPreview();
 
-      final schoolFeePaymentPreview = SchoolFeePaymentPreview.fromJson(data);
+      final schoolFeePaymentPreview =
+          SchoolFeePaymentPreview.fromJson(data['data']);
       return schoolFeePaymentPreview;
     } catch (e) {
+      Log.e(e.toString());
       throw GetSchoolFeeFailure();
     }
   }
@@ -853,6 +855,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       throw GetPaymentGatewayFailure();
     }
   }
+
   Future<Gateway> choosePaymentGateway({
     required int pupilId,
     required int totalMoneyPayment,
@@ -870,6 +873,42 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       Log.e(e.toString());
       throw GetPaymentGatewayFailure();
+    }
+  }
+
+  Future<SchoolFeePaymentPreview> getPreviewSchoolFeeClearingDebt({
+    required int pupilId,
+    required int totalMoneyPayment,
+  }) async {
+    final data = await _authRestClient.doHttpPost(
+      url: '/api/v1/payments/preview-can-tru',
+      requestBody: {
+        'pupil_id': pupilId,
+        'total_money_payment': totalMoneyPayment,
+      },
+    );
+    Log.d(data['data']);
+    return SchoolFeePaymentPreview.fromJson(data['data']);
+  }
+
+  Future<bool> paymentClearingDebt(
+      {required int pupilId, required int totalMoneyPayment}) async {
+    try {
+      final data = await _authRestClient.doHttpPost(
+        url: '/api/v1/payments/thanh-toan-can-tru',
+        requestBody: {
+          'pupil_id': pupilId,
+          'total_money_payment': totalMoneyPayment,
+        },
+      );
+      Log.d('Response: $data');
+      if (data['code'] == 201) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      Log.e(e.toString());
+      return false;
     }
   }
 }
