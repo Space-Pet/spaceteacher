@@ -48,7 +48,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
             ).then(
               (resDialog) {
                 if (resDialog != null && resDialog == true) {
-                  context.pop(true);
+                  Navigator.of(context).pop({'refresh': true, 'tabIndex': 1});
                 }
               },
             );
@@ -112,7 +112,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => context.pop(true),
+            onPressed: () => context.pop(false),
             icon: const Icon(
               Icons.close,
               color: AppColors.gray500,

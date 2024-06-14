@@ -50,8 +50,10 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
             )
                 .then(
               (value) {
-                if (value == true) {
-                  context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
+                if (value['refresh'] == true && value['tabIndex'] != null) {
+                  context.read<SchoolFeeBloc>().add(
+                        const UpdateTabIndexEvent(1),
+                      );
                 }
               },
             );
@@ -127,9 +129,10 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                 ],
               ),
 
-              // Kiểm tra totalCanTru không phải là null và khác 0 thì hiển thị nút cấn trừ.
+              // Kiểm tra totalCanTru không phải là null, khác 0 và list cần thanh toán khác null thì hiển thị nút cấn trừ.
               if (!isNullOrEmpty(state.schoolFee?.totalCanTru) &&
-                  int.tryParse(state.schoolFee?.totalCanTru ?? "0") != 0)
+                  int.tryParse(state.schoolFee?.totalCanTru ?? "0") != 0 &&
+                  !isNullOrEmpty(state.schoolFee?.schoolFeeItems))
                 ElevatedButton(
                   onPressed: () {
                     _payWithBalance(
@@ -169,22 +172,33 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
         ),
         ElevatedButton(
           onPressed: () {
-            context
-                .push(
-              SchoolFeePaymentScreen(
-                schoolFeePaymentPreview:
-                    state.schoolFeePaymentPreview ?? SchoolFeePaymentPreview(),
-                paymentGateways: state.paymentGateways ?? [],
-                // amountToBePaid: int.parse('${totalThanhTien.round()}'),
-                isPayWithBalance: isPayWithBalance,
-              ),
-            )
-                .then((res) {
-              if (res == true) {
-                context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
-                isPayWithBalance = false;
-              }
-            });
+            if (isNullOrEmpty(state.schoolFee?.schoolFeeItems)) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Không còn mục nào để thanh toán",
+                      style: TextStyle(
+                          color: AppColors.white, fontWeight: FontWeight.w600)),
+                  backgroundColor: AppColors.red500,
+                ),
+              );
+            } else {
+              context
+                  .push(
+                SchoolFeePaymentScreen(
+                  schoolFeePaymentPreview: state.schoolFeePaymentPreview ??
+                      SchoolFeePaymentPreview(),
+                  paymentGateways: state.paymentGateways ?? [],
+                  // amountToBePaid: int.parse('${totalThanhTien.round()}'),
+                  isPayWithBalance: isPayWithBalance,
+                ),
+              )
+                  .then((res) {
+                if (res == true) {
+                  context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
+                  isPayWithBalance = false;
+                }
+              });
+            }
           },
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.red90001),
           child: Text(

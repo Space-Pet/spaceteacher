@@ -43,6 +43,7 @@ class SchoolFeeState extends Equatable {
     this.isLoading = false,
     this.error,
     this.isPayWithBalance = false,
+    this.currentTabIndex = 0,
   });
   final SchoolFeeStatus schoolFeeStatus;
   final SchoolFeeHistoryStatus schoolFeeHistoryStatus;
@@ -57,6 +58,7 @@ class SchoolFeeState extends Equatable {
   final bool isLoading;
   final String? error;
   final bool? isPayWithBalance;
+  final int? currentTabIndex;
 
   @override
   List<Object?> get props => [
@@ -73,23 +75,24 @@ class SchoolFeeState extends Equatable {
         isLoading,
         error,
         isPayWithBalance,
+        currentTabIndex,
       ];
 
-  SchoolFeeState copyWith({
-    SchoolFeeStatus? schoolFeeStatus,
-    SchoolFeeHistoryStatus? schoolFeeHistoryStatus,
-    PaymentStatus? paymentStatus,
-    SchoolFeePreviewStatus? schoolFeePreviewStatus,
-    SchoolFee? schoolFee,
-    HistorySchoolFee? historySchoolFee,
-    SchoolFeePaymentPreview? schoolFeePaymentPreview,
-    SchoolFeePaymentPreview? schoolFeePayWithBalancePreview,
-    List<PaymentGateway>? paymentGateways,
-    Gateway? gateway,
-    bool? isLoading,
-    String? error,
-    bool? isPayWithBalance,
-  }) {
+  SchoolFeeState copyWith(
+      {SchoolFeeStatus? schoolFeeStatus,
+      SchoolFeeHistoryStatus? schoolFeeHistoryStatus,
+      PaymentStatus? paymentStatus,
+      SchoolFeePreviewStatus? schoolFeePreviewStatus,
+      SchoolFee? schoolFee,
+      HistorySchoolFee? historySchoolFee,
+      SchoolFeePaymentPreview? schoolFeePaymentPreview,
+      SchoolFeePaymentPreview? schoolFeePayWithBalancePreview,
+      List<PaymentGateway>? paymentGateways,
+      Gateway? gateway,
+      bool? isLoading,
+      String? error,
+      bool? isPayWithBalance,
+      int? currentTabIndex}) {
     return SchoolFeeState(
       schoolFeeStatus: schoolFeeStatus ?? this.schoolFeeStatus,
       schoolFeeHistoryStatus:
@@ -108,6 +111,7 @@ class SchoolFeeState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       isPayWithBalance: isPayWithBalance ?? this.isPayWithBalance,
+      currentTabIndex: currentTabIndex ?? this.currentTabIndex,
     );
   }
 }

@@ -66,3 +66,12 @@ class UpdateStatusSchoolFeeEvent extends SchoolFeeEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateTabIndexEvent extends SchoolFeeEvent {
+  final int tabIndex;
+
+  const UpdateTabIndexEvent(this.tabIndex);
+
+  @override
+  List<Object> get props => [tabIndex];
+}

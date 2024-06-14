@@ -486,34 +486,51 @@ class AppFetchApiRepository {
         listFee: listFee,
       );
 
-  Future<SchoolFee> getSchoolFee({required int pupilId}) async =>
-      await _appFetchApi.getSchoolFee(pupilId: pupilId);
+  Future<SchoolFee> getSchoolFee(
+          {required int pupilId, required String learnYear}) async =>
+      await _appFetchApi.getSchoolFee(pupilId: pupilId, learnYear: learnYear);
 
-  Future<HistorySchoolFee> getHistorySchoolFee({required int pupilId}) async =>
-      await _appFetchApi.getHistorySchoolFee(pupilId: pupilId);
+  Future<HistorySchoolFee> getHistorySchoolFee(
+          {required int pupilId, required String learnYear}) async =>
+      await _appFetchApi.getHistorySchoolFee(
+          pupilId: pupilId, learnYear: learnYear);
 
   Future<List<PaymentGateway>> getPaymentGateways() async =>
       await _appFetchApi.getPaymentGateway();
   Future<SchoolFeePaymentPreview> getSchoolFeePaymentPreview(
-          {required int pupilId, required num totalMoneyPayment}) async =>
+          {required int pupilId,
+          required num totalMoneyPayment,
+          required String learnYear}) async =>
       await _appFetchApi.getSchoolFeePaymentPreview(
-          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
+          pupilId: pupilId,
+          totalMoneyPayment: totalMoneyPayment,
+          learnYear: learnYear);
   Future<Gateway> choosePaymentGateway(
           {required int pupilId,
           required int totalMoneyPayment,
-          required int paymentId}) async =>
+          required int paymentId,
+          required String learnYear}) async =>
       await _appFetchApi.choosePaymentGateway(
           pupilId: pupilId,
           totalMoneyPayment: totalMoneyPayment,
-          paymentId: paymentId);
+          paymentId: paymentId,
+          learnYear: learnYear);
 
   Future<SchoolFeePaymentPreview> getPreviewSchooWithBalance(
-          {required int pupilId, required int totalMoneyPayment}) async =>
+          {required int pupilId,
+          required int totalMoneyPayment,
+          required String learnYear}) async =>
       await _appFetchApi.getPreviewSchooWithBalance(
-          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
+          pupilId: pupilId,
+          totalMoneyPayment: totalMoneyPayment,
+          learnYear: learnYear);
 
   Future<bool> payWithBalance(
-          {required int pupilId, required int totalMoneyPayment}) async =>
+          {required int pupilId,
+          required int totalMoneyPayment,
+          required String learnYear}) async =>
       await _appFetchApi.payWithBalance(
-          pupilId: pupilId, totalMoneyPayment: totalMoneyPayment);
+          pupilId: pupilId,
+          totalMoneyPayment: totalMoneyPayment,
+          learnYear: learnYear);
 }

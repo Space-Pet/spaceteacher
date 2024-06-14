@@ -786,12 +786,14 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<SchoolFee> getSchoolFee({
     required int pupilId,
+    required String learnYear,
   }) async {
     try {
       final data = await _authRestClient.doHttpPost(
         url: '/api/v1/payments/need-payment',
         requestBody: {
           'pupil_id': pupilId,
+          'learn_year': learnYear,
         },
       );
       if (isNullOrEmpty(data['data'])) return SchoolFee();
@@ -805,11 +807,13 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<HistorySchoolFee> getHistorySchoolFee({
     required int pupilId,
+    required String learnYear,
   }) async {
     try {
       final data = await _authRestClient
           .doHttpPost(url: '/api/v1/payments/history', requestBody: {
         'pupil_id': pupilId,
+        'learn_year': learnYear,
       });
       if (isNullOrEmpty(data['data'])) return HistorySchoolFee();
       final historySchoolFee = HistorySchoolFee.fromJson(data['data']);
@@ -823,12 +827,14 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<SchoolFeePaymentPreview> getSchoolFeePaymentPreview({
     required int pupilId,
     required num totalMoneyPayment,
+    required String learnYear,
   }) async {
     try {
       final data = await _authRestClient
           .doHttpPost(url: '/api/v1/payments/preview', requestBody: {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
+        'learn_year': learnYear,
       });
       if (isNullOrEmpty(data['data'])) return SchoolFeePaymentPreview();
 
@@ -860,6 +866,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     required int pupilId,
     required int totalMoneyPayment,
     required int paymentId,
+    required String learnYear,
   }) async {
     try {
       final data = await _authRestClient
@@ -867,6 +874,7 @@ class AppFetchApi extends AbstractAppFetchApi {
         'pupil_id': pupilId,
         'payment_id': paymentId,
         'total_money_payment': totalMoneyPayment,
+        'learn_year': learnYear,
       });
       Log.d(data['data']['items']);
       return Gateway.fromJson(data['data']['items']);
@@ -879,12 +887,14 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<SchoolFeePaymentPreview> getPreviewSchooWithBalance({
     required int pupilId,
     required int totalMoneyPayment,
+    required String learnYear,
   }) async {
     final data = await _authRestClient.doHttpPost(
       url: '/api/v1/payments/preview-can-tru',
       requestBody: {
         'pupil_id': pupilId,
         'total_money_payment': totalMoneyPayment,
+        'learn_year': learnYear,
       },
     );
     Log.d(data['data']);
@@ -892,13 +902,16 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<bool> payWithBalance(
-      {required int pupilId, required int totalMoneyPayment}) async {
+      {required int pupilId,
+      required int totalMoneyPayment,
+      required String learnYear}) async {
     try {
       final data = await _authRestClient.doHttpPost(
         url: '/api/v1/payments/thanh-toan-can-tru',
         requestBody: {
           'pupil_id': pupilId,
           'total_money_payment': totalMoneyPayment,
+          'learn_year': learnYear,
         },
       );
       Log.d('Response: $data');

@@ -48,8 +48,8 @@ class _TabViewSchoolFeeHistoryPayment
                     child: Column(
                       children: List.generate(
                         5,
-                        (index) =>
-                            _buildHistoryPaymentCard(context, state, index),
+                        (index) => _buildHistoryPaymentCard(
+                            context, []..length = 3, index),
                       ),
                     ),
                   ),
@@ -58,12 +58,14 @@ class _TabViewSchoolFeeHistoryPayment
             );
           } else if (state.schoolFeeHistoryStatus ==
               SchoolFeeHistoryStatus.loaded) {
-            final itemsLength =
-                state.historySchoolFee?.historySchoolFeeItems?.length ?? 0;
-            if (listIsShowDetail.length != itemsLength) {
-              listIsShowDetail = List.filled(itemsLength, false);
+            final listReversed = state
+                .historySchoolFee?.historySchoolFeeItems?.reversed
+                .toList();
+            if (listIsShowDetail.length != listReversed?.length) {
+              listIsShowDetail = List.filled(listReversed?.length ?? 0, false);
             }
             return Scaffold(
+              backgroundColor: AppColors.white,
               body: Skeletonizer(
                 enabled: false,
                 child: CustomRefresh(
@@ -75,9 +77,9 @@ class _TabViewSchoolFeeHistoryPayment
                   child: SingleChildScrollView(
                     child: Column(
                       children: List.generate(
-                        itemsLength,
-                        (index) =>
-                            _buildHistoryPaymentCard(context, state, index),
+                        listReversed?.length ?? 0,
+                        (index) => _buildHistoryPaymentCard(
+                            context, listReversed ?? [], index),
                       ),
                     ),
                   ),
@@ -103,8 +105,8 @@ class _TabViewSchoolFeeHistoryPayment
     );
   }
 
-  Widget _buildHistoryPaymentCard(
-      BuildContext context, SchoolFeeState state, int index) {
+  Widget _buildHistoryPaymentCard(BuildContext context,
+      List<HistorySchoolFeeItem> historySchoolFeeItems, int index) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -114,8 +116,7 @@ class _TabViewSchoolFeeHistoryPayment
         });
       },
       child: CardDetailSchoolFeeHistoryPayment(
-        item: state.historySchoolFee?.historySchoolFeeItems?[index] ??
-            HistorySchoolFeeItem(),
+        item: historySchoolFeeItems[index],
         isShowDetail:
             listIsShowDetail.length > index ? listIsShowDetail[index] : false,
       ),

@@ -35,7 +35,7 @@ class SchoolFeeDetailHistoryPayment extends StatelessWidget {
                     valueStyle:
                         AppTextStyles.semiBold14(color: AppColors.gray700),
                     // value: item.paymentDate?.ddMMYYYSlash ?? "",
-                    value: "31-12-2021",
+                    value: "${item.ngayThu}",
                     isLastItem: false),
                 FieldRowCardDetail(
                     title: "Hình thức thu",
