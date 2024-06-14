@@ -876,7 +876,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<SchoolFeePaymentPreview> getPreviewSchoolFeeClearingDebt({
+  Future<SchoolFeePaymentPreview> getPreviewSchooWithBalance({
     required int pupilId,
     required int totalMoneyPayment,
   }) async {
@@ -891,7 +891,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     return SchoolFeePaymentPreview.fromJson(data['data']);
   }
 
-  Future<bool> paymentClearingDebt(
+  Future<bool> payWithBalance(
       {required int pupilId, required int totalMoneyPayment}) async {
     try {
       final data = await _authRestClient.doHttpPost(

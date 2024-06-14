@@ -23,7 +23,7 @@ class _TabViewSchoolFeeHistoryPayment
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SchoolFeeBloc>.value(
-      value: context.read<SchoolFeeBloc>()..add(const FetchSchoolFeeHistory()),
+      value: context.read<SchoolFeeBloc>(),
       child: BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
         listener: (context, state) {
           if (state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loaded) {
