@@ -24,12 +24,14 @@ class NotificationData {
 
     return NotificationData(
       data: List<NotificationItem>.from(
-        map['data']?.map(
-          NotificationItem.fromMap,
+        (map['data'] as List<dynamic>).map(
+          (item) => NotificationItem.fromMap(item as Map<String, dynamic>),
         ),
       ),
-      links: NotificationLinks.fromMap(map['links']),
-      meta: NotificationMeta.fromMap(map['meta']),
+      links: NotificationLinks.empty(),
+      meta: NotificationMeta.empty(),
+      // links: NotificationLinks.fromMap(map['links']),
+      // meta: NotificationMeta.fromMap(map['meta']),
     );
   }
 
@@ -61,14 +63,16 @@ class NotificationItem {
   final String title;
   final String content;
   final String excerpt;
+  final String createdAt;
+  final int createdBy;
+
   final dynamic attachment;
   final dynamic viewerId;
   final dynamic pupilId;
-  final String toUser;
-  final String createdAt;
-  final String updatedAt;
   final dynamic viewedAt;
-  final int createdBy;
+  final String? toUser;
+  final String? updatedAt;
+  final String? status;
 
   NotificationItem({
     required this.id,
@@ -76,31 +80,35 @@ class NotificationItem {
     required this.title,
     required this.content,
     required this.excerpt,
-    required this.attachment,
-    required this.viewerId,
-    required this.pupilId,
-    required this.toUser,
     required this.createdAt,
-    required this.updatedAt,
-    required this.viewedAt,
     required this.createdBy,
+    this.attachment,
+    this.viewerId,
+    this.pupilId,
+    this.viewedAt,
+    this.toUser,
+    this.updatedAt,
+    this.status,
   });
 
   factory NotificationItem.fromMap(Map<String, dynamic> map) {
+    final createdBy = map['created_by'];
+
     return NotificationItem(
-      id: map['id'],
-      schoolId: map['school_id'],
-      title: map['title'],
-      content: map['content'],
-      excerpt: map['excerpt'],
+      id: map['id'] ?? 0,
+      schoolId: map['school_id'] ?? 0,
+      title: map['title'] ?? '',
+      content: map['content'] ?? '',
+      excerpt: map['excerpt'] ?? '',
       attachment: map['attachment'],
       viewerId: map['viewer_id'],
       pupilId: map['pupil_id'],
-      toUser: map['to_user'],
-      createdAt: map['created_at'],
-      updatedAt: map['updated_at'],
-      viewedAt: map['viewed_at'],
-      createdBy: map['created_by'],
+      toUser: map['to_user'] ?? '',
+      createdAt: map['created_at'] ?? '',
+      updatedAt: map['updated_at'] ?? '',
+      viewedAt: map['viewed_at'] ?? '',
+      createdBy: createdBy is String ? int.parse(createdBy) : createdBy,
+      status: map['status'] ?? 'active',
     );
   }
 
@@ -119,6 +127,7 @@ class NotificationItem {
       'updated_at': updatedAt,
       'viewed_at': viewedAt,
       'created_by': createdBy,
+      'status': status,
     };
   }
 
@@ -126,10 +135,6 @@ class NotificationItem {
       NotificationItem.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-
-  @override
-  String toString() =>
-      'NotificationItem(id: $id, schoolId: $schoolId, title: $title, content: $content, attachment: $attachment, viewerId: $viewerId, pupilId: $pupilId, toUser: $toUser, createdAt: $createdAt, updatedAt: $updatedAt, viewedAt: $viewedAt, createdBy: $createdBy)';
 
   static NotificationItem empty() {
     return NotificationItem(
@@ -146,6 +151,7 @@ class NotificationItem {
       updatedAt: '',
       viewedAt: '',
       createdBy: 0,
+      status: 'active',
     );
   }
 }

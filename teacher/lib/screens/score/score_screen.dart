@@ -1,6 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/resources/resources.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
@@ -12,6 +10,7 @@ import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/screens/score/bloc/score_bloc.dart';
 import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/screens/score/views/class_score/class_score_screen.dart';
 
 class ScoreScreen extends StatefulWidget {
   static const String routeName = 'score';
@@ -48,6 +47,7 @@ class _ScoreScreenState extends State<ScoreScreen>
       create: (context) => ScoreBloc(
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
+        appFetchApiRepository: context.read<AppFetchApiRepository>(),
       ),
       child: BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
         final scoreBloc = context.read<ScoreBloc>();
@@ -244,54 +244,71 @@ class _ScoreScreenState extends State<ScoreScreen>
                                       width: 1.5,
                                     ),
                                   ),
-                                  child: ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    itemCount: 8,
-                                    itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 8),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: AppColors.white,
-                                            border: Border.all(
-                                                width: 1,
-                                                color: AppColors.gray100),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: AppColors.gray200,
-                                                spreadRadius: 1,
-                                                blurRadius: 5,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 8, right: 4),
-                                                child: Text(
-                                                  'Lớp 6.2',
-                                                  style: AppTextStyles.normal14(
-                                                    fontWeight: FontWeight.w400,
-                                                    color: AppColors.gray700,
+                                  child: BlocBuilder<ScoreBloc, ScoreState>(
+                                    builder: (context, state) {
+                                      return state.classListStatus ==
+                                              ScoreStatus.loading
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              // itemCount: state.listClass.length,
+                                              itemCount: 8,
+                                              itemBuilder: (context, index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    context.push(
+                                                      const ClassScoreScreen(),
+                                                    );
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(8),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: AppColors.white,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 8,
+                                                                    right: 4),
+                                                            child: Text(
+                                                              // state
+                                                              //     .listClass[
+                                                              //         index]
+                                                              //     .className,
+                                                              '10A1',
+                                                              style:
+                                                                  AppTextStyles
+                                                                      .normal14(
+                                                                color: AppColors
+                                                                    .gray700,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '(23)',
+                                                            style: AppTextStyles
+                                                                .normal14(
+                                                                    color: AppColors
+                                                                        .gray400),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                              Text(
-                                                '(23)',
-                                                style: AppTextStyles.normal14(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: AppColors.gray700,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
+                                                );
+                                              },
+                                            );
                                     },
                                   ),
                                 ),

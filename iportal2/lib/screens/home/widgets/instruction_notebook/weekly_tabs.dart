@@ -83,6 +83,7 @@ class _WeeklyTabsState extends State<WeeklyTabs>
             ),
             Expanded(
               child: TabBarView(
+                
                 controller: tabBarController,
                 children: listTabContent,
               ),

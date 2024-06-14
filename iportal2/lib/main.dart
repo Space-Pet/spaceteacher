@@ -1,6 +1,5 @@
-
 import 'app_delegate.dart';
 
-void main() async {
+void main() {
   AppDelegate.run();
 }

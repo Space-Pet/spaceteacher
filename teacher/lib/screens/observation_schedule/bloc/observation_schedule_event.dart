@@ -13,5 +13,3 @@ class ObservationScheduleFetched extends ObservationScheduleEvent {
   final String txtDate;
   final String? teacherId;
 }
-
-class ListTeacherFetched extends ObservationScheduleEvent {}

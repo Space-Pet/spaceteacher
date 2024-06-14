@@ -10,7 +10,7 @@ class NotiDetailBloc extends Bloc<NotiDetailEvent, NotiDetailState> {
   NotiDetailBloc(
     this.appFetchApiRepo, {
     required this.currentUserBloc,
-  }) : super(NotiDetailState(notiDetail: NotificationItem.empty())) {
+  }) : super(NotiDetailState(notiDetail: SentNotiDetail.empty())) {
     on<NotificationFetchDetail>(_onFetchNotiDetail);
   }
 
@@ -27,7 +27,7 @@ class NotiDetailBloc extends Bloc<NotiDetailEvent, NotiDetailState> {
       'School-Brand': user.school_brand,
     };
 
-    final notiDetailData = await appFetchApiRepo.getNotiDetail(
+    final notiDetailData = await appFetchApiRepo.getNotiDetailTeacher(
       headers: headers,
       id: event.id,
     );

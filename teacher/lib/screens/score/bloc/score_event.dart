@@ -2,6 +2,8 @@ part of 'score_bloc.dart';
 
 sealed class ScoreEvent {}
 
+class ClassListFetched extends ScoreEvent {}
+
 class ScoreFetchMoet extends ScoreEvent {
   ScoreFetchMoet();
 }

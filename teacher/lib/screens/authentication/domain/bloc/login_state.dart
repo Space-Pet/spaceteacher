@@ -7,7 +7,9 @@ enum LoginStatus {
   success,
   failure,
   domainInit,
-  domainFailure
+  domainFailure,
+  chooseSchool,
+  listSchoolTeacher,
 }
 
 class LoginState extends Equatable {
@@ -15,14 +17,21 @@ class LoginState extends Equatable {
     this.showError = false,
     this.status = LoginStatus.init,
     this.cachedDomain = '',
+    this.listSchoolTeacher = const [],
   });
 
   final bool showError;
   final LoginStatus status;
   final String cachedDomain;
+  final List<SchoolTeacher> listSchoolTeacher;
 
   @override
-  List<Object> get props => [showError, status, cachedDomain];
+  List<Object> get props => [
+        showError,
+        status,
+        cachedDomain,
+        listSchoolTeacher,
+      ];
 
   bool get isReadyToSubmit => status == LoginStatus.readyToSubmit;
   bool get isSuccess => status == LoginStatus.success;
@@ -31,11 +40,13 @@ class LoginState extends Equatable {
     bool? showError,
     LoginStatus? status,
     String? cachedDomain,
+    List<SchoolTeacher>? listSchoolTeacher,
   }) {
     return LoginState(
       showError: showError ?? this.showError,
       status: status ?? this.status,
       cachedDomain: cachedDomain ?? this.cachedDomain,
+      listSchoolTeacher: listSchoolTeacher ?? this.listSchoolTeacher,
     );
   }
 }

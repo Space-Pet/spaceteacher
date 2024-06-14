@@ -1,6 +1,7 @@
 class ApiPath {
   static const String _apiV1 = '/api/v1';
   static String loginStaff = '$_apiV1/staff-login';
+  static String loginStaffWithSchool = '$_apiV1/staff-school-login';
   static String loginWithQR = '$_apiV1/login-QRCode';
   static String logout = '$_apiV1/logout';
   static String getInfoStudent = '$_apiV1/member/pupil/';

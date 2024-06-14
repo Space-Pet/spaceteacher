@@ -464,6 +464,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.7.0"
+  easy_image_viewer:
+    dependency: transitive
+    description:
+      name: easy_image_viewer
+      sha256: eca828c492d580f9bd775495b281cf6481d34109b73010f1e9a3db87c4d2e5f7
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   enum_to_string:
     dependency: transitive
     description:
@@ -473,7 +481,7 @@ packages:
     source: hosted
     version: "2.0.1"
   equatable:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: equatable
       sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
@@ -1435,6 +1443,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  multi_dropdown:
+    dependency: "direct main"
+    description:
+      name: multi_dropdown
+      sha256: b63ff339fcc875d667f8688c8ef62853545b580dd2b6fe78b73339783268afd8
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
   nested:
     dependency: transitive
     description:

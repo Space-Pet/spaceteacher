@@ -19,8 +19,6 @@ class AppDelegate {
     //   DeviceOrientation.portraitDown,
     // ]);
 
-    // Not yet implemented
-    // Config.instance.setup(env);
 
     await Hive.initFlutter();
     initializeDateFormatting();

@@ -8,9 +8,9 @@ part 'school_fee.g.dart';
 class SchoolFee {
   @JsonKey(name: 'items')
   final List<SchoolFeeItem>? schoolFeeItems;
-  final int? totalThanhTien;
-  final int? totalDaDong;
-  final int? totalChuaNop;
+  final num? totalThanhTien;
+  final num? totalDaDong;
+  final num? totalChuaNop;
   final String? totalCanTru;
 
   SchoolFee({
@@ -33,9 +33,9 @@ class SchoolFee {
 
   SchoolFee copyWith({
     List<SchoolFeeItem>? schoolFeeItems,
-    int? totalThanhTien,
-    int? totalDaDong,
-    int? totalChuaNop,
+    num? totalThanhTien,
+    num? totalDaDong,
+    num? totalChuaNop,
     String? totalCanTru,
   }) {
     return SchoolFee(

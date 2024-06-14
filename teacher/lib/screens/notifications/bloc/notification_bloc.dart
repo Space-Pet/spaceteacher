@@ -9,9 +9,15 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(
     this.appFetchApiRepo, {
     required this.currentUserBloc,
-  }) : super(NotificationState(notificationData: NotificationData.empty())) {
+  }) : super(NotificationState(
+          notificationData: NotificationData.empty(),
+          sentNoti: NotificationData.empty(),
+        )) {
     on<NotificationFetchData>(_onFetchNotifications);
     add(NotificationFetchData());
+
+    on<NotificationFetchSentNoti>(_onFetchSentNoti);
+    add(NotificationFetchSentNoti());
 
     on<NotificationChageViewMode>(_onChangeViewMode);
   }
@@ -38,6 +44,28 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     emit(state.copyWith(
       notificationData: notificationData,
       status: NotificationStatus.success,
+    ));
+  }
+
+  _onFetchSentNoti(
+      NotificationFetchSentNoti event, Emitter<NotificationState> emit) async {
+    emit(state.copyWith(status: NotificationStatus.loadingSent));
+
+    final user = currentUserBloc.state.user;
+    final headers = {
+      'School-Id': user.school_id,
+      'School-Brand': user.school_brand,
+    };
+
+    final notificationData = await appFetchApiRepo.getSentNoti(
+      headers: headers,
+      status: event.status.value,
+      orderBy: event.orderBy.value,
+    );
+
+    emit(state.copyWith(
+      sentNoti: notificationData,
+      status: NotificationStatus.successSent,
     ));
   }
 

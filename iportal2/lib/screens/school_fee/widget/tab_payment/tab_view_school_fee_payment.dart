@@ -182,12 +182,10 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
   void _clearingDebt(SchoolFee schoolFee, BuildContext context) {
     setState(() {
       final totalCanTruDouble = double.parse(schoolFee.totalCanTru ?? "0");
-      final totalChuaNop = schoolFee.totalChuaNop ?? 0;
+      final totalChuaNop = schoolFee.totalChuaNop ?? 0.0;
 
-      if (totalChuaNop < totalCanTruDouble) {
-        totalThanhTien = 0;
-      } else if (totalChuaNop - totalCanTruDouble < 0) {
-        totalThanhTien = 0;
+      if (totalChuaNop <= totalCanTruDouble) {
+        totalThanhTien = totalChuaNop.toDouble();
       } else {
         totalThanhTien = totalChuaNop - totalCanTruDouble;
       }

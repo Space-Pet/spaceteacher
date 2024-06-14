@@ -28,6 +28,8 @@ class LocalTeacher {
   final SchoolBrand background;
   @HiveField(9)
   final bool isKinderGarten;
+  @HiveField(10)
+  final String learnYear;
 
   LocalTeacher({
     required this.name,
@@ -40,6 +42,7 @@ class LocalTeacher {
     required this.pinnedAlbumIdList,
     required this.background,
     required this.isKinderGarten,
+    required this.learnYear,
   });
 
   LocalTeacher copyWith({
@@ -53,6 +56,7 @@ class LocalTeacher {
     List<int>? pinnedAlbumIdList,
     SchoolBrand? background,
     bool? isKinderGarten,
+    String? learnYear,
   }) {
     return LocalTeacher(
       name: name ?? this.name,
@@ -65,6 +69,7 @@ class LocalTeacher {
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
       background: background ?? this.background,
       isKinderGarten: isKinderGarten ?? this.isKinderGarten,
+      learnYear: learnYear ?? this.learnYear,
     );
   }
 
@@ -80,6 +85,7 @@ class LocalTeacher {
       pinnedAlbumIdList: [],
       background: SchoolBrand.uka,
       isKinderGarten: false,
+      learnYear: '',
     );
   }
 
@@ -94,6 +100,7 @@ class LocalTeacher {
       'pinnedAlbumIdList': pinnedAlbumIdList,
       'background': background,
       'isKinderGarten': isKinderGarten,
+      'learnYear': learnYear,
     };
   }
 

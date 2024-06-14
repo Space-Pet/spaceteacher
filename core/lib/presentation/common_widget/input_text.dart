@@ -47,71 +47,77 @@ class TitleAndInputText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const redColor = AppColors.redMenu;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if ((title ?? '').isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: Text(
-              title ?? '',
-              style: titleStyle,
+    return Padding(
+      padding: EdgeInsets.only(
+        top: paddingTop,
+        bottom: paddingBottom,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if ((title ?? '').isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: Text(
+                title ?? '',
+                style: titleStyle,
+              ),
             ),
+          TextField(
+            focusNode: focusNode,
+            obscuringCharacter: '*',
+            onChanged: onChanged,
+            onTap: () {
+              if (null != onTap) {
+                onTap!();
+              }
+            },
+            onSubmitted: (_) {
+              if (null != onSubmit) {
+                onSubmit!();
+              }
+            },
+            cursorColor: isValid ? null : redColor,
+            keyboardType:
+                textInputType ? TextInputType.text : TextInputType.number,
+            decoration: InputDecoration(
+              constraints: const BoxConstraints(
+                maxHeight: 50,
+                minHeight: 42,
+              ),
+              contentPadding: prefixIcon == null
+                  ? const EdgeInsets.symmetric(horizontal: 16)
+                  : EdgeInsets.zero,
+              enabledBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: isValid ? AppColors.gray300 : redColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: isValid ? Colors.blue : redColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              border: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: isValid ? AppColors.gray300 : redColor),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                  color: AppColors.gray500,
+                  fontFamily: 'Inter',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400),
+              filled: true,
+              fillColor: Colors.white,
+              prefixIconColor: isValid ? AppColors.gray500 : redColor,
+              prefixIcon: prefixIcon,
+            ),
+            obscureText: obscureText,
           ),
-        TextField(
-          focusNode: focusNode,
-          obscuringCharacter: '*',
-          onChanged: onChanged,
-          onTap: () {
-            if (null != onTap) {
-              onTap!();
-            }
-          },
-          onSubmitted: (_) {
-            if (null != onSubmit) {
-              onSubmit!();
-            }
-          },
-          cursorColor: isValid ? null : redColor,
-          keyboardType:
-              textInputType ? TextInputType.text : TextInputType.number,
-          decoration: InputDecoration(
-            constraints: const BoxConstraints(
-              maxHeight: 50,
-              minHeight: 42,
-            ),
-            contentPadding: prefixIcon == null
-                ? const EdgeInsets.symmetric(horizontal: 16)
-                : EdgeInsets.zero,
-            enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: isValid ? AppColors.gray300 : redColor),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: isValid ? Colors.blue : redColor),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            border: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: isValid ? AppColors.gray300 : redColor),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            hintText: hintText,
-            hintStyle: const TextStyle(
-                color: AppColors.gray500,
-                fontFamily: 'Inter',
-                fontSize: 16,
-                fontWeight: FontWeight.w400),
-            filled: true,
-            fillColor: Colors.white,
-            prefixIconColor: isValid ? AppColors.gray500 : redColor,
-            prefixIcon: prefixIcon,
-          ),
-          obscureText: obscureText,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

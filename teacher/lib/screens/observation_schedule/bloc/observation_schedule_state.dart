@@ -7,26 +7,29 @@ enum ObservationScheduleStatus {
   error,
 }
 
+extension ObservationScheduleStatusX on ObservationScheduleStatus {
+  bool get isInitial => this == ObservationScheduleStatus.initial;
+  bool get isLoading => this == ObservationScheduleStatus.loading;
+  bool get isSuccess => this == ObservationScheduleStatus.success;
+  bool get isError => this == ObservationScheduleStatus.error;
+}
+
 class ObservationScheduleState extends Equatable {
   const ObservationScheduleState({
     this.status = ObservationScheduleStatus.initial,
-    this.observationList = const <ObservationData>[],
-    this.listTeacher = const <TeacherItem>[],
+    this.observationList = const [],
   });
 
   final ObservationScheduleStatus status;
   final List<ObservationData> observationList;
-  final List<TeacherItem> listTeacher;
 
   ObservationScheduleState copyWith({
     ObservationScheduleStatus? status,
     List<ObservationData>? observationList,
-    List<TeacherItem>? listTeacher,
   }) {
     return ObservationScheduleState(
       status: status ?? this.status,
       observationList: observationList ?? this.observationList,
-      listTeacher: listTeacher ?? this.listTeacher,
     );
   }
 
@@ -34,6 +37,5 @@ class ObservationScheduleState extends Equatable {
   List<Object> get props => [
         status,
         observationList,
-        listTeacher,
       ];
 }

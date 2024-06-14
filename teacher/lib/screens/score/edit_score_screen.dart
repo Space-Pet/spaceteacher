@@ -28,6 +28,7 @@ class EditScoreScreen extends StatelessWidget {
       create: (context) => ScoreBloc(
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
+        appFetchApiRepository: context.read<AppFetchApiRepository>(),
       ),
       child: BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
         final scoreBloc = context.read<ScoreBloc>();

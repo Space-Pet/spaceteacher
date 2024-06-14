@@ -91,6 +91,26 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
+  Future<NotificationData> getSentNoti({
+    required Map<String, Object> headers,
+    required String status,
+    required String orderBy,
+  }) async {
+    try {
+      final res = await _authRestClient.doHttpGet('/api/v1/staff/notifications',
+          headers: headers,
+          queryParameters: {
+            'status': status,
+            'orderBy': orderBy,
+          });
+
+      final sentNotiData = NotificationData.fromMap(res['data']);
+      return sentNotiData;
+    } catch (e) {
+      throw GetNotificationsFailure();
+    }
+  }
+
   Future<NotificationItem> getNotiDetail({
     required Map<String, Object> headers,
     required int id,
@@ -102,6 +122,23 @@ class AppFetchApi extends AbstractAppFetchApi {
       );
 
       final notiDetail = NotificationItem.fromMap(res['data']);
+      return notiDetail;
+    } catch (e) {
+      throw GetNotiDetailFailure();
+    }
+  }
+
+  Future<SentNotiDetail> getNotiDetailTeacher({
+    required Map<String, Object> headers,
+    required int id,
+  }) async {
+    try {
+      final res = await _authRestClient.doHttpGet(
+        '/api/v1/staff/notifications/$id',
+        headers: headers,
+      );
+
+      final notiDetail = SentNotiDetail.fromMap(res['data']);
       return notiDetail;
     } catch (e) {
       throw GetNotiDetailFailure();
@@ -291,6 +328,45 @@ class AppFetchApi extends AbstractAppFetchApi {
     return data.data;
   }
 
+  Future<Map<String, dynamic>> createNewNoti({
+    required List<int> listPupilId,
+    required int classId,
+    required String type,
+    required String title,
+    required String content,
+    required String status,
+    required List<File> listFiles,
+    required Map<String, dynamic> headers,
+  }) async {
+    // parse listPupilId to sample [10055489, 10045775], includes []
+    var pupilId = listPupilId.toString();
+    print(pupilId);
+    var formData = FormData.fromMap(
+      {
+        "pupil_id": pupilId,
+        "class_id": classId,
+        "type": type,
+        "title": title,
+        "content": content,
+        "status": status,
+      },
+    );
+
+    for (int i = 0; i < listFiles.length; i++) {
+      formData.files.add(MapEntry(
+        'attachment[$i]',
+        MultipartFile.fromFileSync(listFiles[i].path),
+      ));
+    }
+
+    final data = await _authRestClient.dio.post(
+        '/api/v1/staff/announce/notifications/create',
+        data: formData,
+        options: Options(headers: headers));
+
+    return data.data;
+  }
+
   Future<int> deleteMessageDetail({
     required String content,
     required int schoolId,
@@ -442,6 +518,47 @@ class AppFetchApi extends AbstractAppFetchApi {
           .toList();
 
       return listClass;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<NotiClass>> getListClassNoti(
+      String learnYear, int teacherId) async {
+    try {
+      final data = await _authRestClient.doHttpGet(
+        '/api/v1/staff/class/teacher',
+        queryParameters: {
+          'learn_year': learnYear,
+          'teacher_id': teacherId,
+        },
+      );
+
+      final listClass = (data['data']['data'] as List<dynamic>)
+          .map((e) => NotiClass.fromMap(e))
+          .toList();
+
+      return listClass;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<PupilInClass>> getPupilInClass(
+      Map<String, dynamic> headers, int classId) async {
+    try {
+      final data = await _authRestClient.doHttpGet(
+        '/api/v1/staff/class/$classId/pupils',
+        headers: headers,
+      );
+
+      print(data);
+
+      final listPupilInClass = (data['data'] as List<dynamic>)
+          .map((e) => PupilInClass.fromJson(e))
+          .toList();
+
+      return listPupilInClass;
     } catch (e) {
       return [];
     }
@@ -1041,47 +1158,89 @@ class AppFetchApi extends AbstractAppFetchApi {
     return data;
   }
 
-  Future<List<ObservationData>> getLessonRegister({
+  Future<Map<String, dynamic>> getLessonRegister({
     required String userKey,
     required int schoolId,
     required String txtDate,
     int? teacherId,
   }) async {
-    final response = await _authRestClient.doHttpGet(
-      '/api/api.php',
-      queryParameters: {
-        'act': 'get_lesson_register',
-        'user_key': userKey,
-        'school_id': schoolId,
-        'txt_date': txtDate,
-        if (teacherId != null) 'teacher_id': teacherId,
-      },
-    );
+    var query =
+        'act=get_lesson_register&user_key=$userKey&school_id=$schoolId&txt_date=$txtDate';
 
-    final data = response['data'] as List<dynamic>;
-
-    return data
-        .map<ObservationData>((e) => ObservationData.fromMap(e))
-        .toList();
-  }
-
-  Future<List<TeacherItem>> getTeacherListBySchool({
-    required int schoolId,
-  }) async {
-    final response = await _authRestClient.doHttpGet(
-      '/api.php',
-      queryParameters: {
-        'act': 'list_teacher',
-        'school_id': schoolId,
-      },
-    );
-
-    if (response['trang_thai'] == false) {
-      throw Exception(response['noi_dung_trang_thai']);
+    if (teacherId != null) {
+      query += '&teacher_id=$teacherId';
     }
 
-    final data = response['data'] as List<dynamic>;
-    return data.map((e) => TeacherItem.fromMap(e)).toList();
+    final response = await _client.doHttpGet(
+      '/api/api.php?$query',
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getTeacherListBySchool({
+    required int schoolId,
+  }) async {
+    final response = await _client.doHttpGet(
+      '/api.php?act=list_teacher&school_id=$schoolId',
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getTeacherListByTeacherId({
+    required int teacherId,
+  }) async {
+    final response = await _client.doHttpGet(
+      '/api/v1/staff/teacher/?teacher_id=$teacherId',
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getListSubject({
+    required int schoolId,
+  }) async {
+    final response = await _client.doHttpGet(
+      '/api.php?act=list_subject&school_id=$schoolId',
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getListClassBySchool({
+    required int schoolId,
+    required String learnYear,
+  }) async {
+    final response = await _client.doHttpGet(
+      '/api.php?act=list_class&school_id=$schoolId&learn_year=$learnYear',
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> postLessonRegister({
+    required String userKey,
+    required String txtDate,
+    required int schoolId,
+    required int teacherId,
+    required int tietNum,
+    required int classId,
+    required int subjectId,
+  }) async {
+    final response = await _client.doHttpPost(
+      url: '/api/api.php?act=post_lesson_register',
+      requestBody: {
+        'user_key': userKey,
+        'txt_date': txtDate,
+        'SCHOOL_ID': schoolId,
+        'TEACHER_ID': teacherId,
+        'TIET_NUM': tietNum,
+        'CLASS_ID': classId,
+        'SUBJECT_ID': subjectId,
+      },
+    );
+    return response;
   }
 }
 

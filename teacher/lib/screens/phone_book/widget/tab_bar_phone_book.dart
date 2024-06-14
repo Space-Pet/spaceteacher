@@ -1,4 +1,4 @@
-import 'package:core/resources/resources.dart';
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/phone_book/model/list_phone_book.dart';
@@ -8,17 +8,19 @@ class TabBarPhoneBook extends StatelessWidget {
   TabBarPhoneBook({
     super.key,
     this.phoneBookStudent,
+    this.phoneBookParent,
     this.phoneBookTeacher,
     required this.currentUserBloc,
     this.onStudentTap,
     this.onParentTap,
   });
 
-  final List<String> tabs = ['Học sinh', 'Cha mẹ học sinh'];
-  final List<PhoneBook>? phoneBookStudent;
-  final List<PhoneBook>? phoneBookTeacher;
+  final List<String> tabs = ['Học sinh', 'Cha mẹ học sinh', 'Giáo viên'];
+  final List<PhoneBookStudent>? phoneBookStudent;
+  final List<PhoneBook>? phoneBookParent;
+  final List<PhoneBookTeacher>? phoneBookTeacher;
   final CurrentUserBloc currentUserBloc;
-  final void Function(PhoneBook)? onStudentTap;
+  final void Function(PhoneBookStudent)? onStudentTap;
   final void Function(PhoneBook)? onParentTap;
 
   @override
@@ -36,8 +38,8 @@ class TabBarPhoneBook extends StatelessWidget {
             width: double.infinity,
             margin: const EdgeInsets.only(top: 12),
             child: TabBar(
-              tabAlignment: TabAlignment.start,
-              isScrollable: true,
+              // tabAlignment: TabAlignment.start,
+              // isScrollable: true,
               labelColor: AppColors.brand600,
               unselectedLabelColor: AppColors.brand600,
               dividerColor: Colors.transparent,
@@ -64,9 +66,9 @@ class TabBarPhoneBook extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20),
-                ),
+                // borderRadius: BorderRadius.only(
+                //   topRight: Radius.circular(20),
+                // ),
                 color: AppColors.white,
               ),
               child: TabBarView(
@@ -78,10 +80,16 @@ class TabBarPhoneBook extends StatelessWidget {
                     index: 0,
                   ),
                   TabBarViewPhoneBook(
-                    phoneBookTeacher: phoneBookTeacher,
+                    phoneBookParent: phoneBookParent,
                     title: '',
                     onParentTap: onParentTap,
                     index: 1,
+                  ),
+                  TabBarViewPhoneBook(
+                    phoneBookTeacher: phoneBookTeacher,
+                    title: '',
+                    onParentTap: onParentTap,
+                    index: 2,
                   )
                 ],
               ),

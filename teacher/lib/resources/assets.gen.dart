@@ -128,6 +128,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/car.svg
   SvgGenImage get car => const SvgGenImage('assets/icons/car.svg');
 
+  /// File path: assets/icons/case_icon.svg
+  SvgGenImage get caseIcon => const SvgGenImage('assets/icons/case_icon.svg');
+
   /// File path: assets/icons/check copy.svg
   SvgGenImage get checkCopy => const SvgGenImage('assets/icons/check copy.svg');
 
@@ -599,6 +602,7 @@ class $AssetsIconsGen {
         call,
         callBus,
         car,
+        caseIcon,
         checkCopy,
         checkAbsent,
         checkCircleGreenCopy,

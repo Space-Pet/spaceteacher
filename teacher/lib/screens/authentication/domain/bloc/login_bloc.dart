@@ -16,6 +16,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) : super(const LoginState()) {
     on<LoginDomainSave>(_onDomainSave);
     on<LoginWith365>(_loginWithOffice365);
+    on<LoginWithSchool>(_loginWithSchool);
   }
   final DomainSaver domainSaver;
   final AuthRepository authRepository;
@@ -26,13 +27,63 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginWith365 event, Emitter<LoginState> emit) async {
     try {
       emit(state.copyWith(status: LoginStatus.loading));
-      final user = await authRepository.loginWith365();
+      final teacherLogin = await authRepository.loginWith365();
 
-      if (user == null) {
+      if (teacherLogin == null) {
         emit(state.copyWith(status: LoginStatus.failure));
         return;
       }
+      if (teacherLogin.isSchoolTeacher == 0) {
+        final user = teacherLogin.info;
+        final isKinderGarten = user.isKinderGarten();
 
+        final defaultFeatures =
+            isKinderGarten ? preSTeacherFeatures : hihgSTeacherFeatures;
+
+        final bgSchoolBrand = SchoolBrand.values
+            .firstWhere((element) => element.value == user.schoolBrand);
+
+        final localTeacherInfo = LocalTeacher(
+          name: user.name,
+          user_key: user.userKey,
+          teacher_id: user.teacherId,
+          school_id: user.schoolId,
+          user_id: user.userId,
+          school_brand: user.schoolBrand,
+          features: defaultFeatures,
+          background: bgSchoolBrand,
+          pinnedAlbumIdList: [],
+          isKinderGarten: isKinderGarten,
+          learnYear: user.learnYear,
+        );
+
+        userRepository.saveUser(localTeacherInfo);
+        currentUserBloc.add(CurrentUserUpdated(user: localTeacherInfo));
+
+        emit(state.copyWith(status: LoginStatus.success));
+      } else {
+        emit(state.copyWith(
+          listSchoolTeacher: teacherLogin.schoolTeacher,
+          status: LoginStatus.chooseSchool,
+        ));
+      }
+    } catch (e) {
+      Log.e('$e', name: "Login Error AuthRepository -> loginWithOffice365()");
+      emit(state.copyWith(status: LoginStatus.failure));
+    }
+  }
+
+  Future<void> _loginWithSchool(
+      LoginWithSchool event, Emitter<LoginState> emit) async {
+    try {
+      final teacherLogin =
+          await authRepository.loginWithSchool(event.teacherId);
+
+      if (teacherLogin == null) {
+        emit(state.copyWith(status: LoginStatus.failure));
+        return;
+      }
+      final user = teacherLogin.info;
       final isKinderGarten = user.isKinderGarten();
 
       final defaultFeatures =
@@ -52,6 +103,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         background: bgSchoolBrand,
         pinnedAlbumIdList: [],
         isKinderGarten: isKinderGarten,
+        learnYear: user.learnYear,
       );
 
       userRepository.saveUser(localTeacherInfo);

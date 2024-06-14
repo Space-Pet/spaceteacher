@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:teacher/components/buttons/buttons.dart';
 import 'package:teacher/components/tab/tab_content.dart';
 import 'package:teacher/resources/assets.gen.dart';
@@ -113,7 +112,7 @@ class ShowBottomSheetPhone {
             ),
           ),
         ),
-        RowContent(
+        const RowContent(
           content: '0987 888 888',
           title: 'Số điện thoại',
         ),

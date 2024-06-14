@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/score/edit_score_screen.dart';
@@ -9,6 +11,7 @@ part 'score_state.dart';
 class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   ScoreBloc({
     required this.appFetchApiRepo,
+    required this.appFetchApiRepository,
     required this.currentUserBloc,
   }) : super(
           ScoreState(
@@ -22,12 +25,15 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     on<ScoreFilterChange>(_onUpdateScoreFilter);
     on<ScoreFetchEsl>(_onFetchEslScore);
     on<ScoreFetchPrimaryConduct>(_onFetchPrimaryConduct);
+    on<ClassListFetched>(_onClassListFetch);
 
-    add(ScoreFetchMoet());
+    // add(ScoreFetchMoet());
+    add(ClassListFetched());
   }
 
   // final RegisterNotebookRepository registerNoteBookRepo;
   final AppFetchApiRepository appFetchApiRepo;
+  final AppFetchApiRepository appFetchApiRepository;
   final CurrentUserBloc currentUserBloc;
 
   _onFetchMoetScore(ScoreFetchMoet event, Emitter<ScoreState> emit) async {
@@ -135,6 +141,38 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       add(ScoreFetchMoet());
     } else {
       add(ScoreFetchEsl());
+    }
+  }
+
+  Future<void> _onClassListFetch(
+      ClassListFetched event, Emitter<ScoreState> emit) async {
+    emit(
+      state.copyWith(classListStatus: ScoreStatus.loading),
+    );
+
+    try {
+      final classList = await appFetchApiRepository.getListClassTeacher(
+        teacherId: currentUserBloc.state.user.teacher_id,
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand,
+      );
+
+      log('ScoreBloc - _onClassListFetch - $classList');
+
+      emit(
+        state.copyWith(
+          classListStatus: ScoreStatus.loaded,
+          listClass: classList,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(classListStatus: ScoreStatus.error),
+      );
+
+      log(
+        'ScoreBloc - _onClassListFetch - error: ${e.toString()}',
+      );
     }
   }
 }

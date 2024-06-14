@@ -4,12 +4,19 @@ import 'package:teacher/screens/observation_schedule/widgets/select_field.dart';
 
 class CardFilterObservation extends StatelessWidget {
   const CardFilterObservation({
+    super.key,
     required this.title,
     required this.typeField,
-    super.key,
+    this.options = const [],
+    this.onDateChanged,
+    this.onTeacherChanged,
   });
   final String title;
   final int typeField;
+  final List<TeacherItem> options;
+  final Function(DateTime)? onDateChanged;
+  final Function(String)? onTeacherChanged;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,12 +32,24 @@ class CardFilterObservation extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          SelectField(typeField: typeField),
           if (typeField == 1)
-            const SizedBox(
-              height: 10,
+            SelectDate(
+              onDateChanged: (date) {
+                onDateChanged != null ? onDateChanged!(date) : null;
+              },
+            )
+          else
+            SelectField(
+              typeField: typeField,
+              options: options,
+              onChanged: (value) {
+                onTeacherChanged != null ? onTeacherChanged!(value) : null;
+              },
             ),
-          if (typeField == 1) SelectDate(onDateChanged: (date) {}),
+          // const SizedBox(
+          //   height: 10,
+          // ),
+          // if (typeField == 1) SelectDate(onDateChanged: (date) {}),
         ],
       ),
     );

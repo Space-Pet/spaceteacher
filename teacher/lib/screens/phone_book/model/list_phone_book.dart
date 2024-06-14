@@ -34,6 +34,26 @@ class PhoneBook {
   final int parentId;
   final String parentName;
   final String phoneNumber;
+
+  factory PhoneBook.fromMap(Map<String, dynamic> map) {
+    return PhoneBook(
+      pupilId: map['pupil_id'],
+      userId: map['user_id'],
+      schoolId: map['school_id'],
+      schoolName: map['school_name'],
+      fullName: map['full_name'],
+      userKey: map['user_key'],
+      classId: map['class_id'],
+      className: map['class_name'],
+      email: map['email'],
+      urlImage: UrlImage.fromMap(map['url_image']),
+      indentifier: map['indentifier'],
+      capDaoTao: CapDaoTao.fromMap(map['cap_dao_tao']),
+      parentId: map['parent_id'],
+      parentName: map['parent_name'],
+      phoneNumber: map['phone_number'],
+    );
+  }
 }
 
 final List<PhoneBook> phoneBook = [

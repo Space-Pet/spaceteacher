@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -111,8 +112,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     try {
-      final userName = state.userName;
-      final password = state.password;
+      // [TEST] - clear before commit
+      final userName = kDebugMode ? '0563230001' : state.userName;
+      final password = kDebugMode ? 'ab6ujo' : state.password;
       final deviceInfo = state.deviceInfo;
 
       emit(state.copyWith(status: LoginStatus.loading));

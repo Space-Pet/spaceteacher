@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +15,7 @@ import 'package:teacher/screens/observation_schedule/mock_data/subject_mock.dart
 import 'package:teacher/screens/observation_schedule/screen/create_observation/create_observation_screen.dart';
 import 'package:teacher/screens/observation_schedule/screen/observation_detail/overvation_detail_screen.dart';
 import 'package:teacher/screens/observation_schedule/widgets/card_observation.dart';
-import 'package:teacher/screens/observation_schedule/widgets/filter_observation.dart';
+import 'package:teacher/screens/observation_schedule/widgets/filter_observation/filter_observation.dart';
 
 class ObservationSchedule extends StatelessWidget {
   const ObservationSchedule({super.key});
@@ -28,6 +30,7 @@ class ObservationSchedule extends StatelessWidget {
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         userKey: currentUserBloc.user_key,
         schoolId: currentUserBloc.school_id,
+        learnYear: currentUserBloc.learnYear,
       )..add(ObservationScheduleInit()),
       child: const ObservationScheduleView(),
     );
@@ -108,39 +111,59 @@ class _ObservationScheduleViewState extends State<ObservationScheduleView> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    showGeneralDialog(
-                                      context: context,
-                                      routeSettings: const RouteSettings(
-                                          name: FilterObservation.routeName),
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          const FilterObservation(),
+                                BlocBuilder<ObservationScheduleBloc,
+                                    ObservationScheduleState>(
+                                  builder: (context, state) {
+                                    return GestureDetector(
+                                      onTap: () async {
+                                        final args = await showGeneralDialog<
+                                            Map<String, dynamic>?>(
+                                          context: context,
+                                          routeSettings: const RouteSettings(
+                                              name:
+                                                  FilterObservation.routeName),
+                                          pageBuilder: (context, animation,
+                                                  secondaryAnimation) =>
+                                              const FilterObservation(),
+                                        );
+
+                                        if (args != null) {
+                                          log('args: $args');
+
+                                          context
+                                              .read<ObservationScheduleBloc>()
+                                              .add(
+                                                ObservationScheduleFetched(
+                                                  txtDate: args['date'],
+                                                  teacherId: args['teacherId'],
+                                                ),
+                                              );
+                                        }
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all(
+                                            color: AppColors.gray400,
+                                          ),
+                                        ),
+                                        child: Assets.icons.filter.svg(
+                                          colorFilter: const ColorFilter.mode(
+                                            AppColors.gray500,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ),
                                     );
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(
-                                        color: AppColors.gray400,
-                                      ),
-                                    ),
-                                    child: Assets.icons.filter.svg(
-                                      colorFilter: const ColorFilter.mode(
-                                        AppColors.gray500,
-                                        BlendMode.srcIn,
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               ],
                             ),
                           ),
                           const SizedBox(height: 20),
-                          // list of observation schedule
                           Row(
                             children: [
                               Text(
@@ -159,37 +182,44 @@ class _ObservationScheduleViewState extends State<ObservationScheduleView> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 10),
                           Expanded(
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              itemBuilder: (ctx, index) {
-                                final it = listMockSubjectData[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    context.push(
-                                      ObservationDetailScreen(
-                                        data: it,
-                                        typeObservation: it.typeObservation!,
-                                      ),
-                                    );
-                                  },
-                                  child: CardObservation(
-                                    isFirstIndex:
-                                        it.id == listMockSubjectData.first.id,
-                                    isLastIndex:
-                                        it.id == listMockSubjectData.last.id,
-                                    nameObservation: it.nameObservation ?? "",
-                                    time: it.time ?? "",
-                                    descriptionSubjectLesson:
-                                        it.descriptionSubjectLesson ?? "",
-                                    tietNum: '${it.subjectModel?.tietNum}',
-                                    teacherName:
-                                        it.subjectModel?.teacherName ?? "",
-                                    typeObservation: it.typeObservation ?? 0,
-                                  ),
-                                );
+                            child: BlocBuilder<ObservationScheduleBloc,
+                                ObservationScheduleState>(
+                              builder: (context, state) {
+                                return state.observationList.isEmpty
+                                    ? const Center()
+                                    : ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        itemBuilder: (ctx, index) {
+                                          final it =
+                                              state.observationList[index];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              context.push(
+                                                ObservationDetailScreen(
+                                                  data: it,
+                                                  // typeObservation: 1!,
+                                                ),
+                                              );
+                                            },
+                                            child: CardObservation(
+                                              isFirstIndex: index == 0,
+                                              isLastIndex: index ==
+                                                  state.observationList.length -
+                                                      1,
+                                              nameObservation: it.subjectName,
+                                              time: '',
+                                              descriptionSubjectLesson: "",
+                                              tietNum: it.lessonNum,
+                                              teacherName: it.teacherFullname,
+                                              typeObservation: 0,
+                                            ),
+                                          );
+                                        },
+                                        itemCount: listMockSubjectData.length,
+                                      );
                               },
-                              itemCount: listMockSubjectData.length,
                             ),
                           ),
                         ],

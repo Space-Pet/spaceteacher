@@ -4,8 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:teacher/utils/extension_context.dart';
 
 class SelectDate extends StatefulWidget {
-  const SelectDate(
-      {super.key, required this.onDateChanged, this.isHideIcon = false});
+  const SelectDate({
+    super.key,
+    required this.onDateChanged,
+    this.isHideIcon = false,
+  });
 
   final Function(DateTime date) onDateChanged;
   final bool isHideIcon;
@@ -117,8 +120,15 @@ class _SelectDateState extends State<SelectDate> {
 }
 
 class SelectField extends StatefulWidget {
-  const SelectField({required this.typeField, super.key});
+  const SelectField({
+    this.onChanged,
+    this.options = const [],
+    required this.typeField,
+    super.key,
+  });
   final int typeField;
+  final List<TeacherItem> options;
+  final Function(String value)? onChanged;
   @override
   State<SelectField> createState() => _SelectFieldState();
 }
@@ -181,14 +191,21 @@ class _SelectFieldState extends State<SelectField> {
           style: AppTextStyles.normal16(color: AppColors.gray500)),
       onChanged: (String? value) {
         setState(() {});
+        widget.onChanged != null && value != null && widget.onChanged!(value);
       },
-      items: <String>['Select Field', 'Field 1', 'Field 2', 'Field 3']
-          .map<DropdownMenuItem<String>>((String? value) {
+      items: widget.options.map<DropdownMenuItem<String>>((TeacherItem value) {
         return DropdownMenuItem<String>(
-          value: value ?? "",
-          child: Text(value ?? ""),
+          value: value.teacherId,
+          child: Text(value.teacherFullname ?? ''),
         );
       }).toList(),
+      // items: <String>['Select Field', 'Field 1', 'Field 2', 'Field 3']
+      //     .map<DropdownMenuItem<String>>((String? value) {
+      //   return DropdownMenuItem<String>(
+      //     value: value ?? "",
+      //     child: Text(value ?? ""),
+      //   );
+      // }).toList(),
     );
   }
 }

@@ -33,10 +33,10 @@ class AuthRepository {
     return AadOAuth(config);
   }
 
-  Future<TeacherLogin?> loginWith365() async {
+  Future<TeacherLoginModel?> loginWith365() async {
     String email = '';
     try {
-      final accessToken = await oauth.getAccessToken();
+      // final accessToken = await oauth.getAccessToken();
 
       // if (accessToken != null && accessToken.isNotEmpty) {
       //   final decodeRes = JwtUtils.decode(accessToken);
@@ -55,16 +55,28 @@ class AuthRepository {
       //   });
       // }
 
-      email = 'liemlv.baria@uka.edu.vn';
-      //email = 'vyntd@saigonacademy.com';
+      // email = 'liemlv.baria@uka.edu.vn';
+      // email = 'vyntd@saigonacademy.com';
+      email = 'elearning_1@nhg.vn';
 
       if (email.isEmpty) {
         return null;
       }
 
-      final loginInfo = await _authApi.staffLogin(email: email);
+      final teacherLogin = await _authApi.staffLogin(email: email);
 
-      return loginInfo;
+      return teacherLogin;
+    } catch (e) {
+      Log.e('$e', name: "Login Error AuthRepository -> loginWith365()");
+      rethrow;
+    }
+  }
+
+  Future<TeacherLoginModel?> loginWithSchool(int teacherId) async {
+    try {
+      final teacherLogin = await _authApi.staffSchoolLogin(teacherId);
+
+      return teacherLogin;
     } catch (e) {
       Log.e('$e', name: "Login Error AuthRepository -> loginWith365()");
       rethrow;

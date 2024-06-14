@@ -9,12 +9,14 @@ import 'package:teacher/screens/gallery/widget/gallery_create/gallery_create.dar
 import 'package:teacher/screens/home/home_screen.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
+import 'package:teacher/screens/notifications/create/noti_create_screen.dart';
 import 'package:teacher/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
 import 'package:teacher/screens/score/edit_score_screen.dart';
+import 'package:teacher/screens/score/views/class_score/class_score_screen.dart';
 import 'package:teacher/screens/splash/loading_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
 
@@ -123,10 +125,22 @@ class CustomRouter {
           routeName: NotiDetailScreen.routeName,
         );
 
+      case NotiCreateNew.routeName:
+        return transitionAnimation(
+          child: const NotiCreateNew(),
+          routeName: NotiCreateNew.routeName,
+        );
+
       case SurveyScreen.routeName:
         return transitionAnimation(
           child: const SurveyScreen(),
           routeName: SurveyScreen.routeName,
+        );
+
+      case ClassScoreScreen.routeName:
+        return transitionAnimation(
+          child: const ClassScoreScreen(),
+          routeName: ClassScoreScreen.routeName,
         );
 
       default:

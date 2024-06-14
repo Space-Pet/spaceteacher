@@ -3,17 +3,17 @@ part of 'noti_detail_bloc.dart';
 class NotiDetailState extends Equatable {
   const NotiDetailState({
     required this.notiDetail,
-    this.status = NotificationStatus.init,
+    this.status = NotificationStatus.loading,
   });
 
-  final NotificationItem notiDetail;
+  final SentNotiDetail notiDetail;
   final NotificationStatus status;
 
   @override
   List<Object?> get props => [notiDetail, status];
 
   NotiDetailState copyWith({
-    NotificationItem? notiDetail,
+    SentNotiDetail? notiDetail,
     NotificationStatus? status,
   }) {
     return NotiDetailState(

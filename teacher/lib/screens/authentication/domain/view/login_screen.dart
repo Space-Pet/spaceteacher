@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repository/repository.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
+import 'package:teacher/screens/authentication/domain/view/choose_school.dart';
 
 import '../../../../app_main_layout.dart';
 import '../../../../resources/assets.gen.dart';
@@ -61,6 +62,17 @@ class _LoginScreenState extends State<LoginScreen> {
           case LoginStatus.loading:
             LoadingDialog.show(context);
             break;
+          case LoginStatus.chooseSchool:
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              enableDrag: false,
+              isDismissible: false,
+              builder: (BuildContext context) =>
+                  TeacherChooseSchool(loginBloc: loginBloc),
+            );
+            break;
+
           default:
             // LoadingDialog.hide(context);
             break;

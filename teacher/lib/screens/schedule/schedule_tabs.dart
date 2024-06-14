@@ -2,7 +2,6 @@ import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 

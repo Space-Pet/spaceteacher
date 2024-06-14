@@ -98,11 +98,22 @@ class AppFetchApiRepository {
         orderBy: orderBy,
       );
 
-  Future<NotificationItem> getNotiDetail({
+  Future<NotificationData> getSentNoti({
+    required Map<String, Object> headers,
+    required String status,
+    required String orderBy,
+  }) =>
+      _appFetchApi.getSentNoti(
+        headers: headers,
+        status: status,
+        orderBy: orderBy,
+      );
+
+  Future<SentNotiDetail> getNotiDetailTeacher({
     required Map<String, Object> headers,
     required int id,
   }) =>
-      _appFetchApi.getNotiDetail(
+      _appFetchApi.getNotiDetailTeacher(
         headers: headers,
         id: id,
       );
@@ -191,6 +202,14 @@ class AppFetchApiRepository {
   Future<List<GalleryClass>> getListClass(String learnYear) =>
       _appFetchApi.getListClass(learnYear);
 
+  Future<List<NotiClass>> getListClassNoti(
+          {required String learnYear, required int teacherId}) =>
+      _appFetchApi.getListClassNoti(learnYear, teacherId);
+
+  Future<List<PupilInClass>> getPupilInClass(
+          {required Map<String, dynamic> headers, required int classId}) =>
+      _appFetchApi.getPupilInClass(headers, classId);
+
   Future<Map<String, dynamic>> createNewAlbum({
     required String learnYear,
     required int classId,
@@ -204,6 +223,29 @@ class AppFetchApiRepository {
       galleryName: galleryName,
       listFiles: listFiles,
       teacherId: teacherId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> createNewNoti({
+    required List<int> listPupilId,
+    required int classId,
+    required String type,
+    required String title,
+    required String content,
+    required String status,
+    required List<File> listFiles,
+    required Map<String, dynamic> headers,
+  }) async {
+    final data = await _appFetchApi.createNewNoti(
+      listPupilId: listPupilId,
+      classId: classId,
+      type: type,
+      title: title,
+      content: content,
+      status: status,
+      listFiles: listFiles,
+      headers: headers,
     );
     return data;
   }
@@ -665,7 +707,7 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<List<TeacherItem>> getTeacherListBySchool({
+  Future<Map<String, dynamic>> getTeacherListBySchool({
     required int schoolId,
   }) async {
     final response = await _appFetchApi.getTeacherListBySchool(
@@ -675,17 +717,71 @@ class AppFetchApiRepository {
     return response;
   }
 
-  Future<List<ObservationData>> getLessonRegister({
+  Future<Map<String, dynamic>> getLessonRegister({
     required String userKey,
-    required int schoolId,
     required String txtDate,
+    required int schoolId,
     int? teacherId,
   }) async {
     final response = await _appFetchApi.getLessonRegister(
       userKey: userKey,
-      schoolId: schoolId,
       txtDate: txtDate,
+      schoolId: schoolId,
       teacherId: teacherId,
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getTeacherListByTeacherId({
+    required int teacherId,
+  }) async {
+    final response = await _appFetchApi.getTeacherListByTeacherId(
+      teacherId: teacherId,
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getListSubject({
+    required int schoolId,
+  }) async {
+    final response = await _appFetchApi.getListSubject(
+      schoolId: schoolId,
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getListClassBySchoolId({
+    required int schoolId,
+    required String learnYear,
+  }) async {
+    final response = await _appFetchApi.getListClassBySchool(
+      schoolId: schoolId,
+      learnYear: learnYear,
+    );
+
+    return response;
+  }
+
+  Future<Map<String, dynamic>> postLessonRegister({
+    required String userKey,
+    required String txtDate,
+    required int schoolId,
+    required int teacherId,
+    required int tietNum,
+    required int classId,
+    required int subjectId,
+  }) async {
+    final response = await _appFetchApi.postLessonRegister(
+      userKey: userKey,
+      txtDate: txtDate,
+      schoolId: schoolId,
+      teacherId: teacherId,
+      tietNum: tietNum,
+      classId: classId,
+      subjectId: subjectId,
     );
 
     return response;

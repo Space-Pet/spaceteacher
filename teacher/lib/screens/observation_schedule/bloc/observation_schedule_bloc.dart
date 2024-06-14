@@ -14,15 +14,16 @@ class ObservationScheduleBloc
     required this.appFetchApiRepo,
     required this.userKey,
     required this.schoolId,
+    required this.learnYear,
   }) : super(const ObservationScheduleState()) {
     on<ObservationScheduleInit>(_onInit);
     on<ObservationScheduleFetched>(_onObservationScheduleFetch);
-    on<ListTeacherFetched>(_onListTeacherFetch);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
   final String userKey;
   final int schoolId;
+  final String learnYear;
 
   void _onInit(
     ObservationScheduleInit event,
@@ -48,35 +49,23 @@ class ObservationScheduleBloc
         schoolId: schoolId,
       );
 
-      log('ObservationScheduleBloc - Exception - ${response.toString()}');
+      final observationList = response['data']
+          .map<ObservationData>(
+            (e) => ObservationData.fromMap(e),
+          )
+          .toList();
 
       emit(
         state.copyWith(
           status: ObservationScheduleStatus.success,
-          observationList: response,
+          observationList: observationList,
         ),
       );
+
+      log('ObservationScheduleBloc - ${response.toString()}');
     } catch (e) {
       log('ObservationScheduleBloc - Exception - $e');
       emit(state.copyWith(status: ObservationScheduleStatus.error));
-    }
-  }
-
-  Future<void> _onListTeacherFetch(
-    ListTeacherFetched event,
-    Emitter<ObservationScheduleState> emit,
-  ) async {
-    try {
-      final listTeacher =
-          await appFetchApiRepo.getTeacherListBySchool(schoolId: schoolId);
-      emit(state.copyWith(listTeacher: listTeacher));
-    } catch (e) {
-      log('ObservationScheduleBloc - Exception - $e');
-      emit(
-        state.copyWith(
-          listTeacher: [],
-        ),
-      );
     }
   }
 }

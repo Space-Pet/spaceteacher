@@ -11,6 +11,8 @@ class ScoreState extends Equatable {
     this.scoreType = 'Điểm MOET',
     this.status = ScoreStatus.initial,
     this.conducStatus = ScoreStatus.initial,
+    this.classListStatus = ScoreStatus.initial,
+    this.listClass = const [],
   });
 
   final ScoreModel moetScore;
@@ -26,6 +28,9 @@ class ScoreState extends Equatable {
   final ScoreStatus status;
   final ScoreStatus conducStatus;
 
+  final ScoreStatus classListStatus;
+  final List<ClassTeacher> listClass;
+
   @override
   List<Object?> get props => [
         scoreType,
@@ -37,6 +42,8 @@ class ScoreState extends Equatable {
         scoreType,
         status,
         conducStatus,
+        classListStatus,
+        listClass,
       ];
 
   static String _calculateYearRange() {
@@ -57,6 +64,8 @@ class ScoreState extends Equatable {
     String? scoreType,
     ScoreStatus? status,
     ScoreStatus? conducStatus,
+    ScoreStatus? classListStatus,
+    List<ClassTeacher>? listClass,
   }) {
     return ScoreState(
       scoreType: scoreType ?? this.scoreType,
@@ -68,6 +77,8 @@ class ScoreState extends Equatable {
       txtLearnYear: txtLearnYear ?? this.txtLearnYear,
       status: status ?? this.status,
       conducStatus: conducStatus ?? this.conducStatus,
+      classListStatus: classListStatus ?? this.classListStatus,
+      listClass: listClass ?? this.listClass,
     );
   }
 }

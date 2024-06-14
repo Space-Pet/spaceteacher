@@ -822,7 +822,7 @@ class AppFetchApi extends AbstractAppFetchApi {
 
   Future<SchoolFeePaymentPreview> getSchoolFeePaymentPreview({
     required int pupilId,
-    required int totalMoneyPayment,
+    required num totalMoneyPayment,
   }) async {
     try {
       final data = await _authRestClient

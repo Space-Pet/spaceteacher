@@ -1,12 +1,9 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
-import 'package:teacher/components/dropdown/dropdown.dart';
-import 'package:teacher/components/textfield/input_text.dart';
+import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/screens/phone_book/bloc/phone_book_bloc.dart';
 import 'package:teacher/screens/phone_book/model/list_phone_book.dart';
 import 'package:teacher/screens/phone_book/widget/phone_book_bottom_sheet.dart';
@@ -21,9 +18,11 @@ class PhoneBookScreen extends StatelessWidget {
     final userRepository = context.read<UserRepository>();
     final appFetchApiRepository = context.read<AppFetchApiRepository>();
     final phoneBookBloc = PhoneBookBloc(
-        appFetchApiRepo: appFetchApiRepository,
-        currentUserBloc: context.read<CurrentUserBloc>(),
-        userRepository: userRepository);
+      appFetchApiRepo: appFetchApiRepository,
+      appFetchApiRepository: appFetchApiRepository,
+      currentUserBloc: context.read<CurrentUserBloc>(),
+      userRepository: userRepository,
+    );
     phoneBookBloc.add(GetPhoneBookStudent());
     phoneBookBloc.add(GetPhoneBookTeacher());
     return BlocProvider.value(
@@ -51,8 +50,6 @@ class _PhoneBookViewState extends State<PhoneBookView> {
     super.initState();
   }
 
-  
-
   void onParentTap(value) {
     ShowBottomSheetPhone.show(
       context,
@@ -78,7 +75,6 @@ class _PhoneBookViewState extends State<PhoneBookView> {
       final isLoading = state.phoneBookStatus == PhoneBookStatus.loading;
       // final phoneBookStudent = state.phoneBookStudent;
       // final phoneBookTeacher = state.phoneBookParent;
-      final phoneBookStudent = mockPhoneBookStudent;
       final phoneBookParent = mockPhoneBookStudent;
       return GestureDetector(
         onTap: () {
@@ -87,7 +83,20 @@ class _PhoneBookViewState extends State<PhoneBookView> {
         child: BackGroundContainer(
           child: Column(
             children: [
-              const PhoneBookAppBar(),
+              BlocBuilder<PhoneBookBloc, PhoneBookState>(
+                builder: (context, state) {
+                  return PhoneBookAppBar(
+                    isLoading:
+                        state.classTeacherStatus == ApiCallStatus.loading,
+                    optionList:
+                        state.classTeacher.map((e) => e.className).toList(),
+                    selectedOption: state.classTeacher.isEmpty
+                        ? ''
+                        : state.classTeacher[0].className,
+                    onUpdateOption: (value) {},
+                  );
+                },
+              ),
               Flexible(
                 child: Container(
                   width: double.infinity,
@@ -108,13 +117,28 @@ class _PhoneBookViewState extends State<PhoneBookView> {
                   ),
                   child: Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: TitleAndInputText(
+                          hintText: 'Tìm kiếm',
+                          onChanged: (value) {
+                            setState(() {
+                              _searchKey = value;
+                            });
+                          },
+                          prefixIcon: Assets.images.search.image(),
+                        ),
+                      ),
                       Flexible(
                         child: AppSkeleton(
                           isLoading: isLoading,
                           child: TabBarPhoneBook(
                             currentUserBloc: context.read<CurrentUserBloc>(),
-                            phoneBookTeacher: phoneBookTeacher,
-                            phoneBookStudent: phoneBookStudent,
+                            phoneBookStudent: state.phoneBookStudent,
+                            phoneBookTeacher: state.phoneBookTeacher,
+                            phoneBookParent: state.phoneBookParent,
+                            onParentTap: onParentTap,
+                            onStudentTap: onStudentTap,
                           ),
                         ),
                       ),
@@ -133,84 +157,101 @@ class _PhoneBookViewState extends State<PhoneBookView> {
 class PhoneBookAppBar extends StatelessWidget {
   const PhoneBookAppBar({
     super.key,
-    // required this.optionList,
-    // required this.selectedOption,
-    // required this.onUpdateOption,
+    this.isLoading = true,
+    required this.optionList,
+    required this.selectedOption,
+    required this.onUpdateOption,
   });
 
-  // final List<String> optionList;
-  // final String selectedOption;
-  // final void Function(String value) onUpdateOption;
+  final bool isLoading;
+  final List<String> optionList;
+  final String selectedOption;
+  final void Function(String value) onUpdateOption;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Expanded(
           child: ScreenAppBar(
-            title: 'Thời khóa biểu',
+            title: 'Danh bạ',
           ),
         ),
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    contentPadding: EdgeInsets.zero,
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: AppColors.white,
-                    title: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: AppColors.gray100,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Lớp học',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (int i = 1; i <= 3; i++)
-                          ListTile(
-                            title: Text(
-                              'Lớp $i (22)',
-                            ),
-                            trailing: Radio(
-                              value: i,
-                              groupValue: 1,
-                              onChanged: (_) {},
+        isLoading
+            ? const SizedBox()
+            : GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        contentPadding: EdgeInsets.zero,
+                        titlePadding: EdgeInsets.zero,
+                        backgroundColor: AppColors.white,
+                        title: Container(
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            color: AppColors.gray100,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
                             ),
                           ),
-                      ],
-                    ));
-              },
-            );
-          },
-          child: Container(
-            margin: const EdgeInsets.only(
-              right: 16,
-              top: 24,
-            ),
-            child: const Icon(
-              Icons.keyboard_arrow_down,
-              size: 24,
-              color: AppColors.white,
-            ),
-          ),
-        )
+                          child: const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Lớp học',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (int i = 1; i <= optionList.length; i++)
+                              ListTile(
+                                title: Text(
+                                  optionList[i - 1],
+                                ),
+                                trailing: Radio(
+                                  value: i,
+                                  groupValue: 1,
+                                  onChanged: (_) {},
+                                ),
+                              ),
+                            // for (int i = 1; i <= 3; i++)
+                            //   ListTile(
+                            //     title: Text(
+                            //       'Lớp $i (22)',
+                            //     ),
+                            //     trailing: Radio(
+                            //       value: i,
+                            //       groupValue: 1,
+                            //       onChanged: (_) {},
+                            //     ),
+                            //   ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    right: 16,
+                    top: 24,
+                  ),
+                  child: const Icon(
+                    Icons.keyboard_arrow_down,
+                    size: 24,
+                    color: AppColors.white,
+                  ),
+                ),
+              )
       ],
     );
   }

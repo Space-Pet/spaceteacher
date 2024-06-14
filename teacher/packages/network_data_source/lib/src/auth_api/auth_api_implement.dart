@@ -16,7 +16,7 @@ class AuthApi extends AbstractAuthApi {
 
   final AbstractDioClient _client;
 
-  Future<TeacherLogin> staffLogin({required String email}) async {
+  Future<TeacherLoginModel> staffLogin({required String email}) async {
     try {
       final data = await _client.doHttpPost(
         url: ApiPath.loginStaff,
@@ -29,10 +29,33 @@ class AuthApi extends AbstractAuthApi {
       final loginInfo = LoginInfo.fromMap(dataToken);
       _client.updateAccessToken(loginInfo.access_token);
 
-      final dataUser = data['data']['info'] as Map<String, dynamic>;
-      final teacherInfo = TeacherLogin.fromMap(dataUser);
+      final teacherData = data['data'] as Map<String, dynamic>;
+      final teacherLogin = TeacherLoginModel.fromMap(teacherData);
 
-      return teacherInfo;
+      return teacherLogin;
+    } catch (e) {
+      Log.e('error: $e');
+      rethrow;
+    }
+  }
+
+  Future<TeacherLoginModel> staffSchoolLogin(int teacherId) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: ApiPath.loginStaffWithSchool,
+        requestBody: {
+          'teacher_id': teacherId,
+          'login_app': 0,
+        },
+      );
+      final dataToken = data['data'] as Map<String, dynamic>;
+      final loginInfo = LoginInfo.fromMap(dataToken);
+      _client.updateAccessToken(loginInfo.access_token);
+
+      final teacherData = data['data'] as Map<String, dynamic>;
+      final teacherLogin = TeacherLoginModel.fromMap(teacherData);
+
+      return teacherLogin;
     } catch (e) {
       Log.e('error: $e');
       rethrow;

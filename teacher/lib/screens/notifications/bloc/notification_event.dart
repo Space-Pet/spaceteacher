@@ -12,6 +12,16 @@ class NotificationFetchData extends NotificationEvent {
   final NotificationOrderBy orderBy;
 }
 
+class NotificationFetchSentNoti extends NotificationEvent {
+  NotificationFetchSentNoti({
+    this.status = SentNotiStatus.active,
+    this.orderBy = NotificationOrderBy.desc,
+  });
+
+  final SentNotiStatus status;
+  final NotificationOrderBy orderBy;
+}
+
 class NotificationChageViewMode extends NotificationEvent {
   NotificationChageViewMode({
     this.viewed = ViewMode.all,

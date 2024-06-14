@@ -1,23 +1,23 @@
 import 'dart:convert';
 
 class TeacherItem {
-  final String teacherId;
-  final String teacherUserKey;
-  final String teacherFullname;
+  final String? teacherId;
+  final String? teacherUserKey;
+  final String? teacherFullname;
   final String? teacherImg;
-  final String teacherMainSubjectId;
-  final String teacherMainSubjectName;
-  final String teacherEmail;
-  final String teacherMobile;
+  final String? teacherMainSubjectId;
+  final String? teacherMainSubjectName;
+  final String? teacherEmail;
+  final String? teacherMobile;
   TeacherItem({
-    required this.teacherId,
-    required this.teacherUserKey,
-    required this.teacherFullname,
+    this.teacherId,
+    this.teacherUserKey,
+    this.teacherFullname,
     this.teacherImg,
-    required this.teacherMainSubjectName,
-    required this.teacherMainSubjectId,
-    required this.teacherEmail,
-    required this.teacherMobile,
+    this.teacherMainSubjectName,
+    this.teacherMainSubjectId,
+    this.teacherEmail,
+    this.teacherMobile,
   });
 
   TeacherItem copyWith({
@@ -58,14 +58,14 @@ class TeacherItem {
 
   factory TeacherItem.fromMap(Map<String, dynamic> map) {
     return TeacherItem(
-      teacherId: map['teacher_id'] as String,
-      teacherUserKey: map['teacher_user_key'] as String,
-      teacherFullname: map['teacher_fullname'] as String,
+      teacherId: map['teacher_id'] as String?,
+      teacherUserKey: map['teacher_user_key'] as String?,
+      teacherFullname: map['teacher_fullname'] as String?,
       teacherImg: map['teacher_img'] as String?,
-      teacherMainSubjectId: map['teacher_main_subject_id'] as String,
-      teacherMainSubjectName: map['teacher_main_subject_name'] as String,
-      teacherEmail: map['teacher_email'] as String,
-      teacherMobile: map['teacher_mobile'] as String,
+      teacherMainSubjectId: map['teacher_main_subject_id'] as String?,
+      teacherMainSubjectName: map['teacher_main_subject_name'] as String?,
+      teacherEmail: map['teacher_email'] as String?,
+      teacherMobile: map['teacher_mobile'] as String?,
     );
   }
 

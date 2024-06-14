@@ -63,3 +63,11 @@ class LoginDomainSave extends LoginEvent {
 }
 
 class LoginWith365 extends LoginEvent {}
+
+class LoginWithSchool extends LoginEvent {
+  final int teacherId;
+
+  const LoginWithSchool({
+    required this.teacherId,
+  });
+}

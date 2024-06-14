@@ -7,4 +7,9 @@ abstract class PhoneBookEvent extends Equatable {
 }
 
 class GetPhoneBookStudent extends PhoneBookEvent {}
+
+class GetPhoneBookParent extends PhoneBookEvent {}
+
 class GetPhoneBookTeacher extends PhoneBookEvent {}
+
+class GetListClass extends PhoneBookEvent {}

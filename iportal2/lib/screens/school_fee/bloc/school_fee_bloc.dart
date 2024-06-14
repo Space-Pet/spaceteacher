@@ -122,6 +122,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     }
   }
 
+  /// chọn gateway
   Future<void> _openPaymentGateway(
       OpenPaymentGateway event, Emitter<SchoolFeeState> emit) async {
     try {
@@ -142,7 +143,8 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       ));
     }
   }
-
+  
+  /// cấn trừ
   Future<void> _onGetPreviewSchoolFeeClearingDebt(
       GetSchoolFeeClearingDebtPreview event,
       Emitter<SchoolFeeState> emit) async {

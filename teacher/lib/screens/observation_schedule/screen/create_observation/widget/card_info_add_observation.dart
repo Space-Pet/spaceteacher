@@ -39,7 +39,7 @@ class CardInfoAddObservation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    teacherInfo.teacherFullname,
+                    teacherInfo.teacherFullname ?? '',
                     style: const TextStyle(
                         color: AppColors.blueForgorPassword,
                         fontWeight: FontWeight.bold),

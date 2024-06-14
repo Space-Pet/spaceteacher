@@ -28,15 +28,17 @@ class CardObservation extends StatelessWidget {
       alignment: Alignment.topCenter,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.gray100,
-        borderRadius: isFirstIndex == true
-            ? const BorderRadius.only(topRight: Radius.circular(20))
-            : isLastIndex == true
-                ? const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20))
-                : null,
-      ),
+          color: AppColors.gray100,
+          // borderRadius: isFirstIndex == true
+          //     ? const BorderRadius.only(topRight: Radius.circular(20))
+          //     : isLastIndex == true
+          //         ?
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          )
+          // : null,
+          ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
