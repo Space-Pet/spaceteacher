@@ -17,7 +17,9 @@ class SchoolFeeScreen extends StatelessWidget {
       create: (context) => SchoolFeeBloc(
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
-      ),
+      )
+        ..add(const FetchSchoolFee())
+        ..add(const FetchSchoolFeeHistory()),
       child: Scaffold(
         body: BackGroundContainer(
           child: Column(

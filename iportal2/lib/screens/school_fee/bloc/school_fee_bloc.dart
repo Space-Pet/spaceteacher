@@ -22,10 +22,11 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     add(const GetPaymentGateways());
 
     on<OpenPaymentGateway>(_openPaymentGateway);
-    on<GetSchoolFeeClearingDebtPreview>(
-      _onGetPreviewSchoolFeeClearingDebt,
+    on<GetSchoolFeePayWithBalancePreview>(
+      _onGetPreviewSchoolFeePayWithBalance,
     );
-    on<PaymentClearingDebt>(_onPaymentClearingDebt);
+    on<PayWithBalance>(_onPayWithBalance);
+    on<UpdateStatusSchoolFeeEvent>(_onUpdateStatusSchoolFeeEvent);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -41,13 +42,17 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: result.totalThanhTien ?? 0,
       );
-      emit(state.copyWith(
-          schoolFeeStatus: SchoolFeeStatus.loaded,
-          schoolFee: result,
-          schoolFeePaymentPreview: schoolPreview));
+      emit(
+        state.copyWith(
+            schoolFeeStatus: SchoolFeeStatus.loaded,
+            schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
+            schoolFee: result,
+            schoolFeePaymentPreview: schoolPreview),
+      );
     } catch (e) {
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.error,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         error: e.toString(),
       ));
     }
@@ -65,38 +70,18 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
 
       emit(state.copyWith(
         schoolFeeHistoryStatus: SchoolFeeHistoryStatus.loaded,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         historySchoolFee: res,
       ));
     } catch (e) {
       Log.e(e.toString());
       emit(state.copyWith(
         schoolFeeHistoryStatus: SchoolFeeHistoryStatus.error,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         error: e.toString(),
       ));
     }
   }
-
-  // Future<void> _onGetSchoolFeePaymentPreview(
-  //     GetSchoolFeePaymentPreview event, Emitter<SchoolFeeState> emit) async {
-  //   emit(state.copyWith(schoolFeeStatus: SchoolFeeStatus.loading));
-
-  //   try {
-  //     final res = await appFetchApiRepo.getSchoolFeePaymentPreview(
-  //       pupilId: currentUserBloc.state.activeChild.pupil_id,
-  //       totalMoneyPayment: event.totalMoneyPayment,
-  //     );
-
-  //     emit(state.copyWith(
-  //       schoolFeeStatus: SchoolFeeStatus.loaded,
-  //       schoolFeePaymentPreview: res,
-  //     ));
-  //   } catch (e) {
-  //     emit(state.copyWith(
-  //       schoolFeeStatus: SchoolFeeStatus.error,
-  //       error: e.toString(),
-  //     ));
-  //   }
-  // }
 
   Future<void> _onGetPaymentGateways(
       GetPaymentGateways event, Emitter<SchoolFeeState> emit) async {
@@ -134,29 +119,31 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       );
       emit(state.copyWith(
         paymentStatus: PaymentStatus.loaded,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         gateway: res,
       ));
     } catch (e) {
       emit(state.copyWith(
         schoolFeeStatus: SchoolFeeStatus.error,
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         error: e.toString(),
       ));
     }
   }
-  
+
   /// cấn trừ
-  Future<void> _onGetPreviewSchoolFeeClearingDebt(
-      GetSchoolFeeClearingDebtPreview event,
+  Future<void> _onGetPreviewSchoolFeePayWithBalance(
+      GetSchoolFeePayWithBalancePreview event,
       Emitter<SchoolFeeState> emit) async {
     try {
-      final resPreview = await appFetchApiRepo.getPreviewSchoolFeeClearingDebt(
+      final resPreview = await appFetchApiRepo.getPreviewSchooWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
       );
       Log.d('result: ${resPreview.hinhThucThanhToan}');
       emit(state.copyWith(
         schoolFeePreviewStatus: SchoolFeePreviewStatus.loaded,
-        schoolFeePaymentClearingDebtPreview: resPreview,
+        schoolFeePayWithBalancePreview: resPreview,
       ));
     } catch (e) {
       Log.e(e.toString());
@@ -167,17 +154,17 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     }
   }
 
-  Future<void> _onPaymentClearingDebt(
-      PaymentClearingDebt event, Emitter<SchoolFeeState> emit) async {
+  Future<void> _onPayWithBalance(
+      PayWithBalance event, Emitter<SchoolFeeState> emit) async {
     try {
-      final res = await appFetchApiRepo.paymentClearingDebt(
+      final res = await appFetchApiRepo.payWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
       );
 
       emit(state.copyWith(
         paymentStatus: PaymentStatus.loaded,
-        isClearingDebt: res,
+        isPayWithBalance: res,
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -185,5 +172,15 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
         error: e.toString(),
       ));
     }
+  }
+
+  Future<void> _onUpdateStatusSchoolFeeEvent(
+      UpdateStatusSchoolFeeEvent event, Emitter<SchoolFeeState> emit) async {
+    emit(state.copyWith(
+      schoolFeeHistoryStatus: event.schoolFeeHistoryStatus,
+      schoolFeeStatus: event.schoolFeeStatus,
+      paymentStatus: event.paymentStatus,
+      schoolFeePreviewStatus: event.schoolFeePreviewStatus,
+    ));
   }
 }

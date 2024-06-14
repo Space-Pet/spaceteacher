@@ -4,6 +4,7 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
+import 'package:iportal2/screens/school_fee/widget/dialog_noti/school_fee_payment_dialog_noti.dart';
 import 'package:iportal2/screens/school_fee/widget/method_payment/method_payment_screen.dart';
 import 'package:repository/repository.dart';
 
@@ -12,13 +13,13 @@ class SchoolFeePaymentScreen extends StatefulWidget {
   const SchoolFeePaymentScreen({
     required this.schoolFeePaymentPreview,
     required this.paymentGateways,
-    this.isClearingDebt,
+    this.isPayWithBalance,
     super.key,
   });
 
   final SchoolFeePaymentPreview schoolFeePaymentPreview;
   final List<PaymentGateway> paymentGateways;
-  final bool? isClearingDebt;
+  final bool? isPayWithBalance;
 
   @override
   State<SchoolFeePaymentScreen> createState() => _SchoolFeePaymentScreenState();
@@ -39,13 +40,18 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
       child: BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
         listener: (context, state) {
           if (state.paymentStatus == PaymentStatus.loaded &&
-              state.isClearingDebt == true) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Thanh toán thành công"),
-              ),
+              state.isPayWithBalance == true) {
+            showDialog(
+              context: context,
+              builder: (ctx) => SchoolFeePaymentDialogNoti(
+                  isSuccess: state.isPayWithBalance ?? false),
+            ).then(
+              (resDialog) {
+                if (resDialog != null && resDialog == true) {
+                  context.pop(true);
+                }
+              },
             );
-            context.pop(true);
           }
         },
         builder: (context, state) {
@@ -215,13 +221,13 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            widget.isClearingDebt == false
+            widget.isPayWithBalance == false
                 ? "Chọn số tiền cần thanh toán"
                 : "${widget.schoolFeePaymentPreview.hinhThucThanhToan}",
             style: AppTextStyles.bold14(),
           ),
           const SizedBox(height: 10),
-          if (widget.isClearingDebt == false)
+          if (widget.isPayWithBalance == false)
             Row(
               children: [
                 _buildPaymentButton(
@@ -364,6 +370,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     );
   }
 
+  // Xác thực số tiền thanh toán
   String? _validatePayment(String? value) {
     if (value == null || value.isEmpty) {
       return 'Vui lòng nhập số tiền';
@@ -375,10 +382,11 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     return null;
   }
 
+  // Thanh toán dựa trên điều kiện thanh toán bằng số dư hiện tại hoặc các phương thức thanh toán khác.
   void _handlePayment(BuildContext context) {
-    if (widget.isClearingDebt == true) {
+    if (widget.isPayWithBalance == true) {
       context.read<SchoolFeeBloc>().add(
-            PaymentClearingDebt(
+            PayWithBalance(
                 totalMoneyPayment:
                     widget.schoolFeePaymentPreview.tongThanhToan ?? 0),
           );
@@ -396,6 +404,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     }
   }
 
+  // Hiển thị màn hình phương thức thanh toán dưới dạng bottom sheet
   void _showMethodPaymentScreen(BuildContext context, int totalMoneyPayment) {
     showModalBottomSheet(
       context: context,

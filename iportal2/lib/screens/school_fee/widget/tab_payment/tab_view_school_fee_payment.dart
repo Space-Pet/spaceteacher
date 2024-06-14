@@ -17,8 +17,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
     with SingleTickerProviderStateMixin {
   List<bool> isShowDetailList = [];
 
-  double totalThanhTien = 0;
-  bool isClearingDebt = false;
+  bool isPayWithBalance = false;
 
   @override
   void initState() {
@@ -28,18 +27,33 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SchoolFeeBloc>.value(
-      value: context.read<SchoolFeeBloc>()..add(const FetchSchoolFee()),
+      value: context.read<SchoolFeeBloc>(),
       child: BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
         listener: (context, state) {
           if (state.schoolFeePreviewStatus == SchoolFeePreviewStatus.loaded) {
-            context.push(
+            context.read<SchoolFeeBloc>().add(
+                  UpdateStatusSchoolFeeEvent(
+                    schoolFeeHistoryStatus: state.schoolFeeHistoryStatus,
+                    paymentStatus: state.paymentStatus,
+                    schoolFeeStatus: state.schoolFeeStatus,
+                    schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
+                  ),
+                );
+            context
+                .push(
               SchoolFeePaymentScreen(
-                schoolFeePaymentPreview:
-                    state.schoolFeePaymentClearingDebtPreview ??
-                        SchoolFeePaymentPreview(),
+                schoolFeePaymentPreview: state.schoolFeePayWithBalancePreview ??
+                    SchoolFeePaymentPreview(),
                 paymentGateways: state.paymentGateways ?? [],
-                isClearingDebt: isClearingDebt,
+                isPayWithBalance: isPayWithBalance,
               ),
+            )
+                .then(
+              (value) {
+                if (value == true) {
+                  context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
+                }
+              },
             );
           }
           if (state.schoolFeeStatus == SchoolFeeStatus.loaded) {
@@ -47,7 +61,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
               state.schoolFee?.schoolFeeItems?.length ?? 0,
               (index) => false,
             );
-            isClearingDebt = false;
+            isPayWithBalance = false;
           }
         },
         builder: (context, state) {
@@ -112,10 +126,13 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                   ),
                 ],
               ),
-              if (state.schoolFee?.totalCanTru != "0")
+
+              // Kiểm tra totalCanTru không phải là null và khác 0 thì hiển thị nút cấn trừ.
+              if (!isNullOrEmpty(state.schoolFee?.totalCanTru) &&
+                  int.tryParse(state.schoolFee?.totalCanTru ?? "0") != 0)
                 ElevatedButton(
                   onPressed: () {
-                    _clearingDebt(
+                    _payWithBalance(
                       state.schoolFee ?? SchoolFee(),
                       context,
                     );
@@ -144,7 +161,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                 style: AppTextStyles.normal14(fontWeight: FontWeight.w400),
               ),
               Text(
-                "${NumberFormatUtils.displayMoney(isClearingDebt == true ? totalThanhTien : NumberFormatUtils.parseDouble("${state.schoolFee?.totalChuaNop ?? 0}"))}",
+                "${NumberFormatUtils.displayMoney(state.schoolFee?.totalChuaNop?.toDouble())}",
                 style: AppTextStyles.bold14(),
               ),
             ],
@@ -159,13 +176,13 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                     state.schoolFeePaymentPreview ?? SchoolFeePaymentPreview(),
                 paymentGateways: state.paymentGateways ?? [],
                 // amountToBePaid: int.parse('${totalThanhTien.round()}'),
-                isClearingDebt: isClearingDebt,
+                isPayWithBalance: isPayWithBalance,
               ),
             )
                 .then((res) {
               if (res == true) {
                 context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
-                isClearingDebt = false;
+                isPayWithBalance = false;
               }
             });
           },
@@ -179,20 +196,13 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
     );
   }
 
-  void _clearingDebt(SchoolFee schoolFee, BuildContext context) {
+  // Thanh toán cấn trừ.
+  void _payWithBalance(SchoolFee schoolFee, BuildContext context) {
     setState(() {
-      final totalCanTruDouble = double.parse(schoolFee.totalCanTru ?? "0");
-      final totalChuaNop = schoolFee.totalChuaNop ?? 0.0;
-
-      if (totalChuaNop <= totalCanTruDouble) {
-        totalThanhTien = totalChuaNop.toDouble();
-      } else {
-        totalThanhTien = totalChuaNop - totalCanTruDouble;
-      }
-      isClearingDebt = true;
+      isPayWithBalance = true;
+      context.read<SchoolFeeBloc>().add(GetSchoolFeePayWithBalancePreview(
+            totalMoneyPayment: int.parse('${schoolFee.totalCanTru}'),
+          ));
     });
-    context.read<SchoolFeeBloc>().add(GetSchoolFeeClearingDebtPreview(
-          totalMoneyPayment: int.parse('${totalThanhTien.round()}'),
-        ));
   }
 }

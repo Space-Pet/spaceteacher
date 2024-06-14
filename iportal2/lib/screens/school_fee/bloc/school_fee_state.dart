@@ -37,12 +37,12 @@ class SchoolFeeState extends Equatable {
     this.schoolFee,
     this.historySchoolFee,
     this.schoolFeePaymentPreview,
-    this.schoolFeePaymentClearingDebtPreview,
+    this.schoolFeePayWithBalancePreview,
     this.paymentGateways,
     this.gateway,
     this.isLoading = false,
     this.error,
-    this.isClearingDebt = false,
+    this.isPayWithBalance = false,
   });
   final SchoolFeeStatus schoolFeeStatus;
   final SchoolFeeHistoryStatus schoolFeeHistoryStatus;
@@ -51,12 +51,12 @@ class SchoolFeeState extends Equatable {
   final SchoolFee? schoolFee;
   final HistorySchoolFee? historySchoolFee;
   final SchoolFeePaymentPreview? schoolFeePaymentPreview;
-  final SchoolFeePaymentPreview? schoolFeePaymentClearingDebtPreview;
+  final SchoolFeePaymentPreview? schoolFeePayWithBalancePreview;
   final List<PaymentGateway>? paymentGateways;
   final Gateway? gateway;
   final bool isLoading;
   final String? error;
-  final bool? isClearingDebt;
+  final bool? isPayWithBalance;
 
   @override
   List<Object?> get props => [
@@ -67,12 +67,12 @@ class SchoolFeeState extends Equatable {
         schoolFee,
         historySchoolFee,
         schoolFeePaymentPreview,
-        schoolFeePaymentClearingDebtPreview,
+        schoolFeePayWithBalancePreview,
         paymentGateways,
         gateway,
         isLoading,
         error,
-        isClearingDebt,
+        isPayWithBalance,
       ];
 
   SchoolFeeState copyWith({
@@ -83,12 +83,12 @@ class SchoolFeeState extends Equatable {
     SchoolFee? schoolFee,
     HistorySchoolFee? historySchoolFee,
     SchoolFeePaymentPreview? schoolFeePaymentPreview,
-    SchoolFeePaymentPreview? schoolFeePaymentClearingDebtPreview,
+    SchoolFeePaymentPreview? schoolFeePayWithBalancePreview,
     List<PaymentGateway>? paymentGateways,
     Gateway? gateway,
     bool? isLoading,
     String? error,
-    bool? isClearingDebt,
+    bool? isPayWithBalance,
   }) {
     return SchoolFeeState(
       schoolFeeStatus: schoolFeeStatus ?? this.schoolFeeStatus,
@@ -101,14 +101,13 @@ class SchoolFeeState extends Equatable {
       historySchoolFee: historySchoolFee ?? this.historySchoolFee,
       schoolFeePaymentPreview:
           schoolFeePaymentPreview ?? this.schoolFeePaymentPreview,
-      schoolFeePaymentClearingDebtPreview:
-          schoolFeePaymentClearingDebtPreview ??
-              this.schoolFeePaymentClearingDebtPreview,
+      schoolFeePayWithBalancePreview:
+          schoolFeePayWithBalancePreview ?? this.schoolFeePayWithBalancePreview,
       paymentGateways: paymentGateways ?? this.paymentGateways,
       gateway: gateway ?? this.gateway,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
-      isClearingDebt: isClearingDebt ?? this.isClearingDebt,
+      isPayWithBalance: isPayWithBalance ?? this.isPayWithBalance,
     );
   }
 }
