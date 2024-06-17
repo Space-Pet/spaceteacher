@@ -533,4 +533,7 @@ class AppFetchApiRepository {
           pupilId: pupilId,
           totalMoneyPayment: totalMoneyPayment,
           learnYear: learnYear);
+
+  Future<List<LearnYear>> getLearnYears({required int number}) async =>
+      await _appFetchApi.getLearnYears(number: number);
 }

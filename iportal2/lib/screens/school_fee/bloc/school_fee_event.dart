@@ -5,20 +5,24 @@ abstract class SchoolFeeEvent extends Equatable {
 }
 
 class FetchSchoolFee extends SchoolFeeEvent {
-  const FetchSchoolFee();
+  const FetchSchoolFee({this.learnYear});
+  final String? learnYear;
   @override
   List<Object> get props => [];
 }
 
 class FetchSchoolFeeHistory extends SchoolFeeEvent {
-  const FetchSchoolFeeHistory();
+  const FetchSchoolFeeHistory({this.learnYear});
+  final String? learnYear;
   @override
   List<Object> get props => [];
 }
 
 class GetSchoolFeePaymentPreview extends SchoolFeeEvent {
   final int totalMoneyPayment;
-  const GetSchoolFeePaymentPreview({required this.totalMoneyPayment});
+  final String? learnYear;
+  const GetSchoolFeePaymentPreview(
+      {required this.totalMoneyPayment, this.learnYear});
   @override
   List<Object> get props => [totalMoneyPayment];
 }
@@ -32,22 +36,28 @@ class GetPaymentGateways extends SchoolFeeEvent {
 class OpenPaymentGateway extends SchoolFeeEvent {
   final int paymentId;
   final int totalMoneyPayment;
+  final String? learnYear;
   const OpenPaymentGateway(
-      {required this.paymentId, required this.totalMoneyPayment});
+      {required this.paymentId,
+      required this.totalMoneyPayment,
+      this.learnYear});
   @override
   List<Object> get props => [paymentId, totalMoneyPayment];
 }
 
 class GetSchoolFeePayWithBalancePreview extends SchoolFeeEvent {
-  const GetSchoolFeePayWithBalancePreview({required this.totalMoneyPayment});
+  const GetSchoolFeePayWithBalancePreview(
+      {required this.totalMoneyPayment, this.learnYear});
   final int totalMoneyPayment;
+  final String? learnYear;
   @override
   List<Object> get props => [totalMoneyPayment];
 }
 
 class PayWithBalance extends SchoolFeeEvent {
-  const PayWithBalance({required this.totalMoneyPayment});
+  const PayWithBalance({required this.totalMoneyPayment, this.learnYear});
   final int totalMoneyPayment;
+  final String? learnYear;
   @override
   List<Object> get props => [totalMoneyPayment];
 }
@@ -74,4 +84,20 @@ class UpdateTabIndexEvent extends SchoolFeeEvent {
 
   @override
   List<Object> get props => [tabIndex];
+}
+
+class GetLearnYears extends SchoolFeeEvent {
+  final int number;
+  const GetLearnYears({required this.number});
+  @override
+  List<Object> get props => [number];
+}
+
+class UpdateCurrentYearEvent extends SchoolFeeEvent {
+  final LearnYear currentYear;
+
+  const UpdateCurrentYearEvent(this.currentYear);
+
+  @override
+  List<Object> get props => [currentYear];
 }

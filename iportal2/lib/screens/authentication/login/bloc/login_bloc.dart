@@ -146,6 +146,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         user_id: user.user_id,
         type: user.type,
         type_text: user.type_text,
+        learn_year: user.learn_year,
         children: localChildren,
       );
 
@@ -186,6 +187,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         user_id: user.user_id,
         type: user.type,
         type_text: user.type_text,
+        learn_year: user.learn_year,
         children: localChildren,
       );
 

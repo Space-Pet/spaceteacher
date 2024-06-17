@@ -4,7 +4,8 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
-import 'package:iportal2/screens/school_fee/widget/dialog_noti/school_fee_payment_dialog_noti.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
+import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_payment_dialog_noti.dart';
 import 'package:iportal2/screens/school_fee/widget/method_payment/method_payment_screen.dart';
 import 'package:repository/repository.dart';
 
@@ -112,7 +113,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => context.pop(false),
+            onPressed: () => context.pop({'refresh': false}),
             icon: const Icon(
               Icons.close,
               color: AppColors.gray500,

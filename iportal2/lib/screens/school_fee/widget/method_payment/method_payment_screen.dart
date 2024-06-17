@@ -6,7 +6,8 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/webview_screen.dart';
 
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
-import 'package:iportal2/screens/school_fee/widget/dialog_noti/school_fee_payment_dialog_noti.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
+import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_payment_dialog_noti.dart';
 import 'package:repository/repository.dart';
 
 class MethodPaymentScreen extends StatefulWidget {

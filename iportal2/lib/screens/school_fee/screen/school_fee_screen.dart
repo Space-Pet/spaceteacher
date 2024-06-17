@@ -1,11 +1,12 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/components/app_bar/app_bar.dart';
+import 'package:iportal2/components/app_bar/screen_app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
+import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_learn_years_dialog.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_bar_school_fee.dart';
-import 'package:iportal2/utils/utils_export.dart';
 import 'package:repository/repository.dart';
 
 class SchoolFeeScreen extends StatefulWidget {
@@ -40,7 +41,8 @@ class _SchoolFeeScreenState extends State<SchoolFeeScreen>
         currentUserBloc: context.read<CurrentUserBloc>(),
       )
         ..add(const FetchSchoolFee())
-        ..add(const FetchSchoolFeeHistory()),
+        ..add(const FetchSchoolFeeHistory())
+        ..add(const GetLearnYears(number: 2)),
       child: BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
         listener: (context, state) {
           if (state.currentTabIndex == 1) {
@@ -53,12 +55,13 @@ class _SchoolFeeScreenState extends State<SchoolFeeScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ScreenAppBar(
-                    title: 'Học phí',
-                    canGoback: true,
+                  ScreensAppBar(
+                    'Học phí',
+                    canGoBack: true,
                     onBack: () {
                       context.pop();
                     },
+                    actionWidget: const LearnYearWidgetButton(),
                   ),
                   Flexible(
                     child: Container(

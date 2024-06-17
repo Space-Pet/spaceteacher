@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:core/core.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_history_payment/w_card_detail_school_fee_history_payment.dart';
 
 class TabViewSchoolFeeHistoryPayment extends StatefulWidget {
@@ -40,16 +41,17 @@ class _TabViewSchoolFeeHistoryPayment
                 enabled: true,
                 child: CustomRefresh(
                   onRefresh: () async {
-                    context
-                        .read<SchoolFeeBloc>()
-                        .add(const FetchSchoolFeeHistory());
+                    context.read<SchoolFeeBloc>().add(FetchSchoolFeeHistory(
+                        learnYear: state.currentYearState?.learnYear));
                   },
                   child: SingleChildScrollView(
                     child: Column(
                       children: List.generate(
                         5,
                         (index) => _buildHistoryPaymentCard(
-                            context, []..length = 3, index),
+                            context,
+                            state.historySchoolFee?.historySchoolFeeItems ?? [],
+                            index),
                       ),
                     ),
                   ),
@@ -66,24 +68,23 @@ class _TabViewSchoolFeeHistoryPayment
             }
             return Scaffold(
               backgroundColor: AppColors.white,
-              body: Skeletonizer(
-                enabled: false,
-                child: CustomRefresh(
-                  onRefresh: () async {
-                    context
-                        .read<SchoolFeeBloc>()
-                        .add(const FetchSchoolFeeHistory());
-                  },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List.generate(
-                        listReversed?.length ?? 0,
-                        (index) => _buildHistoryPaymentCard(
-                            context, listReversed ?? [], index),
+              body: CustomRefresh(
+                onRefresh: () async {
+                  context
+                      .read<SchoolFeeBloc>()
+                      .add(const FetchSchoolFeeHistory());
+                },
+                child: isNullOrEmpty(listReversed)
+                    ? const Center(
+                        child: Text('Không có dữ liệu'),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          return _buildHistoryPaymentCard(
+                              context, listReversed ?? [], index);
+                        },
                       ),
-                    ),
-                  ),
-                ),
               ),
             );
           } else {

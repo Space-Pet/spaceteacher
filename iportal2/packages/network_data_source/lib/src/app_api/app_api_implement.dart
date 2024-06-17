@@ -817,6 +817,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       });
       if (isNullOrEmpty(data['data'])) return HistorySchoolFee();
       final historySchoolFee = HistorySchoolFee.fromJson(data['data']);
+      Log.d(historySchoolFee.toString());
       return historySchoolFee;
     } catch (e) {
       Log.e(e.toString());
@@ -924,7 +925,26 @@ class AppFetchApi extends AbstractAppFetchApi {
       return false;
     }
   }
+
+  Future<List<LearnYear>> getLearnYears({required int number}) async {
+    try {
+      final res = await _authRestClient.doHttpGet(
+        '/api/v1/payments/learn_year',
+        queryParameters: {
+          'number': number,
+        },
+      );
+      Log.d(res['data']);
+
+      return res['data'].map<LearnYear>((e) => LearnYear.fromJson(e)).toList();
+    } catch (e) {
+      Log.e(e.toString());
+      throw GetLearnYearsFailure();
+    }
+  }
 }
+
+class GetLearnYearsFailure implements Exception {}
 
 class GetNotificationsFailure implements Exception {}
 
