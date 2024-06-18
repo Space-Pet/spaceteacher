@@ -14,13 +14,16 @@ class HistorySchoolFeeItem {
   final String? soTien;
   @JsonKey(name: 'chi_tiet_phi_thu')
   final List<ChiTietPhieuThu>? chiTietPhiThu;
+  @JsonKey(name: 'ngay_thu')
+  final String? ngayThu;
 
   HistorySchoolFeeItem({
     this.pupilFeeHisId,
     this.soPhieuThu,
     this.hinhThucThanhToan,
     this.soTien,
-    this.chiTietPhiThu,
+    this.chiTietPhiThu = const [],
+    this.ngayThu,
   });
 
   factory HistorySchoolFeeItem.fromJson(Map<String, dynamic> json) =>
@@ -30,7 +33,7 @@ class HistorySchoolFeeItem {
 
   @override
   String toString() {
-    return 'HistorySchoolFeeItem(pupilFeeHisId: $pupilFeeHisId, soPhieuThu: $soPhieuThu, hinhThucThanhToan: $hinhThucThanhToan, soTien: $soTien, chiTietPhiThu: $chiTietPhiThu)';
+    return 'HistorySchoolFeeItem(pupilFeeHisId: $pupilFeeHisId, soPhieuThu: $soPhieuThu, hinhThucThanhToan: $hinhThucThanhToan, soTien: $soTien, chiTietPhiThu: $chiTietPhiThu, ngayThu: $ngayThu)';
   }
 
   HistorySchoolFeeItem copyWith({
@@ -39,6 +42,7 @@ class HistorySchoolFeeItem {
     String? hinhThucThanhToan,
     String? soTien,
     List<ChiTietPhieuThu>? chiTietPhiThu,
+    String? ngayThu,
   }) {
     return HistorySchoolFeeItem(
       pupilFeeHisId: pupilFeeHisId ?? this.pupilFeeHisId,
@@ -46,6 +50,7 @@ class HistorySchoolFeeItem {
       hinhThucThanhToan: hinhThucThanhToan ?? this.hinhThucThanhToan,
       soTien: soTien ?? this.soTien,
       chiTietPhiThu: chiTietPhiThu ?? this.chiTietPhiThu,
+      ngayThu: ngayThu ?? this.ngayThu,
     );
   }
 }

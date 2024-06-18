@@ -157,4 +157,6 @@ class AppColors {
   static const Color observationStatusSuccessText = Color(0xFF039855);
   static const Color observationCardDetailDotted = Color(0xFFFEE4E2);
   static const Color observationCardDetailbg = Color(0xFFFFFBFA);
+
+  static const Color paymentDeadlineApproaching = Color(0xFFFEF3F2);
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:repository/repository.dart';
 
 part 'school_fee_event.dart';
@@ -27,6 +28,9 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     );
     on<PayWithBalance>(_onPayWithBalance);
     on<UpdateStatusSchoolFeeEvent>(_onUpdateStatusSchoolFeeEvent);
+    on<UpdateTabIndexEvent>(_onUpdateTabIndexEvent);
+    on<GetLearnYears>(_onGetLearnYears);
+    on<UpdateCurrentYearEvent>(_onUpdateCurrentYear);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -37,10 +41,13 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     emit(state.copyWith(schoolFeeStatus: SchoolFeeStatus.loading));
     try {
       final result = await appFetchApiRepo.getSchoolFee(
-          pupilId: currentUserBloc.state.activeChild.pupil_id);
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+      );
       final schoolPreview = await appFetchApiRepo.getSchoolFeePaymentPreview(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: result.totalThanhTien ?? 0,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
       );
       emit(
         state.copyWith(
@@ -66,6 +73,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     try {
       final res = await appFetchApiRepo.getHistorySchoolFee(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
       );
 
       emit(state.copyWith(
@@ -116,6 +124,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
         paymentId: event.paymentId,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
       );
       emit(state.copyWith(
         paymentStatus: PaymentStatus.loaded,
@@ -139,6 +148,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       final resPreview = await appFetchApiRepo.getPreviewSchooWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
       );
       Log.d('result: ${resPreview.hinhThucThanhToan}');
       emit(state.copyWith(
@@ -156,10 +166,12 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
 
   Future<void> _onPayWithBalance(
       PayWithBalance event, Emitter<SchoolFeeState> emit) async {
+    emit(state.copyWith(paymentStatus: PaymentStatus.loading));
     try {
       final res = await appFetchApiRepo.payWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
+        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
       );
 
       emit(state.copyWith(
@@ -182,5 +194,40 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       paymentStatus: event.paymentStatus,
       schoolFeePreviewStatus: event.schoolFeePreviewStatus,
     ));
+  }
+
+  Future<void> _onUpdateTabIndexEvent(
+      UpdateTabIndexEvent event, Emitter<SchoolFeeState> emit) async {
+    emit(state.copyWith(currentTabIndex: event.tabIndex));
+    Log.d(state.currentTabIndex);
+  }
+
+  Future<void> _onGetLearnYears(
+      GetLearnYears event, Emitter<SchoolFeeState> emit) async {
+    emit(state.copyWith(
+        schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.loading));
+    try {
+      final res = await appFetchApiRepo.getLearnYears(number: event.number);
+      final currentYear = res.firstWhere((element) =>
+          element.learnYear == currentUserBloc.state.user.learn_year);
+      emit(state.copyWith(
+          learnYears: res,
+          currentYearState: currentYear,
+          schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.loaded));
+    } catch (e) {
+      Log.e(e.toString());
+      emit(state.copyWith(
+          schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.error,
+          error: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateCurrentYear(
+      UpdateCurrentYearEvent event, Emitter<SchoolFeeState> emit) async {
+    emit(
+      state.copyWith(
+          currentYearState: event.currentYear,
+          schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.updated),
+    );
   }
 }

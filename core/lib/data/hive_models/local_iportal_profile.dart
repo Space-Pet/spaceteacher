@@ -20,6 +20,8 @@ class LocalIPortalProfile {
   @HiveField(4)
   final String type_text;
   @HiveField(5)
+  final String learn_year;
+  @HiveField(6)
   final List<LocalChildren> children;
 
   LocalIPortalProfile({
@@ -28,6 +30,7 @@ class LocalIPortalProfile {
     required this.user_id,
     required this.type,
     required this.type_text,
+    required this.learn_year,
     required this.children,
   });
 
@@ -41,6 +44,7 @@ class LocalIPortalProfile {
     int? user_id,
     int? type,
     String? type_text,
+    String? learn_year,
     List<LocalChildren>? children,
   }) {
     return LocalIPortalProfile(
@@ -49,6 +53,7 @@ class LocalIPortalProfile {
       user_id: user_id ?? this.user_id,
       type: type ?? this.type,
       type_text: type_text ?? this.type_text,
+      learn_year: learn_year ?? this.learn_year,
       children: children ?? this.children,
     );
   }
@@ -68,6 +73,7 @@ class LocalIPortalProfile {
       user_id: map['user_id'].toInt() as int,
       type: map['type'].toInt() as int,
       type_text: map['type_text'] as String,
+      learn_year: map['learn_year'] as String,
       children: children,
     );
   }
@@ -82,6 +88,7 @@ class LocalIPortalProfile {
       user_id: 0,
       type: 0,
       type_text: '',
+      learn_year: '',
       children: [],
     );
   }

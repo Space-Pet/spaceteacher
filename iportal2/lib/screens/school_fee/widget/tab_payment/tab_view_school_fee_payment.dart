@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
+import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:iportal2/screens/school_fee/screen/school_fee_payment_screen.dart';
 import 'package:iportal2/screens/school_fee/widget/tab_payment/w_card_detail_school_fee_payment.dart';
 
@@ -50,17 +51,24 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
             )
                 .then(
               (value) {
-                if (value == true) {
-                  context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
+                if (value['refresh'] == true && value['tabIndex'] != null) {
+                  context.read<SchoolFeeBloc>().add(
+                        const UpdateTabIndexEvent(1),
+                      );
                 }
               },
             );
           }
           if (state.schoolFeeStatus == SchoolFeeStatus.loaded) {
-            isShowDetailList = List.generate(
-              state.schoolFee?.schoolFeeItems?.length ?? 0,
-              (index) => false,
-            );
+            final itemLength = state.schoolFee?.schoolFeeItems?.length ?? 0;
+
+            if (itemLength > 0 && isShowDetailList.length < itemLength) {
+              isShowDetailList = List.generate(
+                itemLength,
+                (index) => false,
+              );
+            }
+
             isPayWithBalance = false;
           }
         },
@@ -71,28 +79,30 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
               enabled: state.schoolFeeStatus == SchoolFeeStatus.loading,
               child: CustomRefresh(
                 onRefresh: () async {
-                  context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
+                  context.read<SchoolFeeBloc>().add(
+                        FetchSchoolFee(
+                            learnYear: state.currentYearState?.learnYear),
+                      );
                 },
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: List.generate(
-                      state.schoolFee?.schoolFeeItems?.length ?? 0,
-                      (index) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            isShowDetailList[index] = !isShowDetailList[index];
-                          });
-                        },
-                        child: CardDetailSchoolFeePayment(
-                          isShowDetail: isShowDetailList.length > index
-                              ? isShowDetailList[index]
-                              : false,
-                          item: state.schoolFee?.schoolFeeItems?[index] ??
-                              SchoolFeeItem(),
-                        ),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isShowDetailList[index] = !isShowDetailList[index];
+                        });
+                      },
+                      child: CardDetailSchoolFeePayment(
+                        isShowDetail: isShowDetailList.length > index
+                            ? isShowDetailList[index]
+                            : false,
+                        item: state.schoolFee?.schoolFeeItems?[index] ??
+                            SchoolFeeItem(),
                       ),
-                    ),
-                  ),
+                    );
+                  },
+                  itemCount: state.schoolFee?.schoolFeeItems?.length ?? 0,
                 ),
               ),
             ),
@@ -127,9 +137,10 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                 ],
               ),
 
-              // Kiểm tra totalCanTru không phải là null và khác 0 thì hiển thị nút cấn trừ.
+              // Kiểm tra totalCanTru không phải là null, khác 0 và list cần thanh toán khác null thì hiển thị nút cấn trừ.
               if (!isNullOrEmpty(state.schoolFee?.totalCanTru) &&
-                  int.tryParse(state.schoolFee?.totalCanTru ?? "0") != 0)
+                  int.tryParse(state.schoolFee?.totalCanTru ?? "0") != 0 &&
+                  !isNullOrEmpty(state.schoolFee?.schoolFeeItems))
                 ElevatedButton(
                   onPressed: () {
                     _payWithBalance(
@@ -169,24 +180,37 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
         ),
         ElevatedButton(
           onPressed: () {
-            context
-                .push(
-              SchoolFeePaymentScreen(
-                schoolFeePaymentPreview:
-                    state.schoolFeePaymentPreview ?? SchoolFeePaymentPreview(),
-                paymentGateways: state.paymentGateways ?? [],
-                // amountToBePaid: int.parse('${totalThanhTien.round()}'),
-                isPayWithBalance: isPayWithBalance,
-              ),
-            )
-                .then((res) {
-              if (res == true) {
-                context.read<SchoolFeeBloc>().add(const FetchSchoolFee());
-                isPayWithBalance = false;
-              }
-            });
+            if (!isNullOrEmpty(state.schoolFee?.schoolFeeItems)) {
+              context
+                  .push(
+                SchoolFeePaymentScreen(
+                  schoolFeePaymentPreview: state.schoolFeePaymentPreview ??
+                      SchoolFeePaymentPreview(),
+                  paymentGateways: state.paymentGateways ?? [],
+                  // amountToBePaid: int.parse('${totalThanhTien.round()}'),
+                  isPayWithBalance: isPayWithBalance,
+                ),
+              )
+                  .then((res) {
+                if (res['refresh'] == true) {
+                  context.read<SchoolFeeBloc>().add(
+                        FetchSchoolFee(
+                          learnYear: state.currentYearState?.learnYear,
+                        ),
+                      );
+                  isPayWithBalance = false;
+                }
+              });
+            }
           },
-          style: ElevatedButton.styleFrom(backgroundColor: AppColors.red90001),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: !isNullOrEmpty(state.schoolFee?.schoolFeeItems)
+                ? AppColors.red90001
+                : AppColors.gray300,
+            splashFactory: !isNullOrEmpty(state.schoolFee?.schoolFeeItems)
+                ? InkSplash.splashFactory
+                : NoSplash.splashFactory,
+          ),
           child: Text(
             'Nộp phí',
             style: AppTextStyles.semiBold16(color: AppColors.white),

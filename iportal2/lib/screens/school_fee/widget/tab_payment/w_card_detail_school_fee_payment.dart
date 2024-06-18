@@ -177,14 +177,15 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
             children: [
               Icon(
                 Icons.info,
-                color: daysDifference < 0 ? AppColors.primaryRedColor : color,
+                color: daysDifference <= 0 ? AppColors.primaryRedColor : color,
               ),
               const SizedBox(width: 5),
               Text(
                 message,
                 style: AppTextStyles.bold14(
-                    color:
-                        daysDifference < 0 ? AppColors.primaryRedColor : color),
+                    color: daysDifference <= 0
+                        ? AppColors.primaryRedColor
+                        : color),
               ),
               const SizedBox(width: 5),
             ],
@@ -194,9 +195,9 @@ class CardDetailSchoolFeePayment extends StatelessWidget {
     }
 
     if (daysDifference < 0) {
-      return buildMessage("Đã quá hạn", AppColors.observationCardDetailDotted);
+      return buildMessage("Đã quá hạn", AppColors.error);
     } else if (daysDifference == 0) {
-      return buildMessage("Tới hạn đóng", AppColors.amberWarn);
+      return buildMessage("Tới hạn đóng", AppColors.error);
     } else if (daysDifference <= 5) {
       return buildMessage("Sắp tới hạn đóng", AppColors.amberWarn);
     } else {
