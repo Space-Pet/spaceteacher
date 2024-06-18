@@ -1,30 +1,30 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'learn_year.g.dart';
+part 'learn_year_payment.g.dart';
 
 @JsonSerializable()
-class LearnYear {
+class LearnYearPayment {
   @JsonKey(name: 'learn_year')
   final String? learnYear;
   @JsonKey(name: 'current_learn_year')
   final int? currentLearnYear;
 
-  LearnYear({this.learnYear, this.currentLearnYear});
+  LearnYearPayment({this.learnYear, this.currentLearnYear});
 
-  factory LearnYear.fromJson(Map<String, dynamic> json) =>
-      _$LearnYearFromJson(json);
+  factory LearnYearPayment.fromJson(Map<String, dynamic> json) =>
+      _$LearnYearPaymentFromJson(json);
 
-  Map<String, dynamic> toJson() => _$LearnYearToJson(this);
+  Map<String, dynamic> toJson() => _$LearnYearPaymentToJson(this);
 
   @override
   String toString() {
-    return 'LearnYear{learnYear: $learnYear, currentLearnYear: $currentLearnYear}';
+    return 'LearnYearPayment{learnYear: $learnYear, currentLearnYear: $currentLearnYear}';
   }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LearnYear &&
+      other is LearnYearPayment &&
           runtimeType == other.runtimeType &&
           learnYear == other.learnYear &&
           currentLearnYear == other.currentLearnYear;
@@ -32,11 +32,11 @@ class LearnYear {
   @override
   int get hashCode => learnYear.hashCode ^ currentLearnYear.hashCode;
 
-  LearnYear copyWith({
+  LearnYearPayment copyWith({
     String? learnYear,
     int? currentLearnYear,
   }) {
-    return LearnYear(
+    return LearnYearPayment(
       learnYear: learnYear ?? this.learnYear,
       currentLearnYear: currentLearnYear ?? this.currentLearnYear,
     );

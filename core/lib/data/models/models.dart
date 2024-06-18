@@ -14,7 +14,7 @@ export 'gallery_class.dart';
 export 'gateway.dart';
 export 'history_school_fee.dart';
 export 'history_school_fee_item.dart';
-export 'learn_year.dart';
+export 'learn_year_payment.dart';
 export 'leaves.dart';
 export 'leaves_teacher.dart';
 export 'lesson_model.dart';

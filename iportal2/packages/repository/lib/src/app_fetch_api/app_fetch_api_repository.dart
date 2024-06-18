@@ -534,6 +534,6 @@ class AppFetchApiRepository {
           totalMoneyPayment: totalMoneyPayment,
           learnYear: learnYear);
 
-  Future<List<LearnYear>> getLearnYears({required int number}) async =>
+  Future<List<LearnYearPayment>> getLearnYears({required int number}) async =>
       await _appFetchApi.getLearnYears(number: number);
 }
