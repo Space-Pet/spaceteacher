@@ -94,7 +94,7 @@ class GetLearnYears extends SchoolFeeEvent {
 }
 
 class UpdateCurrentYearEvent extends SchoolFeeEvent {
-  final LearnYear currentYear;
+  final LearnYearPayment currentYear;
 
   const UpdateCurrentYearEvent(this.currentYear);
 

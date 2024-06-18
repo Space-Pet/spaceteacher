@@ -14,9 +14,9 @@ class LearnYearWidgetButton extends StatefulWidget {
 
 class _LearnYearWidgetButtonState extends State<LearnYearWidgetButton> {
   String currentYearTXT = '';
-  LearnYear? currentYear;
+  LearnYearPayment? currentYear;
 
-  List<LearnYear> learnYears = [];
+  List<LearnYearPayment> learnYears = [];
 
   @override
   void initState() {

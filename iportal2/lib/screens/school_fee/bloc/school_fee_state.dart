@@ -1,25 +1,24 @@
 part of 'school_fee_bloc.dart';
 
 class SchoolFeeState extends Equatable {
-  const SchoolFeeState({
-    this.schoolFeeStatus = SchoolFeeStatus.initial,
-    this.schoolFeeHistoryStatus = SchoolFeeHistoryStatus.initial,
-    this.paymentStatus = PaymentStatus.initial,
-    this.schoolFeePreviewStatus = SchoolFeePreviewStatus.initial,
-    this.schoolFee,
-    this.historySchoolFee,
-    this.schoolFeePaymentPreview,
-    this.schoolFeePayWithBalancePreview,
-    this.paymentGateways,
-    this.gateway,
-    this.isLoading = false,
-    this.error,
-    this.isPayWithBalance = false,
-    this.currentTabIndex = 0,
-    this.learnYears,
-    this.schoolFeeGetLearnYearsStatus = SchoolFeeGetLearnYearsStatus.initial,
-    this.currentYearState 
-  });
+  const SchoolFeeState(
+      {this.schoolFeeStatus = SchoolFeeStatus.initial,
+      this.schoolFeeHistoryStatus = SchoolFeeHistoryStatus.initial,
+      this.paymentStatus = PaymentStatus.initial,
+      this.schoolFeePreviewStatus = SchoolFeePreviewStatus.initial,
+      this.schoolFee,
+      this.historySchoolFee,
+      this.schoolFeePaymentPreview,
+      this.schoolFeePayWithBalancePreview,
+      this.paymentGateways,
+      this.gateway,
+      this.isLoading = false,
+      this.error,
+      this.isPayWithBalance = false,
+      this.currentTabIndex = 0,
+      this.learnYears,
+      this.schoolFeeGetLearnYearsStatus = SchoolFeeGetLearnYearsStatus.initial,
+      this.currentYearState});
 
   // state status
   final SchoolFeeStatus schoolFeeStatus;
@@ -38,8 +37,8 @@ class SchoolFeeState extends Equatable {
   final Gateway? gateway;
   final String? error;
   final int? currentTabIndex;
-  final List<LearnYear>? learnYears;
-  final LearnYear? currentYearState;
+  final List<LearnYearPayment>? learnYears;
+  final LearnYearPayment? currentYearState;
 
   @override
   List<Object?> get props => [
@@ -77,9 +76,9 @@ class SchoolFeeState extends Equatable {
     String? error,
     bool? isPayWithBalance,
     int? currentTabIndex,
-    List<LearnYear>? learnYears,
+    List<LearnYearPayment>? learnYears,
     SchoolFeeGetLearnYearsStatus? schoolFeeGetLearnYearsStatus,
-    LearnYear? currentYearState,
+    LearnYearPayment? currentYearState,
   }) {
     return SchoolFeeState(
       schoolFeeStatus: schoolFeeStatus ?? this.schoolFeeStatus,

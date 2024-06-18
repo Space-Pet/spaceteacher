@@ -926,7 +926,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<List<LearnYear>> getLearnYears({required int number}) async {
+  Future<List<LearnYearPayment>> getLearnYears({required int number}) async {
     try {
       final res = await _authRestClient.doHttpGet(
         '/api/v1/payments/learn_year',
@@ -936,7 +936,9 @@ class AppFetchApi extends AbstractAppFetchApi {
       );
       Log.d(res['data']);
 
-      return res['data'].map<LearnYear>((e) => LearnYear.fromJson(e)).toList();
+      return res['data']
+          .map<LearnYearPayment>((e) => LearnYearPayment.fromJson(e))
+          .toList();
     } catch (e) {
       Log.e(e.toString());
       throw GetLearnYearsFailure();
