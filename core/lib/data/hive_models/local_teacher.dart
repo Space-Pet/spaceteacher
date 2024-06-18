@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import '../../core.dart';
+import '../models/teacher_detail.dart';
 
 part 'local_teacher.g.dart';
 
@@ -29,6 +30,8 @@ class LocalTeacher {
   @HiveField(9)
   final bool isKinderGarten;
   @HiveField(10)
+  final CapDaoTao cap_dao_tao;
+  @HiveField(11)
   final String learnYear;
 
   LocalTeacher({
@@ -42,10 +45,12 @@ class LocalTeacher {
     required this.pinnedAlbumIdList,
     required this.background,
     required this.isKinderGarten,
+    required this.cap_dao_tao,
     required this.learnYear,
   });
 
   LocalTeacher copyWith({
+    CapDaoTao? cap_dao_tao,
     String? name,
     int? teacher_id,
     String? user_key,
@@ -59,6 +64,7 @@ class LocalTeacher {
     String? learnYear,
   }) {
     return LocalTeacher(
+      cap_dao_tao: cap_dao_tao ?? this.cap_dao_tao,
       name: name ?? this.name,
       teacher_id: teacher_id ?? this.teacher_id,
       user_key: user_key ?? this.user_key,
@@ -75,6 +81,7 @@ class LocalTeacher {
 
   factory LocalTeacher.empty() {
     return LocalTeacher(
+      cap_dao_tao: CapDaoTao(id: '', name: ''),
       name: '',
       teacher_id: 0,
       user_key: '',
@@ -100,6 +107,7 @@ class LocalTeacher {
       'pinnedAlbumIdList': pinnedAlbumIdList,
       'background': background,
       'isKinderGarten': isKinderGarten,
+      'cap_dao_tao': cap_dao_tao,
       'learnYear': learnYear,
     };
   }

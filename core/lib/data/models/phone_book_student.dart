@@ -1,6 +1,6 @@
 class PhoneBookStudent {
   final int pupilId;
-  final String userId;
+  final int userId;
   final int classId;
   final String fullName;
   final String userKey;
@@ -31,9 +31,22 @@ class PhoneBookStudent {
         className: '',
         pupilId: 0,
         urlImage: UrlImagePhoneBook(mobile: '', web: ''),
-        userId: '',
+        userId: 0,
         userKey: '',
       );
+
+  static List<PhoneBookStudent> fakeData() {
+    return List.generate(
+        10,
+        (index) => PhoneBookStudent(
+            classId: index,
+            fullName: 'fullName $index',
+            pupilId: index,
+            className: 'className $index',
+            urlImage: const UrlImagePhoneBook(mobile: '', web: ''),
+            userId: index,
+            userKey: 'userKey $index'));
+  }
 }
 
 class UrlImagePhoneBook {

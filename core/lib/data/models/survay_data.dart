@@ -38,6 +38,20 @@ class Survey {
       'hoc_ky': hocKy,
     };
   }
+
+  static List<Survey> fakeData() {
+    return List.generate(
+      5,
+      (index) => Survey(
+        khaoSatId: index,
+        name: 'Khảo sát $index',
+        status: 0,
+        statusText: 'Chưa hoàn thành',
+        learnYear: '2021-2022',
+        hocKy: 1,
+      ),
+    );
+  }
 }
 
 class SurveyDetail {

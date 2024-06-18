@@ -18,7 +18,6 @@ import 'package:teacher/screens/observation_schedule/screen/observation_schedule
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
-import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
 // import 'package:teacher/screens/survey_iportal2/survey_screen.dart';
@@ -28,10 +27,12 @@ class PinFeatures extends StatefulWidget {
     super.key,
     required this.isKinderGarten,
     required this.userFeatures,
+    required this.isLoading,
   });
 
   final bool isKinderGarten;
   final List<FeatureModel> userFeatures;
+  final bool isLoading;
 
   @override
   State<PinFeatures> createState() => _PinFeaturesState();
@@ -179,7 +180,10 @@ class _PinFeaturesState extends State<PinFeatures> {
     return Container(
       margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       width: double.infinity,
-      child: Wrap(children: listFeature),
+      child: AppSkeleton(
+        isLoading: widget.isLoading,
+        child: Wrap(children: listFeature),
+      ),
     );
   }
 }

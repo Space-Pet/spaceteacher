@@ -12,9 +12,9 @@ class GalleryGetPinnedAlbumIdList extends GalleryEvent {
 }
 
 class GalleryUpdatePinnedAlbum extends GalleryEvent {
-  GalleryUpdatePinnedAlbum(this.pinnedAlbumIdList,
-      {this.isOnlyUpdateState = false});
+  GalleryUpdatePinnedAlbum(
+    this.albumId,
+  );
 
-  final List<int> pinnedAlbumIdList;
-  final bool isOnlyUpdateState;
+  final int albumId;
 }

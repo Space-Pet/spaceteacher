@@ -9,6 +9,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
       : super(CurrentUserState(user: LocalTeacher.empty())) {
     on<CurrentUserUpdated>(_onUpdateUser);
     on<BackGroundUpdatedState>(updateBg);
+    on<CurrentUserNotify>(_onUpdateNotify);
   }
 
   final UserRepository userRepository;
@@ -26,6 +27,15 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   ) async {
     emit(state.copyWith(
       background: event.bg,
+    ));
+  }
+
+  Future<void> _onUpdateNotify(
+    CurrentUserNotify event,
+    Emitter<CurrentUserState> emit,
+  ) async {
+    emit(state.copyWith(
+      pushNotify: event.pushNotify,
     ));
   }
 }

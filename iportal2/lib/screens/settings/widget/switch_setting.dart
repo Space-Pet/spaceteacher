@@ -37,75 +37,79 @@ class _AccountSettingState extends State<AccountSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.5, right: 10.5, bottom: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      widget.iconAsset,
-                      height: 20,
-                      width: 20,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                        widget.text,
-                        style: AppTextStyles.normal16(color: AppColors.gray600),
+    return InkWell(
+      onTap: widget.onPressed,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.5, right: 10.5, bottom: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        widget.iconAsset,
+                        height: 20,
+                        width: 20,
                       ),
-                    )
-                  ],
-                ),
-              ),
-              if (widget.isNotiSetting)
-                Transform.scale(
-                  scale: 0.6,
-                  child: CupertinoSwitch(
-                    value: isSwitched,
-                    onChanged: (value) {
-                      setState(() {
-                        isSwitched = value;
-                      });
-                      widget.onPressed!();
-                    },
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text(
+                          widget.text,
+                          style:
+                              AppTextStyles.normal16(color: AppColors.gray600),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              if (!widget.isNotiSetting)
-                Row(
-                  children: [
-                    Text(
-                      widget.textRight ?? '',
-                      style: AppTextStyles.normal16(),
+                if (widget.isNotiSetting)
+                  Transform.scale(
+                    scale: 0.6,
+                    child: CupertinoSwitch(
+                      value: isSwitched,
+                      onChanged: (value) {
+                        setState(() {
+                          isSwitched = value;
+                        });
+                        widget.onPressed!();
+                      },
                     ),
-                    IconButton(
-                        onPressed: widget.onPressed,
-                        icon: const Icon(
-                          Icons.keyboard_arrow_right,
-                          color: AppColors.gray400,
-                        )),
-                  ],
-                ),
-            ],
-          ),
-          if (widget.showDottedLine)
-            const Padding(
-              padding: EdgeInsets.only(top: 5),
-              child: SizedBox(
-                width: double.infinity,
-                child: DottedLine(
-                  dashLength: 2,
-                  dashColor: AppColors.gray300,
+                  ),
+                if (!widget.isNotiSetting)
+                  Row(
+                    children: [
+                      Text(
+                        widget.textRight ?? '',
+                        style: AppTextStyles.normal16(),
+                      ),
+                      IconButton(
+                          onPressed: widget.onPressed,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_right,
+                            color: AppColors.gray400,
+                          )),
+                    ],
+                  ),
+              ],
+            ),
+            if (widget.showDottedLine)
+              const Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: DottedLine(
+                    dashLength: 2,
+                    dashColor: AppColors.gray300,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -19,13 +19,22 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
   final UserRepository userRepository;
 
   void _onGetLeaves(GetLeaves event, Emitter<LeaveState> emit) async {
-    emit(state.copyWith(leaveStatus: LeaveStatusEnum.init));
+    emit(state.copyWith(
+      leaveStatus: LeaveStatusEnum.init,
+      leaveData: LeaveData.fakeData(),
+    ));
     final data = await appFetchApiRepo.getLeaves(
         classId: currentUserBloc.state.user.children[0].class_id,
         pupilId: currentUserBloc.state.user.children[0].pupil_id,
         schoolId: currentUserBloc.state.activeChild.school_id,
         schoolBrand: currentUserBloc.state.activeChild.school_brand);
-    emit(state.copyWith(leaveStatus: LeaveStatusEnum.success, leaveData: data));
+
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    emit(state.copyWith(
+      leaveStatus: LeaveStatusEnum.success,
+      leaveData: data,
+    ));
   }
 
   void _onPostLeave(PostLeave event, Emitter<LeaveState> emit) async {

@@ -1,3 +1,4 @@
+export './cap_dao_tao.dart';
 export './local_children.dart';
 export './local_features.dart';
 export './local_iportal_profile.dart';

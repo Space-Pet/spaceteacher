@@ -49,6 +49,8 @@ class LocalChildren {
   final LocalUrlImage url_image;
   @HiveField(18)
   final String? learn_year;
+  @HiveField(19)
+  final LearnYear? learnYearList;
 
   LocalChildren({
     required this.pupil_id,
@@ -70,6 +72,7 @@ class LocalChildren {
     this.school_brand = 'uka',
     required this.url_image,
     this.learn_year,
+    this.learnYearList,
   });
 
   LocalChildren copyWith({
@@ -92,6 +95,7 @@ class LocalChildren {
     String? school_brand,
     LocalUrlImage? url_image,
     String? learn_year,
+    LearnYear? learnYearList,
   }) {
     return LocalChildren(
       pupil_id: pupil_id ?? this.pupil_id,
@@ -113,6 +117,7 @@ class LocalChildren {
       school_brand: school_brand ?? this.school_brand,
       url_image: url_image ?? this.url_image,
       learn_year: learn_year ?? this.learn_year,
+      learnYearList: learnYearList ?? this.learnYearList,
     );
   }
 
@@ -126,6 +131,14 @@ class LocalChildren {
 
   bool isMamNon() {
     return ['C_001', 'C_002'].contains(cap_dao_tao.id);
+  }
+
+  bool isPrimary() {
+    return cap_dao_tao.id == 'C_003';
+  }
+
+  bool isHighSchool() {
+    return ['C_004', 'C_005'].contains(cap_dao_tao.id);
   }
 
   factory LocalChildren.fromMap(Map<String, dynamic> map) {
@@ -159,6 +172,9 @@ class LocalChildren {
         map['url_image'] as Map<String, dynamic>,
       ),
       learn_year: map['learn_year'] as String?,
+      learnYearList: LearnYear.fromMap(
+        map['learnYearList'] as Map<String, dynamic>,
+      ),
     );
   }
 
@@ -185,6 +201,8 @@ class LocalChildren {
       isMN: false,
       school_brand: 'uka',
       url_image: LocalUrlImage(web: '', mobile: ''),
+      learn_year: '',
+      learnYearList: LearnYear.empty(),
     );
   }
 }

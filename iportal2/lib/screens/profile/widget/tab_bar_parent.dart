@@ -141,7 +141,7 @@ class TabBarParent extends StatelessWidget {
           ),
           RowContent(
             title: 'Mã học sinh',
-            content: studentData.pupil.userKey,
+            content: studentData.pupil.pupilId.toString(),
           ),
           RowContent(
             title: 'Mã định danh',

@@ -54,6 +54,7 @@ abstract class AbstractDioClient with TokenManagementMixin {
 
   void setHeader() {
     dio.options.headers['authorization'] =
+        //  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTczMzE2ODgsImV4cCI6MTY4ODg2NzY4OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.3PXXeua7B4UfGhvH4s8QWKCzf5w0M_uGUODs7-wXj_g';
         accessToken.isNotEmpty ? tokenFormat : accessToken;
 
     const parnerToken =
@@ -391,6 +392,7 @@ class RestApiClient {
     Json? headers,
     String? prefix,
     String? surfix,
+    bool? hasDelay,
   }) async {
     try {
       await ensureInitialized(
@@ -406,6 +408,9 @@ class RestApiClient {
         options: headers != null ? Options(headers: headers) : null,
       );
       final data = response.data;
+      if (hasDelay ?? false) {
+        await Future.delayed(const Duration(milliseconds: 300));
+      }
       return data as Json;
     } on DioException {
       throw Exception();

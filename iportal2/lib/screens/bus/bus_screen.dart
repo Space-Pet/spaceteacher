@@ -75,27 +75,21 @@ class BusView extends StatelessWidget {
                           onRefresh: () async {
                             context.read<BusBloc>().add(BusFetchedSchedules());
                           },
-                          child: Stack(
-                            children: [
-                              ListView(),
-                              AppSkeleton(
-                                isLoading: isLoading,
-                                child: isEmptyData
-                                    ? const Center(
-                                        child: EmptyScreen(
-                                            text: 'Chưa có dữ liệu'))
-                                    : ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        cacheExtent: 1000,
-                                        itemCount: busSchedules.length,
-                                        itemBuilder: (context, index) {
-                                          return CardBusItem(
-                                            busSchedule: busSchedules[index],
-                                          );
-                                        },
-                                      ),
-                              ),
-                            ],
+                          child: AppSkeleton(
+                            isLoading: isLoading,
+                            child: isEmptyData
+                                ? const Center(
+                                    child: EmptyScreen(text: 'Chưa có dữ liệu'))
+                                : ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    cacheExtent: 1000,
+                                    itemCount: busSchedules.length,
+                                    itemBuilder: (context, index) {
+                                      return CardBusItem(
+                                        busSchedule: busSchedules[index],
+                                      );
+                                    },
+                                  ),
                           ),
                         );
                       },
@@ -129,7 +123,7 @@ class _SelectDateState extends State<SelectDate> {
   @override
   void initState() {
     super.initState();
-    datePicked = now.ddMMyyyyDash;
+    datePicked = now.ddMMyyyySlash;
   }
 
   @override
@@ -158,7 +152,7 @@ class _SelectDateState extends State<SelectDate> {
         );
 
         if (pickedDate != null) {
-          String formattedDate = pickedDate.ddMMyyyyDash;
+          String formattedDate = pickedDate.ddMMyyyySlash;
           widget.onDateChanged(pickedDate);
           setState(() {
             datePicked = formattedDate;

@@ -32,116 +32,123 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
     final lessonsWExpanded =
         List.generate(widget.lessons?.length ?? 0, (index) {
       final lesson = widget.lessons?[index];
+
+      if (lesson == null) {
+        return const SizedBox();
+      }
+
       var colorAttendance = AppColors.amberA200;
       var title = '';
-      switch (lesson?.attendanceType) {
+
+      print(lesson.attendanceType);
+
+      switch (lesson.attendanceType) {
         case ('so_lan'):
           title = 'Lần';
         case ('tiet_hoc'):
           title = 'Tiết';
       }
-      switch (lesson?.status) {
+      switch (lesson.status) {
         case ('Có mặt'):
           colorAttendance = AppColors.green600;
         case ('Vắng có phép'):
           colorAttendance = AppColors.red700;
       }
-      return Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            decoration: BoxDecoration(
-              borderRadius: index == (widget.lessons?.length ?? 0) - 1
-                  ? AppRadius.roundedBottom12
-                  : index == 0
-                      ? AppRadius.roundedTop12
-                      : const BorderRadius.all(Radius.zero),
-              color: AppColors.gray100,
-              border: Border(
-                bottom: index == (widget.lessons?.length ?? 0) - 1
-                    ? BorderSide.none
-                    : const BorderSide(color: AppColors.gray300),
+
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+          borderRadius: index == (widget.lessons?.length ?? 0) - 1
+              ? AppRadius.roundedBottom12
+              : index == 0
+                  ? AppRadius.roundedTop12
+                  : const BorderRadius.all(Radius.zero),
+          color: AppColors.gray100,
+          border: Border(
+            bottom: index == (widget.lessons?.length ?? 0) - 1
+                ? BorderSide.none
+                : const BorderSide(color: AppColors.gray300),
+          ),
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(top: 6),
+                width: 130.h,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      // '$title ${lesson?.numberOfClassPeriod}',
+                      'Lúc: ${DateFormat('HH:mm').format(DateTime.parse(lesson.date))}',
+                      style: AppTextStyles.semiBold14(color: AppColors.black24),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'GV: ${lesson.teacherName}',
+                      style: AppTextStyles.normal14(color: AppColors.gray600),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
               ),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(top: 6),
-                  width: 90,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              Container(
+                width: 4,
+                decoration: BoxDecoration(
+                    color: AppColors.brand600,
+                    borderRadius: BorderRadius.circular(14)),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '$title ${lesson?.numberOfClassPeriod}',
-                        style: AppTextStyles.normal14(color: AppColors.black24),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          lesson.attendanceType == 'so_lan'
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: Text(
+                                    'Lần điểm danh ${lesson.numberOfClassPeriod}',
+                                    style: AppTextStyles.semiBold14(
+                                        color: AppColors.black24),
+                                  ),
+                                )
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4),
+                                  child: Text(
+                                    lesson.subjectName,
+                                    style: AppTextStyles.semiBold14(
+                                        color: AppColors.black24),
+                                  ),
+                                ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              lesson.status,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.normal12(
+                                  color: colorAttendance),
+                            ),
+                          ),
+                        ],
                       ),
-                      if (lesson?.attendanceType != 'so_lan')
-                        Text(
-                          lesson?.roomTitle ?? '',
-                          style:
-                              AppTextStyles.normal12(color: AppColors.gray500),
-                        )
                     ],
                   ),
                 ),
-                Container(
-                  width: 4,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: AppColors.brand600,
-                      borderRadius: BorderRadius.circular(14)),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (lesson?.attendanceType == 'so_lan')
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  'Giờ điểm danh - ${DateFormat('HH:mm').format(DateTime.parse(lesson!.date))}',
-                                  style: AppTextStyles.semiBold14(
-                                      color: AppColors.black24),
-                                ),
-                              ),
-                            if (lesson?.attendanceType != 'so_lan')
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(
-                                  lesson?.subjectName ?? '',
-                                  style: AppTextStyles.semiBold14(
-                                      color: AppColors.black24),
-                                ),
-                              ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Text(
-                                lesson?.status ?? '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.normal12(
-                                    color: colorAttendance),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       );
     });
 
@@ -149,7 +156,7 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            padding: const EdgeInsets.only(top: 4, bottom: 10),
             child: SelectDate(
               selectDate: widget.selectDate,
               onDatePicked: (date) {
@@ -157,19 +164,14 @@ class _CTabBarViewDayState extends State<CTabBarViewDay> {
                 widget.getAttendanceDay?.call(formattedDate, date);
               },
             )),
-        if (widget.lessons?.length != 0)
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [...lessonsWExpanded],
-            ),
-          ),
-        if (widget.lessons?.length == null || widget.lessons?.length == 0)
-          const Expanded(
-              child: Padding(
-            padding:  EdgeInsets.only(bottom: 200),
-            child: EmptyScreen(text: 'Bạn chưa có điểm danh theo ngày'),
-          ))
+        Expanded(
+          child: (widget.lessons ?? []).isNotEmpty
+              ? ListView(
+                  padding: EdgeInsets.zero,
+                  children: [...lessonsWExpanded],
+                )
+              : const EmptyScreen(text: 'Không có dữ liệu'),
+        )
       ],
     );
   }

@@ -14,6 +14,7 @@ class BusBloc extends Bloc<BusEvent, BusState> {
     required this.schoolBrand,
   }) : super(BusState(
           selectedDate: DateTime.now(),
+          busSchedules: BusSchedule.fakeData(),
         )) {
     on<BusFetchedSchedules>(_onFetchSchedules);
     on<BusChangedDate>(_onChangedDate);
@@ -35,12 +36,19 @@ class BusBloc extends Bloc<BusEvent, BusState> {
       schoolBrand: schoolBrand,
       schoolId: schoolId,
     );
-    emit(state.copyWith(busSchedules: busSchedules, status: BusStatus.success));
+    
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    emit(state.copyWith(
+      busSchedules: busSchedules,
+      status: BusStatus.success,
+    ));
   }
 
   _onChangedDate(BusChangedDate event, Emitter<BusState> emit) {
     emit(state.copyWith(
       selectedDate: event.date,
+      busSchedules: BusSchedule.fakeData(),
     ));
     add(BusFetchedSchedules());
   }

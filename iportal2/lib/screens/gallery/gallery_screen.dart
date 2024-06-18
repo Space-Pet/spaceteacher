@@ -43,7 +43,7 @@ class GalleryScreen extends StatelessWidget {
                   title: 'Thư viện ảnh (${albumList.length})',
                   canGoback: true,
                   onBack: () {
-                    context.pop(pinnedAlbumIdList);
+                    context.pop();
                   },
                 ),
                 Expanded(
@@ -79,8 +79,7 @@ class GalleryScreen extends StatelessWidget {
                                         ? const Center(
                                             child: EmptyScreen(
                                                 text:
-                                                    'Thư viện ảnh của bạn trống!'),
-                                          )
+                                                    'Thư viện ảnh của bạn trống!'))
                                         : GalleryListView(
                                             itemCount: albumList.length,
                                             itemBuilder: (context, index) {
@@ -91,33 +90,15 @@ class GalleryScreen extends StatelessWidget {
                                               return CardGallery(
                                                 galleryItem: albumList[index],
                                                 isPinned: isPinned,
+                                                isLoading: isLoading,
                                                 onUpdatePinAlbum: () {
                                                   final albumId =
                                                       albumList[index]
                                                           .galleryId;
 
-                                                  if (pinnedAlbumIdList
-                                                      .contains(albumId)) {
-                                                    final newList =
-                                                        pinnedAlbumIdList
-                                                            .where((element) =>
-                                                                element !=
-                                                                albumId)
-                                                            .toList();
-
-                                                    galleryBloc.add(
-                                                        GalleryUpdatePinnedAlbum(
-                                                            newList));
-                                                  } else {
-                                                    final newList = [
-                                                      ...pinnedAlbumIdList,
-                                                      albumId
-                                                    ];
-
-                                                    galleryBloc.add(
-                                                        GalleryUpdatePinnedAlbum(
-                                                            newList));
-                                                  }
+                                                  galleryBloc.add(
+                                                      GalleryUpdatePinnedAlbum(
+                                                          albumId));
                                                 },
                                               );
                                             }),

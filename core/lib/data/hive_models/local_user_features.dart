@@ -363,16 +363,6 @@ final List<FeatureModel> hihgSFeatures = [
     order: 4,
     gradientType: FeatureGradient.green,
   ),
-
-  FeatureModel(
-    key: FeatureKey.observation,
-    name: 'Dự giờ',
-    icon: 'highS_attend_time',
-    category: FeatureCategory.daily,
-    order: 8,
-    gradientType: FeatureGradient.orange,
-    pinned: false,
-  ),
 ];
 
 final List<FeatureModel> preSTeacherFeatures = [

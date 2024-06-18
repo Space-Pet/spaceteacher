@@ -40,6 +40,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
         ?.where((entry) =>
             entry.fullName.toLowerCase().contains(_searchKeyword.toLowerCase()))
         .toList();
+
     _filteredPhoneBookTeacher = widget.phoneBookTeacher
         ?.where((entry) =>
             entry.fullName.toLowerCase().contains(_searchKeyword.toLowerCase()))
@@ -71,7 +72,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
-                  '${widget.title} (${_filteredPhoneBookTeacher == null ? _filteredPhoneBookStudent?.length : _filteredPhoneBookTeacher?.length})',
+                  '${widget.title} (${_filteredPhoneBookTeacher == null ? widget.phoneBookStudent?.length : widget.phoneBookStudent?.length})',
                   style: AppTextStyles.normal16(
                     color: AppColors.brand600,
                     fontWeight: FontWeight.w600,
@@ -83,7 +84,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: TitleAndInputText(
-              obscureText: true,
+              obscureText: false,
               hintText: 'Tìm kiếm',
               onChanged: (value) {
                 setState(() {

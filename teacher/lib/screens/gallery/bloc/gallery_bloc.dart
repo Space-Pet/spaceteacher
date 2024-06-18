@@ -12,7 +12,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     this.appFetchApiRepo, {
     required this.currentUserBloc,
     required this.userRepository,
-  }) : super(GalleryState(albumData: AlbumData.empty)) {
+  }) : super(GalleryState(albumData: AlbumData.fakeData)) {
     on<GalleryFetchData>(_onFetchAlbumData);
     add(GalleryFetchData());
 

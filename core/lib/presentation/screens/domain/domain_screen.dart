@@ -178,7 +178,7 @@ class _CDomainScreenState extends State<CDomainScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(12, 4, 10, 0),
+                          padding: const EdgeInsets.fromLTRB(12, 6, 10, 0),
                           child: Text(contactMessage,
                               style: AppTextStyles.normal12()),
                         ),

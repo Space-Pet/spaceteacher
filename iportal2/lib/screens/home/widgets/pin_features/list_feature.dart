@@ -54,10 +54,7 @@ class ListFeature extends StatelessWidget {
               style: AppTextStyles.semiBold14(color: AppColors.blueGray800),
             ),
           ),
-          Wrap(
-            spacing: (MediaQuery.of(context).size.width - 372) / 3,
-            children: features,
-          ),
+          Wrap(children: features),
         ],
       ),
     );

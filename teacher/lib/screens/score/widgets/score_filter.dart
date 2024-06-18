@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher/components/dropdown/dropdown.dart';
 import 'package:teacher/screens/score/bloc/score_bloc.dart';
@@ -9,17 +10,21 @@ class ScoreFilter extends StatelessWidget {
     required this.onSelectedOption,
     required this.selectedOption,
     required this.isPrimary,
+    required this.semesterList,
   });
 
   final bool isPrimary;
   final ViewScoreSelectedParam selectedOption;
   final void Function(ViewScoreSelectedParam) onSelectedOption;
+  final List<Semester> semesterList; // Add this line to accept semester list
 
-  void onUpdateTerm(String value) {
+  void onUpdateTerm(Semester semester) {
     final newParam = selectedOption.copyWith(
-      selectedTerm: value,
+      selectedTerm: semester.title,
+      valueTerm: semester.value,
     );
     onSelectedOption(newParam);
+    print(semester.value); // Print the value of the selected semester
   }
 
   void onUpdateScoreType(String value) {
@@ -31,6 +36,10 @@ class ScoreFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Ensure no duplicates in the optionList
+    final uniqueSemesterNames =
+        semesterList.map((e) => e.title).toSet().toList();
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
@@ -45,21 +54,16 @@ class ScoreFilter extends StatelessWidget {
           const SizedBox(height: 8),
           DropdownButtonComponent(
             selectedOption: selectedOption.selectedTerm,
-            onUpdateOption: onUpdateTerm,
+            onUpdateOption: (value) {
+              final selectedSemester = semesterList
+                  .firstWhere((semester) => semester.title == value);
+              onUpdateTerm(selectedSemester);
+            },
             hint: 'Chọn học kỳ',
-            optionList: isPrimary
-                ? PrimaryTermType.values.map((e) => e.text()).toList()
-                : TermType.values.map((e) => e.text()).toList(),
+            optionList: uniqueSemesterNames, // Use unique names
           ),
         ],
       ),
     );
   }
-}
-
-class ListItem<T> {
-  bool isSelected = false;
-  final T data;
-
-  ListItem(this.data, {this.isSelected = false});
 }

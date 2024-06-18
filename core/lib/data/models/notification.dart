@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 class NotificationData {
   final List<NotificationItem> data;
   final NotificationLinks links;
@@ -11,7 +12,24 @@ class NotificationData {
     required this.meta,
   });
 
-  factory NotificationData.empty() => NotificationData(
+  factory NotificationData.fakeData() => NotificationData(
+        data: List.generate(
+          10,
+          (index) => NotificationItem(
+            id: index,
+            schoolId: index,
+            title: 'title $index',
+            content: 'content $index',
+            excerpt: 'excerpt $index',
+            createdAt: '2021-09-01 00:00:00',
+            createdBy: index,
+          ),
+        ),
+        links: NotificationLinks.empty(),
+        meta: NotificationMeta.empty(),
+      );
+
+  factory NotificationData. empty() => NotificationData(
         data: [],
         links: NotificationLinks.empty(),
         meta: NotificationMeta.empty(),
@@ -307,8 +325,4 @@ class NotificationMetaLink {
       NotificationMetaLink.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-
-  @override
-  String toString() =>
-      'NotificationMetaLink(url: $url, label: $label, active: $active)';
 }

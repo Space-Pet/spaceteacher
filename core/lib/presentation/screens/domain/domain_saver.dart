@@ -24,6 +24,7 @@ class DomainSaver {
     // Save domain to local storage
     try {
       final isValid = await isDomainValid(domain);
+      print('object: $isValid');
       if (isValid) {
         await tryOpenHive();
         await box?.put(domainKey, domain);
@@ -73,7 +74,6 @@ class DomainSaver {
       if (response.statusCode == 200 && response.data['code'] == 200) {
         return true;
       }
-
     } catch (_) {
       rethrow;
     }
@@ -94,10 +94,10 @@ class DomainSaver {
 
   Future<String> getDomain() async {
     // Get domain from local storage
-    if(cachedDomain.isNotEmpty) {
+    if (cachedDomain.isNotEmpty) {
       return cachedDomain;
     }
-    
+
     try {
       await tryOpenHive();
       final domain = box?.get(domainKey) as String?;

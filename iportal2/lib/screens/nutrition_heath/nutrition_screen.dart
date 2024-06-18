@@ -1,4 +1,5 @@
 import 'package:core/core.dart';
+import 'package:core/resources/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -33,7 +34,6 @@ class NutritionScreenState extends State<NutritionScreen> {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double calculatedHeight = screenHeight / 1.4;
     return BlocProvider(
       create: (context) => NutritionBloc(
           userRepository: context.read<UserRepository>(),
@@ -57,86 +57,54 @@ class NutritionScreenState extends State<NutritionScreen> {
                 Expanded(
                   child: Container(
                     width: double.infinity,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+                      borderRadius: AppRadius.roundedTop20,
                     ),
                     child: AppSkeleton(
                       isLoading: isLoading,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: AppRadius.roundedTop28,
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
+                        decoration: BoxDecoration(
+                          color: AppColors.white,
+                          borderRadius: AppRadius.roundedTop28,
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
+                              child: Text(
+                                nutrition?.statusNote ?? '',
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                style: AppTextStyles.semiBold16(
+                                    color: AppColors.brand600),
+                              ),
                             ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // SelectChild(),
-                                      Text(
-                                        nutrition?.statusNote ?? '',
-                                        style: AppTextStyles.semiBold16(
-                                            color: AppColors.brand600),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  height: calculatedHeight,
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: ShapeDecoration(
-                                    color: AppColors.white,
-                                    shape: RoundedRectangleBorder(
-                                      side: const BorderSide(
-                                          color: AppColors.blueGray100),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    shadows: const [
-                                      BoxShadow(
-                                        color: AppColors.gray9000c,
-                                        blurRadius: 2,
-                                        offset: Offset(0, 1),
-                                      )
-                                    ],
-                                  ),
-                                  child: SingleChildScrollView(
-                                    physics:
-                                        const AlwaysScrollableScrollPhysics(),
-                                    child: Column(
-                                      children: [
-                                        ...List.generate(
-                                            nutrition?.dataNutrition.length ??
-                                                0,
-                                            (index) => CardNutrition(
-                                                isExpanded:
-                                                    expandedIndex == index,
-                                                index: index,
-                                                onExpansionChanged: () =>
-                                                    _handleExpansion(index),
-                                                nutritionItem: nutrition!
-                                                    .dataNutrition.reversed
-                                                    .toList()[index],
-                                                lastIndex: nutrition
-                                                        .dataNutrition.length -
+                            Expanded(
+                              child: SingleChildScrollView(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  children: [
+                                    ...List.generate(
+                                        nutrition?.dataNutrition.length ?? 0,
+                                        (index) => CardNutrition(
+                                            isExpanded: expandedIndex == index,
+                                            index: index,
+                                            onExpansionChanged: () =>
+                                                _handleExpansion(index),
+                                            nutritionItem: nutrition!
+                                                .dataNutrition.reversed
+                                                .toList()[index],
+                                            lastIndex: index ==
+                                                nutrition.dataNutrition.length -
                                                     1))
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

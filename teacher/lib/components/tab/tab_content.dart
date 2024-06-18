@@ -14,6 +14,7 @@ class RowContent extends StatelessWidget {
     this.isEditPhone = false,
     this.isShowDottedLine = true,
     this.onTap,
+    this.formSize,
   });
   final String title;
   final String content;
@@ -21,6 +22,7 @@ class RowContent extends StatelessWidget {
   final bool isHighlightContent;
   final Function()? onTap;
   final bool isShowDottedLine;
+  final double? formSize;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +39,8 @@ class RowContent extends StatelessWidget {
                     Expanded(
                       child: Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 14,
+                        style: TextStyle(
+                          fontSize: formSize ?? 14,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
                         ),
@@ -46,6 +48,7 @@ class RowContent extends StatelessWidget {
                     ),
                     const SizedBox(width: 20),
                     Expanded(
+                      flex: 2,
                       child: Text(
                         content,
                         textAlign: TextAlign.end,
@@ -53,7 +56,7 @@ class RowContent extends StatelessWidget {
                             color: isHighlightContent
                                 ? AppColors.blue500
                                 : AppColors.gray500,
-                            fontSize: 12,
+                            fontSize: formSize ?? 12,
                             fontWeight: isHighlightContent
                                 ? FontWeight.w600
                                 : FontWeight.w400),

@@ -3,39 +3,43 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class ScoreModel {
-  final String txtCurrentYear;
-  final String txtCurrentHocKy;
-  final List<String> listYear;
-  final String txtKhoiLevel;
-  final TxtDiemMoetType txtDiemMoet;
+  final String txtLearnYear;
+  final String txtHocKy;
+  final String txtClassName;
+  final TxtDiemMoetType txtDiem;
+  final String statusNote;
 
   ScoreModel({
-    required this.txtDiemMoet,
-    required this.listYear,
-    required this.txtCurrentYear,
-    required this.txtCurrentHocKy,
-    required this.txtKhoiLevel,
+    required this.txtDiem,
+    required this.txtLearnYear,
+    required this.txtHocKy,
+    required this.txtClassName,
+    required this.statusNote,
   });
 
   factory ScoreModel.fromMap(Map<String, dynamic> map) {
+    if (map['txt_class_name'] == null) {
+      return ScoreModel.empty();
+    }
+
     return ScoreModel(
-      listYear: List<String>.from(map['list_year'].cast<String>()),
-      txtDiemMoet: map['txt_diem_moet'] == null
+      txtDiem: map['txt_diem'] == null
           ? TxtDiemMoetType.empty()
-          : TxtDiemMoetType.fromMap(map['txt_diem_moet']),
-      txtCurrentYear: map['txt_current_year'],
-      txtCurrentHocKy: map['txt_current_hoc_ky'],
-      txtKhoiLevel: map['txt_khoi_level'],
+          : TxtDiemMoetType.fromMap(map['txt_diem']),
+      txtLearnYear: map['txt_learn_year'],
+      txtHocKy: map['txt_hoc_ky'],
+      txtClassName: map['txt_class_name'],
+      statusNote: map['status_note'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'txt_diem_moet': txtDiemMoet.toMap(),
-      'list_year': listYear,
-      'txt_current_year': txtCurrentYear,
-      'txt_current_hoc_ky': txtCurrentHocKy,
-      'txt_khoi_level': txtKhoiLevel,
+      'txt_diem': txtDiem.toMap(),
+      'txt_learn_year': txtLearnYear,
+      'txt_hoc_ky': txtHocKy,
+      'txt_class_name': txtClassName,
+      'status_note': statusNote,
     };
   }
 
@@ -50,16 +54,20 @@ class ScoreModel {
   }
 
   factory ScoreModel.empty() => ScoreModel(
-        listYear: [],
-        txtDiemMoet: TxtDiemMoetType.empty(),
-        txtCurrentYear: '',
-        txtCurrentHocKy: '',
-        txtKhoiLevel: '',
+        txtDiem: TxtDiemMoetType.empty(),
+        txtLearnYear: '',
+        txtHocKy: '',
+        txtClassName: '',
+        statusNote: '',
       );
 
-  @override
-  String toString() =>
-      'ExerciseData(txtDiemMoet: $txtDiemMoet,listYear:$listYear, txtCurrentYear: $txtCurrentYear, txtCurrentHocKy: $txtCurrentHocKy, txtKhoiLevel: $txtKhoiLevel)';
+  factory ScoreModel.fakeData() => ScoreModel(
+        txtDiem: TxtDiemMoetType.fakeData(),
+        txtLearnYear: '2021-2022',
+        txtHocKy: '1',
+        txtClassName: 'Lớp 1A',
+        statusNote: 'MOET',
+      );
 }
 
 class TxtDiemMoetType {
@@ -95,15 +103,15 @@ class TxtDiemMoetType {
       scoreData: map['score_data'] == null
           ? null
           : List<ScoreDataType>.from(
-              map['score_data']?.map(
-                ScoreDataType.fromMap,
+              (map['score_data'] as List<dynamic>).map(
+                (item) => ScoreDataType.fromMap(item as Map<String, dynamic>),
               ),
             ),
       diemData: map['diem_data'] == null
           ? null
           : List<DiemDataType>.from(
-              map['diem_data']?.map(
-                DiemDataType.fromMap,
+              (map['diem_data'] as List<dynamic>).map(
+                (item) => DiemDataType.fromMap(item as Map<String, dynamic>),
               ),
             ),
       kqht: map['kqht']?.toString(),
@@ -163,14 +171,24 @@ class TxtDiemMoetType {
         nhanXetChungCuaGvcn: null,
       );
 
+  factory TxtDiemMoetType.fakeData() => TxtDiemMoetType(
+        scoreData: List.generate(
+          10,
+          (index) => ScoreDataType(
+            subjectId: 'subjectId$index',
+            subjectName: 'subjectName$index',
+            ddgtx: List.generate(5, (index) => 'ddgtx$index'),
+            ddggk: 'ddggk$index',
+            ddgck: 'ddgck$index',
+            tbmhk: 'tbmhk$index',
+          ),
+        ),
+      );
+
   factory TxtDiemMoetType.fromJson(String source) =>
       TxtDiemMoetType.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-
-  @override
-  String toString() =>
-      'ExerciseItem(scoreData: $scoreData,diemData: $diemData, kqht: $kqht, kqrl: $kqrl, hocKy: $hocKy, dtbCn: $dtbCn, xlhlCn: $xlhlCn, xlhkCn: $xlhkCn, danhHieuCn: $danhHieuCn, ngayNghiCn: $ngayNghiCn, nhanXetGvcnCn: $nhanXetGvcnCn)';
 }
 
 class ScoreDataType {
@@ -194,7 +212,7 @@ class ScoreDataType {
       subjectId: map['SUBJECT_ID'],
       subjectName: map['SUBJECT_NAME'],
       ddgtx: map['ddgtx'] == null
-          ? null
+          ? []
           : List<String>.from(map['ddgtx'].cast<String>()),
       ddggk: map['ddggk']?.toString(),
       ddgck: map['ddgck']?.toString(),

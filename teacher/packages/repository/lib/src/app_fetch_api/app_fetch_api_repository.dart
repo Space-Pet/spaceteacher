@@ -671,7 +671,7 @@ class AppFetchApiRepository {
   }
 
   Future<Map<String, dynamic>?> turnOffNoti({
-    required bool pushNotify,
+    required int pushNotify,
     required Map<String, Object> headers,
   }) async {
     final data = await _appFetchApi.turnOffNoti(
@@ -743,6 +743,19 @@ class AppFetchApiRepository {
     return response;
   }
 
+  Future<List<Semester>> getSemester({
+    required int schoolId,
+    required String schoolBrand,
+    required String capDaoTao,
+  }) async {
+    final data = await _appFetchApi.getSemester(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      capDaoTao: capDaoTao,
+    );
+    return data;
+  }
+
   Future<Map<String, dynamic>> getListSubject({
     required int schoolId,
   }) async {
@@ -765,6 +778,37 @@ class AppFetchApiRepository {
     return response;
   }
 
+  Future<List<ClassScore>> getListClassScore(
+      {required int schoolId,
+      required String schoolBrand,
+      required String learnYear}) async {
+    final data = await _appFetchApi.getListClassScore(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      learnYear: learnYear,
+    );
+    return data;
+  }
+
+  Future<FormInputScore> getFormInputScore({
+    required int schoolId,
+    required String schoolBrand,
+    required int classId,
+    required int subjectId,
+    required String learnYear,
+    required int semester,
+  }) async {
+    final data = await _appFetchApi.getFormInputScore(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      classId: classId,
+      subjectId: subjectId,
+      learnYear: learnYear,
+      semester: semester,
+    );
+    return data;
+  }
+
   Future<Map<String, dynamic>> postLessonRegister({
     required String userKey,
     required String txtDate,
@@ -785,5 +829,28 @@ class AppFetchApiRepository {
     );
 
     return response;
+  }
+
+  Future<Map<String, dynamic>> postNutritionHealth({
+    required int pupilId,
+    required DateTime learnYear,
+    required int txtMonth,
+    required String typeHeight,
+    required String weight,
+    required String height,
+    required double bmi,
+    required String distribute,
+  }) async {
+    final data = await _appFetchApi.postNutritionHealth(
+      pupilId: pupilId,
+      learnYear: learnYear,
+      txtMonth: txtMonth,
+      typeHeight: typeHeight,
+      weight: weight,
+      height: height,
+      bmi: bmi,
+      distribute: distribute,
+    );
+    return data;
   }
 }

@@ -167,8 +167,8 @@ class _ListNewMessagesViewState extends State<ListNewMessagesView> {
                                                     'message': Message(
                                                       fullName:
                                                           newMessage.fullName,
-                                                      senderId: int.parse(
-                                                          newMessage.userId),
+                                                      senderId:
+                                                          newMessage.userId,
                                                       avatarUrl: newMessage
                                                           .urlImage.mobile,
                                                     ),

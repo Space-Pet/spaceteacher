@@ -70,10 +70,10 @@ class ConductData {
   factory ConductData.fromMap(Map<String, dynamic> map) {
     return ConductData(
       nangLucCotLoi: NangLucCotLoi.fromMap(map['nang_luc_cot_loi']),
-      phamChatChuYeu: List<ConductItem>.from(
-          map['pham_chat_chu_yeu']?.map(ConductItem.fromMap)),
-      nhanXetChungCuaGvcn: List<ConductItem>.from(
-          map['nhan_xet_chung_cua_gvcn']?.map(ConductItem.fromMap)),
+      phamChatChuYeu: List<ConductItem>.from(map['pham_chat_chu_yeu']
+          ?.map((item) => ConductItem.fromMap(item as Map<String, dynamic>))),
+      nhanXetChungCuaGvcn: List<ConductItem>.from(map['nhan_xet_chung_cua_gvcn']
+          ?.map((item) => ConductItem.fromMap(item as Map<String, dynamic>))),
     );
   }
 
@@ -106,10 +106,10 @@ class NangLucCotLoi {
 
   factory NangLucCotLoi.fromMap(Map<String, dynamic> map) {
     return NangLucCotLoi(
-      nangLucChung: List<ConductItem>.from(
-          map['nang_luc_chung']?.map(ConductItem.fromMap)),
-      nangLucDacThu: List<ConductItem>.from(
-          map['nang_luc_dac_thu']?.map(ConductItem.fromMap)),
+      nangLucChung: List<ConductItem>.from(map['nang_luc_chung']
+          ?.map((item) => ConductItem.fromMap(item as Map<String, dynamic>))),
+      nangLucDacThu: List<ConductItem>.from(map['nang_luc_dac_thu']
+          ?.map((item) => ConductItem.fromMap(item as Map<String, dynamic>))),
     );
   }
 

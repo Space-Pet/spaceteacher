@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/screens/settings/settings_screen/setting_screen.dart';
 
-class ProfileAppBar extends StatefulWidget {
+class ProfileAppBar extends StatelessWidget {
   final VoidCallback? onBack;
   final TeacherDetail user;
 
@@ -15,13 +15,8 @@ class ProfileAppBar extends StatefulWidget {
   });
 
   @override
-  _ProfileAppBarState createState() => _ProfileAppBarState();
-}
-
-class _ProfileAppBarState extends State<ProfileAppBar> {
-  @override
   Widget build(BuildContext context) {
-    final userData = widget.user.info;
+    final userData = user.info;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 12),
@@ -31,7 +26,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: widget.onBack,
+                  onTap: onBack,
                   child: const Icon(
                     Icons.arrow_back_ios_sharp,
                     size: 18,
@@ -77,9 +72,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
             children: [
               IconButton(
                   onPressed: () {
-                    context.push(SettingScreen(
-                      pushNotify: widget.user.pushNotify,
-                    ));
+                    context.push(const SettingScreen());
                   },
                   icon: const Icon(
                     Icons.settings,

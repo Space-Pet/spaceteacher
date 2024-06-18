@@ -59,20 +59,20 @@ class _EslView extends State<EslView> {
     });
 
     return Container(
+      margin: const EdgeInsets.only(bottom: 16),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8)),
           border: Border(
-            top: BorderSide(
-              color: AppColors.gray300,
-            ),
-            left: BorderSide(
-              color: AppColors.gray300,
-            ),
-            right: BorderSide(
-              color: AppColors.gray300,
-            ),
+            top: BorderSide(color: AppColors.gray300),
+            left: BorderSide(color: AppColors.gray300),
+            right: BorderSide(color: AppColors.gray300),
           )),
-      child: Column(children: listEslW),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: listEslW,
+        ),
+      ),
     );
   }
 }

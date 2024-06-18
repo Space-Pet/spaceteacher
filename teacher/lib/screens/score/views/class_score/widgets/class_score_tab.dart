@@ -3,13 +3,15 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 class ClassScoreTab extends StatelessWidget {
-  const ClassScoreTab({super.key});
-
+  const ClassScoreTab({super.key, required this.formInputScore});
+  final FormInputScore formInputScore;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 30,
+      padding: EdgeInsets.only(top: 16),
+      itemCount: formInputScore.items?.length,
       itemBuilder: (context, index) {
+        final item = formInputScore.items?[index];
         return DecoratedBox(
           decoration: BoxDecoration(
             color: AppColors.white,
@@ -44,13 +46,13 @@ class ClassScoreTab extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Nguyễn Trung Quân',
+                    item?.pupilName ?? '',
                     style: AppTextStyles.semiBold14(
                       color: AppColors.brand600,
                     ),
                   ),
                   Text(
-                    'MHS123456',
+                    item?.pupilId.toString() ?? '',
                     style: AppTextStyles.normal14(
                       color: AppColors.textSecondary,
                     ),

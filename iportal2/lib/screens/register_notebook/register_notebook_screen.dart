@@ -75,13 +75,10 @@ class RegisterNoteBoookScreen extends StatelessWidget {
                             isLoading: isLoading,
                             child: isEmpty
                                 ? const Center(
-                                    child: EmptyScreen(
-                                      text: 'Không có dữ liệu',
-                                    ),
-                                  )
-                                : Column(
-                                    children: lessonListW,
-                                  ),
+                                    child:
+                                        EmptyScreen(text: 'Không có dữ liệu'))
+                                : SingleChildScrollView(
+                                    child: Column(children: lessonListW)),
                           ),
                         ),
                       ],

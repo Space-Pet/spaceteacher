@@ -48,18 +48,19 @@ class _HomeScreenState extends State<HomeScreen>
               children: [
                 ListView(),
                 const CenterPositioned(
-                  top: 48,
+                  top: 52,
                   child: HomeAppBar(),
                 ),
                 CenterPositioned(
-                  top: isKinderGarten ? 352 : 320,
+                  top: isKinderGarten ? 376 : 340,
                   child: const NotiSlider(),
                 ),
                 CenterPositioned(
-                  top: isKinderGarten ? 500 : 468,
+                  top: isKinderGarten ? 520 : 472,
                   child: PinFeatures(
                     isKinderGarten: isKinderGarten,
                     userFeatures: localUser.features,
+                    isLoading: homeBloc.state.statusNoti == HomeStatus.loading,
                   ),
                 ),
                 CenterPositioned(

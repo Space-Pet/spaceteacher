@@ -25,9 +25,9 @@ class AuthApi extends AbstractAuthApi {
           'login_app': 0,
         },
       );
-      final dataToken = data['data'] as Map<String, dynamic>;
-      final loginInfo = LoginInfo.fromMap(dataToken);
-      _client.updateAccessToken(loginInfo.access_token);
+
+      final userToken = data['data']['access_token'] as String;
+      _client.updateAccessToken(userToken);
 
       final teacherData = data['data'] as Map<String, dynamic>;
       final teacherLogin = TeacherLoginModel.fromMap(teacherData);
@@ -48,9 +48,9 @@ class AuthApi extends AbstractAuthApi {
           'login_app': 0,
         },
       );
-      final dataToken = data['data'] as Map<String, dynamic>;
-      final loginInfo = LoginInfo.fromMap(dataToken);
-      _client.updateAccessToken(loginInfo.access_token);
+      
+      final userToken = data['data']['access_token'] as String;
+      _client.updateAccessToken(userToken);
 
       final teacherData = data['data'] as Map<String, dynamic>;
       final teacherLogin = TeacherLoginModel.fromMap(teacherData);

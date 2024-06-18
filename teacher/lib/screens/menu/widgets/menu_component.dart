@@ -1,5 +1,7 @@
+import 'package:core/core.dart';
 import 'package:core/data/models/menu.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher/resources/assets.gen.dart';
 
 class ShowPopupMenu extends StatefulWidget {
   const ShowPopupMenu({super.key, required this.item});
@@ -23,9 +25,9 @@ class _ShowPopupMenuState extends State<ShowPopupMenu> {
               decoration: BoxDecoration(
                 color: Colors.transparent,
                 image: DecorationImage(
-                  image: NetworkImage(widget.item.picture.isNotEmpty
+                  image: NetworkImage(widget.item.picture != ''
                       ? widget.item.picture
-                      : 'assets/images/breakfast.png'),
+                      : 'https://via.placeholder.com/500x500.png?text=No+Image+Available'),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -33,13 +35,24 @@ class _ShowPopupMenuState extends State<ShowPopupMenu> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                textAlign: TextAlign.left,
-                widget.item.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Assets.icons.pizza.svg(color: AppColors.green400),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Text(
+                        textAlign: TextAlign.left,
+                        widget.item.title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 8,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           ],

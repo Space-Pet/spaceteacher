@@ -13,11 +13,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.currentUserBloc,
     required this.userRepository,
   }) : super(HomeState(
-          exerciseDueDateToday: const [],
+          exerciseDueDateToday: ExerciseItem.fakeData(),
           exerciseDueDateDataList: const [],
           exerciseInDayDataList: const [],
-          notificationData: NotificationData.empty(),
-          albumData: AlbumData.empty,
+          notificationData: NotificationData.fakeData(),
+          albumData: AlbumData.fakeData,
           datePicked: DateTime.now(),
         )) {
     on<HomeFetchExercise>(_onFetchExercise);
@@ -30,11 +30,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeFetchAlbumData>(_onFetchAlbumData);
     add(HomeFetchAlbumData());
 
-    on<HomeGetPinnedAlbumIdList>(_onGetPinnedAlbumIdList);
-    add(HomeGetPinnedAlbumIdList());
-    on<HomeUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
+    on<HomeRefresh>(_onRefresh);
 
-    on<HomeRefresh>(_onRefresh); 
+    on<HomeFetchLearnYearList>(_onFetchLearnYearList);
+    add(HomeFetchLearnYearList());
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -47,7 +46,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
       // userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
-      userKey: '0723210020',
+      userKey: '0253230044',
     );
 
     emit(
@@ -72,12 +71,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (!currentUserBloc.state.activeChild.isMN) {
       emit(state.copyWith(statusExercise: HomeStatus.loading));
 
+      // create DateTime for 29/05/2024
+      final dateTimeTest = DateTime(2024, 9, 25);
       final exerciseDataList = await appFetchApiRepo.getExercises(
-        userKey: currentUserBloc.state.activeChild.user_key,
-        datePicked: DateTime.now(),
+        // userKey: currentUserBloc.state.activeChild.user_key,
+        datePicked: dateTimeTest,
         isDueDate: event.isDueDate,
         // txtDate: '18-03-2024',
-        // userKey: '0723210020',
+        userKey: '0253230044',
       );
 
       if (event.isDueDate) {
@@ -115,7 +116,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       orderBy: NotificationOrderBy.desc.value,
     );
     emit(state.copyWith(
-        notificationData: notificationData, statusNoti: HomeStatus.success));
+      notificationData: notificationData,
+      statusNoti: HomeStatus.success,
+    ));
   }
 
   _onFetchAlbumData(HomeFetchAlbumData event, Emitter<HomeState> emit) async {
@@ -123,11 +126,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(state.copyWith(statusAlbum: HomeStatus.loading));
 
       final user = currentUserBloc.state.activeChild;
-
       final albumData = await appFetchApiRepo.getAlbum(
-        // pupilId: '10044568',
         pupilId: user.pupil_id.toString(),
       );
+
       emit(state.copyWith(
         albumData: albumData,
         statusAlbum: HomeStatus.success,
@@ -135,35 +137,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  _onGetPinnedAlbumIdList(
-      HomeGetPinnedAlbumIdList event, Emitter<HomeState> emit) async {
-    if (currentUserBloc.state.activeChild.isMN) {
-      final user = currentUserBloc.state.activeChild;
-
-      emit(state.copyWith(pinnedAlbumIdList: user.pinnedAlbumIdList));
-    }
-  }
-
-  _onUpdatePinnedAlbum(HomeUpdatePinnedAlbum event, Emitter<HomeState> emit) {
-    if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.activeChild;
-      // TODO: Update pinned album
-      // userRepository.updatePinnedAlbum(event.pinnedAlbumIdList, user.user_key);
-    }
-
-    emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
-  }
-
   _onRefresh(HomeRefresh event, Emitter<HomeState> emit) {
     final isKinderGarten = currentUserBloc.state.activeChild.isMN;
-    add(HomeFetchProfileData());
     add(HomeFetchNotificationData());
 
     if (isKinderGarten) {
       add(HomeFetchAlbumData());
-      add(HomeGetPinnedAlbumIdList());
     } else {
       add(HomeFetchExercise());
     }
+  }
+
+  _onFetchLearnYearList(
+      HomeFetchLearnYearList event, Emitter<HomeState> emit) async {
+    final activeChild = currentUserBloc.state.activeChild;
+
+    final learnYear = await appFetchApiRepo.getLearnYearList(
+      schoolId: activeChild.school_id,
+    );
+
+    currentUserBloc.add(CurrentUserChangeActiveChild(
+      activeChild.copyWith(learnYearList: learnYear),
+    ));
+
+    emit(state.copyWith(statusHome: HomeStatus.success));
   }
 }

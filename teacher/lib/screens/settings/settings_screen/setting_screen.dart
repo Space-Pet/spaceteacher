@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
@@ -10,21 +11,15 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dialog_languages.dart';
 import 'package:teacher/screens/authentication/domain/view/login_screen.dart';
 import 'package:teacher/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
-import 'package:teacher/screens/settings/faq/faq_screen.dart';
 import 'package:teacher/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
-import 'package:teacher/screens/settings/user_manual/user_manual_screen.dart';
 import 'package:teacher/screens/settings/widget/show_dialog_logout.dart';
-import 'package:repository/repository.dart';
 
 import '../widget/switch_setting.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({
     super.key,
-    required this.pushNotify,
   });
-
-  final int pushNotify;
 
   @override
   State<SettingScreen> createState() => _SettingScreenState();
@@ -47,13 +42,9 @@ class _SettingScreenState extends State<SettingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDisableNoti = widget.pushNotify == 0;
-
     return BlocProvider.value(
       value: settingBloc,
       child: BlocListener<SettingScreenBloc, SettingScreenState>(
-        listenWhen: (previous, current) =>
-            previous.logoutStatus != current.logoutStatus,
         listener: (context, state) {
           if (state.logoutStatus.isSuccess) {
             Navigator.pushAndRemoveUntil(
@@ -71,6 +62,10 @@ class _SettingScreenState extends State<SettingScreen> {
               backgroundColor: AppColors.black,
               textColor: AppColors.white,
             );
+          }
+
+          if (state.logoutStatus.isTurnOffNotiSuccess) {
+            SnackBarUtils.showFloatingSnackBar(context, 'Cập nhật thành công!');
           }
         },
         child: BackGroundContainer(
@@ -95,33 +90,40 @@ class _SettingScreenState extends State<SettingScreen> {
                     ),
                   ),
                   child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: SettingFeature(
-                        text: AppStrings.turnOffNoti,
-                        iconAsset: Assets.icons.bell,
-                        isDisableNoti: isDisableNoti,
-                        isNotiSetting: true,
-                        onPressed: () {
-                          settingBloc.add(TurnOffNoti(
-                            pushNotify: !isDisableNoti,
-                          ));
-                        },
-                      ),
+                    BlocBuilder<CurrentUserBloc, CurrentUserState>(
+                      builder: (context, state) {
+                        final pushNotify = state.pushNotify;
+                        final currentUserBloc = context.read<CurrentUserBloc>();
+
+                        final updateValue = pushNotify == 0 ? 1 : 0;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 18),
+                          child: SettingFeature(
+                            text: AppStrings.turnOffNoti,
+                            iconAsset: Assets.icons.bell,
+                            isDisableNoti: pushNotify == 0,
+                            isNotiSetting: true,
+                            onPressed: () {
+                              settingBloc
+                                  .add(TurnOnOffNoti(pushNotify: updateValue));
+
+                              currentUserBloc
+                                  .add(CurrentUserNotify(updateValue));
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SettingFeature(
                       text: AppStrings.userManual,
                       iconAsset: Assets.icons.userManual,
-                      onPressed: () {
-                        context.push(const UserManualScreen());
-                      },
+                      onPressed: onViewGuide,
                     ),
                     SettingFeature(
                       text: 'FAQ',
                       iconAsset: Assets.icons.faq,
-                      onPressed: () {
-                        context.push(const FaqScreen());
-                      },
+                      onPressed: onViewGuide,
                     ),
                     SettingFeature(
                       text: AppStrings.changeWallpaper,
@@ -211,6 +213,13 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void onViewGuide() {
+    launchUrl(
+      Uri.parse('https://istudy.edu.vn/mod/book/view.php?id=40104'),
+      mode: LaunchMode.inAppBrowserView,
     );
   }
 }

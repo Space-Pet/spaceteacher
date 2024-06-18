@@ -131,6 +131,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/case_icon.svg
   SvgGenImage get caseIcon => const SvgGenImage('assets/icons/case_icon.svg');
 
+  /// File path: assets/icons/chat_round_call.svg
+  SvgGenImage get chatRoundCall =>
+      const SvgGenImage('assets/icons/chat_round_call.svg');
+
   /// File path: assets/icons/check copy.svg
   SvgGenImage get checkCopy => const SvgGenImage('assets/icons/check copy.svg');
 
@@ -302,6 +306,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/filter.svg
   SvgGenImage get filter => const SvgGenImage('assets/icons/filter.svg');
 
+  /// File path: assets/icons/flame.svg
+  SvgGenImage get flame => const SvgGenImage('assets/icons/flame.svg');
+
   /// File path: assets/icons/fluent_apps-list-detail-20-filled.svg
   SvgGenImage get fluentAppsListDetail20Filled =>
       const SvgGenImage('assets/icons/fluent_apps-list-detail-20-filled.svg');
@@ -466,6 +473,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/pin.svg
   SvgGenImage get pin => const SvgGenImage('assets/icons/pin.svg');
 
+  /// File path: assets/icons/pizza.svg
+  SvgGenImage get pizza => const SvgGenImage('assets/icons/pizza.svg');
+
   /// File path: assets/icons/qr-code.svg
   SvgGenImage get qrCode => const SvgGenImage('assets/icons/qr-code.svg');
 
@@ -603,6 +613,7 @@ class $AssetsIconsGen {
         callBus,
         car,
         caseIcon,
+        chatRoundCall,
         checkCopy,
         checkAbsent,
         checkCircleGreenCopy,
@@ -650,6 +661,7 @@ class $AssetsIconsGen {
         file,
         fileMessage,
         filter,
+        flame,
         fluentAppsListDetail20Filled,
         globalCopy,
         global,
@@ -696,6 +708,7 @@ class $AssetsIconsGen {
         pinCopy,
         pinGallery,
         pin,
+        pizza,
         qrCode,
         qrcodeCopy,
         qrcode,

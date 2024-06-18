@@ -3,8 +3,16 @@ part of 'score_bloc.dart';
 @immutable
 sealed class ScoreEvent {}
 
-class ScoreFetchMoet extends ScoreEvent {
-  ScoreFetchMoet();
+class ScoreFetchData extends ScoreEvent {
+  ScoreFetchData();
+}
+
+class ScoreFetchMoetType extends ScoreEvent {
+  ScoreFetchMoetType();
+}
+
+class ScoreFetchMoetAverage extends ScoreEvent {
+  ScoreFetchMoetAverage();
 }
 
 class ScoreFetchEsl extends ScoreEvent {
@@ -15,8 +23,8 @@ class ScoreFetchPrimaryConduct extends ScoreEvent {
   ScoreFetchPrimaryConduct();
 }
 
-class ScoreFetchOtherScore extends ScoreEvent {
-  ScoreFetchOtherScore();
+class ScoreFetchProgramList extends ScoreEvent {
+  ScoreFetchProgramList();
 }
 
 class ScoreTxtTermChange extends ScoreEvent {
@@ -36,10 +44,9 @@ class ScoreLearnYearChange extends ScoreEvent {
 }
 
 class ScoreFilterChange extends ScoreEvent {
-  ScoreFilterChange(this.scoreFilter, this.isPrimary);
+  ScoreFilterChange(this.scoreFilter);
 
   final ViewScoreSelectedParam scoreFilter;
-  final bool isPrimary;
 
   List<Object> get props => [scoreFilter];
 }

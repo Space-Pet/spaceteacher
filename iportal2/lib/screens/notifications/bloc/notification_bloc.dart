@@ -12,7 +12,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationBloc(
     this.appFetchApiRepo, {
     required this.currentUserBloc,
-  }) : super(NotificationState(notificationData: NotificationData.empty())) {
+  }) : super(NotificationState(
+          notificationData: NotificationData.fakeData(),
+        )) {
     on<NotificationFetchData>(_onFetchNotifications);
     add(NotificationFetchData());
 

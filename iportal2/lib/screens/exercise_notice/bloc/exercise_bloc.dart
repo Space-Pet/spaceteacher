@@ -14,10 +14,10 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       required this.currentUserBloc,
       required this.todayString})
       : super(
-          const ExerciseState(
+          ExerciseState(
             subjectList: [],
-            tempData: [],
-            exerciseDataList: [],
+            tempData: ExerciseItem.fakeData(),
+            exerciseDataList: ExerciseItem.fakeData(),
           ),
         ) {
     on<ExerciseFetchData>(_onFetchDueDateExercises);
@@ -53,7 +53,11 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
   }
 
   _onSelectDate(ExerciseSelectDate event, Emitter<ExerciseState> emit) async {
-    emit(state.copyWith(status: ExerciseStatus.loading));
+    emit(state.copyWith(
+      status: ExerciseStatus.loading,
+      tempData: ExerciseItem.fakeData(),
+      exerciseDataList: ExerciseItem.fakeData(),
+    ));
 
     final exerciseDataList = await appFetchApiRepo.getExercises(
       // userKey: '0723210020',

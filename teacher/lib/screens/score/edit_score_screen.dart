@@ -28,7 +28,6 @@ class EditScoreScreen extends StatelessWidget {
       create: (context) => ScoreBloc(
         appFetchApiRepo: context.read<AppFetchApiRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
-        appFetchApiRepository: context.read<AppFetchApiRepository>(),
       ),
       child: BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
         final scoreBloc = context.read<ScoreBloc>();
@@ -36,15 +35,16 @@ class EditScoreScreen extends StatelessWidget {
         final eslScore = state.eslScore;
 
         final khoiLevel = int.parse(
-            scoreData.txtKhoiLevel.isEmpty ? '0' : scoreData.txtKhoiLevel);
+            scoreData.txtClassName.isEmpty ? '0' : scoreData.txtClassName);
         final isPrimary = khoiLevel < 6;
 
-        final isLoading = state.status == ScoreStatus.loading;
-        final isEmptyData = state.status == ScoreStatus.loaded &&
-            (isPrimary
-                ? scoreData.txtDiemMoet.diemData!.isEmpty
-                : scoreData.txtDiemMoet.scoreData!.isEmpty);
+        final isLoading =
+            state.status == ScoreStatus.loadingSemesterLeaderTeacher;
 
+        final semester = state.semester;
+        final user = state.localTeacher;
+        print('value term: ${state.termType}');
+        final termValue = state.termType;
         return BackGroundContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,22 +67,15 @@ class EditScoreScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ScoreFilter(
+                        semesterList: semester,
                         isPrimary: isPrimary,
                         onSelectedOption: (ViewScoreSelectedParam newOption) {
-                          scoreBloc
-                              .add(ScoreFilterChange(newOption, isPrimary));
-                          if (newOption.selectedScoreType ==
-                              ScoreType.moet.text()) {
-                            scoreBloc.add(ScoreFetchMoet());
-                          } else {
-                            scoreBloc.add(ScoreFetchEsl());
-                          }
+                          print('check: ${state.scoreType}');
+                          scoreBloc.add(ScoreFilterChange(newOption));
                         },
                         selectedOption: ViewScoreSelectedParam(
                           selectedScoreType: state.scoreType,
-                          selectedTerm: isPrimary
-                              ? state.txtTihHocKy.text()
-                              : state.txtHocKy.text(),
+                          selectedTerm: semester.first.title,
                           selectedYear: state.txtLearnYear,
                         ),
                       ),
@@ -104,47 +97,54 @@ class EditScoreScreen extends StatelessWidget {
                           ),
                           child: CustomRefresh(
                             onRefresh: () async {
-                              if (state.scoreType == ScoreType.moet.text()) {
-                                scoreBloc.add(ScoreFetchMoet());
-                              } else {
-                                scoreBloc.add(ScoreFetchEsl());
-                              }
+                              // if (state.scoreType == ScoreType.moet.text()) {
+                              //   scoreBloc.add(ScoreFetchMoet());
+                              // } else {
+                              //   scoreBloc.add(ScoreFetchEsl());
+                              // }
                             },
                             child: SingleChildScrollView(
                               physics: const AlwaysScrollableScrollPhysics(),
                               child: AppSkeleton(
-                                isLoading: !isLoading,
-                                child:
-                                    //  isEmptyData
-                                    //     ? const EmptyScreen(
-                                    //         text: 'Chưa có dữ liệu',
-                                    //       )
-                                    //     :
-                                    // state.scoreType == ScoreType.esl.text()
-                                    //     ? EslView(eslScore: eslScore.data)
-                                    //     : isPrimary
-                                    //         ? MoetViewPrimary(
-                                    //             diemMoetTxt:
-                                    //                 scoreData.txtDiemMoet,
-                                    //             semester: state.txtTihHocKy,
-                                    //           )
-                                    //         : MoetView(
-                                    //             diemMoetTxt:
-                                    //                 scoreData.txtDiemMoet,
-                                    //             isSecondSemester:
-                                    //                 scoreData.txtCurrentHocKy ==
-                                    //                     '2',
-                                    //           ),
-                                    MoetViewPrimary(
-                                  diemMoetTxt: scoreData.txtDiemMoet,
-                                  semester: state.txtTihHocKy,
-                                ),
-                                //     MoetView(
-                                //   diemMoetTxt: scoreData.txtDiemMoet,
-                                //   isSecondSemester:
-                                //       scoreData.txtCurrentHocKy == '2',
-                                // ),
-                              ),
+                                  isLoading: isLoading,
+                                  child: state.scoreType == ScoreType.esl.text()
+                                      ? const EslView()
+                                      : user.cap_dao_tao.name == 'Phổ thông'
+                                          ? MoetViewPrimary()
+                                          : MoetView(
+                                              isSecondSemester: termValue == 2,
+                                            )
+
+                                  //  isEmptyData
+                                  //     ? const EmptyScreen(
+                                  //         text: 'Chưa có dữ liệu',
+                                  //       )
+                                  //     :
+                                  // state.scoreType == ScoreType.esl.text()
+                                  //     ? EslView(eslScore: eslScore.data)
+                                  //     : isPrimary
+                                  //         ? MoetViewPrimary(
+                                  //             diemMoetTxt:
+                                  //                 scoreData.txtDiemMoet,
+                                  //             semester: state.txtTihHocKy,
+                                  //           )
+                                  //         : MoetView(
+                                  //             diemMoetTxt:
+                                  //                 scoreData.txtDiemMoet,
+                                  //             isSecondSemester:
+                                  //                 scoreData.txtCurrentHocKy ==
+                                  //                     '2',
+                                  //           ),
+                                  //     MoetViewPrimary(
+                                  //   diemMoetTxt: scoreData.txtDiemMoet,
+                                  //   //semester: state.txtTihHocKy,
+                                  // ),
+                                  //     MoetView(
+                                  //   diemMoetTxt: scoreData.txtDiemMoet,
+                                  //   isSecondSemester:
+                                  //       scoreData.txtCurrentHocKy == '2',
+                                  // ),
+                                  ),
                             ),
                           ),
                         ),
@@ -194,18 +194,22 @@ class ViewScoreSelectedParam {
   final String selectedYear;
   final String selectedScoreType;
   final String selectedTerm;
+  final int valueTerm;
 
   ViewScoreSelectedParam(
       {required this.selectedYear,
+      this.valueTerm = 1,
       required this.selectedScoreType,
       required this.selectedTerm});
 
   ViewScoreSelectedParam copyWith({
+    int? valueTerm,
     String? selectedYear,
     String? selectedScoreType,
     String? selectedTerm,
   }) {
     return ViewScoreSelectedParam(
+      valueTerm: valueTerm ?? this.valueTerm,
       selectedYear: selectedYear ?? this.selectedYear,
       selectedScoreType: selectedScoreType ?? this.selectedScoreType,
       selectedTerm: selectedTerm ?? this.selectedTerm,

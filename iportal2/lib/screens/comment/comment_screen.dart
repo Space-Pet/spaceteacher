@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:core/core.dart';
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,20 +12,20 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
-import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
-import 'package:iportal2/screens/pre_score/widget/tab_bar/tab_bar_pre_score.dart';
+import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
+import 'package:iportal2/screens/comment/widget/tab_bar/tab_bar_comment.dart';
 import 'package:repository/repository.dart';
 
-class PreScoreScreen extends StatelessWidget {
-  const PreScoreScreen({super.key});
+class CommentScreen extends StatelessWidget {
+  const CommentScreen({super.key});
 
-  static const routeName = '/pre-score';
+  static const routeName = '/comment';
 
   @override
   Widget build(BuildContext context) {
     final userRepository = context.read<UserRepository>();
     final appFetchApiRepository = context.read<AppFetchApiRepository>();
-    final preScoreBloc = PreScoreBloc(
+    final preScoreBloc = CommentBloc(
         appFetchApiRepo: appFetchApiRepository,
         currentUserBloc: context.read<CurrentUserBloc>(),
         userRepository: userRepository);
@@ -39,24 +40,25 @@ class PreScoreScreen extends StatelessWidget {
 
     return BlocProvider.value(
       value: preScoreBloc,
-      child: const StudentScoreViewPre(),
+      child: const CommentView(),
     );
   }
 }
 
-class StudentScoreViewPre extends StatefulWidget {
-  const StudentScoreViewPre({super.key});
+class CommentView extends StatefulWidget {
+  const CommentView({super.key});
   @override
-  State<StudentScoreViewPre> createState() => StudentScoreViewPreState();
+  State<CommentView> createState() => CommentViewState();
 }
 
-class StudentScoreViewPreState extends State<StudentScoreViewPre> {
+class CommentViewState extends State<CommentView> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PreScoreBloc, PreScoreState>(builder: (context, state) {
+    return BlocBuilder<CommentBloc, CommentState>(builder: (context, state) {
       final comment = state.comment;
       final startDate = state.startDate;
       final endDate = state.endDate;
+      final isLoading = state.commentStatus == CommentStatus.loading;
 
       return BackGroundContainer(
         child: Column(
@@ -79,11 +81,13 @@ class StudentScoreViewPreState extends State<StudentScoreViewPre> {
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: TabBarPreScore(
-                  comment: comment ?? [Comment.empty()],
-                  endDate: endDate,
-                  startDate: startDate,
-                  state: state,
+                child: AppSkeleton(
+                  isLoading: isLoading,
+                  child: TabBarComment(
+                    comment: comment ?? [],
+                    endDate: endDate,
+                    startDate: startDate,
+                  ),
                 ),
               ),
             ),

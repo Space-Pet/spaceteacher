@@ -1,10 +1,10 @@
-import 'package:core/resources/app_colors.dart';
-import 'package:core/resources/app_text_styles.dart';
+import 'package:core/core.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:repository/repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CardBusItem extends StatelessWidget {
   const CardBusItem({
@@ -16,8 +16,7 @@ class CardBusItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 4),
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: ShapeDecoration(
         color: AppColors.white,
         shape: RoundedRectangleBorder(
@@ -41,34 +40,47 @@ class CardBusItem extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 12, 0, 0),
           child: Row(
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                decoration: BoxDecoration(
-                    color: busSchedule.isCompleted
-                        ? AppColors.green400
-                        : AppColors.green100,
-                    borderRadius: const BorderRadius.all(Radius.circular(20))),
-                child: Text(
-                  busSchedule.title(),
-                  style: AppTextStyles.semiBold12(
-                    color: busSchedule.isCompleted
-                        ? AppColors.white
-                        : AppColors.black24,
+              if (busSchedule.checkInTime().isNotEmpty)
+                Container(
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.green100,
+                    borderRadius: AppRadius.rounded4,
+                  ),
+                  child: Text(
+                    busSchedule.checkInTime(),
+                    style: AppTextStyles.semiBold14(
+                      color: AppColors.black24,
+                    ),
                   ),
                 ),
-              ),
+              if (busSchedule.checkOutTime().isNotEmpty)
+                Container(
+                  margin: const EdgeInsets.only(left: 6),
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.green400,
+                    borderRadius: AppRadius.rounded4,
+                  ),
+                  child: Text(
+                    busSchedule.checkOutTime(),
+                    style: AppTextStyles.semiBold14(
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
         collapsed: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
           child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: _Item(
-                  label: 'Tuyến',
-                  value: '${busSchedule.route.routeId}',
+                  label: 'Loại tuyến',
+                  value: busSchedule.scheduleType.text,
                 ),
               ),
               const Padding(
@@ -83,6 +95,8 @@ class CardBusItem extends StatelessWidget {
                 ),
               ),
               const _Divider(),
+              const SizedBox(height: 6),
+              TeacherInfo(busSchedule: busSchedule),
             ],
           ),
         ),
@@ -172,62 +186,7 @@ class CardBusItem extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                        color: AppColors.blueGray50,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Giáo viên',
-                              softWrap: true,
-                              style: AppTextStyles.semiBold14(
-                                color: AppColors.gray600,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 6,
-                            ),
-                            Text(
-                              busSchedule.teacher.teacherName,
-                              softWrap: true,
-                              style: AppTextStyles.normal14(
-                                color: AppColors.gray600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              maxRadius: 16,
-                              backgroundColor: AppColors.brand600,
-                              child: SvgPicture.asset(
-                                  width: 17,
-                                  height: 17,
-                                  'assets/icons/send-message-bus.svg'),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            CircleAvatar(
-                              maxRadius: 16,
-                              backgroundColor: AppColors.red900,
-                              child: SvgPicture.asset(
-                                  width: 17,
-                                  height: 17,
-                                  'assets/icons/phone-call-bus.svg'),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  TeacherInfo(busSchedule: busSchedule),
                   const SizedBox(
                     height: 8,
                   ),
@@ -261,6 +220,80 @@ class CardBusItem extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TeacherInfo extends StatelessWidget {
+  const TeacherInfo({
+    super.key,
+    required this.busSchedule,
+  });
+
+  final BusSchedule busSchedule;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: const BoxDecoration(
+          color: AppColors.blueGray50,
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Bảo mẫu',
+                softWrap: true,
+                style: AppTextStyles.semiBold14(
+                  color: AppColors.gray600,
+                ),
+              ),
+              const SizedBox(
+                height: 6,
+              ),
+              Text(
+                busSchedule.teacher.teacherName,
+                softWrap: true,
+                style: AppTextStyles.normal14(
+                  color: AppColors.gray600,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CircleAvatar(
+                maxRadius: 18,
+                backgroundColor: AppColors.brand600,
+                child: SvgPicture.asset(
+                    width: 20, height: 20, 'assets/icons/send-message-bus.svg'),
+              ),
+              if (busSchedule.teacher.mobilePhone.isNotEmpty)
+                InkWell(
+                  onTap: () {
+                    launchUrl(
+                        Uri.parse("tel:${busSchedule.teacher.mobilePhone}"));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: CircleAvatar(
+                      maxRadius: 18,
+                      backgroundColor: AppColors.red900,
+                      child: SvgPicture.asset(
+                          width: 22,
+                          height: 22,
+                          'assets/icons/phone-call-bus.svg'),
+                    ),
+                  ),
+                )
+            ],
+          ),
+        ],
       ),
     );
   }

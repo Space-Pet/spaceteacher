@@ -1,6 +1,5 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
@@ -59,12 +58,10 @@ class WeekScheduleView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ScreenAppBar(
-                title: 'Kế hoạch tuần',
-              ),
+              const ScreenAppBar(title: 'Kế hoạch tuần'),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: AppRadius.roundedTop28,
@@ -79,33 +76,20 @@ class WeekScheduleView extends StatelessWidget {
                               date: date ?? DateTime.now(),
                               weekSchedule: weekData,
                             ),
-                            if (weekData != null &&
-                                weekData.data.mainPlan!.isNotEmpty &&
-                                state.weekScheduleStatus ==
-                                    WeekScheduleStatus.success)
+                            if (weekData.data.mainPlan!.isNotEmpty)
                               WeeklyTopic(weekSchedule: weekData),
-                            const SizedBox(height: 8),
-                            if (weekData != null &&
-                                weekData.data.detailPlan!.isNotEmpty &&
-                                state.weekScheduleStatus ==
-                                    WeekScheduleStatus.success)
-                              Expanded(
-                                child: WeeklyTabs(
-                                  date: date ?? DateTime.now(),
-                                  lessons: weekData.data.detailPlan,
-                                ),
-                              ),
-                            if (weekData == null ||
-                                weekData.data.detailPlan!.isEmpty)
-                              const Expanded(
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: 200),
-                                  child: Center(
-                                    child: EmptyScreen(
-                                        text: 'Bạn chưa có kế hoạch tuần'),
+                            weekData.data.detailPlan!.isNotEmpty
+                                ? Expanded(
+                                    child: WeeklyTabs(
+                                      date: date ?? DateTime.now(),
+                                      lessons: weekData.data.detailPlan,
+                                    ),
+                                  )
+                                : const Expanded(
+                                    child: Center(
+                                        child: EmptyScreen(
+                                            text: 'Không có dữ liệu')),
                                   ),
-                                ),
-                              )
                           ],
                         )),
                   ),
@@ -125,7 +109,7 @@ class WeeklyTopic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: ShapeDecoration(
@@ -160,22 +144,12 @@ class WeeklyTopic extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Text(
-                //   weekSchedule?.data.mainPlan?.isNotEmpty ?? false
-                //       ? weekSchedule!.data.mainPlan!.first.mainPlanTitle ?? ''
-                //       : '',
-                //   style: AppTextStyles.normal12(color: AppColors.gray400),
-                // ),
-                // Text(
-                //   'Chủ đề',
-                //   style: AppTextStyles.normal12(color: AppColors.gray400),
-                // ),
                 const SizedBox(height: 4),
                 Text(
                   weekSchedule?.data.mainPlan?.isNotEmpty ?? false
                       ? weekSchedule!.data.mainPlan!.first.mainPlanBody ?? ''
                       : '',
-                  style: AppTextStyles.normal12(fontWeight: FontWeight.w700),
+                  style: AppTextStyles.normal14(fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -208,6 +182,7 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       decoration: const BoxDecoration(
         color: AppColors.gray100,

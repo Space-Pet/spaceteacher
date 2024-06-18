@@ -12,9 +12,10 @@ import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
-import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
+import 'package:iportal2/screens/comment/comment_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
+import 'package:iportal2/screens/survey/survey_screen.dart';
 
 import '../../../school_fee/screen/school_fee_screen.dart';
 
@@ -133,7 +134,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
 
         case FeatureKey.comment:
           homeNavigatorKey.currentContext
-              ?.pushNamed(routeName: PreScoreScreen.routeName);
+              ?.pushNamed(routeName: CommentScreen.routeName);
           break;
 
         case FeatureKey.phoneBook:
@@ -158,6 +159,10 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
         case FeatureKey.bus:
           homeNavigatorKey.currentContext
               ?.pushNamed(routeName: BusScreen.routeName);
+          break;
+        case FeatureKey.survey:
+          homeNavigatorKey.currentContext
+              ?.pushNamed(routeName: SurveyScreen.routeName);
           break;
         case FeatureKey.tariff:
           homeNavigatorKey.currentContext

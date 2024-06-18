@@ -28,10 +28,12 @@ class _ScheduleTabsState extends State<ScheduleTabs>
   void initState() {
     super.initState();
 
-    tabBarController = TabController(
-      length: (widget.lessons ?? []).length,
-      vsync: this,
-    );
+    if ((widget.lessons ?? []).isNotEmpty) {
+      tabBarController = TabController(
+        length: (widget.lessons ?? []).length,
+        vsync: this,
+      );
+    }
   }
 
   Future<void> _onItemTapped(int index) async {
@@ -65,8 +67,6 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                 children: tabView(index, startOfWeek),
               ),
             ));
-
-    // _onItemTapped(days);
 
     return DefaultTabController(
         length: (widget.lessons ?? []).length,
@@ -106,95 +106,114 @@ class _ScheduleTabsState extends State<ScheduleTabs>
   }
 
   List<Container> tabView(int index, DateTime startOfWeek) {
-    return List.generate(widget.lessons?[index].dateSubject.length ?? 0,
-        (innerIndex) {
-      final lesson = widget.lessons?[index].dateSubject[innerIndex];
-      final lastIndex = (widget.lessons?[index].dateSubject.length ?? 0) - 1;
+    final listLesson = widget.lessons?[index].dateSubject;
+    final indexSeparate =
+        listLesson!.indexWhere((element) => element.tietNum == 5) + 1;
 
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          borderRadius: innerIndex == lastIndex
-              ? AppRadius.roundedBottom12
-              : const BorderRadius.all(Radius.zero),
-          color: AppColors.gray100,
-          border: Border(
-            bottom: innerIndex == lastIndex
-                ? const BorderSide(color: AppColors.white)
-                : const BorderSide(color: AppColors.gray300),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-                padding: const EdgeInsets.only(top: 6),
-                width: 80,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    listLesson.insert(indexSeparate, DateSubject.empty());
+
+    return List.generate(listLesson.length, (innerIndex) {
+      final lesson = listLesson[innerIndex];
+      final lastIndex = listLesson.length - 1;
+
+      return innerIndex == indexSeparate
+          ? Container(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              width: double.infinity,
+              child: Text(
+                'Buổi chiều',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.semiBold16(color: AppColors.brand600),
+              ),
+            )
+          : Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: innerIndex == lastIndex
+                    ? AppRadius.roundedBottom12
+                    : const BorderRadius.all(Radius.zero),
+                color: AppColors.gray100,
+                border: Border(
+                  bottom: innerIndex == lastIndex
+                      ? const BorderSide(color: AppColors.white)
+                      : const BorderSide(color: AppColors.gray300),
+                ),
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Tiết ${lesson?.tietNum}',
-                      style: AppTextStyles.normal14(color: AppColors.black24),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      lesson?.room ?? '',
-                      style: AppTextStyles.normal14(color: AppColors.gray61),
-                    ),
-                  ],
-                )),
-            Expanded(
-              child: Row(
-                children: [
-                  Container(
-                    width: 4,
-                    height: 50,
-                    decoration: BoxDecoration(
-                        color: AppColors.brand600,
-                        borderRadius: BorderRadius.circular(14)),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        lesson?.subjectName ?? 'Tiết trống',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            AppTextStyles.semiBold14(color: AppColors.black24),
-                      ),
-                      const SizedBox(height: 4),
-                      lesson?.teacherName != null
-                          ? Text(
-                              'GV: ${lesson?.teacherName}',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                    Container(
+                        padding: const EdgeInsets.only(top: 6),
+                        width: 80,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tiết ${innerIndex < indexSeparate ? lesson.tietNum : lesson.tietNum! - 5}',
+                              style: AppTextStyles.normal14(
+                                  color: AppColors.black24),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              lesson.room ?? '',
                               style: AppTextStyles.normal14(
                                   color: AppColors.gray61),
-                            )
-                          : const SizedBox(height: 16),
-                    ],
-                  )),
-                  if (lesson?.subjectId != null)
-                    InkWell(
-                      onTap: () {
-                        widget.onViewExercise(
-                          startOfWeek.add(Duration(days: index)),
-                          lesson?.tietNum ?? 0,
-                        );
-                      },
-                      child: SvgPicture.asset('assets/icons/advice.svg'),
+                            ),
+                          ],
+                        )),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            decoration: BoxDecoration(
+                                color: AppColors.brand600,
+                                borderRadius: BorderRadius.circular(14)),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4),
+                              Text(
+                                lesson.subjectName ?? 'Tự học',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.semiBold14(
+                                    color: AppColors.black24),
+                              ),
+                              const SizedBox(height: 4),
+                              lesson.teacherName != null
+                                  ? Text(
+                                      'GV: ${lesson.teacherName}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AppTextStyles.normal14(
+                                          color: AppColors.gray61),
+                                    )
+                                  : const SizedBox(height: 16),
+                            ],
+                          )),
+                          if (lesson.subjectId != null)
+                            InkWell(
+                              onTap: () {
+                                widget.onViewExercise(
+                                  startOfWeek.add(Duration(days: index)),
+                                  lesson.tietNum ?? 0,
+                                );
+                              },
+                              child:
+                                  SvgPicture.asset('assets/icons/advice.svg'),
+                            ),
+                        ],
+                      ),
                     ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      );
+            );
     });
   }
 }

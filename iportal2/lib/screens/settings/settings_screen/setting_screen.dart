@@ -1,9 +1,6 @@
-import 'package:core/common/utils.dart';
+import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -15,14 +12,11 @@ import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
 import 'package:iportal2/screens/settings/change_account_screen/change_account.dart';
 import 'package:iportal2/screens/settings/change_wallpaper/change_wallpaper_screen.dart';
-import 'package:iportal2/screens/settings/faq/faq_screen.dart';
 import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bloc.dart';
-import 'package:iportal2/screens/settings/user_manual/user_manual_screen.dart';
 import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
+import 'package:iportal2/screens/settings/widget/switch_setting.dart';
 import 'package:network_data_source/network_data_source.dart';
 import 'package:repository/repository.dart';
-
-import '../widget/switch_setting.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({
@@ -50,7 +44,7 @@ class _SettingScreenState extends State<SettingScreen> {
       authRepository: context.read<AuthRepository>(),
       userRepository: context.read<UserRepository>(),
       currentUserBloc: context.read<CurrentUserBloc>(),
-    );
+  );
 
     final isDisableNoti = widget.isParent
         ? widget.parentData.pushNotify == 0
@@ -114,24 +108,22 @@ class _SettingScreenState extends State<SettingScreen> {
                       AccountSetting(
                         text: AppStrings.userManual,
                         iconAsset: Assets.icons.userManual,
-                        onPressed: () {
-                          context.push(const UserManualScreen());
-                        },
+                        onPressed: onViewGuide,
                       ),
                       AccountSetting(
                         text: 'FAQ',
                         iconAsset: Assets.icons.faq,
-                        onPressed: () {
-                          context.push(const FaqScreen());
-                        },
-                      ),
-                      AccountSetting(
-                        text: AppStrings.changeAccount,
-                        iconAsset: Assets.icons.accountConversion,
-                        onPressed: () {
-                          context.push(const ChangeAccountScreen());
-                        },
-                      ),
+                        onPressed: onViewGuide,
+                      ), 
+                      if (widget.isParent &&
+                          widget.parentData.children.length > 1)
+                        AccountSetting(
+                          text: AppStrings.changeAccount,
+                          iconAsset: Assets.icons.accountConversion,
+                          onPressed: () {
+                            context.push(const ChangeAccountScreen());
+                          },
+                        ),
                       BlocBuilder<SettingScreenBloc, SettingScreenState>(
                           builder: (context, state) {
                         return AccountSetting(
@@ -238,6 +230,13 @@ class _SettingScreenState extends State<SettingScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void onViewGuide() {
+    launchUrl(
+      Uri.parse('https://istudy.edu.vn/mod/book/view.php?id=40104'),
+      mode: LaunchMode.inAppBrowserView,
     );
   }
 }

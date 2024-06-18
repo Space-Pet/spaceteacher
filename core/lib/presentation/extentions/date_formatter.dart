@@ -4,6 +4,8 @@ part of 'extention.dart';
 extension DateTimeFormatter on DateTime {
   String get yyyyMMdd => DateFormat('yyyy-MM-dd').format(this);
   String get ddMMSlash => DateFormat('dd/MM').format(this);
+  String get mmyyyy => DateFormat('MM-yyyy').format(this);
+  String get myyyy => DateFormat('M-yyyy').format(this);
 
   String get eeee => DateFormat('EEEE', 'vi_VN').format(this);
 

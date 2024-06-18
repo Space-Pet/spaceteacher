@@ -17,19 +17,19 @@ class PhoneBookBloc extends Bloc<PhoneBookEvent, PhoneBookState> {
       required this.currentUserBloc,
       required this.userRepository})
       : super(PhoneBookState(
-            phoneBookTeacher: const [],
-            user: userRepository.notSignedIn(),
-            phoneBookStudent: const [])) {
+          user: userRepository.notSignedIn(),
+          phoneBookTeacher: const [],
+          phoneBookStudent: PhoneBookStudent.fakeData(),
+        )) {
     on<GetPhoneBookStudent>(_onGetPhoneBookStudent);
     on<GetPhoneBookTeacher>(_onGetPhoneBookTeacher);
   }
   void _onGetPhoneBookTeacher(
       GetPhoneBookTeacher event, Emitter<PhoneBookState> emit) async {
-    emit(state.copyWith(phoneBookStatus: PhoneBookStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookTeacher(
         pupilId: currentUserBloc.state.activeChild.pupil_id);
-    emit(state.copyWith(
-        phoneBookStatus: PhoneBookStatus.success, phoneBookTeacher: data));
+
+    emit(state.copyWith(phoneBookTeacher: data));
   }
 
   void _onGetPhoneBookStudent(
@@ -37,7 +37,10 @@ class PhoneBookBloc extends Bloc<PhoneBookEvent, PhoneBookState> {
     emit(state.copyWith(phoneBookStatus: PhoneBookStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookStudent(
         classId: currentUserBloc.state.user.children[0].class_id);
+
     emit(state.copyWith(
-        phoneBookStatus: PhoneBookStatus.success, phoneBookStudent: data));
+      phoneBookStatus: PhoneBookStatus.success,
+      phoneBookStudent: data,
+    ));
   }
 }

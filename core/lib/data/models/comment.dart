@@ -1,4 +1,3 @@
-
 class Comment {
   final String commentId;
   final String teacherId;
@@ -37,14 +36,31 @@ class Comment {
   }
 
   factory Comment.empty() => const Comment(
-      commentDate: 'eee',
-      commentId: '',
-      commentNote: '',
-      commentTimePost: '',
-      huyHieuImg: '',
-      huyHieuName: '',
-      teacherId: '',
-      teacherName: '',
-      teacherimg: '',
-      weekDayNote: '');
+        commentDate: 'eee',
+        commentId: '',
+        commentNote: '',
+        commentTimePost: '',
+        huyHieuImg: '',
+        huyHieuName: '',
+        teacherId: '',
+        teacherName: '',
+        teacherimg: '',
+        weekDayNote: '',
+      );
+
+  static List<Comment> fakeData() => List.generate(
+      10,
+      (index) => const Comment(
+            commentDate: '22-01-2024',
+            commentId: '1',
+            commentNote:
+                'Chúc mừng con đã hoàn thành tốt bài kiểm tra tuần này',
+            commentTimePost: '22:00',
+            huyHieuImg: 'imgurl',
+            huyHieuName: 'Huy hiệu 1',
+            teacherId: '1',
+            teacherName: 'Nguyễn Văn A',
+            teacherimg: 'imgurl',
+            weekDayNote: 'Thứ 2',
+          ));
 }

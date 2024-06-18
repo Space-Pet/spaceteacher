@@ -23,6 +23,7 @@ class PhoneBookScreen extends StatelessWidget {
       currentUserBloc: context.read<CurrentUserBloc>(),
       userRepository: userRepository,
     );
+    phoneBookBloc.add(GetListClass());
     phoneBookBloc.add(GetPhoneBookStudent());
     phoneBookBloc.add(GetPhoneBookTeacher());
     return BlocProvider.value(

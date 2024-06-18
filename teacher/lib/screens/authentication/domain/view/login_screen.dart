@@ -20,7 +20,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextStyle get hintStyle => TextStyle(
-      fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey[500]);
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: Colors.grey[500],
+      );
 
   late LoginBloc loginBloc;
 

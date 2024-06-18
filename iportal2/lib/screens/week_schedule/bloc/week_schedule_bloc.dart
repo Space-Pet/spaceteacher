@@ -13,7 +13,10 @@ class WeekScheduleBloc extends Bloc<WeekScheduleEvent, WeekScheduleState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(WeekScheduleState(user: userRepository.notSignedIn())) {
+      : super(WeekScheduleState(
+          user: userRepository.notSignedIn(),
+          weekSchedule: WeekSchedule.fakeData(),
+        )) {
     on<GetWeekSchedule>(_onGetWeekSchedule);
   }
   final AppFetchApiRepository appFetchApiRepo;
@@ -23,15 +26,21 @@ class WeekScheduleBloc extends Bloc<WeekScheduleEvent, WeekScheduleState> {
   void _onGetWeekSchedule(
       GetWeekSchedule event, Emitter<WeekScheduleState> emitter) async {
     emitter(state.copyWith(
-        weekScheduleStatus: WeekScheduleStatus.init, date: DateTime.now()));
+      weekScheduleStatus: WeekScheduleStatus.init,
+      date: DateTime.now(),
+      weekSchedule: WeekSchedule.fakeData(),
+    ));
+
     final data = await appFetchApiRepo.getWeekSchedule(
-      // userKey: currentUserBloc.state.activeChild.user_key,R
+      // userKey: currentUserBloc.state.activeChild.user_key,
       userKey: '0282810220108',
       txtDate: event.txtDate,
     );
+
     emitter(state.copyWith(
-        weekScheduleStatus: WeekScheduleStatus.success,
-        weekSchedule: data,
-        date: event.date));
+      weekScheduleStatus: WeekScheduleStatus.success,
+      weekSchedule: data,
+      date: event.date,
+    ));
   }
 }

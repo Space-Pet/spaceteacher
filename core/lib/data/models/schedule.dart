@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 class Schedule {
@@ -49,8 +48,24 @@ class Schedule {
     return 'Schedule(tkbDateApply: $tkbDateApply, tkbClass: $tkbClass, tkbData: $tkbData)';
   }
 
-  factory Schedule.empty() =>
-      Schedule(tkbDateApply: '', tkbClass: '', tkbData: []);
+  factory Schedule.empty() => Schedule(
+      tkbDateApply: '',
+      tkbClass: '',
+      tkbData: List.generate(6, (index) {
+        return ScheduleData(
+          date: '2022-10-0${index + 1}',
+          dateName: 'Thứ ${index + 2} - 0${index + 1}/10',
+          dateSubject: List.generate(10, (index) {
+            return DateSubject(
+              subjectName: 'Toán',
+              tietNum: index + 1,
+              className: '10A1',
+              room: '101',
+              teacherName: 'Nguyễn Văn A',
+            );
+          }),
+        );
+      }));
 }
 
 class ScheduleData {
@@ -158,6 +173,18 @@ class DateSubject {
   factory DateSubject.fromJson(String source) =>
       DateSubject.fromMap(json.decode(source));
 
+  factory DateSubject.empty() => DateSubject(
+        subjectId: '',
+        subjectName: '',
+        tietNum: 0,
+        classId: '',
+        className: '',
+        room: '',
+        teacherId: '',
+        teacherName: '',
+        teacherImg: '',
+      );
+
   String toJson() => json.encode(toMap());
 
   bool get isNotEmpty =>
@@ -170,9 +197,4 @@ class DateSubject {
       teacherId != null ||
       teacherName != null ||
       teacherImg != null;
-
-  @override
-  String toString() {
-    return 'DateSubject(subjectId: $subjectId, subjectName: $subjectName, tietNum: $tietNum, classId: $classId, className: $className, room: $room, teacherId: $teacherId, teacherName: $teacherName, teacherImg: $teacherImg)';
-  }
 }

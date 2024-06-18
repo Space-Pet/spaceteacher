@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/phone_book/widget/tab_bar_view_phone_book.dart';
 
-
 class TabBarPhoneBook extends StatelessWidget {
   TabBarPhoneBook({
     super.key,
@@ -20,19 +19,15 @@ class TabBarPhoneBook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fullName = currentUserBloc.state.user.name;
-
-    final nameParts = fullName.split(' ');
-
-    final lastName = nameParts.last;
     return DefaultTabController(
       length: tabs.length,
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
             child: Container(
               width: double.infinity,
+              height: 40,
               decoration: BoxDecoration(
                 color: AppColors.blackTransparent,
                 borderRadius: BorderRadius.circular(40),
@@ -71,12 +66,12 @@ class TabBarPhoneBook extends StatelessWidget {
             child: TabBarView(
               children: [
                 TabBarViewPhoneBook(
-                  title: 'Bạn cùng lớp của $lastName',
+                  title: 'Bạn cùng lớp',
                   phoneBookStudent: phoneBookStudent,
                 ),
                 TabBarViewPhoneBook(
                   phoneBookTeacher: phoneBookTeacher,
-                  title: 'Giáo viên đang dạy $lastName',
+                  title: 'Giáo viên đang dạy',
                 )
               ],
             ),

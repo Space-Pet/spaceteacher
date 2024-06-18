@@ -13,7 +13,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
     required this.currentUserBloc,
   }) : super(const SettingScreenState()) {
     on<SettingScreenLoggedOut>(_onLogout);
-    on<TurnOffNoti>(_onTurnOffNoti);
+    on<TurnOnOffNoti>(_onTurnOffNoti);
   }
 
   final AuthRepository authRepository;
@@ -22,7 +22,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
   final CurrentUserBloc currentUserBloc;
 
   Future<void> _onTurnOffNoti(
-    TurnOffNoti event,
+    TurnOnOffNoti event,
     Emitter<SettingScreenState> emit,
   ) async {
     final user = currentUserBloc.state.user;
@@ -37,10 +37,10 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
         pushNotify: event.pushNotify,
         headers: headers,
       );
-      print(data);
       if (data!['code'] == 200) {
         emit(state.copyWith(
-            logoutStatus: SettingScreenStatus.turnOffNotiSuccess));
+          logoutStatus: SettingScreenStatus.turnOffNotiSuccess,
+        ));
       }
     } catch (e) {
       emit(

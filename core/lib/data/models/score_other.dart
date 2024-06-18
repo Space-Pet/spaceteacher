@@ -1,30 +1,38 @@
 import 'dart:convert';
 
-class ScoreOther {
-  final String pupilId;
-  final String txtLearnYear;
-  final String status;
-  final String statusNote;
-  final List<ScoreOtherData>? data;
 
-  ScoreOther({
+class ScoreProgramList {
+  String pupilId;
+  String txtLearnYear;
+  String status;
+  String statusNote;
+  List<ScoreProgram> data;
+
+  ScoreProgramList({
     required this.pupilId,
     required this.txtLearnYear,
     required this.status,
     required this.statusNote,
-    this.data,
+    required this.data,
   });
 
-  factory ScoreOther.fromMap(Map<String, dynamic> map) {
-    print(map);
-    return ScoreOther(
+  factory ScoreProgramList.fromMap(Map<String, dynamic> map) {
+    var data = map['data'];
+    if (data == null || data.isEmpty) {
+      data = [];
+    } else {
+      data = List<ScoreProgram>.from(
+        map['data'].map((dynamic item) =>
+            ScoreProgram.fromMap(item as Map<String, dynamic>)),
+      );
+    }
+
+    return ScoreProgramList(
       pupilId: map['pupil_id'],
       txtLearnYear: map['txt_learn_year'],
       status: map['status'],
       statusNote: map['status_note'],
-      data: List<ScoreOtherData>.from(
-        map['data']?.map(ScoreOtherData.fromMap),
-      ),
+      data: data,
     );
   }
 
@@ -34,16 +42,16 @@ class ScoreOther {
       'txt_learn_year': txtLearnYear,
       'status': status,
       'status_note': statusNote,
-      'data': data?.map((x) => x.toMap()).toList(),
+      'data': data.map((x) => x.toMap()).toList(),
     };
   }
 
-  factory ScoreOther.fromJson(String source) =>
-      ScoreOther.fromMap(json.decode(source));
+  factory ScoreProgramList.fromJson(String source) =>
+      ScoreProgramList.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
 
-  factory ScoreOther.empty() => ScoreOther(
+  factory ScoreProgramList.empty() => ScoreProgramList(
         pupilId: '',
         txtLearnYear: '',
         status: '',
@@ -52,21 +60,21 @@ class ScoreOther {
       );
 }
 
-class ScoreOtherData {
+class ScoreProgram {
   final String ctId;
   final String ctName;
   final String schoolId;
   final String schoolName;
 
-  ScoreOtherData({
+  ScoreProgram({
     required this.ctId,
     required this.ctName,
     required this.schoolId,
     required this.schoolName,
   });
 
-  factory ScoreOtherData.fromMap(Map<String, dynamic> map) {
-    return ScoreOtherData(
+  factory ScoreProgram.fromMap(Map<String, dynamic> map) {
+    return ScoreProgram(
       ctId: map['CT_ID'],
       ctName: map['CT_NAME'],
       schoolId: map['SCHOOL_ID'],
@@ -82,4 +90,11 @@ class ScoreOtherData {
       'SCHOOL_NAME': schoolName,
     };
   }
+
+  factory ScoreProgram.empty() => ScoreProgram(
+        ctId: '',
+        ctName: '',
+        schoolId: '',
+        schoolName: '',
+      );
 }

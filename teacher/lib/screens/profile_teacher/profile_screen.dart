@@ -20,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
     return BlocBuilder<CurrentUserBloc, CurrentUserState>(
       builder: (context, state) {
         final brandLogo = state.user.brandLogo();
+
         return BackGroundContainer(
           child: Column(
             children: [
@@ -42,9 +43,9 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Image(
-                        image: brandLogo,
-                        height: 100,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Image(image: brandLogo, height: 100),
                       ),
                       TeacherGeneralInfo(teacher: teacherInfo)
                     ],

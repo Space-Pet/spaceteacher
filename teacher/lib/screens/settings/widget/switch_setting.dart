@@ -65,7 +65,9 @@ class _SettingFeatureState extends State<SettingFeature> {
                     scale: 0.6,
                     child: CupertinoSwitch(
                       value: widget.isDisableNoti,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        widget.onPressed!();
+                      },
                     ),
                   ),
                 if (!widget.isNotiSetting)

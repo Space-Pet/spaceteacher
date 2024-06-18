@@ -46,14 +46,14 @@ class UserApi extends AbstractUserApi {
   /// Chuyển sang author
   Future logOut() async {
     try {
-      await _client.clearToken();
+      await _client.clearToken();  
       _partnerTokenRestClient.clearDomain();
       _authRestClient.clearDomain();
     } catch (e) {
       throw LogOutFailure();
     }
   }
-
+  
   Future<Map<String, dynamic>?> updateStudentPhone({
     required String phone,
     required String motherName,

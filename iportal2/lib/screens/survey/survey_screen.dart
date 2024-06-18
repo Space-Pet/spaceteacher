@@ -12,6 +12,8 @@ import 'package:repository/repository.dart';
 class SurveyScreen extends StatelessWidget {
   const SurveyScreen({super.key});
 
+  static const routeName = '/survey';
+
   @override
   Widget build(BuildContext context) {
     final appFetchApiRepository = context.read<AppFetchApiRepository>();
@@ -63,6 +65,7 @@ class _SurveyViewState extends State<SurveyView> {
                 child: Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
+                    color: AppColors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),

@@ -4,11 +4,11 @@ enum WeekScheduleStatus { init, success, error }
 
 class WeekScheduleState extends Equatable {
   const WeekScheduleState({
-    this.weekSchedule,
+    required this.weekSchedule,
     this.date,
     this.weekScheduleStatus = WeekScheduleStatus.init,
   });
-  final WeekSchedule? weekSchedule;
+  final WeekSchedule weekSchedule;
   final WeekScheduleStatus weekScheduleStatus;
   final DateTime? date;
 

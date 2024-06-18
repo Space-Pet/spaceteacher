@@ -168,16 +168,16 @@ class ScheduleAppbar extends StatelessWidget {
             },
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 28, right: 16),
-          width: 130,
-          child: DropdownButtonComponent(
-            selectedOption: selectedOption,
-            onUpdateOption: onUpdateOption,
-            hint: 'Chọn năm học',
-            optionList: optionList,
-          ),
-        ),
+        // Container(
+        //   margin: const EdgeInsets.only(top: 32, right: 16),
+        //   width: 140,
+        //   child: DropdownButtonComponent(
+        //     selectedOption: selectedOption,
+        //     onUpdateOption: onUpdateOption,
+        //     hint: 'Chọn năm học',
+        //     optionList: optionList,
+        //   ),
+        // ),
       ],
     );
   }

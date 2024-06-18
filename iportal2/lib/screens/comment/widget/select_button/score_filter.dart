@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/dropdown/dropdown.dart';
-import 'package:iportal2/screens/pre_score/widget/tab_bar/tav_bar_view_report.dart';
+import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
+import 'package:iportal2/screens/comment/widget/tab_bar/tav_bar_view_report.dart';
 
 class ListItem<T> {
   bool isSelected = false;

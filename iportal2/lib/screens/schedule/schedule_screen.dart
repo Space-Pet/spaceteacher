@@ -40,6 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           final bloc = context.read<ScheduleBloc>();
           final isLoading = state.status == ScheduleStatus.loading;
           final scheduleData = state.scheduleData.tkbData;
+          final exerciseData = state.exerciseDataList;
 
           onViewExercise(DateTime date, int tietNum) {
             bloc.add(ScheduleFetchExercise(datePicked: date));
@@ -52,22 +53,21 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                     previous.exerciseDataList != current.exerciseDataList,
                 builder: (context, state) {
                   final exerciseData = state.exerciseDataList;
-                  final isEmptyExercise = exerciseData.isEmpty;
 
-                  final exercise = isEmptyExercise
-                      ? null
+                  final exercise = exerciseData.isEmpty
+                      ? ExerciseItem.empty()
                       : exerciseData.firstWhere(
                           (element) => int.parse(element.tietNum) == tietNum,
                           orElse: () => ExerciseItem.empty());
 
-                  final fileName = getFileName(exercise?.fileBaoBai ?? '');
+                  final fileName = getFileName(exercise.fileBaoBai ?? '');
 
                   return DialogViewExercise(
                     title: 'Báo bài hôm nay',
                     content: fileName,
                     isLink: true,
                     link:
-                        'https://${exercise?.fileBaoBaiDomain}/${exercise?.fileBaoBai}',
+                        'https://${exercise.fileBaoBaiDomain}/${exercise.fileBaoBai}',
                   );
                 },
               ),
@@ -85,26 +85,26 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                   },
                 ),
                 Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: AppRadius.roundedTop28,
-                    ),
-                    child: Column(
-                      children: [
-                        WeekSelect(
-                          date: state.datePicked,
-                          onDatePicked: (date) {
-                            bloc.add(ScheduleSelectDate(datePicked: date));
-                          },
-                        ),
-                        const SizedBox(height: 8),
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: AppRadius.rounded10,
-                            child: AppSkeleton(
-                              isLoading: isLoading,
+                  child: AppSkeleton(
+                    isLoading: isLoading,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: AppRadius.roundedTop28,
+                      ),
+                      child: Column(
+                        children: [
+                          WeekSelect(
+                            date: state.datePicked,
+                            onDatePicked: (date) {
+                              bloc.add(ScheduleSelectDate(datePicked: date));
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: AppRadius.rounded10,
                               child: ScheduleTabs(
                                 lessons: scheduleData,
                                 datePicked: state.datePicked,
@@ -112,8 +112,8 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

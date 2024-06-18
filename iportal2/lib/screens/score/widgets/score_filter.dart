@@ -9,43 +9,42 @@ class ScoreFilter extends StatelessWidget {
     required this.onSelectedOption,
     required this.selectedOption,
     required this.isPrimary,
-    required this.otherScoreData,
+    required this.programList,
   });
 
   final bool isPrimary;
   final ViewScoreSelectedParam selectedOption;
   final void Function(ViewScoreSelectedParam) onSelectedOption;
-  final List<String> otherScoreData;
+  final List<String> programList;
 
   void onUpdateTerm(String value) {
     final newParam = selectedOption.copyWith(
       selectedTerm: value,
+      filterType: FilterType.term,
     );
     onSelectedOption(newParam);
   }
 
-  void onUpdateScoreType(String value) {
+  void onUpdateScoreProgram(String value) {
     final newParam = selectedOption.copyWith(
-      selectedScoreType: value,
+      selectedScoreProgram: value,
+      filterType: FilterType.program,
     );
     onSelectedOption(newParam);
   }
 
   @override
   Widget build(BuildContext context) {
-    final listScoreType = ScoreType.values.map((e) => e.text()).toList();
-    listScoreType.addAll(otherScoreData);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DropdownButtonComponent(
-            selectedOption: selectedOption.selectedScoreType,
-            onUpdateOption: onUpdateScoreType,
+            selectedOption: selectedOption.selectedScoreProgram,
+            onUpdateOption: onUpdateScoreProgram,
             hint: 'Chọn chương trình học',
-            optionList: listScoreType,
+            optionList: programList,
           ),
           const SizedBox(height: 8),
           DropdownButtonComponent(

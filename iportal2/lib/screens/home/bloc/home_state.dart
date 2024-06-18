@@ -14,6 +14,7 @@ class HomeState extends Equatable {
     this.statusExercise = HomeStatus.init,
     this.statusAlbum = HomeStatus.init,
     this.profileStatus = HomeStatus.init,
+    this.statusHome = HomeStatus.loading,
     this.pinnedAlbumIdList = const [],
   });
 
@@ -29,6 +30,7 @@ class HomeState extends Equatable {
   final HomeStatus statusExercise;
   final HomeStatus statusAlbum;
   final HomeStatus profileStatus;
+  final HomeStatus statusHome;
 
   @override
   List<Object?> get props => [
@@ -40,6 +42,7 @@ class HomeState extends Equatable {
         statusNoti,
         statusExercise,
         statusAlbum,
+        statusHome,
         albumData,
         pinnedAlbumIdList,
         profileStatus,
@@ -55,6 +58,7 @@ class HomeState extends Equatable {
     HomeStatus? statusNoti,
     HomeStatus? statusExercise,
     HomeStatus? statusAlbum,
+    HomeStatus? statusHome,
     AlbumData? albumData,
     List<int>? pinnedAlbumIdList,
     HomeStatus? profileStatus,
@@ -71,6 +75,7 @@ class HomeState extends Equatable {
       statusNoti: statusNoti ?? this.statusNoti,
       statusExercise: statusExercise ?? this.statusExercise,
       statusAlbum: statusAlbum ?? this.statusAlbum,
+      statusHome: statusHome ?? this.statusHome,
       pinnedAlbumIdList: pinnedAlbumIdList ?? this.pinnedAlbumIdList,
       profileStatus: profileStatus ?? this.profileStatus,
     );

@@ -11,7 +11,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
     required this.currentUserBloc,
   }) : super(SurveyState(
           surveyDetail: SurveyDetail.empty(),
-          surveyList: const [],
+          surveyList: Survey.fakeData(),
         )) {
     on<GetSurveyList>(_onGetSurveyList);
     add(GetSurveyList());

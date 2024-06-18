@@ -16,6 +16,23 @@ class AppFetchApi extends AbstractAppFetchApi {
   final RestApiClient _authRestClient;
   final RestApiClient _partnerTokenRestClient;
 
+  Future<LearnYear> getLearnYearList(int schoolId) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': 'learn_year',
+          'school_id': schoolId,
+        },
+      );
+
+      final learnYearData = LearnYear.fromMap(data);
+      return learnYearData;
+    } catch (e) {
+      return LearnYear.empty();
+    }
+  }
+
   Future<WeeklyLessonData> getRegisterNoteBook({
     required String userKey,
     required String txtDate,
@@ -78,10 +95,8 @@ class AppFetchApi extends AbstractAppFetchApi {
       );
 
       final notiData = NotificationData.fromMap(res['data']);
-      if (isNullOrEmpty(notiData)) return NotificationData.empty();
       return notiData;
     } catch (e) {
-      print(e);
       throw GetNotificationsFailure();
     }
   }
@@ -138,11 +153,22 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<ScoreModel> getMoetScore(
-      String userKey, String txtHocKy, String txtYear) async {
+  Future<ScoreModel> getMoetTypeScore(
+    String userKey,
+    String txtHocKy,
+    String txtYear,
+    String ctId,
+  ) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-        '/api.php?act=show_score&user_key=$userKey&txt_hoc_ky=$txtHocKy&txt_learn_year=$txtYear',
+        '/api.php',
+        queryParameters: {
+          'act': 'score_chuong_trinh_khac',
+          'user_key': userKey,
+          'txt_learn_year': txtYear,
+          'txt_hoc_ky': txtHocKy,
+          'ct_id': ctId,
+        },
       );
 
       final scoreRes = ScoreModel.fromMap(data);
@@ -152,29 +178,63 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<ScoreOther> getScoreOther(String userKey, String txtYear) async {
+  Future<MoetAverage> getMoetAverage(
+    String userKey,
+    String txtLearnYear,
+    String txtHocKy,
+  ) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-        '/api.php?act=list_chuong_trinh_khac&user_key=$userKey&txt_learn_year=$txtYear',
+        '/api.php',
+        queryParameters: {
+          'act': 'total_score_moet',
+          'user_key': userKey,
+          'txt_learn_year': txtLearnYear,
+          'txt_hoc_ky': txtHocKy,
+        },
       );
 
-      final scoreRes = ScoreOther.fromMap(data);
+      final moetAverage = MoetAverage.fromMap(data);
+      return moetAverage;
+    } catch (e) {
+      return MoetAverage.empty();
+    }
+  }
+
+  Future<ScoreProgramList> getProgramList(
+      String userKey, String txtYear) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': 'list_chuong_trinh_khac',
+          'user_key': userKey,
+          'txt_learn_year': txtYear,
+        },
+      );
+
+      final scoreRes = ScoreProgramList.fromMap(data);
       return scoreRes;
     } catch (e) {
-      throw GetOtherScoreFailure();
+      throw GetProgramListFailure();
     }
   }
 
   Future<EslScore> getEslScore(
     String userKey,
-    String txtTerm,
+    String txtHocKy,
     String txtYear,
   ) async {
     try {
-      final txtHocKy = (txtTerm == 'Học kỳ 1' || txtTerm == '1') ? '1' : '2';
-
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=esl_score&user_key=0253220010&txt_hoc_ky=$txtHocKy&txt_learn_year=$txtYear');
+        '/api.php',
+        queryParameters: {
+          'act': 'esl_score',
+          'user_key': userKey,
+          'txt_learn_year': txtYear,
+          'txt_hoc_ky': txtHocKy,
+        },
+      );
       final res = EslScore.fromMap(data);
 
       return res;
@@ -190,13 +250,20 @@ class AppFetchApi extends AbstractAppFetchApi {
     String hkTihValue,
   ) async {
     try {
-      final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=show_hkth&user_key=$userKey&learn_year=$txtYear&txt_hoc_ky=$txtHocKy&hk_tih_value=$hkTihValue');
+      final data =
+          await _partnerTokenRestClient.doHttpGet('/api.php', queryParameters: {
+        'act': 'show_hkth',
+        'user_key': userKey,
+        'learn_year': txtYear,
+        'txt_hoc_ky': txtHocKy,
+        'hk_tih_value': hkTihValue,
+      });
+
       final res = PrimaryConduct.fromMap(data);
 
       return res;
     } catch (e) {
-      throw GetPrimaryConductFailure();
+      return PrimaryConduct.empty();
     }
   }
 
@@ -401,11 +468,13 @@ class AppFetchApi extends AbstractAppFetchApi {
     try {
       final token = await _client.getAccessToken();
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=teacher_comment_mn&user_key=$userKey&txt_date=$txtDate',
-          headers: {'Parter-Token': token});
+        '/api.php?act=teacher_comment_mn&user_key=$userKey&txt_date=$txtDate',
+        headers: {'Parter-Token': token},
+        hasDelay: true,
+      );
+
       final dataList = data['data_comment'] as List<dynamic>?;
-      return dataList?.map((e) => Comment.fromJson(e)).toList() ??
-          [Comment.empty()];
+      return dataList?.map((e) => Comment.fromJson(e)).toList() ?? [];
     } catch (e) {
       return [];
     }
@@ -964,7 +1033,9 @@ class GetPrimaryConductFailure implements Exception {}
 
 class GetScoreFailure implements Exception {}
 
-class GetOtherScoreFailure implements Exception {}
+class GetMoetAverageFailure implements Exception {}
+
+class GetProgramListFailure implements Exception {}
 
 class GetExerciseFailure implements Exception {}
 

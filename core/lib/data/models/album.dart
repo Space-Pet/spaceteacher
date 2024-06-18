@@ -45,11 +45,6 @@ class AlbumData {
 
   String toJson() => json.encode(toMap());
 
-  @override
-  String toString() {
-    return 'AlbumData{items: $items, total: $total, count: $count, perPage: $perPage, currentPage: $currentPage, totalPages: $totalPages}';
-  }
-
   static AlbumData get empty => AlbumData(
         items: [],
         total: 0,
@@ -57,6 +52,36 @@ class AlbumData {
         perPage: 0,
         currentPage: 0,
         totalPages: 0,
+      );
+
+  static AlbumData get fakeData => AlbumData(
+        items: List.generate(
+          6,
+          (index) => Gallery(
+            galleryId: index,
+            galleryName: 'Gallery $index',
+            learnYear: '2021-2022',
+            schoolId: 1,
+            galleryNumber: index,
+            galleryImages: List.generate(
+              2,
+              (index) => GalleryImage(
+                id: index,
+                name: 'Image $index',
+                description: 'Description $index',
+                images: ImageUrl(
+                  web: 'urlImage',
+                  mobile: 'urlImage',
+                ),
+              ),
+            ),
+          ),
+        ),
+        total: 2,
+        count: 2,
+        perPage: 10,
+        currentPage: 1,
+        totalPages: 1,
       );
 }
 

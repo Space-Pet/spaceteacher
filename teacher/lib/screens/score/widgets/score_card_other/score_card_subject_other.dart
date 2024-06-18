@@ -12,14 +12,14 @@ class EslCard extends StatefulWidget {
     required this.isExpanded,
     required this.onExpansionChanged,
     this.subjectName,
-    required this.coreDataList,
+     this.coreDataList,
   });
   final num index;
   final num lastIndex;
   final bool isExpanded;
   final VoidCallback onExpansionChanged;
   final String? subjectName;
-  final List<EslScoreData> coreDataList;
+  final List<EslScoreData>? coreDataList;
 
   @override
   State<EslCard> createState() => _EslCardState();
@@ -84,7 +84,7 @@ class _EslCardState extends State<EslCard> {
               ],
             ),
             if (widget.isExpanded)
-              EslCardExpand(coreDataList: widget.coreDataList)
+              EslCardExpand()
           ],
         ),
       ),

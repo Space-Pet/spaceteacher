@@ -1,7 +1,6 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
@@ -14,7 +13,7 @@ import 'package:iportal2/screens/leave/on_leave_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
-import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
+import 'package:iportal2/screens/comment/comment_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/survey/survey_screen.dart';
@@ -27,10 +26,12 @@ class PinFeatures extends StatefulWidget {
     super.key,
     required this.isKinderGarten,
     required this.userFeatures,
+    required this.isLoading,
   });
 
   final bool isKinderGarten;
   final List<FeatureModel> userFeatures;
+  final bool isLoading;
 
   @override
   State<PinFeatures> createState() => _PinFeaturesState();
@@ -76,6 +77,8 @@ class _PinFeaturesState extends State<PinFeatures> {
   }
 
   void onTapFeature(FeatureModel feature) {
+    if (widget.isLoading) return;
+
     if (feature.category == FeatureCategory.all) {
       showFlexibleBottomSheet(
         minHeight: 0,
@@ -123,7 +126,7 @@ class _PinFeaturesState extends State<PinFeatures> {
           context.push(const ScoreScreen());
           break;
         case FeatureKey.comment:
-          context.push(const PreScoreScreen());
+          context.push(const CommentScreen());
           break;
 
         case FeatureKey.phoneBook:
@@ -141,9 +144,9 @@ class _PinFeaturesState extends State<PinFeatures> {
         case FeatureKey.menu:
           context.push(const MenuScreen());
           break;
-          
+
         case FeatureKey.survey:
-          mainNavKey.currentContext?.push(const SurveyScreen());
+          context.push(const SurveyScreen());
           break;
 
         case FeatureKey.tuition:
@@ -186,8 +189,11 @@ class _PinFeaturesState extends State<PinFeatures> {
     return Container(
       margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       width: double.infinity,
-      child: Wrap(
-        children: listFeature,
+      child: AppSkeleton(
+        isLoading: widget.isLoading,
+        child: Wrap(
+          children: listFeature,
+        ),
       ),
     );
   }

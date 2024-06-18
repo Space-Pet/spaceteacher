@@ -7,11 +7,11 @@ import 'package:teacher/screens/score/widgets/score_card_subject/score_card_subj
 class MoetView extends StatefulWidget {
   const MoetView({
     super.key,
-    required this.diemMoetTxt,
+     this.diemMoetTxt,
     required this.isSecondSemester,
   });
 
-  final TxtDiemMoetType diemMoetTxt;
+  final TxtDiemMoetType? diemMoetTxt;
   final bool isSecondSemester;
 
   @override
@@ -52,19 +52,20 @@ class _TabViewMonet extends State<MoetView> {
     return Column(children: [
       Column(
         children: [
-          SummaryGroup(
-            category: 'Điểm trung bình môn',
-            evaluation: widget.diemMoetTxt.dtbCn ?? diemTBM.text,
-            textColor: AppColors.red90001,
-            onSelected: (value) {
-              setState(() {
-                diemTBM.text = value;
-              });
-            },
-          ),
+          if (widget.isSecondSemester)
+            SummaryGroup(
+              category: 'Điểm trung bình môn',
+              evaluation: '',
+              textColor: AppColors.red90001,
+              onSelected: (value) {
+                setState(() {
+                  diemTBM.text = value;
+                });
+              },
+            ),
           SummaryGroup(
             category: 'Kết quả học tập',
-            evaluation: widget.diemMoetTxt.kqht ?? kqht.text,
+            evaluation: '' ?? kqht.text,
             textColor: AppColors.brand600,
             onSelected: (value) {
               setState(() {
@@ -74,7 +75,7 @@ class _TabViewMonet extends State<MoetView> {
           ),
           SummaryGroup(
             category: 'Kết quả rèn luyện',
-            evaluation: widget.diemMoetTxt.kqrl ?? kqrl.text,
+            evaluation: '' ?? kqrl.text,
             textColor: AppColors.brand600,
             onSelected: (value) {
               setState(() {
@@ -82,40 +83,41 @@ class _TabViewMonet extends State<MoetView> {
               });
             },
           ),
-          Column(
-            children: [
-              SummaryGroup(
-                category: 'Xếp loại học lực',
-                evaluation: widget.diemMoetTxt.xlhlCn ?? xlhl.text,
-                textColor: AppColors.brand600,
-                onSelected: (value) {
-                  setState(() {
-                    xlhl.text = value;
-                  });
-                },
-              ),
-              SummaryGroup(
-                category: 'Xếp loại hạnh kiểm',
-                evaluation: widget.diemMoetTxt.xlhkCn ?? xlhk.text,
-                textColor: AppColors.brand600,
-                onSelected: (value) {
-                  setState(() {
-                    xlhk.text = value;
-                  });
-                },
-              ),
-              SummaryGroup(
-                category: 'Danh hiệu',
-                evaluation: widget.diemMoetTxt.danhHieuCn ?? dh.text,
-                textColor: AppColors.brand600,
-                onSelected: (value) {
-                  setState(() {
-                    dh.text = value;
-                  });
-                },
-              ),
-            ],
-          ),
+          if (widget.isSecondSemester)
+            Column(
+              children: [
+                SummaryGroup(
+                  category: 'Xếp loại học lực',
+                  evaluation: '' ?? xlhl.text,
+                  textColor: AppColors.brand600,
+                  onSelected: (value) {
+                    setState(() {
+                      xlhl.text = value;
+                    });
+                  },
+                ),
+                SummaryGroup(
+                  category: 'Xếp loại hạnh kiểm',
+                  evaluation: '' ?? xlhk.text,
+                  textColor: AppColors.brand600,
+                  onSelected: (value) {
+                    setState(() {
+                      xlhk.text = value;
+                    });
+                  },
+                ),
+                SummaryGroup(
+                  category: 'Danh hiệu',
+                  evaluation: '' ?? dh.text,
+                  textColor: AppColors.brand600,
+                  onSelected: (value) {
+                    setState(() {
+                      dh.text = value;
+                    });
+                  },
+                ),
+              ],
+            ),
         ],
       ),
       Container(

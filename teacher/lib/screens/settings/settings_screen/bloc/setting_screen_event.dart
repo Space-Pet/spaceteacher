@@ -4,10 +4,14 @@ abstract class SettingScreenEvent {}
 
 class SettingScreenLoggedOut extends SettingScreenEvent {}
 
-class TurnOffNoti extends SettingScreenEvent {
-  TurnOffNoti({
+class TurnOnOffNoti extends SettingScreenEvent {
+  TurnOnOffNoti({
     required this.pushNotify,
   });
 
-  final bool pushNotify;
+  final int pushNotify;
+}
+
+class SettingFetchTeacherInfo extends SettingScreenEvent {
+  SettingFetchTeacherInfo();
 }

@@ -26,6 +26,19 @@ class WeekSchedule {
         txtPreWeek: json['txt_pre_week'] ?? '',
         txtWeek: json['txt_week'] ?? '');
   }
+
+  // create fake data
+  static WeekSchedule fakeData() {
+    return WeekSchedule(
+      data: DataWeekSchedule.fakeData(),
+      txtBeginDay: '2021-09-06',
+      txtClassName: 'Lớp 1A',
+      txtEndDay: '2021-09-12',
+      txtNextWeek: '2021-09-13',
+      txtPreWeek: '2021-08-30',
+      txtWeek: '12',
+    );
+  }
 }
 
 class DataWeekSchedule {
@@ -42,6 +55,35 @@ class DataWeekSchedule {
         .toList();
     return DataWeekSchedule(
         mainPlan: mainPlan ?? [], detailPlan: detailPlan ?? []);
+  }
+
+  // create fake data
+  static DataWeekSchedule fakeData() {
+    return DataWeekSchedule(
+        mainPlan: [
+          const MainPlan(
+              classId: '1',
+              className: 'Lớp 1A',
+              mainPlanBody: 'Nội dung kế hoạch chính',
+              mainPlanTitle: 'Kế hoạch chính')
+        ],
+        detailPlan: List.generate(
+          6,
+          (index) => DetailPlan(
+            planmnDataInWeek: List.generate(
+              8,
+              (index) => const PlanmnDataInWeek(
+                planContent: 'Nội dung kế hoạch',
+                planContentDetail: 'Chi tiết nội dung kế hoạch',
+                planTeacherId: '1',
+                planTeacherName: 'Nguyễn Văn A',
+                planTime: '07:00 - 08:00',
+              ),
+            ),
+            planmnNgay: '18-03-2024',
+            planmnWeek: 'Monday',
+          ),
+        ));
   }
 }
 

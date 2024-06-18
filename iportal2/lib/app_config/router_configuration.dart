@@ -17,10 +17,11 @@ import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
-import 'package:iportal2/screens/pre_score/preS_score_screen.dart';
+import 'package:iportal2/screens/comment/comment_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
+import 'package:iportal2/screens/survey/survey_screen.dart';
 
 import '../screens/school_fee/screen/school_fee_screen.dart';
 
@@ -149,16 +150,22 @@ class CustomRouter {
           routeName: ScoreScreen.routeName,
         );
 
-      case PreScoreScreen.routeName:
+      case CommentScreen.routeName:
         return transitionAnimation(
-          child: const PreScoreScreen(),
-          routeName: PreScoreScreen.routeName,
+          child: const CommentScreen(),
+          routeName: CommentScreen.routeName,
         );
 
       case NotiDetailScreen.routeName:
         return transitionAnimation(
           child: const NotiDetailScreen(id: 0),
           routeName: NotiDetailScreen.routeName,
+        );
+
+      case SurveyScreen.routeName:
+        return transitionAnimation(
+          child: const SurveyScreen(),
+          routeName: SurveyScreen.routeName,
         );
 
       case SchoolFeeScreen.routeName:

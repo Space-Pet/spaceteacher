@@ -8,16 +8,6 @@ class LoginFailure implements Exception {
   final String? message;
 }
 
-class GetJobListFailure implements Exception {}
-
-class LogOutFailure implements Exception {}
-
-class GetCellStockFailure implements Exception {}
-
-class NoteFailure implements Exception {}
-
-class SettingFailure implements Exception {}
-
 class AuthApi extends AbstractAuthApi {
   AuthApi({
     required AbstractDioClient client,
@@ -92,9 +82,8 @@ class AuthApi extends AbstractAuthApi {
         throw LoginFailure(message: message);
       }
 
-      final dataToken = data['data'] as Map<String, dynamic>;
-      final loginInfo = LoginInfo.fromMap(dataToken);
-      _client.updateAccessToken(loginInfo.access_token);
+      final userToken = data['data']['access_token'] as String;
+      _client.updateAccessToken(userToken);
 
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
@@ -125,9 +114,8 @@ class AuthApi extends AbstractAuthApi {
         "platform": platform,
         "token_firebase": tokenFirebase
       });
-      final dataToken = data['data'] as Map<String, dynamic>;
-      final loginInfo = LoginInfo.fromMap(dataToken);
-      _client.updateAccessToken(loginInfo.access_token);
+      final userToken = data['data']['access_token'] as String;
+      _client.updateAccessToken(userToken);
 
       final dataUser = data['data']['info'] as Map<String, dynamic>;
       final userInfo = ProfileInfo.fromMap(dataUser);
@@ -161,3 +149,5 @@ class AuthApi extends AbstractAuthApi {
 
   bool get isLogin => _client.accessToken.isNotEmpty;
 }
+
+class LogOutFailure implements Exception {}

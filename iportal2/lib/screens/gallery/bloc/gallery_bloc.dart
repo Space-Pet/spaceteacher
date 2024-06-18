@@ -11,7 +11,9 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     this.appFetchApiRepo, {
     required this.currentUserBloc,
     required this.userRepository,
-  }) : super(GalleryState(albumData: AlbumData.empty)) {
+  }) : super(GalleryState(
+          albumData: AlbumData.fakeData,
+        )) {
     on<GalleryFetchData>(_onFetchAlbumData);
     add(GalleryFetchData());
 
@@ -34,6 +36,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
       // pupilId: '10044568',
       pupilId: user.pupil_id.toString(),
     );
+
     emit(state.copyWith(
       albumData: albumData,
       status: GalleryStatus.success,
@@ -51,11 +54,27 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
 
   _onUpdatePinnedAlbum(
       GalleryUpdatePinnedAlbum event, Emitter<GalleryState> emit) {
-    if (!event.isOnlyUpdateState) {
-      final user = currentUserBloc.state.activeChild;
-      // TODO: update pinned album
-    }
+    final currentPinnedAlbum =
+        currentUserBloc.state.activeChild.pinnedAlbumIdList;
+    final newPinnedAlbum = currentPinnedAlbum.contains(event.albumId)
+        ? currentPinnedAlbum
+            .where((element) => element != event.albumId)
+            .toList()
+        : [...currentPinnedAlbum, event.albumId];
 
-    emit(state.copyWith(pinnedAlbumIdList: event.pinnedAlbumIdList));
+    emit(state.copyWith(pinnedAlbumIdList: newPinnedAlbum));
+
+    final newChildren = currentUserBloc.state.activeChild
+        .copyWith(pinnedAlbumIdList: newPinnedAlbum);
+
+    final newChildrenList = currentUserBloc.state.user.children
+        .map((e) => e.pupil_id == newChildren.pupil_id ? newChildren : e)
+        .toList();
+
+    final newUser =
+        currentUserBloc.state.user.copyWith(children: newChildrenList);
+
+    currentUserBloc.add(CurrentUserUpdated(user: newUser));
+    userRepository.saveUser(newUser);
   }
 }

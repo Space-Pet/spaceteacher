@@ -9,12 +9,12 @@ import 'package:teacher/screens/score/widgets/score_card_subject/primary_subject
 class MoetViewPrimary extends StatefulWidget {
   const MoetViewPrimary({
     super.key,
-    required this.diemMoetTxt,
-    required this.semester,
+     this.diemMoetTxt,
+    //required this.semester,
   });
 
-  final TxtDiemMoetType diemMoetTxt;
-  final PrimaryTermType semester;
+  final TxtDiemMoetType? diemMoetTxt;
+  //final PrimaryTermType semester;
 
   @override
   State<MoetViewPrimary> createState() => _MoetViewPrimary();
@@ -57,24 +57,24 @@ class _MoetViewPrimary extends State<MoetViewPrimary> {
             ...List.generate(5, (index) {
               final DiemItemType? subjectScoreData;
 
-              switch (widget.semester) {
-                case PrimaryTermType.midTerm1:
-                  // subjectScoreData =
-                  //     widget.diemMoetTxt.diemData![index].diemGiuaHk1;
-                  break;
-                case PrimaryTermType.term1:
-                  // subjectScoreData =
-                  //     widget.diemMoetTxt.diemData![index].diemCuoiHk1;
-                  break;
-                case PrimaryTermType.midTerm2:
-                  // subjectScoreData =
-                  //     widget.diemMoetTxt.diemData![index].diemGiuaHk2;
-                  break;
-                default:
-                  // subjectScoreData =
-                  //     widget.diemMoetTxt.diemData![index].diemCuoiNam;
-                  break;
-              }
+              // switch (widget.semester) {
+              //   case PrimaryTermType.midTerm1:
+              //     // subjectScoreData =
+              //     //     widget.diemMoetTxt.diemData![index].diemGiuaHk1;
+              //     break;
+              //   case PrimaryTermType.term1:
+              //     // subjectScoreData =
+              //     //     widget.diemMoetTxt.diemData![index].diemCuoiHk1;
+              //     break;
+              //   case PrimaryTermType.midTerm2:
+              //     // subjectScoreData =
+              //     //     widget.diemMoetTxt.diemData![index].diemGiuaHk2;
+              //     break;
+              //   default:
+              //     // subjectScoreData =
+              //     //     widget.diemMoetTxt.diemData![index].diemCuoiNam;
+              //     break;
+              // }
 
               return PrimarySubjectScore(
                 subjectName: 'widget.diemMoetTxt.diemData![index].subjectName',

@@ -10,6 +10,11 @@ class AppFetchApiRepository {
 
   final AppFetchApi _appFetchApi;
 
+  // Master data
+  Future<LearnYear> getLearnYearList({required int schoolId}) =>
+      _appFetchApi.getLearnYearList(schoolId);
+
+  // Member
   Future<WeeklyLessonData> getRegisterNoteBook(
           {required String userKey, required String txtDate}) =>
       _appFetchApi.getRegisterNoteBook(userKey: userKey, txtDate: txtDate);
@@ -40,27 +45,42 @@ class AppFetchApiRepository {
     return listExerciseDueDate;
   }
 
-  Future<ScoreModel> getMoetScore({
+  Future<ScoreModel> getMoetTypeScore({
     required String userKey,
     required String txtHocKy,
     required String txtYear,
+    required String ctId,
   }) async {
     try {
       final scoreData =
-          await _appFetchApi.getMoetScore(userKey, txtHocKy, txtYear);
+          await _appFetchApi.getMoetTypeScore(userKey, txtHocKy, txtYear, ctId);
       return scoreData;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<ScoreOther> getScoreOther({
+  Future<MoetAverage> getMoetAverage({
+    required String userKey,
+    required String txtHocKy,
+    required String txtYear,
+  }) async {
+    try {
+      final moetAverage =
+          await _appFetchApi.getMoetAverage(userKey, txtYear, txtHocKy);
+      return moetAverage;
+    } catch (e) {
+      return MoetAverage.empty();
+    }
+  }
+
+  Future<ScoreProgramList> getProgramList({
     required String userKey,
     required String txtYear,
   }) async {
     try {
-      final otherScoreData = await _appFetchApi.getScoreOther(userKey, txtYear);
-      return otherScoreData;
+      final programList = await _appFetchApi.getProgramList(userKey, txtYear);
+      return programList;
     } catch (e) {
       rethrow;
     }
@@ -83,12 +103,12 @@ class AppFetchApiRepository {
 
   Future<EslScore> getEslScore({
     required String userKey,
-    required String txtTerm,
+    required String txtHocKy,
     required String txtYear,
   }) async {
     try {
       final scoreData =
-          await _appFetchApi.getEslScore(userKey, txtTerm, txtYear);
+          await _appFetchApi.getEslScore(userKey, txtHocKy, txtYear);
       return scoreData;
     } catch (e) {
       rethrow;

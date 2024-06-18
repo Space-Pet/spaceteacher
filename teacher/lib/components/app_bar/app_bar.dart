@@ -52,16 +52,19 @@ class ScreenAppBar extends StatelessWidget {
             GestureDetector(
               onTap: onOpenIcon,
               child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(40),
-                    color: AppColors.blackTransparent),
-                child: iconWidget
-              ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      color: AppColors.blackTransparent),
+                  child: iconWidget),
             ),
           if (iconRight != null)
             GestureDetector(
               onTap: onRight,
-              child: SvgPicture.asset(iconRight!),
+              child: SvgPicture.asset(
+                iconRight!,
+                color: AppColors.white,
+                width: 24,
+              ),
             )
         ],
       ),

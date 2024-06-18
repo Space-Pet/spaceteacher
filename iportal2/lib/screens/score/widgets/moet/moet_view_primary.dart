@@ -1,7 +1,7 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:core/resources/resources.dart';
 import 'package:iportal2/screens/score/bloc/score_bloc.dart';
 import 'package:iportal2/screens/score/widgets/evaluation.dart';
 import 'package:iportal2/screens/score/widgets/score_card_subject/primary_subject_score.dart';
@@ -11,10 +11,12 @@ class MoetViewPrimary extends StatefulWidget {
     super.key,
     required this.diemMoetTxt,
     required this.semester,
+    required this.isMoetProgram,
   });
 
   final TxtDiemMoetType diemMoetTxt;
   final PrimaryTermType semester;
+  final bool isMoetProgram;
 
   @override
   State<MoetViewPrimary> createState() => _MoetViewPrimary();
@@ -37,61 +39,57 @@ class _MoetViewPrimary extends State<MoetViewPrimary> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Container(
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            border: Border(
-              top: BorderSide(
-                color: AppColors.gray300,
-              ),
-              left: BorderSide(
-                color: AppColors.gray300,
-              ),
-              right: BorderSide(
-                color: AppColors.gray300,
-              ),
-            )),
-        child: Column(
-          children: [
-            ...List.generate(widget.diemMoetTxt.diemData!.length, (index) {
-              final DiemItemType? subjectScoreData;
+    return SingleChildScrollView(
+      child: Column(children: [
+        if (widget.isMoetProgram) const StudentEvaluation(),
+        Container(
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              border: Border(
+                top: BorderSide(color: AppColors.gray300),
+                left: BorderSide(color: AppColors.gray300),
+                right: BorderSide(color: AppColors.gray300),
+              )),
+          child: Column(
+            children: [
+              ...List.generate(widget.diemMoetTxt.diemData!.length, (index) {
+                final DiemItemType? subjectScoreData;
 
-              switch (widget.semester) {
-                case PrimaryTermType.midTerm1:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemGiuaHk1;
-                  break;
-                case PrimaryTermType.term1:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemCuoiHk1;
-                  break;
-                case PrimaryTermType.midTerm2:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemGiuaHk2;
-                  break;
-                default:
-                  subjectScoreData =
-                      widget.diemMoetTxt.diemData![index].diemCuoiNam;
-                  break;
-              }
+                switch (widget.semester) {
+                  case PrimaryTermType.midTerm1:
+                    subjectScoreData =
+                        widget.diemMoetTxt.diemData![index].diemGiuaHk1;
+                    break;
+                  case PrimaryTermType.term1:
+                    subjectScoreData =
+                        widget.diemMoetTxt.diemData![index].diemCuoiHk1;
+                    break;
+                  case PrimaryTermType.midTerm2:
+                    subjectScoreData =
+                        widget.diemMoetTxt.diemData![index].diemGiuaHk2;
+                    break;
+                  default:
+                    subjectScoreData =
+                        widget.diemMoetTxt.diemData![index].diemCuoiNam;
+                    break;
+                }
 
-              return PrimarySubjectScore(
-                subjectName: widget.diemMoetTxt.diemData![index].subjectName,
-                subjectScore: subjectScoreData,
-                isExpanded: expandedIndex == index,
-                index: index,
-                onExpansionChanged: () => _handleExpansion(index),
-                lastIndex: widget.diemMoetTxt.diemData!.length - 1,
-              );
-            })
-          ],
+                return PrimarySubjectScore(
+                  subjectName: widget.diemMoetTxt.diemData![index].subjectName,
+                  subjectScore: subjectScoreData,
+                  isExpanded: expandedIndex == index,
+                  index: index,
+                  onExpansionChanged: () => _handleExpansion(index),
+                  lastIndex: widget.diemMoetTxt.diemData!.length - 1,
+                );
+              })
+            ],
+          ),
         ),
-      ),
-      const StudentEvaluation(),
-      // if ((widget.diemMoetTxt.nhanXetChungCuaGvcn ?? '').isNotEmpty)
-      //   ScoreComment(comment: widget.diemMoetTxt.nhanXetChungCuaGvcn!),
-    ]);
+        // if ((widget.diemMoetTxt.nhanXetChungCuaGvcn ?? '').isNotEmpty)
+        //   ScoreComment(comment: widget.diemMoetTxt.nhanXetChungCuaGvcn!),
+      ]),
+    );
   }
 }
 

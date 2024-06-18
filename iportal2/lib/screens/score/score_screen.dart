@@ -31,44 +31,36 @@ class ScoreScreen extends StatelessWidget {
       ),
       child: BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
         final scoreBloc = context.read<ScoreBloc>();
-        final scoreData = state.moetScore;
-        final eslScore = state.eslScore;
-        final otherScore = state.otherScore;
+        final isPrimary = state.isPrimaryStudent;
 
-        final otherScoreList =
-            state.otherScore.data!.map((e) => e.ctName).toList();
+        final programListName = state.programList.map((e) => e.ctName).toList();
+        final isLoadingProgramList =
+            state.programListStatus == ScoreProgramStatus.loading;
 
-        final khoiLevel = int.parse(
-            scoreData.txtKhoiLevel.isEmpty ? '0' : scoreData.txtKhoiLevel);
-        final isPrimary = khoiLevel < 6;
-
-        void onUpdateYear(String newYear) {
-          scoreBloc.add(ScoreFilterChange(
-            ViewScoreSelectedParam(
-              selectedScoreType: state.scoreType,
-              selectedTerm:
-                  isPrimary ? state.txtTihHocKy.text() : state.txtHocKy.text(),
-              selectedYear: newYear,
-            ),
-            isPrimary,
-          ));
-          // scoreBloc.add(ScoreFetchMoet());
-        }
-
-        final isLoading = state.status == ScoreStatus.loading;
-        final isEmptyData = state.status == ScoreStatus.loaded &&
+        final moetTypeScore = state.moetTypeScore;
+        final isLoadingScore = state.status == ScoreStatus.loading;
+        final isEmptyMoetTypeScore = state.status == ScoreStatus.loaded &&
             (isPrimary
-                ? scoreData.txtDiemMoet.diemData!.isEmpty
-                : scoreData.txtDiemMoet.scoreData!.isEmpty);
+                ? (moetTypeScore.txtDiem.diemData ?? []).isEmpty
+                : (moetTypeScore.txtDiem.scoreData ?? []).isEmpty);
+
+        final eslScore = state.eslScore;
+        final isEmptyESLScore = eslScore.data.isEmpty && !isLoadingScore;
 
         return BackGroundContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ScoreAppbar(
-                scoreData: scoreData,
                 selectedOption: state.txtLearnYear,
-                onUpdateYear: onUpdateYear,
+                onUpdateYear: (newYear) {
+                  scoreBloc.add(ScoreFilterChange(
+                    ViewScoreSelectedParam(
+                      selectedYear: newYear,
+                      filterType: FilterType.learnYear,
+                    ),
+                  ));
+                },
               ),
               Expanded(
                 child: Container(
@@ -80,83 +72,92 @@ class ScoreScreen extends StatelessWidget {
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ScoreFilter(
-                        isPrimary: isPrimary,
-                        otherScoreData: otherScoreList,
-                        onSelectedOption: (ViewScoreSelectedParam newOption) {
-                          scoreBloc
-                              .add(ScoreFilterChange(newOption, isPrimary));
-                          if (newOption.selectedScoreType ==
-                              ScoreType.moet.text()) {
-                            scoreBloc.add(ScoreFetchMoet());
-                          } else {
-                            scoreBloc.add(ScoreFetchEsl());
-                          }
-                        },
-                        selectedOption: ViewScoreSelectedParam(
-                          selectedScoreType: state.scoreType,
-                          selectedTerm: isPrimary
-                              ? state.txtTihHocKy.text()
-                              : state.txtHocKy.text(),
-                          selectedYear: state.txtLearnYear,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0.0, 0.401, 1.0],
-                              colors: [
-                                Color(0xFFDFEEFF),
-                                Color(0xFFFFFFFF),
-                                Color(0xFFFFFFFF),
-                              ],
-                            ),
+                  child: AppSkeleton(
+                    isLoading: isLoadingProgramList,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ScoreFilter(
+                          isPrimary: isPrimary,
+                          programList: programListName,
+                          onSelectedOption: (ViewScoreSelectedParam newOption) {
+                            scoreBloc.add(ScoreFilterChange(newOption));
+                          },
+                          selectedOption: ViewScoreSelectedParam(
+                            selectedScoreProgram: state.scoreProgram.ctName,
+                            selectedTerm: isPrimary
+                                ? state.txtTihHocKy.text()
+                                : state.txtHocKy.text(),
+                            selectedYear: state.txtLearnYear,
                           ),
-                          child: CustomRefresh(
-                            onRefresh: () async {
-                              if (state.scoreType == ScoreType.moet.text()) {
-                                scoreBloc.add(ScoreFetchMoet());
-                              } else {
-                                scoreBloc.add(ScoreFetchEsl());
-                              }
-                            },
-                            child: SingleChildScrollView(
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              child: AppSkeleton(
-                                isLoading: isLoading,
-                                child: isEmptyData
-                                    ? const EmptyScreen(
-                                        text: 'Chưa có dữ liệu',
-                                      )
-                                    : state.scoreType == ScoreType.esl.text()
-                                        ? EslView(eslScore: eslScore.data)
-                                        : isPrimary
-                                            ? MoetViewPrimary(
-                                                diemMoetTxt:
-                                                    scoreData.txtDiemMoet,
-                                                semester: state.txtTihHocKy,
+                        ),
+                        Expanded(
+                          child: AppSkeleton(
+                            isLoading: isLoadingScore,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  stops: [0.0, 0.401, 1.0],
+                                  colors: [
+                                    Color(0xFFDFEEFF),
+                                    Color(0xFFFFFFFF),
+                                    Color(0xFFFFFFFF),
+                                  ],
+                                ),
+                              ),
+                              child: CustomRefresh(
+                                onRefresh: () async {
+                                  scoreBloc.add(ScoreFetchData());
+                                },
+                                child: Stack(
+                                  children: [
+                                    ListView(),
+                                    state.scoreProgram.ctId == 'esl'
+                                        ? isEmptyESLScore
+                                            ? const Center(
+                                                child: EmptyScreen(
+                                                  text: 'Không có dữ liệu',
+                                                ),
                                               )
-                                            : MoetView(
-                                                diemMoetTxt:
-                                                    scoreData.txtDiemMoet,
-                                                isSecondSemester:
-                                                    scoreData.txtCurrentHocKy ==
-                                                        '2',
-                                              ),
+                                            : EslView(eslScore: eslScore.data)
+                                        : isEmptyMoetTypeScore
+                                            ? const Center(
+                                                child: EmptyScreen(
+                                                  text: 'Không có dữ liệu',
+                                                ),
+                                              )
+                                            : isPrimary
+                                                ? MoetViewPrimary(
+                                                    diemMoetTxt:
+                                                        moetTypeScore.txtDiem,
+                                                    isMoetProgram: moetTypeScore
+                                                        .statusNote
+                                                        .contains('MOET'),
+                                                    semester: state.txtTihHocKy,
+                                                  )
+                                                : MoetView(
+                                                    diemMoetTxt:
+                                                        moetTypeScore.txtDiem,
+                                                    moetAverage:
+                                                        state.moetAverage,
+                                                    isSecondSemester:
+                                                        moetTypeScore
+                                                                .txtHocKy ==
+                                                            '2',
+                                                  ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -171,12 +172,10 @@ class ScoreScreen extends StatelessWidget {
 class ScoreAppbar extends StatelessWidget {
   const ScoreAppbar({
     super.key,
-    required this.scoreData,
     required this.selectedOption,
     required this.onUpdateYear,
   });
 
-  final ScoreModel scoreData;
   final String selectedOption;
   final void Function(String newYear) onUpdateYear;
 
@@ -194,16 +193,22 @@ class ScoreAppbar extends StatelessWidget {
             },
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(top: 28, right: 16),
-          width: 130,
-          child: DropdownButtonComponent(
-            selectedOption: selectedOption,
-            onUpdateOption: onUpdateYear,
-            hint: 'Chọn năm học',
-            optionList: scoreData.listYear,
-            isSelectYear: true,
-          ),
+        BlocBuilder<CurrentUserBloc, CurrentUserState>(
+          builder: (context, state) {
+            final learnYear = state.activeChild.learnYearList!.toList();
+
+            return Container(
+              margin: const EdgeInsets.only(top: 28, right: 16),
+              width: 130,
+              child: DropdownButtonComponent(
+                selectedOption: selectedOption,
+                onUpdateOption: onUpdateYear,
+                hint: 'Chọn năm học',
+                optionList: learnYear,
+                isSelectYear: true,
+              ),
+            );
+          },
         ),
       ],
     );
@@ -211,24 +216,29 @@ class ScoreAppbar extends StatelessWidget {
 }
 
 class ViewScoreSelectedParam {
-  final String selectedYear;
-  final String selectedScoreType;
-  final String selectedTerm;
+  final String? selectedYear;
+  final String? selectedScoreProgram;
+  final String? selectedTerm;
+  final FilterType? filterType;
 
-  ViewScoreSelectedParam(
-      {required this.selectedYear,
-      required this.selectedScoreType,
-      required this.selectedTerm});
+  ViewScoreSelectedParam({
+    this.selectedYear,
+    this.selectedScoreProgram,
+    this.selectedTerm,
+    this.filterType = FilterType.program,
+  });
 
   ViewScoreSelectedParam copyWith({
     String? selectedYear,
-    String? selectedScoreType,
+    String? selectedScoreProgram,
     String? selectedTerm,
+    FilterType? filterType,
   }) {
     return ViewScoreSelectedParam(
       selectedYear: selectedYear ?? this.selectedYear,
-      selectedScoreType: selectedScoreType ?? this.selectedScoreType,
+      selectedScoreProgram: selectedScoreProgram ?? this.selectedScoreProgram,
       selectedTerm: selectedTerm ?? this.selectedTerm,
+      filterType: filterType ?? this.filterType,
     );
   }
 }

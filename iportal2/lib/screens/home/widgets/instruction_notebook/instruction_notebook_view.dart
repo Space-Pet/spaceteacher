@@ -25,19 +25,16 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         final isLoading = state.statusExercise == HomeStatus.loading;
-        final exercisesDueDateToday = state.exerciseDueDateToday;
+        final exerciseDueDateToday = state.exerciseDueDateToday;
 
-        final isDataEmpty = exercisesDueDateToday.isEmpty && !isLoading;
-
-        final exercisesDueDate = state.exerciseDueDateDataList;
-        final exercisesInDay = state.exerciseInDayDataList;
+        final isDataEmpty = exerciseDueDateToday.isEmpty && !isLoading;
 
         final firstThreeExercisesDueDate =
-            exercisesDueDateToday.take(3).toList();
+            exerciseDueDateToday.take(3).toList();
 
         final lessonsW = List.generate(3, (index) {
           if (index >= firstThreeExercisesDueDate.length) {
-            return SizedBox(height: 48.v);
+            return SizedBox(height: 58.v);
           }
 
           final lesson = firstThreeExercisesDueDate[index];
@@ -47,6 +44,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
 
           return Expanded(
             child: Container(
+              width: double.infinity,
               margin: EdgeInsets.only(bottom: index == 2 ? 0 : 8),
               decoration: BoxDecoration(
                 borderRadius: AppRadius.rounded4,
@@ -69,31 +67,29 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                         mode: LaunchMode.inAppBrowserView,
                       );
                     },
-                    child: Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            lesson.subjectName,
-                            style: AppTextStyles.semiBold14(
-                                color: AppColors.black24),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/paperclip.svg'),
-                              const SizedBox(width: 4),
-                              Text(
-                                fileName,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.normal12(
-                                    color: AppColors.brand600),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          lesson.subjectName,
+                          style: AppTextStyles.semiBold14(
+                              color: AppColors.black24),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SvgPicture.asset('assets/icons/paperclip.svg'),
+                            const SizedBox(width: 4),
+                            Text(
+                              fileName,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.normal12(
+                                  color: AppColors.brand600),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -106,7 +102,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.fromLTRB(16, 20, 16, 16),
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-          height: isExpanded ? 580.v : 210.v,
+          height: isExpanded ? 580.v : 240.v,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: Colors.white,
@@ -157,10 +153,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
               const SizedBox(height: 8),
               Expanded(
                 child: isExpanded
-                    ? HomeTabsInstruction(
-                        exercisesDueDate: exercisesDueDate,
-                        exercisesInDay: exercisesInDay,
-                      )
+                    ? const HomeTabsInstruction()
                     : Row(
                         children: [
                           Container(
@@ -195,14 +188,14 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                           ),
                           const SizedBox(width: 8),
                           Expanded(
-                            child: AppSkeleton(
-                              isLoading: isLoading,
-                              child: isDataEmpty
-                                  ? const EmptyScreen(text: 'Sổ báo bài trống')
-                                  : Column(
+                            child: isDataEmpty
+                                ? const EmptyScreen(text: 'Sổ báo bài trống')
+                                : AppSkeleton(
+                                    isLoading: isLoading,
+                                    child: Column(
                                       children: lessonsW,
                                     ),
-                            ),
+                                  ),
                           ),
                         ],
                       ),

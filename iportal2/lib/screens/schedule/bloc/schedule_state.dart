@@ -7,7 +7,7 @@ class ScheduleState extends Equatable {
     required this.scheduleData,
     required this.datePicked,
     required this.exerciseDataList,
-    this.status = ScheduleStatus.init,
+    this.status = ScheduleStatus.loading,
   });
 
   final Schedule scheduleData;

@@ -16,6 +16,7 @@ class UserHiveStorage implements UserLocalStorage {
     Hive.registerAdapter(FeatureCategoryAdapter());
     Hive.registerAdapter(FeatureGradientAdapter());
     Hive.registerAdapter(SchoolBrandAdapter());
+    Hive.registerAdapter(CapDaoTaoAdapter());
 
     _teacherBox = await Hive.openBox<LocalTeacher>(teacherBoxName);
   }
@@ -27,8 +28,12 @@ class UserHiveStorage implements UserLocalStorage {
 
   @override
   Future saveUser(LocalTeacher user) async {
-    await _teacherBox.clear();
-    await _teacherBox.put(teaccherKey, user);
+    try {
+      await _teacherBox.clear();
+      await _teacherBox.put(teaccherKey, user);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

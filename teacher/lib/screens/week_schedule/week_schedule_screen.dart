@@ -59,12 +59,10 @@ class WeekScheduleView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ScreenAppBar(
-                title: 'Kế hoạch tuần',
-              ),
+              const ScreenAppBar(title: 'Kế hoạch tuần'),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: AppRadius.roundedTop28,
@@ -79,28 +77,21 @@ class WeekScheduleView extends StatelessWidget {
                               date: date ?? DateTime.now(),
                               weekSchedule: weekData,
                             ),
-                            if (weekData != null &&
-                                weekData.data.mainPlan!.isNotEmpty &&
-                                state.weekScheduleStatus ==
-                                    WeekScheduleStatus.success)
+                            if (weekData.data.mainPlan!.isNotEmpty)
                               WeeklyTopic(weekSchedule: weekData),
-                            const SizedBox(height: 8),
-                            if (weekData != null &&
-                                weekData.data.detailPlan!.isNotEmpty &&
-                                state.weekScheduleStatus ==
-                                    WeekScheduleStatus.success)
-                              Expanded(
-                                child: WeeklyTabs(
-                                  date: date ?? DateTime.now(),
-                                  lessons: weekData.data.detailPlan,
-                                ),
-                              ),
-                            if (weekData == null ||
-                                weekData.data.detailPlan!.isEmpty)
-                              const Expanded(
-                                child: EmptyScreen(
-                                    text: 'Chưa có dữ liệu cho tuần này'),
-                              )
+                            weekData.data.detailPlan!.isNotEmpty
+                                ? Expanded(
+                                    child: WeeklyTabs(
+                                      date: date ?? DateTime.now(),
+                                      lessons: weekData.data.detailPlan,
+                                    ),
+                                  )
+                                : const Expanded(
+                                    child: Center(
+                                      child:
+                                          EmptyScreen(text: 'Không có dữ liệu'),
+                                    ),
+                                  )
                           ],
                         )),
                   ),
@@ -120,7 +111,7 @@ class WeeklyTopic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 8),
+      margin: const EdgeInsets.symmetric(vertical: 12),
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: ShapeDecoration(
@@ -204,6 +195,7 @@ class _WeekSelectWidgetState extends State<WeekSelectWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       decoration: const BoxDecoration(
         color: AppColors.gray100,

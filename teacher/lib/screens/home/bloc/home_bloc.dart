@@ -12,12 +12,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.currentUserBloc,
     required this.userRepository,
   }) : super(HomeState(
-          exerciseDueDateToday: const [],
+          exerciseDueDateToday: ExerciseItem.fakeData(),
           exerciseDueDateDataList: const [],
           exerciseInDayDataList: const [],
-          notificationData: NotificationData.empty(),
-          userData: TeacherDetail.empty(),
-          albumData: AlbumData.empty,
+          notificationData: NotificationData.fakeData(),
+          userData: TeacherDetail.fakeData(),
+          albumData: AlbumData.fakeData,
           datePicked: DateTime.now(),
         )) {
     on<HomeFetchProfileData>(_onFetchTeacherDetail);
@@ -26,13 +26,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeFetchExercise>(_onFetchExercise);
     add(HomeFetchExercise());
 
-    on<HomeFetchNotificationData>(_onFetchNotifications);
-    add(HomeFetchNotificationData());
-
     on<HomeFetchAlbumData>(_onFetchAlbumData);
     add(HomeFetchAlbumData());
 
     on<HomeExerciseSelectDate>(_onSelectDate);
+
+    on<HomeFetchNotificationData>(_onFetchNotifications);
+    add(HomeFetchNotificationData());
 
     on<HomeRefresh>(_onRefresh);
   }
@@ -53,6 +53,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       profileStatus: HomeStatus.success,
       userData: teacherDetail,
     ));
+
+    currentUserBloc.add(CurrentUserNotify(teacherDetail.pushNotify));
   }
 
   _onSelectDate(HomeExerciseSelectDate event, Emitter<HomeState> emit) async {
@@ -65,9 +67,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     emit(
-      state.copyWith(
-        exerciseDueDateDataList: exerciseDueDateDataList,
-      ),
+      state.copyWith(exerciseDueDateDataList: exerciseDueDateDataList),
     );
 
     final exerciseInDayDataList = await appFetchApiRepo.getExercises(
@@ -87,10 +87,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   _onFetchExercise(HomeFetchExercise event, Emitter<HomeState> emit) async {
     if (!currentUserBloc.state.user.isKinderGarten) {
       emit(state.copyWith(statusExercise: HomeStatus.loading));
+      final dateTimeTest = DateTime(2024, 9, 25);
 
       final exerciseDataList = await appFetchApiRepo.getExercises(
-        userKey: currentUserBloc.state.user.user_key,
-        datePicked: DateTime.now(),
+        userKey: '0253230044',
+        datePicked: dateTimeTest,
+        // userKey: currentUserBloc.state.user.user_key,
+        // datePicked: DateTime.now(),
         isDueDate: event.isDueDate,
       );
 
@@ -129,22 +132,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       orderBy: NotificationOrderBy.desc.value,
     );
     emit(state.copyWith(
-        notificationData: notificationData, statusNoti: HomeStatus.success));
+      notificationData: notificationData,
+      statusNoti: HomeStatus.success,
+    ));
   }
 
   _onFetchAlbumData(HomeFetchAlbumData event, Emitter<HomeState> emit) async {
     if (currentUserBloc.state.user.isKinderGarten) {
-      emit(state.copyWith(statusAlbum: HomeStatus.loading));
+      emit(state.copyWith(
+        statusAlbum: HomeStatus.loading,
+        // albumData: AlbumData.fakeData,
+      ));
 
       final albumData = await appFetchApiRepo
           .getAlbum(currentUserBloc.state.user.teacher_id.toString());
 
       emit(state.copyWith(
         albumData: albumData,
+        statusAlbum: HomeStatus.success,
       ));
-
-      await Future.delayed(const Duration(milliseconds: 500));
-      emit(state.copyWith(statusAlbum: HomeStatus.success));
     }
   }
 

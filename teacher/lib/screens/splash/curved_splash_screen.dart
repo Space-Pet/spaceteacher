@@ -199,7 +199,7 @@ class CurvedSheet extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 110,
+                          width: 130.h,
                           child: TextButton(
                             onPressed: () {
                               skip();
@@ -212,7 +212,7 @@ class CurvedSheet extends StatelessWidget {
                         ),
                         Row(children: getSplashDots(totalPages, currentPage)),
                         SizedBox(
-                          width: 110,
+                          width: 130.h,
                           child: TextButton(
                               onPressed: () {
                                 next();

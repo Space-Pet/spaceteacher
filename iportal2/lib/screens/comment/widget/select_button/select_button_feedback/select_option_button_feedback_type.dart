@@ -6,8 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:iportal2/screens/pre_score/bloc/pre_score_bloc.dart';
-
+import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
 
 class SelectFeedBackType extends StatefulWidget {
   const SelectFeedBackType(
@@ -61,7 +60,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
       endDate = getWeekEndDate(endDate.subtract(const Duration(days: 7)));
     });
     getWeekNumber(endDate);
-    context.read<PreScoreBloc>().add(GetComment(
+    context.read<CommentBloc>().add(GetComment(
         txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
         inputEndDate: endDate,
         inputStartDate: startDate));
@@ -74,7 +73,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
     });
 
     getWeekNumber(endDate);
-    context.read<PreScoreBloc>().add(GetComment(
+    context.read<CommentBloc>().add(GetComment(
         txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
         inputEndDate: endDate,
         inputStartDate: startDate));

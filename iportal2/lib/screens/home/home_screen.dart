@@ -49,25 +49,26 @@ class _HomeScreenState extends State<HomeScreen>
               children: [
                 ListView(),
                 const CenterPositioned(
-                  top: 48,
+                  top: 52,
                   child: HomeAppBar(),
                 ),
                 CenterPositioned(
-                  top: isKinderGarten ? 352 : 320,
+                  top: isKinderGarten ? 376 : 346,
                   child: const NotiSlider(),
                 ),
                 CenterPositioned(
-                  top: isKinderGarten ? 500 : 468,
+                  top: isKinderGarten ? 520 : 468,
                   child: PinFeatures(
                     isKinderGarten: isKinderGarten,
                     userFeatures: listFeatures,
+                    isLoading: homeBloc.state.statusHome == HomeStatus.loading,
                   ),
                 ),
                 // Widget can be expanded and overlapped
                 CenterPositioned(
-                  top: isKinderGarten ? 100 : 88,
+                  top: isKinderGarten ? 92 : 88,
                   child: isKinderGarten
-                      ? const ImagesLibrary()
+                      ? ImagesLibrary(pinnedAlbumIdList: user.pinnedAlbumIdList)
                       : const InstructionNotebook(),
                 ),
               ],

@@ -106,7 +106,7 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
           duration: const Duration(milliseconds: 300),
           margin: const EdgeInsets.fromLTRB(16, 20, 16, 16),
           padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-          height: isExpanded ? 580.v : 210.v,
+          height: isExpanded ? 580.v : 240.v,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: Colors.white,

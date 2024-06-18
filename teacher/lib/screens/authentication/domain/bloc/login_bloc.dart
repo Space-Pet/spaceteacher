@@ -44,18 +44,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             .firstWhere((element) => element.value == user.schoolBrand);
 
         final localTeacherInfo = LocalTeacher(
-          name: user.name,
-          user_key: user.userKey,
-          teacher_id: user.teacherId,
-          school_id: user.schoolId,
-          user_id: user.userId,
-          school_brand: user.schoolBrand,
-          features: defaultFeatures,
-          background: bgSchoolBrand,
-          pinnedAlbumIdList: [],
-          isKinderGarten: isKinderGarten,
-          learnYear: user.learnYear,
-        );
+            name: user.name,
+            user_key: user.userKey,
+            teacher_id: user.teacherId,
+            school_id: user.schoolId,
+            user_id: user.userId,
+            school_brand: user.schoolBrand,
+            features: defaultFeatures,
+            background: bgSchoolBrand,
+            pinnedAlbumIdList: [],
+            isKinderGarten: isKinderGarten,
+            learnYear: user.learnYear,
+            cap_dao_tao: user.capDaoTao);
 
         userRepository.saveUser(localTeacherInfo);
         currentUserBloc.add(CurrentUserUpdated(user: localTeacherInfo));
@@ -83,6 +83,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(state.copyWith(status: LoginStatus.failure));
         return;
       }
+
       final user = teacherLogin.info;
       final isKinderGarten = user.isKinderGarten();
 
@@ -104,6 +105,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         pinnedAlbumIdList: [],
         isKinderGarten: isKinderGarten,
         learnYear: user.learnYear,
+        cap_dao_tao: user.capDaoTao,
       );
 
       userRepository.saveUser(localTeacherInfo);

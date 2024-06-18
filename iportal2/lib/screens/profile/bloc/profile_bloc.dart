@@ -54,8 +54,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final data = await userRepository.getProfileStudent(
           pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
       emit(state.copyWith(
-        profileStatus: ProfileStatus.success,
         studentData: data,
+        profileStatus: ProfileStatus.success,
       ));
     } catch (e) {
       print('err: $e');
@@ -70,10 +70,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(state.copyWith(profileStatus: ProfileStatus.init));
       final data = await userRepository.getProfileParent(
           pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
-      emit(state.copyWith(
-        profileStatus: ProfileStatus.success,
-        parentData: data,
-      ));
+      emit(state.copyWith(parentData: data));
 
       add(const GetProfileStudent());
     } catch (e) {

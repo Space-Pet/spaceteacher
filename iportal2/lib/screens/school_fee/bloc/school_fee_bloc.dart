@@ -42,12 +42,16 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     try {
       final result = await appFetchApiRepo.getSchoolFee(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
       final schoolPreview = await appFetchApiRepo.getSchoolFeePaymentPreview(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: result.totalThanhTien ?? 0,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
       emit(
         state.copyWith(
@@ -73,7 +77,9 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     try {
       final res = await appFetchApiRepo.getHistorySchoolFee(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
 
       emit(state.copyWith(
@@ -124,7 +130,9 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
         paymentId: event.paymentId,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
       emit(state.copyWith(
         paymentStatus: PaymentStatus.loaded,
@@ -148,7 +156,9 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       final resPreview = await appFetchApiRepo.getPreviewSchooWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
       Log.d('result: ${resPreview.hinhThucThanhToan}');
       emit(state.copyWith(
@@ -171,7 +181,9 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       final res = await appFetchApiRepo.payWithBalance(
         pupilId: currentUserBloc.state.activeChild.pupil_id,
         totalMoneyPayment: event.totalMoneyPayment,
-        learnYear: event.learnYear ?? currentUserBloc.state.user.learn_year,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
       );
 
       emit(state.copyWith(
@@ -209,7 +221,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     try {
       final res = await appFetchApiRepo.getLearnYears(number: event.number);
       final currentYear = res.firstWhere((element) =>
-          element.learnYear == currentUserBloc.state.user.learn_year);
+          element.learnYear == currentUserBloc.state.activeChild.learn_year);
       emit(state.copyWith(
           learnYears: res,
           currentYearState: currentYear,

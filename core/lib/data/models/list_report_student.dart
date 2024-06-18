@@ -4,12 +4,15 @@ class ListReportStudent {
   final String description;
   final int status;
   final int semester;
-  const ListReportStudent(
-      {required this.description,
-      required this.id,
-      required this.semester,
-      required this.status,
-      required this.title});
+
+  const ListReportStudent({
+    required this.description,
+    required this.id,
+    required this.semester,
+    required this.status,
+    required this.title,
+  });
+
   factory ListReportStudent.fromJson(Map<String, dynamic> json) {
     return ListReportStudent(
         description: json['description'] ?? '',
@@ -17,5 +20,16 @@ class ListReportStudent {
         semester: json['semester'] ?? 0,
         status: json['status'] ?? 0,
         title: json['title'] ?? '');
+  }
+  static List<ListReportStudent> fakeData() {
+    return List.generate(
+      10,
+      (index) => ListReportStudent(
+          description: 'description $index',
+          id: index,
+          semester: index,
+          status: index,
+          title: 'title $index'),
+    );
   }
 }

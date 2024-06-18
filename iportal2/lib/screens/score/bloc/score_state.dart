@@ -2,46 +2,56 @@ part of 'score_bloc.dart';
 
 class ScoreState extends Equatable {
   const ScoreState({
-    required this.moetScore,
-    required this.eslScore,
-    required this.primaryConduct,
+    required this.programList,
+    required this.scoreProgram,
     required this.txtLearnYear,
-    required this.otherScore,
+    this.isPrimaryStudent = false,
     this.txtHocKy = TermType.term1,
     this.txtTihHocKy = PrimaryTermType.midTerm1,
-    this.scoreType = 'Điểm MOET',
+    required this.moetTypeScore,
+    required this.moetAverage,
+    //
+    required this.eslScore,
+    required this.primaryConduct,
     this.status = ScoreStatus.initial,
-    this.otherScoreStatus = OtherScoreStatus.initial,
+    this.programListStatus = ScoreProgramStatus.initial,
     this.conducStatus = ScoreStatus.initial,
   });
 
-  final ScoreModel moetScore;
-  final EslScore eslScore;
-  final PrimaryConduct primaryConduct;
-  final ScoreOther otherScore;
+  final List<ScoreProgram> programList;
+  final ScoreProgram scoreProgram;
+  final String txtLearnYear;
+  final bool isPrimaryStudent;
 
   final TermType txtHocKy;
   final PrimaryTermType txtTihHocKy;
 
-  final String txtLearnYear;
-  final String scoreType;
+  final ScoreModel moetTypeScore;
+  final MoetAverage moetAverage;
 
+  //
+
+  final EslScore eslScore;
+  final PrimaryConduct primaryConduct;
+
+  final ScoreProgramStatus programListStatus;
   final ScoreStatus status;
-  final OtherScoreStatus otherScoreStatus;
   final ScoreStatus conducStatus;
 
   @override
   List<Object?> get props => [
-        scoreType,
-        moetScore,
-        primaryConduct,
-        otherScore,
+        programList,
+        scoreProgram,
+        txtLearnYear,
+        isPrimaryStudent,
         txtHocKy,
         txtTihHocKy,
-        txtLearnYear,
-        scoreType,
+        moetAverage,
+        //
+        moetTypeScore,
+        primaryConduct,
         status,
-        otherScoreStatus,
+        programListStatus,
         conducStatus,
       ];
 
@@ -53,30 +63,36 @@ class ScoreState extends Equatable {
   }
 
   ScoreState copyWith({
-    ScoreModel? moetScore,
-    EslScore? eslScore,
-    PrimaryConduct? primaryConduct,
-    ScoreOther? otherScore,
-    List<String>? yearList,
+    List<ScoreProgram>? programList,
+    ScoreProgram? scoreProgram,
+    String? txtLearnYear,
+    bool? isPrimaryStudent,
     TermType? txtHocKy,
     PrimaryTermType? txtTihHocKy,
-    String? txtLearnYear,
-    String? scoreType,
+    MoetAverage? moetAverage,
+    //
+    ScoreModel? moetTypeScore,
+    EslScore? eslScore,
+    PrimaryConduct? primaryConduct,
+    List<String>? yearList,
     ScoreStatus? status,
-    OtherScoreStatus? otherScoreStatus,
+    ScoreProgramStatus? programListStatus,
     ScoreStatus? conducStatus,
   }) {
     return ScoreState(
-      scoreType: scoreType ?? this.scoreType,
-      moetScore: moetScore ?? this.moetScore,
-      eslScore: eslScore ?? this.eslScore,
-      primaryConduct: primaryConduct ?? this.primaryConduct,
-      otherScore: otherScore ?? this.otherScore,
+      programList: programList ?? this.programList,
+      scoreProgram: scoreProgram ?? this.scoreProgram,
+      txtLearnYear: txtLearnYear ?? this.txtLearnYear,
+      isPrimaryStudent: isPrimaryStudent ?? this.isPrimaryStudent,
       txtHocKy: txtHocKy ?? this.txtHocKy,
       txtTihHocKy: txtTihHocKy ?? this.txtTihHocKy,
-      txtLearnYear: txtLearnYear ?? this.txtLearnYear,
+      moetAverage: moetAverage ?? this.moetAverage,
+      //
+      moetTypeScore: moetTypeScore ?? this.moetTypeScore,
+      eslScore: eslScore ?? this.eslScore,
+      primaryConduct: primaryConduct ?? this.primaryConduct,
       status: status ?? this.status,
-      otherScoreStatus: otherScoreStatus ?? this.otherScoreStatus,
+      programListStatus: programListStatus ?? this.programListStatus,
       conducStatus: conducStatus ?? this.conducStatus,
     );
   }
@@ -84,7 +100,7 @@ class ScoreState extends Equatable {
 
 enum ScoreStatus { initial, loading, loaded, error }
 
-enum OtherScoreStatus { initial, loading, loaded, error }
+enum ScoreProgramStatus { initial, loading, loaded, error }
 
 enum PrimaryTermType {
   midTerm1,
@@ -150,40 +166,21 @@ extension TermTypeX on TermType {
   }
 }
 
-enum ScoreType {
-  moet,
-  esl,
-  // other,
-  // oic,
+enum FilterType {
+  program,
+  term,
+  learnYear,
 }
 
-extension ScoreTypeX on ScoreType {
-  String text() {
+extension FilterTypeX on FilterType {
+  String value() {
     switch (this) {
-      case ScoreType.moet:
-        return "Điểm MOET";
-      case ScoreType.esl:
-        return "Điểm ESL";
+      case FilterType.program:
+        return 'program';
+      case FilterType.term:
+        return 'term';
       default:
-        return "Điểm MOET";
-    }
-  }
-}
-
-enum TermCountType {
-  first,
-  second,
-}
-
-extension TermcountTypeX on TermCountType {
-  String text() {
-    switch (this) {
-      case TermCountType.first:
-        return "Học kỳ 1";
-      case TermCountType.second:
-        return "Học kỳ 2";
-      default:
-        return "Học kỳ 1";
+        return 'learnYear';
     }
   }
 }

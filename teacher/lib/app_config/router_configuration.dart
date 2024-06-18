@@ -137,12 +137,6 @@ class CustomRouter {
           routeName: SurveyScreen.routeName,
         );
 
-      case ClassScoreScreen.routeName:
-        return transitionAnimation(
-          child: const ClassScoreScreen(),
-          routeName: ClassScoreScreen.routeName,
-        );
-
       default:
         assert(false, 'Need to implement ${settings.name}');
         return null;

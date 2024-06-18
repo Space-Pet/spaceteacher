@@ -133,7 +133,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         tokenFirebase: deviceInfo.tokenFirebase,
       );
 
-      final isStudentUser = user.isStudent();
       final localChildren = user.children
           .map((e) => e.toLocalChildren(
                 isDefaultActive: user.pupil_id == e.pupil_id,
@@ -146,13 +145,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         user_id: user.user_id,
         type: user.type,
         type_text: user.type_text,
-        learn_year: user.learn_year,
         children: localChildren,
       );
 
       userRepository.saveUser(localUser);
       currentUserBloc.add(CurrentUserUpdated(user: localUser));
-      return emit(state.copyWith(status: LoginStatus.success));
+      emit(state.copyWith(status: LoginStatus.success));
     } on LoginFailure catch (e) {
       emit(state.copyWith(
           status: LoginStatus.failure, failureMessage: e.message));
@@ -187,7 +185,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         user_id: user.user_id,
         type: user.type,
         type_text: user.type_text,
-        learn_year: user.learn_year,
         children: localChildren,
       );
 

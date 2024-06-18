@@ -29,4 +29,21 @@ class LeaveData {
         value: json['status']['value'] ?? '',
         text: json['status']['text'] ?? '');
   }
+
+  // create fakeData type List<LeaveData>
+  static List<LeaveData> fakeData() {
+    return List.generate(
+      6,
+      (index) => LeaveData(
+        id: index,
+        title: 'title$index',
+        content: 'content$index',
+        leaveType: index,
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        value: 'value$index',
+        text: 'text$index',
+      ),
+    );
+  }
 }

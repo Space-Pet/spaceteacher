@@ -7,12 +7,7 @@ import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 class HomeTabsInstruction extends StatelessWidget {
   const HomeTabsInstruction({
     super.key,
-    required this.exercisesDueDate,
-    required this.exercisesInDay,
   });
-
-  final List<ExerciseItem> exercisesDueDate;
-  final List<ExerciseItem> exercisesInDay;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +15,13 @@ class HomeTabsInstruction extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<HomeBloc>();
         final isLoading = state.statusExercise == HomeStatus.loading;
-        final isEmptyInDay = exercisesInDay.isEmpty && !isLoading;
         final dateSelected = state.datePicked;
 
-        final listExerciseDueDate = exercisesDueDate
-            .where((element) => element.hanNopBaoBai == dateSelected.yyyyMMdd)
-            .toList();
+        final exercisesInDay = state.exerciseInDayDataList;
+        final isEmptyInDay = exercisesInDay.isEmpty && !isLoading;
 
-        final isEmptyDueDate = listExerciseDueDate.isEmpty && !isLoading;
+        final exercisesDueDate = state.exerciseDueDateDataList;
+        final isEmptyDueDate = exercisesDueDate.isEmpty && !isLoading;
 
         return DefaultTabController(
             length: 2,

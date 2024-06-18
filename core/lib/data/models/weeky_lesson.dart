@@ -13,7 +13,7 @@ class WeeklyLessonData {
     return WeeklyLessonData(
       lessonDataList: List<LessonData>.from(
         map['weeklylesson_data']?.map(
-          LessonData.fromMap,
+          (item) => LessonData.fromMap(item as Map<String, dynamic>),
         ),
       ),
     );
@@ -49,8 +49,7 @@ class LessonData {
       ngay: Ngay.fromMap(map['Ngay']),
       dataList: List<LessonDataItem>.from(
         map['Data']?.map(
-          LessonDataItem.fromMap,
-        ),
+            (item) => LessonDataItem.fromMap(item as Map<String, dynamic>)),
       ),
     );
   }
@@ -72,6 +71,45 @@ class LessonData {
   String toJson() => json.encode(toMap());
 
   factory LessonData.empty() => LessonData(ngay: Ngay.empty(), dataList: []);
+
+  factory LessonData.fakeData() {
+    return LessonData(
+      ngay: Ngay(date: 1, dateName: 'dateName', day: 'day'),
+      dataList: fakeListLesson(),
+    );
+  }
+
+  static List<LessonDataItem> fakeListLesson() {
+    return List.generate(
+      10,
+      (index) => LessonDataItem(
+        lessonId: 'lessonId$index',
+        lessonName: 'lessonName$index',
+        subjectId: 'subjectId$index',
+        subjectName: 'subjectName$index',
+        lessonNote: 'lessonNote$index',
+        danDoBaoBai: 'danDoBaoBai$index',
+        fileBaoBai: 'fileBaoBai$index',
+        fileBaoBaiDomain: 'fileBaoBaiDomain$index',
+        linkBaoBai: 'linkBaoBai$index',
+        hanNopBaoBai: 'hanNopBaoBai$index',
+        teacherId: 'teacherId$index',
+        teacherName: 'teacherName$index',
+        teacherImg: 'teacherImg$index',
+        tietNum: 'tietNum$index',
+        tietStatus: 'tietStatus$index',
+        tietStatusNote: 'tietStatusNote$index',
+        lessonRank: List.generate(
+          3,
+          (index) => LessonRank(
+            lessonRankKey: index,
+            lessonRankName: 'lessonRankName$index',
+            active: index,
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   String toString() => 'LessonData(ngay: $ngay, dataList: $dataList)';
@@ -169,7 +207,7 @@ class LessonDataItem {
       tietStatusNote: map['tiet_status_note'],
       lessonRank: List<LessonRank>.from(
         map['lesson_rank']?.map(
-          LessonRank.fromMap,
+          (item) => LessonRank.fromMap(item as Map<String, dynamic>),
         ),
       ),
     );

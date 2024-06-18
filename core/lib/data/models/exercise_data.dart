@@ -14,8 +14,8 @@ class ExerciseData {
     return ExerciseData(
       exerciseDataList: List<ExerciseItem>.from(
         map['data']?.map(
-          ExerciseItem.fromMap,
-        ),
+                (item) => ExerciseItem.fromMap(item as Map<String, dynamic>)) ??
+            [],
       ),
     );
   }
@@ -23,9 +23,7 @@ class ExerciseData {
   Map<String, dynamic> toMap() {
     return {
       'data': List<dynamic>.from(
-        exerciseDataList.map(
-          (x) => x.toMap(),
-        ),
+        exerciseDataList.map((x) => x.toMap()),
       ),
     };
   }
@@ -41,8 +39,7 @@ class ExerciseData {
   }
 
   List<String> getSubjectList() {
-    final uniqueSubjects =
-        exerciseDataList.map((e) => e.subjectName).toSet();
+    final uniqueSubjects = exerciseDataList.map((e) => e.subjectName).toSet();
     final subjectList = uniqueSubjects.toList();
     subjectList.insert(0, 'Tất cả các môn');
     return subjectList;
@@ -138,10 +135,6 @@ class ExerciseItem {
 
   String toJson() => json.encode(toMap());
 
-  @override
-  String toString() =>
-      'ExerciseItem(lessonId: $lessonId, lessonName: $lessonName, subjectId: $subjectId, subjectName: $subjectName, lessonNote: $lessonNote, danDoBaoBai: $danDoBaoBai, fileBaoBai: $fileBaoBai, fileBaoBaiDomain: $fileBaoBaiDomain, linkBaoBai: $linkBaoBai, hanNopBaoBai: $hanNopBaoBai, teacherId: $teacherId, teacherName: $teacherName, tietNum: $tietNum, className: $className, classId: $classId,classId: $lessonStatus)';
-
   static ExerciseItem empty() {
     return ExerciseItem(
       lessonId: '',
@@ -160,6 +153,30 @@ class ExerciseItem {
       className: '',
       classId: '',
       lessonStatus: '',
+    );
+  }
+
+  static List<ExerciseItem> fakeData() {
+    return List.generate(
+      10,
+      (index) => ExerciseItem(
+        lessonId: 'lessonId$index',
+        lessonName: 'lessonName$index',
+        subjectId: 'subjectId$index',
+        subjectName: 'subjectName$index',
+        lessonNote: 'lessonNote$index',
+        danDoBaoBai: 'danDoBaoBai$index',
+        fileBaoBai: 'fileBaoBai$index',
+        fileBaoBaiDomain: 'fileBaoBaiDomain$index',
+        linkBaoBai: 'linkBaoBai$index',
+        hanNopBaoBai: '${DateTime.now()}',
+        teacherId: 'teacherId$index',
+        teacherName: 'teacherName$index',
+        tietNum: 'tietNum$index',
+        className: 'className$index',
+        classId: 'classId$index',
+        lessonStatus: 'lessonStatus$index',
+      ),
     );
   }
 }

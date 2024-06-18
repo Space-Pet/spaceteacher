@@ -40,6 +40,48 @@ class BusSchedule with _$BusSchedule {
       teacher: Teacher.fromData(data.teacher),
     );
   }
+
+  // create fakeData type  List<BusSchedule>
+  static List<BusSchedule> fakeData() {
+    return List.generate(
+      2,
+      (index) => BusSchedule(
+        id: index,
+        schoolId: 1,
+        scheduleId: 1,
+        attendanceDate: DateTime.now(),
+        attendance: 1,
+        checkOut: '2021-10-10T10:10:10',
+        checkIn: '2021-10-10T10:10:10',
+        pupil: const Pupil(pupilId: 1, pupilName: 'Nguyen Van A'),
+        route: const RouteBus(routeId: 1, routeName: 'Route 1'),
+        attendanceFeeType:
+            const AttendanceFeeType(id: 1, text: 'AttendanceFeeType 1'),
+        scheduleType: const ScheduleType(value: 1, text: 'ScheduleType 1'),
+        busStop: BusStop(
+          id: 1,
+          name: 'BusStop 1',
+          address: 'Address 1',
+          estimatedTime: DateTime.now(),
+        ),
+        driverInfo: const DriverInfo(
+          busId: 1,
+          subDriver: 'SubDriver 1',
+          numberPlate: 'NumberPlate 1',
+          driverName: 'DriverName 1',
+        ),
+        teacher: const Teacher(
+          teacherId: 1,
+          teacherName: 'TeacherName 1',
+          mobilePhone: 'MobilePhone 1',
+          image: UserImage(
+            web: 'Web 1',
+            mobile: 'Mobile 1',
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 extension BusScheduleX on BusSchedule {
@@ -55,6 +97,24 @@ extension BusScheduleX on BusSchedule {
   String title() {
     const left = 'Học sinh lên - xuống xe:';
     return '$left${(checkIn ?? '').isNotEmpty ? ' ${checkIn?.substring(11, 16)} - ' : ''}${checkOut?.substring(11, 16) ?? ''}';
+  }
+
+  String checkInTime() {
+    if ((checkIn ?? '').isEmpty) {
+      return '';
+    }
+
+    const left = 'Giờ lên:';
+    return '$left ${checkIn?.substring(11, 16)}';
+  }
+
+  String checkOutTime() {
+    if ((checkOut ?? '').isEmpty) {
+      return '';
+    }
+
+    const left = 'Giờ xuống:';
+    return '$left ${checkOut?.substring(11, 16)}';
   }
 
   String attendanceDateString() {

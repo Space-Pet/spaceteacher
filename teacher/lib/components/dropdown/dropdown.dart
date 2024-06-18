@@ -9,10 +9,12 @@ class DropdownButtonComponent extends StatefulWidget {
   final bool isSelectYear;
   final void Function(String) onUpdateOption;
   final Color? color;
+  final double? borderRadius;
 
   const DropdownButtonComponent({
     super.key,
     this.color,
+    this.borderRadius,
     required this.optionList,
     required this.hint,
     required this.onUpdateOption,
@@ -72,7 +74,7 @@ class _DropdownButtonComponentState extends State<DropdownButtonComponent> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(widget.borderRadius ?? 40),
         color: widget.isSelectYear ? Colors.transparent : AppColors.gray100,
         border: Border.all(
           color: AppColors.gray400,

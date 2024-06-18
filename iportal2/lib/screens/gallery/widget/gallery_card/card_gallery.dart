@@ -3,6 +3,7 @@ import 'package:core/resources/app_colors.dart';
 import 'package:core/resources/app_decoration.dart';
 import 'package:core/resources/app_size.dart';
 import 'package:core/resources/app_text_styles.dart';
+import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -14,10 +15,12 @@ class CardGallery extends StatelessWidget {
     required this.galleryItem,
     required this.onUpdatePinAlbum,
     required this.isPinned,
+    required this.isLoading,
   });
   final Gallery galleryItem;
   final Function() onUpdatePinAlbum;
   final bool isPinned;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,9 @@ class CardGallery extends StatelessWidget {
               borderRadius: AppRadius.rounded10,
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(imgUrl),
+                image: isLoading
+                    ? Assets.images.calendar.provider()
+                    : NetworkImage(imgUrl),
               ),
             ),
             height: itemW,

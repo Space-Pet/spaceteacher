@@ -25,14 +25,12 @@ class _NotiSliderState extends State<NotiSlider> {
         final isEmptyNoti = state.notificationData.data.isEmpty && !isLoading;
 
         final homeBloc = context.watch<HomeBloc>();
-        final notificationList = homeBloc.state.notificationData.data;
+        final notificationList = state.notificationData.data;
 
         final notiList = List.generate(notificationList.length, (index) {
           final noti = notificationList[index];
 
           final date = DateTime.parse(noti.createdAt);
-          // parse 2024-05-14 11:44:30 to Thứ 3, 14 tháng 5, 2024 11:44
-
           final formattedDate = '${date.day} tháng ${date.month}, ${date.year} '
               '${date.hour}:${date.minute}';
 
@@ -89,10 +87,6 @@ class _NotiSliderState extends State<NotiSlider> {
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.normal12(
                                   color: AppColors.gray90002)),
-                          // Text('Xem chi tiết',
-                          //     style: AppTextStyles.normal12(
-                          //       color: AppColors.gray600,
-                          //     )),
                         ],
                       ),
                     )
@@ -103,23 +97,19 @@ class _NotiSliderState extends State<NotiSlider> {
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Stack(
-            children: [
-              isEmptyNoti
-                  ? const EmptyNoti()
-                  : SizedBox(
-                      height: 144,
-                      width: double.infinity,
-                      child: PageView.builder(
-                        controller: controller,
-                        itemCount: notiList.length,
-                        itemBuilder: (_, index) {
-                          return notiList[index % notiList.length];
-                        },
-                      ),
-                    ),
-            ],
-          ),
+          height: 144,
+          child: isEmptyNoti
+              ? const EmptyNoti()
+              : AppSkeleton(
+                  isLoading: isLoading,
+                  child: PageView.builder(
+                    controller: controller,
+                    itemCount: notiList.length,
+                    itemBuilder: (_, index) {
+                      return notiList[index % notiList.length];
+                    },
+                  ),
+                ),
         );
       },
     );
@@ -134,9 +124,10 @@ class EmptyNoti extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaDowBoxContainer(
-        margin: const EdgeInsets.fromLTRB(8, 20, 8, 28),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+        margin: const EdgeInsets.fromLTRB(8, 12, 8, 36),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               decoration: const BoxDecoration(
@@ -159,13 +150,14 @@ class EmptyNoti extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Chưa có thông báo mới',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.bold14(
-                          height: 18 / 12, color: AppColors.gray90002)),
+                        height: 18 / 12,
+                        color: AppColors.gray90002,
+                      )),
                 ],
               ),
             )

@@ -7,29 +7,32 @@ import '../../../resources/assets.gen.dart';
 import '../../../resources/resources.dart';
 import '../../extentions/extention.dart';
 
-class CTabBarViewWeek extends StatefulWidget {
+class CTabBarViewDays extends StatefulWidget {
   final AttendanceWeek? attendanceWeek;
   final bool isWeek;
+  final DateTime selectDate;
 
-  const CTabBarViewWeek({
+  const CTabBarViewDays({
     super.key,
     this.attendanceWeek,
     this.isWeek = true,
     this.getAttendanceWeek,
     this.getAttendanceMonth,
+    required this.selectDate,
   });
 
   final void Function(String endDate, String startDate)? getAttendanceWeek;
   final void Function(String endDate, String startDate)? getAttendanceMonth;
 
   @override
-  State<CTabBarViewWeek> createState() => _CTabBarViewWeekState();
+  State<CTabBarViewDays> createState() => _CTabBarViewDaysState();
 }
 
-class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
-  late DateTime startDate = DateTime.now();
-  late DateTime endDate = DateTime.now();
+class _CTabBarViewDaysState extends State<CTabBarViewDays> {
+  late DateTime startDate;
+  late DateTime endDate;
   late int week;
+
   DateTime getWeekStartDate(DateTime date) {
     return startDate = date.subtract(Duration(days: date.weekday - 1));
   }
@@ -43,14 +46,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
     return '${date.day}/${date.month}';
   }
 
-  int getWeekNumber(DateTime date) {
-    final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    final firstDayOfYear = DateTime(firstDayOfWeek.year);
-    final daysOffset = firstDayOfYear.weekday;
-    final daysOfYear = firstDayOfWeek.difference(firstDayOfYear).inDays + 1;
-    return week = ((daysOfYear - daysOffset) / 7).ceil();
-  }
-
   void getPreviousPeriodData() {
     if (widget.isWeek) {
       setState(() {
@@ -58,7 +53,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
             getWeekStartDate(startDate.subtract(const Duration(days: 7)));
         endDate = getWeekEndDate(endDate.subtract(const Duration(days: 7)));
       });
-      getWeekNumber(endDate);
       widget.getAttendanceWeek?.call(endDate.yyyyMMdd, startDate.yyyyMMdd);
     } else {
       setState(() {
@@ -69,7 +63,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
           DateTime(endDate.year, endDate.month, 0).day,
         );
       });
-      getWeekNumber(endDate);
       widget.getAttendanceMonth?.call(endDate.yyyyMMdd, startDate.yyyyMMdd);
     }
   }
@@ -78,7 +71,6 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
     if (widget.isWeek) {
       startDate = getWeekStartDate(startDate.add(const Duration(days: 7)));
       endDate = getWeekEndDate(endDate.add(const Duration(days: 7)));
-      getWeekNumber(endDate);
       widget.getAttendanceWeek?.call(endDate.yyyyMMdd, startDate.yyyyMMdd);
     } else {
       startDate = DateTime(startDate.year, startDate.month + 1);
@@ -91,9 +83,8 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
   @override
   void initState() {
     super.initState();
-    getFormattedDate(getWeekStartDate(startDate));
-    getFormattedDate(getWeekEndDate(endDate));
-    getWeekNumber(endDate);
+    getFormattedDate(getWeekStartDate(widget.selectDate));
+    getFormattedDate(getWeekEndDate(widget.selectDate));
   }
 
   @override
@@ -106,7 +97,11 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
       var isFirstDay = true;
 
       if (isFirstDay) {
-        dataListAttendance.add({'day': attendance.date});
+        print(attendance.date);
+        final formattedDate =
+            DateFormat('dd/MM/yyyy').format(DateTime.parse(attendance.date));
+
+        dataListAttendance.add({'day': formattedDate});
         isFirstDay = false;
       }
       for (final itemData in attendance.data) {
@@ -121,7 +116,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
     final listAttendance = List.generate(dataListAttendance.length, (index) {
       final data = dataListAttendance[index];
       return SizedBox(
-        height: 60,
+        height: 44,
         width: double.infinity,
         child: TimelineTile(
           alignment: TimelineAlign.manual,
@@ -136,7 +131,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
             color: AppColors.gray300,
           ),
           indicatorStyle: IndicatorStyle(
-            height: 10,
+            height: 8,
             indicator: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -155,12 +150,17 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
             drawGap: true,
           ),
           endChild: data['day'] != null
-              ? Text(
-                  data['day'] ?? '${data['description']} ${data['isAbsent']}',
-                  style: AppTextStyles.normal14(
-                      fontWeight: FontWeight.w600, color: AppColors.brand600))
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: Text(
+                      data['day'] ??
+                          '${data['description']} ${data['isAbsent']}',
+                      style: AppTextStyles.normal14(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.brand600)),
+                )
               : Padding(
-                  padding: const EdgeInsets.only(left: 20, bottom: 5),
+                  padding: const EdgeInsets.only(left: 16, bottom: 5),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
                   ),
                   Text(
                     widget.isWeek
-                        ? 'Tuần $week (${DateFormat('dd/MM').format(startDate)} - ${DateFormat('dd/MM').format(endDate)})'
+                        ? '${DateFormat('dd/MM').format(startDate)} - ${DateFormat('dd/MM').format(endDate)}'
                         : 'Tháng ${endDate.month}',
                     style: AppTextStyles.normal14(
                       height: 0.10,
@@ -354,6 +354,7 @@ class _CTabBarViewWeekState extends State<CTabBarViewWeek> {
             ),
             Flexible(
               child: ListView(
+                padding: const EdgeInsets.all(0),
                 children: listAttendance,
               ),
             )

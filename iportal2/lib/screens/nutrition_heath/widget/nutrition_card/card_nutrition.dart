@@ -1,9 +1,7 @@
-import 'package:core/data/models/models.dart';
+import 'package:core/core.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iportal2/screens/nutrition_heath/widget/nutrition_card/card_expand_nutrition.dart';
-import 'package:core/resources/resources.dart';
 
 class CardNutrition extends StatefulWidget {
   const CardNutrition({
@@ -16,7 +14,7 @@ class CardNutrition extends StatefulWidget {
   });
   final DataNutrition nutritionItem;
   final num index;
-  final num lastIndex;
+  final bool lastIndex;
   final bool isExpanded;
   final VoidCallback onExpansionChanged;
   @override
@@ -28,7 +26,7 @@ class _CardNutritionState extends State<CardNutrition> {
   Widget build(BuildContext context) {
     return DottedBorder(
       dashPattern: const [3, 3],
-      color: AppColors.gray300,
+      color: widget.lastIndex ? AppColors.white : AppColors.gray300,
       customPath: (size) => Path()
         ..moveTo(0, size.height)
         ..lineTo(size.width, size.height)
@@ -38,16 +36,13 @@ class _CardNutritionState extends State<CardNutrition> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.fromLTRB(0, 12, 0, 10),
         height: widget.isExpanded ? 220 : 48,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.nutritionItem.month,
+                  'Tháng ${widget.nutritionItem.month}',
                   style: widget.isExpanded
                       ? AppTextStyles.semiBold14(
                           color: AppColors.gray600,
@@ -59,18 +54,17 @@ class _CardNutritionState extends State<CardNutrition> {
                 GestureDetector(
                   onTap: widget.onExpansionChanged,
                   child: SvgPicture.asset(
-                    'assets/icons/${widget.isExpanded ? 'chevron_up' : 'chevron-down'}.svg',
+                    'assets/icons/${widget.isExpanded ? 'chevron-up' : 'chevron-down'}.svg',
                   ),
                 ),
               ],
             ),
-            widget.isExpanded
-                ? Expanded(
-                    child: SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: CardExpandNutrition(
-                            nutritionItem: widget.nutritionItem)))
-                : Container()
+            if (widget.isExpanded)
+              Expanded(
+                  child: SingleChildScrollView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: CardExpandNutrition(
+                          nutritionItem: widget.nutritionItem)))
           ],
         ),
       ),

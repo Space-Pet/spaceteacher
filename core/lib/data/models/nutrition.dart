@@ -1,15 +1,26 @@
+import '../../core.dart';
 
 class Nutrition {
   final String statusNote;
   final List<DataNutrition> dataNutrition;
   const Nutrition({required this.dataNutrition, required this.statusNote});
+
   factory Nutrition.fromJson(Map<String, dynamic> json) {
     final dataNutrition = (json['data'] as List<dynamic>?)
         ?.map((e) => DataNutrition.fromJson(e))
         .toList();
+
     return Nutrition(
         dataNutrition: dataNutrition ?? [],
         statusNote: json['status_note'] ?? '');
+  }
+
+  // create fakeData
+  static Nutrition fakeData() {
+    return Nutrition(
+      dataNutrition: DataNutrition.fakeData(),
+      statusNote: 'statusNote',
+    );
   }
 }
 
@@ -33,6 +44,7 @@ class DataNutrition {
       required this.month,
       required this.monthsAgeCurrent,
       required this.weight});
+
   factory DataNutrition.fromJson(Map<String, dynamic> json) {
     return DataNutrition(
       ageCurrent: json['age_current'] != null
@@ -52,5 +64,21 @@ class DataNutrition {
           : 0,
       weight: json['Weight'] ?? '',
     );
+  }
+
+  static List<DataNutrition> fakeData() {
+    return List.generate(
+        8,
+        (index) => const DataNutrition(
+              ageCurrent: 5,
+              bmi: 5.0,
+              currentMonth: '5',
+              gender: 'Nam',
+              height: '5',
+              ketLuan: '5',
+              month: '5',
+              monthsAgeCurrent: 5,
+              weight: '5',
+            ));
   }
 }

@@ -5,7 +5,7 @@ enum BusStatus { init, loading, success, failure }
 
 class BusState extends Equatable {
   const BusState({
-    this.busSchedules = const [],
+    required this.busSchedules,
     required this.selectedDate,
     this.status = BusStatus.init,
   });

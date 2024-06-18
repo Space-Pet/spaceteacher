@@ -80,11 +80,17 @@ class DataInWeek {
   final String title;
   final String category;
   final String picture;
-  const DataInWeek(
-      {required this.category, required this.picture, required this.title});
+  final String calo;
+  const DataInWeek({
+    required this.category,
+    required this.picture,
+    required this.title,
+    required this.calo,
+  });
   static DataInWeek? fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
       return DataInWeek(
+          calo: json['THUCDONTUAN_CALO'] ?? '',
           category: json['THUCDONTUAN_CATEGORY'] ?? '',
           picture: json['THUCDONTUAN_PICTURE'] ?? '',
           title: json['THUCDONTUAN_TITLE'] ?? '');

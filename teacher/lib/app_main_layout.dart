@@ -6,6 +6,7 @@ import 'package:teacher/components/custom_loading_logo.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/screens/attendance/view/attendance_navigator.dart';
 import 'package:teacher/screens/home/home_navigator.dart';
+import 'package:teacher/screens/notifications/create/noti_create_screen.dart';
 import 'package:teacher/screens/notifications/notifications_screen.dart';
 import 'package:teacher/screens/schedule/schedule_screen.dart';
 import 'package:teacher/screens/week_schedule/week_schedule_screen.dart';
@@ -29,6 +30,7 @@ class _AppMainLayoutState extends State<AppMainLayout>
 
   final List<Widget> widgetOptionKinderGarten = [
     const HomeNavigator(),
+    // const NotiCreateNew(),
     const WeekScheduleScreen(),
     const AttendanceNavigator(),
     const NotificationsScreen(),

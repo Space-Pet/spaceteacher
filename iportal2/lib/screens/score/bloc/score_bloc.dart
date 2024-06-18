@@ -15,102 +15,129 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     required this.currentUserBloc,
   }) : super(
           ScoreState(
-            moetScore: ScoreModel.empty(),
+            programList: const [],
+            scoreProgram: ScoreProgram.empty(),
+            moetTypeScore: ScoreModel.fakeData(),
+            moetAverage: MoetAverage.empty(),
             eslScore: EslScore.empty(),
             primaryConduct: PrimaryConduct.empty(),
-            otherScore: ScoreOther.empty(),
             txtLearnYear: ScoreState._calculateYearRange(),
           ),
         ) {
-    on<ScoreFetchMoet>(_onFetchMoetScore);
+    on<ScoreFetchProgramList>(_onFetchProgramList);
+    add(ScoreFetchProgramList());
+
+    on<ScoreFetchData>(_onFethScoreData);
     on<ScoreFilterChange>(_onUpdateScoreFilter);
-    on<ScoreFetchEsl>(_onFetchEslScore);
+
+    on<ScoreFetchMoetType>(_onFetchMoetTypeScore);
+    on<ScoreFetchMoetAverage>(_onFetchMoetAverage);
     on<ScoreFetchPrimaryConduct>(_onFetchPrimaryConduct);
 
-    add(ScoreFetchMoet());
-
-    on<ScoreFetchOtherScore>(_onFetchOtherScore);
-    add(ScoreFetchOtherScore());
+    on<ScoreFetchEsl>(_onFetchEslScore);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
 
-  _onFetchMoetScore(ScoreFetchMoet event, Emitter<ScoreState> emit) async {
-    emit(state.copyWith(status: ScoreStatus.loading));
+  _onFetchProgramList(
+      ScoreFetchProgramList event, Emitter<ScoreState> emit) async {
+    emit(state.copyWith(programListStatus: ScoreProgramStatus.loading));
 
-    final scoreData = await appFetchApiRepo.getMoetScore(
-      // userKey: currentUserBloc.state.activeChild.user_key,
-      userKey: '02033200186',
-      txtHocKy: state.txtHocKy.getValue(),
+    final activeChild = currentUserBloc.state.activeChild;
+
+    final prgramListData = await appFetchApiRepo.getProgramList(
+      userKey: activeChild.user_key,
+      // userKey: '02033200186',
       txtYear: state.txtLearnYear,
     );
 
+    final firstProgram = prgramListData.data.first;
     emit(
       state.copyWith(
-        yearList: scoreData.listYear,
-        moetScore: ScoreModel(
-          txtDiemMoet: scoreData.txtDiemMoet,
-          listYear: scoreData.listYear,
-          txtCurrentYear: scoreData.txtCurrentYear,
-          txtCurrentHocKy: scoreData.txtCurrentHocKy,
-          txtKhoiLevel: scoreData.txtKhoiLevel,
-        ),
-        status: ScoreStatus.loaded,
+        programList: prgramListData.data,
+        scoreProgram: firstProgram,
+        txtLearnYear: prgramListData.txtLearnYear,
+        isPrimaryStudent: activeChild.isPrimary(),
+        programListStatus: ScoreProgramStatus.loaded,
       ),
     );
 
-    if (int.tryParse(scoreData.txtKhoiLevel)! < 6) {
-      add(ScoreFetchPrimaryConduct());
+    add(ScoreFetchData());
+  }
+
+  _onFethScoreData(ScoreFetchData event, Emitter<ScoreState> emit) {
+    if (state.scoreProgram.ctId == 'esl') {
+      add(ScoreFetchEsl());
+    } else {
+      add(ScoreFetchMoetType());
     }
   }
 
-  _onFetchOtherScore(
-      ScoreFetchOtherScore event, Emitter<ScoreState> emit) async {
-    emit(state.copyWith(otherScoreStatus: OtherScoreStatus.loading));
+  _onFetchMoetTypeScore(
+      ScoreFetchMoetType event, Emitter<ScoreState> emit) async {
+    emit(state.copyWith(status: ScoreStatus.loading));
 
-    final scoreData = await appFetchApiRepo.getScoreOther(
-      // userKey: currentUserBloc.state.activeChild.user_key,
-      userKey: '02033200186',
+    if (state.scoreProgram.ctName.contains('MOET')) {
+      if (state.isPrimaryStudent) {
+        add(ScoreFetchPrimaryConduct());
+      } else {
+        add(ScoreFetchMoetAverage());
+      }
+    }
+
+    final scoreTypeMoetData = await appFetchApiRepo.getMoetTypeScore(
+      userKey: currentUserBloc.state.activeChild.user_key,
+      // userKey: '0563180077',
+      // userKey: '02033200186',
       txtYear: state.txtLearnYear,
+      txtHocKy: state.txtHocKy.getValue(),
+      ctId: state.scoreProgram.ctId,
     );
+
+    await Future.delayed(const Duration(seconds: 5));
 
     emit(
       state.copyWith(
-        otherScore: scoreData,
-        otherScoreStatus: OtherScoreStatus.loaded,
+        moetTypeScore: scoreTypeMoetData,
+        status: ScoreStatus.loaded,
       ),
     );
+  }
+
+  _onFetchMoetAverage(
+      ScoreFetchMoetAverage event, Emitter<ScoreState> emit) async {
+    final moetAverage = await appFetchApiRepo.getMoetAverage(
+      userKey: currentUserBloc.state.activeChild.user_key,
+      // userKey: '0563180077',
+      txtYear: state.txtLearnYear,
+      txtHocKy: state.txtHocKy.getValue(),
+    );
+
+    emit(state.copyWith(moetAverage: moetAverage));
   }
 
   _onFetchPrimaryConduct(
       ScoreFetchPrimaryConduct event, Emitter<ScoreState> emit) async {
-    if (state.scoreType == ScoreType.moet.text()) {
-      emit(state.copyWith(conducStatus: ScoreStatus.loading));
-
-      final conductData = await appFetchApiRepo.getPrimaryConduct(
-        // userKey: currentUserBloc.state.activeChild.user_key,
-        userKey: '02033200186',
-        txtHocKy: state.txtHocKy.getValue(),
-        txtYear: state.txtLearnYear,
-        hkTihValue: state.txtTihHocKy.getValue().toString(),
-      );
-      emit(
-        state.copyWith(
-          primaryConduct: conductData,
-          conducStatus: ScoreStatus.loaded,
-        ),
-      );
-    }
+    final conductData = await appFetchApiRepo.getPrimaryConduct(
+      userKey: currentUserBloc.state.activeChild.user_key,
+      // userKey: '02033200186',
+      txtHocKy: state.txtHocKy.getValue(),
+      txtYear: state.txtLearnYear,
+      hkTihValue: state.txtTihHocKy.getValue().toString(),
+    );
+    emit(
+      state.copyWith(primaryConduct: conductData),
+    );
   }
 
   _onFetchEslScore(ScoreFetchEsl event, Emitter<ScoreState> emit) async {
     emit(state.copyWith(status: ScoreStatus.loading));
 
     final scoreData = await appFetchApiRepo.getEslScore(
-      userKey: currentUserBloc.state.activeChild.user_key,
-      // userKey: '0253220010',
-      txtTerm: state.txtHocKy.getValue(),
+      // userKey: currentUserBloc.state.activeChild.user_key,
+      userKey: '0253220010',
+      txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
     );
 
@@ -127,42 +154,42 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreFilterChange event,
     Emitter<ScoreState> emit,
   ) {
-    final newScoreType = event.scoreFilter.selectedScoreType;
-    final newYear = event.scoreFilter.selectedYear;
-    final newTerm = event.scoreFilter.selectedTerm;
+    final newFilter = event.scoreFilter;
+    switch (newFilter.filterType) {
+      case FilterType.program:
+        final selectedProgram = state.programList.firstWhere(
+            (element) => element.ctName == newFilter.selectedScoreProgram);
 
-    final newState = state.copyWith(
-      txtLearnYear: newYear,
-      scoreType: newScoreType,
-    );
+        emit(state.copyWith(scoreProgram: selectedProgram));
+        break;
 
-    final ScoreState newFilter;
-    if (event.isPrimary) {
-      final matchTemp = PrimaryTermType.values
-          .firstWhere((element) => newTerm == element.text());
+      case FilterType.learnYear:
+        emit(state.copyWith(txtLearnYear: newFilter.selectedYear));
+        break;
 
-      newFilter = newState.copyWith(
-        txtTihHocKy: matchTemp,
-        txtHocKy: matchTemp.getValue() < 3 ? TermType.term1 : TermType.term2,
-      );
-    } else {
-      final matchTemp =
-          TermType.values.firstWhere((element) => newTerm == element.text());
+      case FilterType.term:
+        final newTerm = newFilter.selectedTerm;
+        if (state.isPrimaryStudent) {
+          final matchTemp = PrimaryTermType.values
+              .firstWhere((element) => newTerm == element.text());
 
-      newFilter = newState.copyWith(
-        txtHocKy: matchTemp,
-      );
+          emit(state.copyWith(
+            txtTihHocKy: matchTemp,
+            txtHocKy:
+                matchTemp.getValue() < 3 ? TermType.term1 : TermType.term2,
+          ));
+        } else {
+          final matchTemp = TermType.values
+              .firstWhere((element) => newTerm == element.text());
+
+          emit(state.copyWith(txtHocKy: matchTemp));
+        }
+        break;
+
+      default:
+        break;
     }
-    emit(newFilter);
 
-    if (newScoreType == ScoreType.moet.text()) {
-      add(ScoreFetchMoet());
-    } else if (newScoreType == ScoreType.esl.text()) {
-      add(ScoreFetchEsl());
-    } else {
-      // Fetch other score
-      final otherScore = state.otherScore.data!
-          .firstWhere((element) => element.ctName == newScoreType);
-    }
+    add(ScoreFetchData());
   }
 }

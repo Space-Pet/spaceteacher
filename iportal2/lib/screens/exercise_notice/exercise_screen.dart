@@ -20,8 +20,6 @@ class ExerciseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return BlocProvider(
       create: (context) => ExerciseBloc(
         todayString: DateTime.now().ddMMyyyyVN,
@@ -58,7 +56,6 @@ class ExerciseScreenView extends StatelessWidget {
 
               final isLoading = state.status == ExerciseStatus.loading;
               final exerciseList = state.tempData;
-
               final listSubject = state.subjectList;
 
               final isEmpty = exerciseList.isEmpty && !isLoading;
@@ -132,11 +129,10 @@ class ExerciseScreenView extends StatelessWidget {
                                 child: isEmpty
                                     ? const Center(
                                         child: EmptyScreen(
-                                            text: 'Sổ báo bài trống'),
-                                      )
-                                    : ExerciseItemList(
-                                        exercise: exerciseList,
-                                      ),
+                                            text: 'Sổ báo bài trống'))
+                                    : SingleChildScrollView(
+                                        child: ExerciseItemList(
+                                            exercise: exerciseList)),
                               ),
                             ],
                           ),

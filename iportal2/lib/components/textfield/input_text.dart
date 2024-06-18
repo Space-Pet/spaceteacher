@@ -9,6 +9,7 @@ class TitleAndInputText extends StatefulWidget {
     required this.hintText,
     required this.onChanged,
     this.obscureText = false,
+    this.isPassword = false,
     this.onPressedIcon,
     this.isRequired = true,
     this.isValid = true,
@@ -37,6 +38,7 @@ class TitleAndInputText extends StatefulWidget {
   final bool isRequired;
   final ValueChanged<String>? onChanged;
   final bool obscureText;
+  final bool isPassword;
   final Function()? onPressedIcon;
   final bool isValid;
   final TextStyle titleStyle;
@@ -116,19 +118,21 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
               fillColor: widget.fillColor ?? Colors.white,
               prefixIconColor: widget.isValid ? null : Colors.transparent,
               prefixIcon: widget.prefixIcon,
-              suffixIcon: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _obscureText = !_obscureText;
-                  });
-                },
-                child: Icon(
-                  _obscureText
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility_outlined,
-                  color: Colors.grey,
-                ),
-              )),
+              suffixIcon: widget.isPassword
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                      child: Icon(
+                        _obscureText
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : const SizedBox()),
           obscureText: _obscureText,
         ),
       ],

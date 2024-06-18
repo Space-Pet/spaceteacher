@@ -9,7 +9,6 @@ import 'package:iportal2/screens/phone_book/bloc/phone_book_bloc.dart';
 import 'package:iportal2/screens/phone_book/widget/tab_bar_phone_book.dart';
 import 'package:repository/repository.dart';
 
-
 class PhoneBookScreen extends StatelessWidget {
   const PhoneBookScreen({super.key});
   static const routeName = '/phone_book';
@@ -39,9 +38,11 @@ class PhoneBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PhoneBookBloc, PhoneBookState>(
         builder: (context, state) {
-      final isLoading = state.phoneBookStatus == PhoneBookStatus.loading;
+      final isLoading = state.phoneBookStatus == PhoneBookStatus.loading ||
+          state.phoneBookStatus == PhoneBookStatus.init;
       final phoneBookStudent = state.phoneBookStudent;
       final phoneBookTeacher = state.phoneBookTeacher;
+
       return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());

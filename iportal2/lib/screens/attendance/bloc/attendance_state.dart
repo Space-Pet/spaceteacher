@@ -13,19 +13,22 @@ enum AttendanceStatus {
 }
 
 class AttendanceState extends Equatable {
-  final List<AttendanceDay>? attendanceday;
+  final List<AttendanceDay> attendanceday;
   final AttendanceWeek? attendanceWeek;
   final AttendanceWeek? attendanceMonth;
   final AttendanceStatus attendanceStatus;
-  final DateTime? selectDate;
+  final DateTime selectDate;
   final String? type;
-  const AttendanceState(
-      {this.selectDate,
-      this.type,
-      this.attendanceday,
-      this.attendanceWeek,
-      this.attendanceMonth,
-      this.attendanceStatus = AttendanceStatus.init});
+  
+  const AttendanceState({
+    required this.selectDate,
+    this.type,
+    required this.attendanceday,
+    this.attendanceWeek,
+    this.attendanceMonth,
+    this.attendanceStatus = AttendanceStatus.init,
+  });
+
   @override
   List<Object?> get props => [
         type,

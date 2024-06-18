@@ -72,6 +72,7 @@ class _OnLeaveViewState extends State<OnLeaveView>
           pending.add(item);
         }
       }
+      
       return BlocBuilder<CurrentUserBloc, CurrentUserState>(
         builder: (context, state) {
           final user = state.user;

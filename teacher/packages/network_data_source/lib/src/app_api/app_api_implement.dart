@@ -22,6 +22,23 @@ class AppFetchApi extends AbstractAppFetchApi {
   final RestApiClient _authRestClient;
   final RestApiClient _partnerTokenRestClient;
 
+  Future<LearnYear> getLearnYearList(int schoolId) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': 'learn_year',
+          'school_id': schoolId,
+        },
+      );
+
+      final learnYearData = LearnYear.fromMap(data);
+      return learnYearData;
+    } catch (e) {
+      return LearnYear.empty();
+    }
+  }
+
   Future<WeeklyLessonData> getRegisterNoteBook({
     required String userKey,
     required String txtDate,
@@ -570,7 +587,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=weeklymenu&type=json&user_key=$userKey&txt_date=$date');
+          '/api/api.php?act=weeklymenu&type=json&user_key=0282810220108&txt_date=4-03-2024');
       return Menu.fromJson(data);
     } catch (e) {
       throw GetMenuFailure();
@@ -1117,11 +1134,11 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<Map<String, dynamic>?> turnOffNoti(
-      {required bool pushNotify, required Map<String, Object> headers}) async {
+      {required int pushNotify, required Map<String, Object> headers}) async {
     try {
       final data = await _client.doHttpPost(
         url: '/api/v1/staff/notifications/switch',
-        requestBody: {'status': pushNotify ? 1 : 0},
+        requestBody: {'status': pushNotify},
         headers: headers,
       );
       return data;
@@ -1219,6 +1236,66 @@ class AppFetchApi extends AbstractAppFetchApi {
     return response;
   }
 
+  Future<List<Semester>> getSemester({
+    required int schoolId,
+    required String schoolBrand,
+    required String capDaoTao,
+  }) async {
+    final data = await _client.doHttpGet(
+      '/api/v1/staff/mark/get-semester?cap_dao_tao=$capDaoTao',
+      headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+    );
+    final jsonData = data['data'] as List<dynamic>;
+    return jsonData.map((e) => Semester.fromJson(e)).toList();
+  }
+
+  Future<List<ClassScore>> getListClassScore(
+      {required int schoolId,
+      required String schoolBrand,
+      required String learnYear}) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/teacher/class/subject?learn_year=2023-2024',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      final dataJson = data['data'] as List<dynamic>;
+      return dataJson.map((e) => ClassScore.fromJson(e)).toList();
+    } catch (e) {
+      print('$e');
+      return [];
+    }
+  }
+
+  Future<FormInputScore> getFormInputScore({
+    required int schoolId,
+    required String schoolBrand,
+    required int classId,
+    required int subjectId,
+    required String learnYear,
+    required int semester,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/mark/form?class_id=$classId&subject_id=$subjectId&learn_year=$learnYear&semester=$semester',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+
+      // Check if the response is a list
+      if (data['data'] is List) {
+        // Convert the list to a map with an "items" key
+        return FormInputScore.fromJson(
+            {'cap_dao_tao': 'default_value', 'items': data['data']});
+      } else {
+        // Otherwise, assume it's already a map
+        final jsonData = data['data'] as Map<String, dynamic>;
+        return FormInputScore.fromJson(jsonData);
+      }
+    } catch (e) {
+      print('error: $e');
+      throw GetAlbumFailure();
+    }
+  }
+
   Future<Map<String, dynamic>> postLessonRegister({
     required String userKey,
     required String txtDate,
@@ -1241,6 +1318,46 @@ class AppFetchApi extends AbstractAppFetchApi {
       },
     );
     return response;
+  }
+
+  Future<Map<String, dynamic>> postNutritionHealth({
+    required int pupilId,
+    required DateTime learnYear,
+    required int txtMonth,
+    required String typeHeight,
+    required String weight,
+    required String height,
+    required double bmi,
+    required String distribute,
+  }) async {
+    DateTime now = learnYear;
+    try {
+      String newLearnYear;
+      if (now.month > 8) {
+        newLearnYear = '${now.year}-${now.year + 1}';
+      } else {
+        newLearnYear = '${now.year - 1}-${now.year}';
+      }
+      final token = await _client.getAccessToken();
+      final data = await _partnerTokenRestClient.doHttpPost(
+        url: '/api/api.php?act=post_health',
+        headers: {'Parter-Token': token},
+        requestBody: {
+          "pupil_id": pupilId,
+          "learn_year": newLearnYear,
+          "txt_month": txtMonth,
+          "type_height": typeHeight,
+          "weight": weight,
+          "height": height,
+          "Distribute": distribute,
+          "BMI": bmi
+        },
+      );
+      return data;
+    } catch (e) {
+      print('$e');
+      throw GetAlbumFailure();
+    }
   }
 }
 

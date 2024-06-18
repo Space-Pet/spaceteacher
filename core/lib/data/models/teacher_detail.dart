@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:core/data/hive_models/cap_dao_tao.dart';
+
 class TeacherDetail {
   TeacherInfo info;
   LopChuNhiem lopChuNhiem;
@@ -21,6 +23,36 @@ class TeacherDetail {
       pushNotify: 0,
     );
   }
+
+  factory TeacherDetail.fakeData() => TeacherDetail(
+        info: TeacherInfo(
+          teacherId: 1,
+          userId: '1',
+          birthday: '2000-01-01',
+          schoolId: 1,
+          schoolName: 'Trường Tiểu học ABC',
+          fullName: 'Nguyễn Văn A',
+          userKey: '1',
+          positionName: 'Giáo viên',
+          mainSubject: 'Toán',
+          subjectId: 1,
+          urlImage: UrlImage(
+            web: '',
+            mobile: '',
+          ),
+          address: 'Hà Nội',
+          phone: '0123456789',
+          capDaoTao: CapDaoTao(
+            id: '1',
+            name: 'Cao đẳng',
+          ),
+        ),
+        lopChuNhiem: LopChuNhiem(
+          id: 1,
+          name: 'Lớp 1A',
+        ),
+        pushNotify: 1,
+      );
 
   factory TeacherDetail.fromMap(Map<String, dynamic> map) {
     return TeacherDetail(
@@ -172,30 +204,6 @@ class UrlImage {
     return {
       'web': web,
       'mobile': mobile,
-    };
-  }
-}
-
-class CapDaoTao {
-  final String id;
-  final String name;
-
-  CapDaoTao({
-    required this.id,
-    required this.name,
-  });
-
-  factory CapDaoTao.fromMap(Map<String, dynamic> map) {
-    return CapDaoTao(
-      id: map['id'],
-      name: map['name'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
     };
   }
 }
