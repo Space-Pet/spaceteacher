@@ -108,27 +108,24 @@ class TabMenu extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.zero,
-                            child: Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.zero,
-                                child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxHeight: 60,
-                                    maxWidth: 100,
-                                    minHeight: 50,
-                                    minWidth: 100,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        5), // Border radius of 20
-                                    child: Image.network(
-                                      fit: BoxFit.cover,
-                                      menu.picture == ''
-                                          ? 'https://via.placeholder.com/500x500.png?text=No+Image+Available'
-                                          : menu.picture,
-                                    ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.zero,
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 60,
+                                  maxWidth: 100,
+                                  minHeight: 50,
+                                  minWidth: 100,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Border radius of 20
+                                  child: Image.network(
+                                    fit: BoxFit.cover,
+                                    menu.picture == ''
+                                        ? 'https://via.placeholder.com/500x500.png?text=No+Image+Available'
+                                        : menu.picture,
                                   ),
                                 ),
                               ),

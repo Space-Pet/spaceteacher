@@ -15,62 +15,71 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
       {required this.appFetchApiRepo,
       required this.currentUserBloc,
       required this.userRepository})
-      : super(const PreScoreState(comment: [])) {
+      : super(PreScoreState(
+          comment: Comment.fakeData(),
+          startDate: DateTime.now(),
+          endDate: DateTime.now(),
+          userData: TeacherDetail.empty(),
+          armorial: Armorial.fakeData(),
+        )) {
+    on<GetListStudents>(_onGetListStudent);
+    on<GetTeacherDetail>(_onGetTeacherDetail);
+    on<GetArmorial>(_onGetArmorial);
     on<GetComment>(_onGetComment);
-    on<GetListReportStudent>(_onGetListReportStudent);
-    on<GetReportStudent>(_onGetReportStudent);
-    on<ScoreTxtTermChange>(_onUpdateTerm);
   }
-  void _onUpdateTerm(
-    ScoreTxtTermChange event,
+  _onGetComment(
+    GetComment event,
     Emitter<PreScoreState> emit,
-  ) {
-    final newTerm = event.txtHocKy;
-
-    final newState = state.copyWith(txtHocKy: newTerm);
-    emit(newState);
-  }
-
-  void _onGetComment(GetComment event, Emitter<PreScoreState> emit) async {
-    emit(state.copyWith(preScoreStatus: PreScoreStatus.loading));
+  ) async {
+    emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingGetComment));
     final data = await appFetchApiRepo.getComment(
-        userKey: currentUserBloc.state.user.user_key, txtDate: event.txtDate);
-    emit(state.copyWith(
-        preScoreStatus: PreScoreStatus.success,
-        comment: data,
-        endDate: event.endDate,
-        startDate: event.startDate));
-  }
-
-  void _onGetListReportStudent(
-      // bind API teacher
-      GetListReportStudent event,
-      Emitter<PreScoreState> emit) async {
-    emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingListReport));
-    final data = await appFetchApiRepo.getListReportStudent(
-        pupilId: currentUserBloc.state.user.teacher_id,
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
-        semester: event.semester,
-        learnYear: event.learnYear);
-    emit(state.copyWith(
-        preScoreStatus: PreScoreStatus.successListReport,
-        listReportStudent: data));
-  }
-
-  void _onGetReportStudent(
-      // bind API teacher
-      GetReportStudent event,
-      Emitter<PreScoreState> emit) async {
-    emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingReportStudent));
-    final data = await appFetchApiRepo.getReportStudent(
-      id: event.id,
-      pupilId: currentUserBloc.state.user.teacher_id,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
+      userKey: event.userKey,
+      txtDate: event.txtDate,
     );
     emit(state.copyWith(
-        preScoreStatus: PreScoreStatus.successReportStudent,
-        reportStudent: data));
+        preScoreStatus: PreScoreStatus.successGetComment,
+        comment: data,
+        startDate: event.startDate,
+        endDate: event.endDate));
+  }
+
+  _onGetArmorial(
+    GetArmorial event,
+    Emitter<PreScoreState> emit,
+  ) async {
+    emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingGetArmorial));
+    final data = await appFetchApiRepo.getArmorial();
+    emit(state.copyWith(
+      preScoreStatus: PreScoreStatus.successGetArmorial,
+      armorial: data,
+    ));
+  }
+
+  _onGetTeacherDetail(
+    GetTeacherDetail event,
+    Emitter<PreScoreState> emit,
+  ) async {
+    emit(
+        state.copyWith(preScoreStatus: PreScoreStatus.loadingGetTeacherDetail));
+    final teacherDetail = await userRepository
+        .getTeacherDetail(currentUserBloc.state.user.teacher_id.toString());
+    emit(state.copyWith(
+      preScoreStatus: PreScoreStatus.successGetTeacherDetail,
+      userData: teacherDetail,
+    ));
+  }
+
+  _onGetListStudent(
+    GetListStudents event,
+    Emitter<PreScoreState> emit,
+  ) async {
+    emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingGetListStudent));
+    final data = await appFetchApiRepo.getPhoneBookStudent(
+      classId: state.userData.lopChuNhiem.id,
+    );
+    emit(state.copyWith(
+      preScoreStatus: PreScoreStatus.successGetListStudent,
+      listStudent: data,
+    ));
   }
 }

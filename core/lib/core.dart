@@ -5,6 +5,7 @@ export 'package:aad_oauth/model/config.dart';
 export 'package:bloc/bloc.dart';
 export 'package:device_info_plus/device_info_plus.dart';
 export 'package:dio/dio.dart';
+export 'package:dropdown_button2/dropdown_button2.dart';
 export 'package:easy_image_viewer/easy_image_viewer.dart';
 export 'package:equatable/equatable.dart';
 export 'package:expansion_tile_group/expansion_tile_group.dart';

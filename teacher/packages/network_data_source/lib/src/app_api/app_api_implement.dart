@@ -781,13 +781,13 @@ class AppFetchApi extends AbstractAppFetchApi {
     try {
       final token = await _client.getAccessToken();
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=teacher_comment_mn&user_key=$userKey&txt_date=$txtDate',
+          '/api/api.php?act=teacher_comment_mn&user_key=$userKey&txt_date=$txtDate',
           headers: {'Parter-Token': token});
       final dataList = data['data_comment'] as List<dynamic>?;
       return dataList?.map((e) => Comment.fromJson(e)).toList() ??
           [Comment.empty()];
     } catch (e) {
-      return [];
+      return Comment.fakeData();
     }
   }
 
@@ -1357,6 +1357,26 @@ class AppFetchApi extends AbstractAppFetchApi {
     } catch (e) {
       print('$e');
       throw GetAlbumFailure();
+    }
+  }
+
+  Future<List<Armorial>> getArmorial() async {
+    try {
+      final token = await _client.getAccessToken();
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api/api.php?act=list_huy_hieu_mn',
+        headers: {'Parter-Token': token},
+      );
+
+      // Ensure that data is a list of dynamic elements
+      final jsonData = data as List<dynamic>;
+
+      // Map each item in jsonData to an Armorial object
+      return jsonData
+          .map((e) => Armorial.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      return Armorial.fakeData();
     }
   }
 }

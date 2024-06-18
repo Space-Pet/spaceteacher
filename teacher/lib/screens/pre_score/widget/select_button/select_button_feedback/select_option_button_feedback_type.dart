@@ -1,19 +1,21 @@
-import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:teacher/screens/pre_score/bloc/pre_score_bloc.dart';
 
 class SelectFeedBackType extends StatefulWidget {
-  const SelectFeedBackType(
-      {super.key, this.comment, this.endDate, this.startDate});
-  final Comment? comment;
+  const SelectFeedBackType({
+    super.key,
+    this.endDate,
+    this.startDate,
+    required this.onGetComment,
+  });
+
   final DateTime? endDate;
   final DateTime? startDate;
+  final Function(DateTime startDate, DateTime endDate) onGetComment;
   @override
   State<SelectFeedBackType> createState() => _SelectFeedBackTypeState();
 }
@@ -60,10 +62,6 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
       endDate = getWeekEndDate(endDate.subtract(const Duration(days: 7)));
     });
     getWeekNumber(endDate);
-    context.read<PreScoreBloc>().add(GetComment(
-        txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        inputEndDate: endDate,
-        inputStartDate: startDate));
   }
 
   void getNextPeriodData() {
@@ -73,10 +71,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
     });
 
     getWeekNumber(endDate);
-    context.read<PreScoreBloc>().add(GetComment(
-        txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        inputEndDate: endDate,
-        inputStartDate: startDate));
+    widget.onGetComment(startDate, endDate);
   }
 
   @override
@@ -93,7 +88,10 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: getPreviousPeriodData,
+              onTap: () {
+                getPreviousPeriodData();
+                widget.onGetComment(startDate, endDate);
+              },
               child: SvgPicture.asset(
                 'assets/icons/chevron-left.svg',
                 height: 24,
@@ -113,7 +111,10 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
               ],
             ),
             GestureDetector(
-              onTap: getNextPeriodData,
+              onTap: () {
+                getNextPeriodData();
+                widget.onGetComment(startDate, endDate);
+              },
               child: SvgPicture.asset(
                 'assets/icons/chevron-right.svg',
                 height: 24,

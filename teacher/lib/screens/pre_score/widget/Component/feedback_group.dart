@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FeedbackGroup extends StatelessWidget {
-  const FeedbackGroup({super.key,  this.comment});
-  final Comment? comment;
+  const FeedbackGroup({
+    super.key,
+    this.comment,
+    required this.nameTeacher,
+  });
+  final String? comment;
+  final String nameTeacher;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -60,7 +65,7 @@ class FeedbackGroup extends StatelessWidget {
                 Expanded(
                   // Wrap the Text widget with Expanded
                   child: Text(
-                    comment?.commentNote ?? '',
+                    comment ?? '',
                     style: AppTextStyles.normal12(
                       color: AppColors.gray700,
                     ),
@@ -74,7 +79,7 @@ class FeedbackGroup extends StatelessWidget {
             height: 12,
           ),
           Text(
-            'GV: Nguyễn Huỳnh Vi Khương',
+            'GV: $nameTeacher',
             style: AppTextStyles.normal12(
               color: AppColors.gray800,
             ),

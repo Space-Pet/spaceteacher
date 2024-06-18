@@ -55,3 +55,4 @@ export 'teacher_item.dart';
 export 'teacher_login.dart';
 export 'week_schedule.dart';
 export 'weeky_lesson.dart';
+export 'armorial.dart';

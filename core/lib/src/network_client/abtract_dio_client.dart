@@ -385,7 +385,7 @@ class RestApiClient {
     dio.options.baseUrl = '';
   }
 
-  Future<Json> doHttpGet(
+  Future<dynamic> doHttpGet(
     String url, {
     Json? requestBody,
     Json? queryParameters,
@@ -411,7 +411,8 @@ class RestApiClient {
       if (hasDelay ?? false) {
         await Future.delayed(const Duration(milliseconds: 300));
       }
-      return data as Json;
+
+      return data;
     } on DioException {
       throw Exception();
     }

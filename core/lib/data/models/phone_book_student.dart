@@ -6,9 +6,11 @@ class PhoneBookStudent {
   final String userKey;
   final String className;
   final UrlImagePhoneBook urlImage;
+  final String schoolName;
   const PhoneBookStudent(
       {required this.classId,
       required this.fullName,
+      required this.schoolName,
       required this.pupilId,
       required this.className,
       required this.urlImage,
@@ -17,6 +19,7 @@ class PhoneBookStudent {
   factory PhoneBookStudent.fromJson(Map<String, dynamic> json) {
     final urlImage = UrlImagePhoneBook.fromJson(json['url_image']);
     return PhoneBookStudent(
+        schoolName: json['school_name'] ?? '',
         classId: json['class_id'] ?? 0,
         fullName: json['full_name'] ?? '',
         pupilId: json['pupil_id'] ?? 0,
@@ -26,6 +29,7 @@ class PhoneBookStudent {
         userKey: json['user_key'] ?? '');
   }
   factory PhoneBookStudent.empty() => const PhoneBookStudent(
+        schoolName: '',
         classId: 0,
         fullName: '',
         className: '',
@@ -39,6 +43,7 @@ class PhoneBookStudent {
     return List.generate(
         10,
         (index) => PhoneBookStudent(
+            schoolName: 'schoolName $index',
             classId: index,
             fullName: 'fullName $index',
             pupilId: index,

@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class BadgePreSchool extends StatelessWidget {
   const BadgePreSchool({super.key, this.comment});
-  final Comment? comment;
+  final String? comment;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -32,7 +32,7 @@ class BadgePreSchool extends StatelessWidget {
               width: 4,
             ),
             Text(
-              comment?.huyHieuName ?? '',
+              comment ?? '',
               style: AppTextStyles.semiBold16(
                 color: AppColors.amberWarn,
               ),

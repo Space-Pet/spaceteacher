@@ -109,27 +109,24 @@ class TabMenu extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10)),
                       child: Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.zero,
-                            child: Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.zero,
-                                child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxHeight: 60,
-                                    maxWidth: 100,
-                                    minHeight: 50,
-                                    minWidth: 100,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        5), // Border radius of 20
-                                    child: Image.network(
-                                      fit: BoxFit.cover,
-                                      menu.picture == ''
-                                          ? 'https://via.placeholder.com/500x500.png?text=No+Image+Available'
-                                          : menu.picture,
-                                    ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.zero,
+                              child: ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  maxHeight: 60,
+                                  maxWidth: 100,
+                                  minHeight: 50,
+                                  minWidth: 100,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Border radius of 20
+                                  child: Image.network(
+                                    fit: BoxFit.cover,
+                                    menu.picture == ''
+                                        ? 'https://via.placeholder.com/500x500.png?text=No+Image+Available'
+                                        : menu.picture,
                                   ),
                                 ),
                               ),
@@ -154,7 +151,9 @@ class TabMenu extends StatelessWidget {
                                             // Assets.icons.pizza
                                             //     .svg(color: AppColors.green400),
                                             SvgPicture.asset(
-                                                Assets.icons.pizza, color: AppColors.green600,),
+                                              Assets.icons.pizza,
+                                              color: AppColors.green600,
+                                            ),
                                             Expanded(
                                               child: Padding(
                                                 padding: const EdgeInsets.only(
@@ -173,7 +172,9 @@ class TabMenu extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             SvgPicture.asset(
-                                                Assets.icons.flame, color: AppColors.orange400,),
+                                              Assets.icons.flame,
+                                              color: AppColors.orange400,
+                                            ),
                                             // Assets.icons.flame.svg(
                                             //     color: AppColors.orange400),
                                             Expanded(

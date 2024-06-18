@@ -2,56 +2,63 @@ part of 'pre_score_bloc.dart';
 
 enum PreScoreStatus {
   init,
-  loading,
-  success,
-  loadingListReport,
-  successListReport,
-  loadingReportStudent,
-  successReportStudent
+  loadingGetListStudent,
+  successGetListStudent,
+
+  loadingGetTeacherDetail,
+  successGetTeacherDetail,
+
+  loadingGetArmorial,
+  successGetArmorial,
+
+  loadingGetComment,
+  successGetComment,
 }
 
 class PreScoreState {
-  final List<Comment>? comment;
   final PreScoreStatus preScoreStatus;
-  final List<ListReportStudent>? listReportStudent;
-  final DateTime? endDate;
-  final DateTime? startDate;
-  final ReportStudent? reportStudent;
-  final String? txtHocKy;
-  const PreScoreState(
-      {required this.comment,
-      String? txtHocKy,
-      this.preScoreStatus = PreScoreStatus.init,
-      this.listReportStudent,
-      this.endDate,
-      this.reportStudent,
-      this.startDate})
-      : txtHocKy = txtHocKy ?? '1';
+  final TeacherDetail userData;
+  final List<PhoneBookStudent> listStudent;
+  final List<Armorial> armorial;
+  final List<Comment> comment;
+  final DateTime startDate;
+  final DateTime endDate;
+  PreScoreState({
+    required this.startDate,
+    required this.endDate,
+    required this.armorial,
+    this.listStudent = const [],
+    required this.comment,
+    required this.userData,
+    this.preScoreStatus = PreScoreStatus.init,
+  });
 
   List<Object?> get props => [
-        comment,
         preScoreStatus,
-        endDate,
+        userData,
+        listStudent,
+        armorial,
+        comment,
         startDate,
-        listReportStudent,
-        reportStudent,
-        txtHocKy
+        endDate,
       ];
-  PreScoreState copyWith(
-      {List<Comment>? comment,
-      PreScoreStatus? preScoreStatus,
-      List<ListReportStudent>? listReportStudent,
-      ReportStudent? reportStudent,
-      DateTime? endDate,
-      String? txtHocKy,
-      DateTime? startDate}) {
+  PreScoreState copyWith({
+    List<PhoneBookStudent>? listStudent,
+    PreScoreStatus? preScoreStatus,
+    TeacherDetail? userData,
+    List<Armorial>? armorial,
+    List<Comment>? comment,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) {
     return PreScoreState(
-        txtHocKy: txtHocKy ?? this.txtHocKy,
-        reportStudent: reportStudent ?? this.reportStudent,
-        listReportStudent: listReportStudent ?? this.listReportStudent,
-        startDate: startDate ?? this.startDate,
-        endDate: endDate ?? this.endDate,
-        comment: comment ?? this.comment,
-        preScoreStatus: preScoreStatus ?? this.preScoreStatus);
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      comment: comment ?? this.comment,
+      armorial: armorial ?? this.armorial,
+      listStudent: listStudent ?? this.listStudent,
+      userData: userData ?? this.userData,
+      preScoreStatus: preScoreStatus ?? this.preScoreStatus,
+    );
   }
 }

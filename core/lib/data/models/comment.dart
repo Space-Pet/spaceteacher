@@ -36,16 +36,16 @@ class Comment {
   }
 
   factory Comment.empty() => const Comment(
-        commentDate: 'eee',
-        commentId: '',
-        commentNote: '',
-        commentTimePost: '',
-        huyHieuImg: '',
-        huyHieuName: '',
-        teacherId: '',
-        teacherName: '',
-        teacherimg: '',
-        weekDayNote: '',
+        commentDate: 'No Comment',
+        commentId: 'No Comment',
+        commentNote: 'No Comment',
+        commentTimePost: 'No Comment',
+        huyHieuImg: 'https://cdn-icons-png.freepik.com/512/9776/9776920.png',
+        huyHieuName: 'No Comment',
+        teacherId: 'No Comment',
+        teacherName: 'No Comment',
+        teacherimg: 'No Comment',
+        weekDayNote: 'No Comment',
       );
 
   static List<Comment> fakeData() => List.generate(

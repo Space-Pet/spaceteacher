@@ -853,4 +853,9 @@ class AppFetchApiRepository {
     );
     return data;
   }
+
+  Future<List<Armorial>> getArmorial() async {
+    final data = await _appFetchApi.getArmorial();
+    return data;
+  }
 }
