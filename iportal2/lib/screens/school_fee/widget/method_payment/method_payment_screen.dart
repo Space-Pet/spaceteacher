@@ -10,6 +10,8 @@ import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_payment_dialog_noti.dart';
 import 'package:repository/repository.dart';
 
+import '../../../authentication/utilites/dialog_utils.dart';
+
 class MethodPaymentScreen extends StatefulWidget {
   const MethodPaymentScreen(
       {required this.paymentGateways,
@@ -134,6 +136,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                   )
                       .then(
                     (res) {
+                      LoadingDialog.hide(context);
                       showDialog(
                         context: context,
                         builder: (ctx) =>
@@ -150,6 +153,8 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                       );
                     },
                   );
+                } else if (state.paymentStatus == PaymentStatus.loading) {
+                  LoadingDialog.show(context);
                 }
               },
               builder: (context, state) {
