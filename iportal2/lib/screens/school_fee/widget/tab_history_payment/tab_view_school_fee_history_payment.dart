@@ -35,33 +35,9 @@ class _TabViewSchoolFeeHistoryPayment
           }
         },
         builder: (context, state) {
-          if (state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loading) {
-            return Scaffold(
-              body: Skeletonizer(
-                enabled: true,
-                child: CustomRefresh(
-                  onRefresh: () async {
-                    context.read<SchoolFeeBloc>().add(FetchSchoolFeeHistory(
-                        learnYear: state.currentYearState?.learnYear));
-                  },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List.generate(
-                        5,
-                        (index) => _buildHistoryPaymentCard(
-                            context,
-                            state.historySchoolFee?.historySchoolFeeItems ?? [],
-                            index),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          } else if (state.schoolFeeHistoryStatus ==
-              SchoolFeeHistoryStatus.loaded) {
+          if (state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loaded) {
             final listData = state.historySchoolFee?.historySchoolFeeItems;
-            if (listIsShowDetail.length != listData) {
+            if (listIsShowDetail.length != listData?.length) {
               listIsShowDetail = List.filled(listData?.length ?? 0, false);
             }
             return Scaffold(
