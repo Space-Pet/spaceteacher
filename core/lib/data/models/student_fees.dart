@@ -165,9 +165,9 @@ class FeeItem {
   final String? PB_11T_GROUP;
   final MetaData? meta_data;
   final String? date;
-  final String? discount;
+  final int? discount;
 
-  final String? grand_total;
+  final int? grand_total;
   final String? status;
 
   FeeItem({
@@ -235,8 +235,8 @@ class FeeItem {
     String? PB_11T_GROUP,
     MetaData? meta_data,
     String? date,
-    String? discount,
-    String? grand_total,
+    int? discount,
+    int? grand_total,
     String? status,
   }) {
     return FeeItem(

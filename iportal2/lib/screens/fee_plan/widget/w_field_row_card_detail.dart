@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:core/core.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,9 @@ class FieldRowCardDetail extends StatelessWidget {
             const Spacer(),
             Flexible(
               flex: 3,
-              child: Text(
+              child: AutoSizeText(
                 value,
-                maxLines: 2,
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: valueStyle ??
                     AppTextStyles.semiBold12(

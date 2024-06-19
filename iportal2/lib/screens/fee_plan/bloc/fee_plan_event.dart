@@ -8,17 +8,19 @@ abstract class FeePlanEvent extends Equatable {
 }
 
 class GetListFee extends FeePlanEvent {
-  const GetListFee();
+  const GetListFee({this.learnYear});
+  final String? learnYear;
 }
 
 class GetFeeRequested extends FeePlanEvent {
-  const GetFeeRequested();
+  const GetFeeRequested({this.learnYear});
+  final String? learnYear;
 }
 
 class SendFeeRequested extends FeePlanEvent {
   final List<FeeItem> listItemFee;
-
-  const SendFeeRequested({required this.listItemFee});
+  final String? learnYear;
+  const SendFeeRequested({required this.listItemFee, this.learnYear});
 
   @override
   // TODO: implement props
@@ -39,4 +41,18 @@ class RemoveFeeFromListVerify extends FeePlanEvent {
   final FeeItem feeItem;
 
   const RemoveFeeFromListVerify({required this.feeItem});
+}
+
+class GetListLearnYear extends FeePlanEvent {
+  final int number;
+  const GetListLearnYear({required this.number});
+  @override
+  // TODO: implement props
+  List<Object> get props => [number];
+}
+
+class UpdateCurrentYear extends FeePlanEvent {
+  final LearnYearPayment currentYearState;
+
+  const UpdateCurrentYear({required this.currentYearState});
 }

@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
+import 'package:iportal2/screens/fee_plan/bloc/fee_plan_status.dart';
 
 import 'card_fee_detail_requested/w_card_topic_fee_detail_requested.dart';
 
@@ -30,7 +31,9 @@ class _TabBarViewRequested extends State<TabBarViewRequested> {
         return CustomRefresh(
           onRefresh: () async {
             context.read<FeePlanBloc>().add(
-                  const GetFeeRequested(),
+                  GetFeeRequested(
+                    learnYear: state.currentYearState?.learnYear,
+                  ),
                 );
           },
           child: SingleChildScrollView(

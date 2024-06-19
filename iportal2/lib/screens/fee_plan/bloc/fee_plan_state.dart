@@ -1,14 +1,15 @@
 part of 'fee_plan_bloc.dart';
 
-enum FeePlanStatus { initial, loading, loaded, error }
-
 class FeePlanState extends Equatable {
   final String? errorsText;
   final FeePlanStatus status;
   final StudentFeesResponse? studentFeesData;
   final StudentFeesResponse? studentFeesRequestedData;
+  final LearnYearPayment? currentYearState;
+  final FeePlanLearnYearsStatus? learnYearsStatus;
 
   final List<FeeItem>? listVerify;
+  final List<LearnYearPayment>? learnYears;
 
   const FeePlanState({
     this.errorsText,
@@ -16,6 +17,9 @@ class FeePlanState extends Equatable {
     this.studentFeesData,
     this.studentFeesRequestedData,
     this.listVerify,
+    this.learnYears,
+    this.currentYearState,
+    this.learnYearsStatus = FeePlanLearnYearsStatus.initial,
   });
 
   @override
@@ -24,7 +28,10 @@ class FeePlanState extends Equatable {
         status,
         studentFeesData,
         studentFeesRequestedData,
-        listVerify
+        listVerify,
+        learnYears,
+        currentYearState,
+        learnYearsStatus,
       ];
 
   FeePlanState copyWith({
@@ -33,6 +40,9 @@ class FeePlanState extends Equatable {
     StudentFeesResponse? studentFeesData,
     StudentFeesResponse? studentFeesRequestedData,
     List<FeeItem>? listVerify,
+    List<LearnYearPayment>? learnYears,
+    LearnYearPayment? currentYearState,
+    FeePlanLearnYearsStatus? learnYearsStatus,
   }) {
     return FeePlanState(
       errorsText: errorsText ?? this.errorsText,
@@ -41,6 +51,9 @@ class FeePlanState extends Equatable {
       studentFeesRequestedData:
           studentFeesRequestedData ?? this.studentFeesRequestedData,
       listVerify: listVerify ?? this.listVerify,
+      learnYears: learnYears ?? this.learnYears,
+      currentYearState: currentYearState ?? this.currentYearState,
+      learnYearsStatus: learnYearsStatus ?? this.learnYearsStatus,
     );
   }
 }

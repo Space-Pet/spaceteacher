@@ -166,31 +166,17 @@ class _AppMainLayoutState extends State<AppMainLayout>
                             text: 'Thời khóa biểu',
                           ),
                     Tab(
-                      child: Container(
-                        padding: EdgeInsets.only(left: 12.h),
-                        child: Column(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/check.svg',
-                              colorFilter: ColorFilter.mode(
-                                _selectedIndex == 2
-                                    ? AppColors.brand500
-                                    : AppColors.gray400,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              'Điểm danh',
-                              style: AppTextStyles.semiBold12(
-                                color: _selectedIndex == 2
-                                    ? AppColors.brand500
-                                    : AppColors.gray400,
-                              ),
-                            )
-                          ],
+                      icon: SvgPicture.asset(
+                        'assets/icons/check.svg',
+                        colorFilter: ColorFilter.mode(
+                          _selectedIndex == 2
+                              ? AppColors.brand500
+                              : AppColors.gray400,
+                          BlendMode.srcIn,
                         ),
                       ),
+                      iconMargin: const EdgeInsets.fromLTRB(0, 0, 0, 6),
+                      text: "Điểm danh",
                     ),
                     Tab(
                       icon: SvgPicture.asset(

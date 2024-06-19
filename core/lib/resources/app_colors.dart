@@ -159,4 +159,5 @@ class AppColors {
   static const Color observationCardDetailbg = Color(0xFFFFFBFA);
 
   static const Color paymentDeadlineApproaching = Color(0xFFFEF3F2);
+  static const Color paymentDeadlineApproachingText = Color(0xFFB11F23);
 }

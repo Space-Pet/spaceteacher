@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:core/core.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/screens/fee_plan/bloc/fee_plan_status.dart';
 import 'package:repository/repository.dart';
 
 part 'fee_plan_event.dart';
@@ -17,12 +18,12 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
           listVerify: [],
         )) {
     on<GetListFee>(_onGetListFee);
-    add(const GetListFee());
     on<GetFeeRequested>(_onGetFeeRequested);
-    add(const GetFeeRequested());
     on<SendFeeRequested>(_onSendFeeRequested);
     on<AddFeeToListVerify>(_onAddFeeToListVerify);
     on<RemoveFeeFromListVerify>(_onRemoveFeeFromListVerify);
+    on<GetListLearnYear>(_onGetLearnYears);
+    on<UpdateCurrentYear>(_onUpdateCurrentYear);
   }
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
@@ -36,8 +37,10 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       final studentFeesData = await appFetchApiRepo.getListFee(
         schoolBrand: user.school_brand,
         schoolId: user.school_id,
-        pupilId: user.parent_id,
-        learnYear: 'user.learn_year',
+        pupilId: user.pupil_id,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            "",
       );
       emit(state.copyWith(
         studentFeesData: studentFeesData,
@@ -61,8 +64,10 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
           await appFetchApiRepo.getListFeeRequested(
         schoolBrand: user.school_brand,
         schoolId: user.school_id,
-        pupilId: user.parent_id,
-        learnYear: 'user.learn_year',
+        pupilId: user.pupil_id,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            "",
       );
 
       emit(state.copyWith(
@@ -89,7 +94,9 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
         schoolBrand: user.school_brand,
         schoolId: user.school_id,
         pupilId: user.pupil_id,
-        learnYear: 'user.learn_year',
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            "",
         listFee: event.listItemFee,
       );
 
@@ -126,5 +133,34 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
     } catch (e) {
       Log.e('Error: $e');
     }
+  }
+
+  Future<void> _onGetLearnYears(
+      GetListLearnYear event, Emitter<FeePlanState> emit) async {
+    emit(state.copyWith(learnYearsStatus: FeePlanLearnYearsStatus.loading));
+    try {
+      final res = await appFetchApiRepo.getLearnYears(number: event.number);
+      final currentYear = res.firstWhere((element) =>
+          element.learnYear == currentUserBloc.state.activeChild.learn_year);
+      emit(state.copyWith(
+          learnYears: res,
+          currentYearState: currentYear,
+          learnYearsStatus: FeePlanLearnYearsStatus.loaded));
+    } catch (e) {
+      Log.e(e.toString());
+      emit(state.copyWith(
+          learnYearsStatus: FeePlanLearnYearsStatus.error,
+          errorsText: e.toString()));
+    }
+  }
+
+  Future<void> _onUpdateCurrentYear(
+      UpdateCurrentYear event, Emitter<FeePlanState> emit) async {
+    emit(
+      state.copyWith(
+        currentYearState: event.currentYearState,
+        learnYearsStatus: FeePlanLearnYearsStatus.updated,
+      ),
+    );
   }
 }
