@@ -22,7 +22,7 @@ class _TabBarViewRequested extends State<TabBarViewRequested> {
     return BlocBuilder<FeePlanBloc, FeePlanState>(
       builder: (context, state) {
         final it = state.studentFeesRequestedData?.data;
-        if (state.status == FeePlanStatus.loading) {
+        if (state.historyStatus == FeePlanHistoryStatus.loading) {
           return const Center(
             child: CircularProgressIndicator(),
           );

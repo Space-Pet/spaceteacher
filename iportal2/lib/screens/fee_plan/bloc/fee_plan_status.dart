@@ -7,3 +7,17 @@ enum FeePlanLearnYearsStatus {
   error,
   updated,
 }
+
+enum FeePlanSendRequestStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}
+
+enum FeePlanHistoryStatus {
+  initial,
+  loading,
+  loaded,
+  error,
+}

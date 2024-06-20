@@ -7,7 +7,7 @@ class StudentFeesResponse {
   final String? status;
   final String? message;
   final int? code;
-  final _Data? data;
+  final dynamic data;
 
   StudentFeesResponse({
     this.status,
@@ -16,8 +16,19 @@ class StudentFeesResponse {
     this.data,
   });
 
-  factory StudentFeesResponse.fromJson(Map<String, dynamic> json) =>
-      _$StudentFeesResponseFromJson(json);
+  factory StudentFeesResponse.fromJson(Map<String, dynamic> json) {
+    return StudentFeesResponse(
+      status: json['status'] as String?,
+      message: json['message'] as String?,
+      code: json['code'] as int?,
+      data: json['data'] == null
+          ? null
+          : json['data'] is List
+              // ignore: unnecessary_lambdas
+              ? (json['data'] as List).map((e) => _Data.fromJson(e)).toList()
+              : _Data.fromJson(json['data'] as Map<String, dynamic>),
+    );
+  }
   Map<String, dynamic> toJson() => _$StudentFeesResponseToJson(this);
 
   StudentFeesResponse copyWith({
@@ -170,6 +181,8 @@ class FeeItem {
   final int? grand_total;
   final String? status;
 
+  final int? disable;
+
   FeeItem({
     this.id,
     this.list_fee_id,
@@ -195,6 +208,7 @@ class FeeItem {
     this.discount,
     this.grand_total,
     this.status,
+    this.disable,
   });
 
   factory FeeItem.fromJson(Map<String, dynamic> json) =>
@@ -238,6 +252,7 @@ class FeeItem {
     int? discount,
     int? grand_total,
     String? status,
+    int? disable,
   }) {
     return FeeItem(
       id: id ?? this.id,
@@ -264,6 +279,7 @@ class FeeItem {
       discount: discount ?? this.discount,
       grand_total: grand_total ?? this.grand_total,
       status: status ?? this.status,
+      disable: disable ?? this.disable,
     );
   }
 
