@@ -4,6 +4,7 @@ import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/custom_refresh.dart';
 import 'package:iportal2/components/dialog/show_dialog.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
+import 'package:iportal2/screens/fee_plan/bloc/fee_plan_status.dart';
 
 import 'card_fee_detail/w_card_topic_fee_detail.dart';
 
@@ -34,7 +35,9 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                 CustomRefresh(
                   onRefresh: () async {
                     context.read<FeePlanBloc>().add(
-                          const GetListFee(),
+                          GetListFee(
+                            learnYear: state.currentYearState?.learnYear,
+                          ),
                         );
                   },
                   child: SingleChildScrollView(

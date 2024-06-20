@@ -376,6 +376,7 @@ class Children {
       user_id: user_id,
       school_id: school_id,
       school_name: school_name,
+      school_brand: school_brand,
       class_id: class_id,
       customer_id: customer_id,
       full_name: full_name,

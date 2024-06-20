@@ -800,11 +800,11 @@ class AppFetchApi extends AbstractAppFetchApi {
       final data = await _authRestClient.doHttpGet(
           '/api/v1/member/tuition-fees/pupil?pupil_id=$pupilId&learn_year=$learnYear',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
-      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
 
+      Log.d(data);
       return StudentFeesResponse.fromJson(data);
     } catch (e) {
-      print('error: $e');
+      Log.e(e.toString());
       return StudentFeesResponse();
     }
   }
@@ -818,11 +818,10 @@ class AppFetchApi extends AbstractAppFetchApi {
       final data = await _authRestClient.doHttpGet(
           '/api/v1/member/tuition-fees/requested?pupil_id=$pupilId&learn_year=$learnYear',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
-      if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
-
+      Log.d(data);
       return StudentFeesResponse.fromJson(data);
     } catch (e) {
-      print('error: $e');
+      Log.e(e.toString());
       return StudentFeesResponse();
     }
   }
@@ -845,10 +844,10 @@ class AppFetchApi extends AbstractAppFetchApi {
         },
       );
       if (isNullOrEmpty(data['data'])) return StudentFeesResponse();
-
+      Log.d(data);
       return StudentFeesResponse.fromJson(data);
     } catch (e) {
-      print('error: $e');
+      Log.e(e.toString());
       return StudentFeesResponse();
     }
   }

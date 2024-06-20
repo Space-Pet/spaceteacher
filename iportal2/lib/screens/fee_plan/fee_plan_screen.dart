@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
-import 'package:iportal2/components/app_bar/app_bar.dart';
+import 'package:iportal2/components/app_bar/screen_app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/tab_bar_tariff.dart';
+import 'package:iportal2/screens/fee_plan/widget/w_learn_year/fee_plan_learn_year_button.dart';
 import 'package:repository/repository.dart';
 
 class FeePlanScreen extends StatelessWidget {
@@ -19,17 +20,27 @@ class FeePlanScreen extends StatelessWidget {
         context.read<AppFetchApiRepository>(),
         userRepository: context.read<UserRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
-      ),
+      )
+        ..add(
+          const GetListLearnYear(number: 2),
+        )
+        ..add(
+          const GetListFee(),
+        )
+        ..add(
+          const GetFeeRequested(),
+        ),
       child: BackGroundContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ScreenAppBar(
-              title: 'Chọn biểu phí',
-              canGoback: true,
+            ScreensAppBar(
+              'Chọn biểu phí',
+              canGoBack: true,
               onBack: () {
                 context.pop();
               },
+              actionWidget: const FeePlanLearnYearButton(),
             ),
             Flexible(
               child: Container(

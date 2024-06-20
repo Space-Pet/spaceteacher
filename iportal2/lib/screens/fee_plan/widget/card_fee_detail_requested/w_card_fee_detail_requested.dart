@@ -74,7 +74,7 @@ class CardFeeDetailRequested extends StatelessWidget {
                     titleStyle: AppTextStyles.bold12(),
                     valueStyle: AppTextStyles.bold12(),
                     value: NumberFormatUtils.displayMoney(
-                            double.parse(feeItem.grand_total ?? '0')) ??
+                            double.parse('${feeItem.grand_total ?? '0'}')) ??
                         "",
                     isLastItem: false,
                   ),

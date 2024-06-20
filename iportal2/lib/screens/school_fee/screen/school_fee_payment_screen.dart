@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
@@ -7,6 +8,7 @@ import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_payment_dialog_noti.dart';
 import 'package:iportal2/screens/school_fee/widget/method_payment/method_payment_screen.dart';
+import 'package:iportal2/utils/text_formatter_utils.dart';
 import 'package:repository/repository.dart';
 
 class SchoolFeePaymentScreen extends StatefulWidget {
@@ -351,6 +353,10 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
               controller: _textController,
               keyboardType: TextInputType.number,
               validator: _validatePayment,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                CurrencyInputFormatter(),
+              ],
               decoration: InputDecoration(
                 hintText: "Nhập số tiền cần thanh toán >/= 50.000đ",
                 hintStyle: AppTextStyles.normal14(color: AppColors.gray500),
@@ -376,6 +382,10 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     if (value == null || value.isEmpty) {
       return 'Vui lòng nhập số tiền';
     }
+
+    // Loại bỏ các dấu phân cách hàng ngàn
+    value = value.replaceAll('.', '');
+
     final numValue = int.tryParse(value);
     if (numValue == null || numValue < 50000) {
       return 'Số tiền phải lớn hơn hoặc bằng 50.000đ';
@@ -394,7 +404,8 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     } else {
       if (_btnTypePayment2 == true) {
         if (_formKey.currentState?.validate() ?? false) {
-          _showMethodPaymentScreen(context, int.parse(_textController.text));
+          final value = _textController.text.replaceAll('.', '');
+          _showMethodPaymentScreen(context, int.parse(value));
         }
       } else {
         _showMethodPaymentScreen(

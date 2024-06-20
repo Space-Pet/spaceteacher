@@ -132,7 +132,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                   ),
                   Text(
                     "${NumberFormatUtils.displayMoney(NumberFormatUtils.parseDouble("${state.schoolFee?.totalCanTru ?? 0}"))}",
-                    style: AppTextStyles.bold14(color: AppColors.green700),
+                    style: AppTextStyles.semiBold14(color: AppColors.green700),
                   ),
                 ],
               ),
@@ -153,10 +153,11 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                     side: const BorderSide(
                       color: AppColors.brand600,
                     ),
+                    elevation: 0,
                   ),
                   child: Text(
                     "Cấn trừ",
-                    style: AppTextStyles.bold14(color: AppColors.brand600),
+                    style: AppTextStyles.semiBold14(color: AppColors.brand600),
                   ),
                 ),
             ],
@@ -173,7 +174,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
               ),
               Text(
                 "${NumberFormatUtils.displayMoney(state.schoolFee?.totalChuaNop?.toDouble())}",
-                style: AppTextStyles.bold14(),
+                style: AppTextStyles.semiBold14(),
               ),
             ],
           ),

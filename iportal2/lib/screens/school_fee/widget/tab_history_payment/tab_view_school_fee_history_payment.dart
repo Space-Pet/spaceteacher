@@ -35,36 +35,10 @@ class _TabViewSchoolFeeHistoryPayment
           }
         },
         builder: (context, state) {
-          if (state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loading) {
-            return Scaffold(
-              body: Skeletonizer(
-                enabled: true,
-                child: CustomRefresh(
-                  onRefresh: () async {
-                    context.read<SchoolFeeBloc>().add(FetchSchoolFeeHistory(
-                        learnYear: state.currentYearState?.learnYear));
-                  },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: List.generate(
-                        5,
-                        (index) => _buildHistoryPaymentCard(
-                            context,
-                            state.historySchoolFee?.historySchoolFeeItems ?? [],
-                            index),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          } else if (state.schoolFeeHistoryStatus ==
-              SchoolFeeHistoryStatus.loaded) {
-            final listReversed = state
-                .historySchoolFee?.historySchoolFeeItems?.reversed
-                .toList();
-            if (listIsShowDetail.length != listReversed?.length) {
-              listIsShowDetail = List.filled(listReversed?.length ?? 0, false);
+          if (state.schoolFeeHistoryStatus == SchoolFeeHistoryStatus.loaded) {
+            final listData = state.historySchoolFee?.historySchoolFeeItems;
+            if (listIsShowDetail.length != listData?.length) {
+              listIsShowDetail = List.filled(listData?.length ?? 0, false);
             }
             return Scaffold(
               backgroundColor: AppColors.white,
@@ -74,7 +48,7 @@ class _TabViewSchoolFeeHistoryPayment
                       .read<SchoolFeeBloc>()
                       .add(const FetchSchoolFeeHistory());
                 },
-                child: isNullOrEmpty(listReversed)
+                child: isNullOrEmpty(listData)
                     ? const Center(
                         child: Text('Không có dữ liệu'),
                       )
@@ -82,8 +56,9 @@ class _TabViewSchoolFeeHistoryPayment
                         padding: EdgeInsets.zero,
                         itemBuilder: (context, index) {
                           return _buildHistoryPaymentCard(
-                              context, listReversed ?? [], index);
+                              context, listData ?? [], index);
                         },
+                        itemCount: listData?.length ?? 0,
                       ),
               ),
             );
