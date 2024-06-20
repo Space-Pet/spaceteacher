@@ -1,5 +1,5 @@
 class ReportStudent {
-  final CommentTeacher comment;
+  final CommentReport comment;
   final TeacherName teacherName;
   final List<ListMarks> listMarks;
   final List<DataItem> dataItems;
@@ -10,7 +10,7 @@ class ReportStudent {
       required this.teacherName});
   factory ReportStudent.fromJson(Map<String, dynamic> json) {
     return ReportStudent(
-        comment: CommentTeacher.fromJson(json['comment']),
+        comment: CommentReport.fromJson(json['comment']),
         teacherName: TeacherName.fromJson(json['teacher_name']),
         dataItems: List<DataItem>.from(
             json['data']['items']?.map(DataItem.fromJson) ?? []),
@@ -20,12 +20,12 @@ class ReportStudent {
   }
 }
 
-class CommentTeacher {
+class CommentReport {
   final String label;
   final String value;
-  const CommentTeacher({required this.label, required this.value});
-  factory CommentTeacher.fromJson(Map<String, dynamic> json) {
-    return CommentTeacher(
+  const CommentReport({required this.label, required this.value});
+  factory CommentReport.fromJson(Map<String, dynamic> json) {
+    return CommentReport(
         label: json['label'] ?? '', value: json['value'] ?? '');
   }
 }

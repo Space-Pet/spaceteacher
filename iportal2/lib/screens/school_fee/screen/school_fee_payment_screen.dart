@@ -8,7 +8,6 @@ import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
 import 'package:iportal2/screens/school_fee/widget/dialog/school_fee_payment_dialog_noti.dart';
 import 'package:iportal2/screens/school_fee/widget/method_payment/method_payment_screen.dart';
-import 'package:iportal2/utils/text_formatter_utils.dart';
 import 'package:repository/repository.dart';
 
 class SchoolFeePaymentScreen extends StatefulWidget {

@@ -858,4 +858,64 @@ class AppFetchApiRepository {
     final data = await _appFetchApi.getArmorial();
     return data;
   }
+
+  Future<Map<String, dynamic>> postScoreComment({
+    required String userKey,
+    required int pupilId,
+    required String weekDay,
+    required String commentMnContent,
+    required String huyHieuId,
+    required String commentMnTitle,
+  }) async {
+    final data = await _appFetchApi.postScoreComment(
+      userKey: userKey,
+      pupilId: pupilId,
+      weekDay: weekDay,
+      commentMnContent: commentMnContent,
+      huyHieuId: huyHieuId,
+      commentMnTitle: commentMnTitle,
+    );
+    return data;
+  }
+
+  Future<List<ListAllForm>> getListAllForm({
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getListAllForm(
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<List<ListStudentFormReport>> getListStudentFormReport({
+    required int id,
+    required int classId,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.getListStudentFormReport(
+      id: id,
+      classId: classId,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<FormDetail> getFormDetail({
+    required int id,
+    required int pupilId,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.getFormDetail(
+      id: id,
+      pupilId: pupilId,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
 }

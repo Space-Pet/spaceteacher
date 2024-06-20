@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';

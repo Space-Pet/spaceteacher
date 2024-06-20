@@ -103,6 +103,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   easy_image_viewer: ^1.5.0
   dropdown_button2: ^2.3.9
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

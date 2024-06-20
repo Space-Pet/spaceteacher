@@ -1,5 +1,6 @@
-import 'package:core/core.dart';
 import 'package:flutter/services.dart';
+
+import 'number_format_utils.dart';
 
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
@@ -9,7 +10,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    double value = double.parse(newValue.text);
+    final value = double.tryParse(newValue.text);
 
     final formatter = NumberFormatUtils.decimalFormat(value);
 

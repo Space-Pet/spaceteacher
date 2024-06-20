@@ -2,6 +2,7 @@ library core;
 
 export 'package:aad_oauth/aad_oauth.dart';
 export 'package:aad_oauth/model/config.dart';
+export 'package:auto_size_text/auto_size_text.dart';
 export 'package:bloc/bloc.dart';
 export 'package:device_info_plus/device_info_plus.dart';
 export 'package:dio/dio.dart';

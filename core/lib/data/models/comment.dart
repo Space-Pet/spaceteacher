@@ -27,7 +27,8 @@ class Comment {
         commentId: json['comment_mn_id'] ?? '',
         commentNote: json['comment_note'] ?? '',
         commentTimePost: json['comment_time_post'] ?? '',
-        huyHieuImg: json['huy_hieu_img'] ?? '',
+        huyHieuImg: json['huy_hieu_img'] ??
+            'https://cdn-icons-png.freepik.com/512/9776/9776920.png',
         huyHieuName: json['huy_hieu_name'] ?? '',
         teacherId: json['teacher_id'] ?? '',
         teacherName: json['teacher_name'] ?? '',

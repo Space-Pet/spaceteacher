@@ -56,3 +56,6 @@ export 'teacher_login.dart';
 export 'week_schedule.dart';
 export 'weeky_lesson.dart';
 export 'armorial.dart';
+export 'list_all_form.dart';
+export 'list_student_form_report.dart';
+export 'form_detail.dart';

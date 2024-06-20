@@ -1,5 +1,3 @@
-import '../../core.dart';
-
 class Nutrition {
   final String statusNote;
   final List<DataNutrition> dataNutrition;

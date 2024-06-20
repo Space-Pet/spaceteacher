@@ -1,12 +1,13 @@
 import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/screen_app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/screens/authentication/utilites/dialog_utils.dart';
 import 'package:teacher/screens/pre_score/bloc/pre_score_bloc.dart';
 import 'package:teacher/screens/pre_score/widget/select_button/select_button_feedback/select_option_button_feedback_type.dart';
 
@@ -30,8 +31,35 @@ class AddPreScoreScreen extends StatelessWidget {
     preScoreBloc.add(GetArmorial());
     return BlocProvider.value(
       value: preScoreBloc,
-      child: AddPreScoreview(
-        phoneBookStudent: phoneBookStudent,
+      child: BlocListener<PreScoreBloc, PreScoreState>(
+        listener: (context, state) {
+          if (state.preScoreStatus == PreScoreStatus.loadingPostComment) {
+            LoadingDialog.show(context);
+          } else if (state.preScoreStatus ==
+              PreScoreStatus.successPostComment) {
+            LoadingDialog.hide(context);
+            Fluttertoast.showToast(
+                timeInSecForIosWeb: 2,
+                msg: state.status,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: AppColors.green400,
+                textColor: AppColors.white);
+            preScoreBloc.add(GetArmorial());
+          } else if (state.preScoreStatus == PreScoreStatus.failPost) {
+            LoadingDialog.hide(context);
+            Fluttertoast.showToast(
+                timeInSecForIosWeb: 2,
+                msg: state.status,
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: AppColors.black,
+                textColor: AppColors.white);
+          }
+        },
+        child: AddPreScoreview(
+          phoneBookStudent: phoneBookStudent,
+        ),
       ),
     );
   }
@@ -47,6 +75,11 @@ class AddPreScoreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Armorial? selectArmorial;
+    DateTime startDate = DateTime.now();
+    DateTime endDate = DateTime.now();
+    PhoneBookStudent? newStudent;
+    String note = '';
     return BlocBuilder<PreScoreBloc, PreScoreState>(builder: (context, state) {
       final listArmorial = state.armorial;
       return GestureDetector(
@@ -76,12 +109,18 @@ class AddPreScoreview extends StatelessWidget {
                     child: Column(
                       children: [
                         DropDowStudent(
+                          onSelectStudent: (value) {
+                            newStudent = value;
+                          },
                           students: phoneBookStudent,
                         ),
                         Container(
                           padding: const EdgeInsets.all(12),
                           child: SelectFeedBackType(
-                            onGetComment: (startDate, endDate){},
+                            onGetComment: (startDate, endDate) {
+                              startDate = startDate;
+                              endDate = endDate;
+                            },
                             endDate: DateTime.now(),
                             startDate: DateTime.now(),
                           ),
@@ -155,11 +194,16 @@ class AddPreScoreview extends StatelessWidget {
                                                   border: InputBorder.none,
                                                   labelText: 'Nhập nhận xét'),
                                               maxLines: null,
-                                              onChanged: (value) {},
+                                              onChanged: (value) {
+                                                note = value;
+                                              },
                                             ),
                                           ),
                                         ),
                                         DropDowArmorial(
+                                          onTapSelect: (value) {
+                                            selectArmorial = value;
+                                          },
                                           armorial: listArmorial,
                                         ),
                                       ],
@@ -171,7 +215,28 @@ class AddPreScoreview extends StatelessWidget {
                                     Container(
                                       width: double.infinity,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          context.read<PreScoreBloc>().add(
+                                                PostComment(
+                                                  commentMnContent: note,
+                                                  commentMnTitle:
+                                                      startDate.toString(),
+                                                  huyHieuId: selectArmorial
+                                                          ?.huyHieuId
+                                                          .toString() ??
+                                                      '',
+                                                  pupilId:
+                                                      newStudent?.pupilId ?? 0,
+                                                  userKey: context
+                                                      .read<CurrentUserBloc>()
+                                                      .state
+                                                      .user
+                                                      .user_key,
+                                                  weekDay:
+                                                      startDate.ddMMyyyyDash,
+                                                ),
+                                              );
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           padding: const EdgeInsets.all(6),
                                           backgroundColor:
@@ -193,7 +258,9 @@ class AddPreScoreview extends StatelessWidget {
                                           vertical: 6),
                                       width: double.infinity,
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          context.pop();
+                                        },
                                         style: ElevatedButton.styleFrom(
                                           padding: const EdgeInsets.all(6),
                                           backgroundColor: AppColors.white,
@@ -230,16 +297,16 @@ class DropDowArmorial extends StatefulWidget {
   const DropDowArmorial({
     super.key,
     required this.armorial,
+    required this.onTapSelect,
   });
   final List<Armorial> armorial;
-
+  final Function(Armorial? armorial) onTapSelect;
   @override
   State<DropDowArmorial> createState() => _DropDowArmorialState();
 }
 
 class _DropDowArmorialState extends State<DropDowArmorial> {
   Armorial? selectedArmorial;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -287,6 +354,7 @@ class _DropDowArmorialState extends State<DropDowArmorial> {
                   : [],
               onChanged: (Armorial? value) {
                 setState(() {
+                  widget.onTapSelect(value);
                   selectedArmorial = value;
                 });
               },
@@ -314,8 +382,12 @@ class _DropDowArmorialState extends State<DropDowArmorial> {
 
 class DropDowStudent extends StatefulWidget {
   final List<PhoneBookStudent> students;
-
-  const DropDowStudent({super.key, required this.students});
+  final Function(PhoneBookStudent? armorial) onSelectStudent;
+  const DropDowStudent({
+    super.key,
+    required this.students,
+    required this.onSelectStudent,
+  });
 
   @override
   _DropDowStudentState createState() => _DropDowStudentState();
@@ -330,6 +402,7 @@ class _DropDowStudentState extends State<DropDowStudent> {
     _selectedStudent = widget.students.isNotEmpty
         ? widget.students[0]
         : PhoneBookStudent.empty();
+    widget.onSelectStudent(_selectedStudent);
   }
 
   @override
@@ -342,9 +415,10 @@ class _DropDowStudentState extends State<DropDowStudent> {
             child: DropdownButton<PhoneBookStudent>(
               value: _selectedStudent,
               icon: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: 15,
+                    width: 100,
                   ),
                   const Icon(
                     Icons.keyboard_arrow_down,
@@ -358,6 +432,7 @@ class _DropDowStudentState extends State<DropDowStudent> {
                 setState(() {
                   _selectedStudent = newValue!;
                 });
+                widget.onSelectStudent(newValue);
               },
               items: widget.students.map<DropdownMenuItem<PhoneBookStudent>>(
                 (PhoneBookStudent student) {
@@ -411,8 +486,7 @@ class _DropDowStudentState extends State<DropDowStudent> {
                                   ),
                                 ),
                                 Text(
-                                  student
-                                      .userKey, // Sử dụng student thay vì _selectedStudent
+                                  student.userKey,
                                   style: AppTextStyles.normal14(
                                     fontWeight: FontWeight.w400,
                                     color: AppColors.gray400,

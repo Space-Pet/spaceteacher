@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:core/data/hive_models/cap_dao_tao.dart';
 
-import 'teacher_detail.dart';
+import '../hive_models/cap_dao_tao.dart';
 
 class TeacherLoginModel {
   TeacherLogin info;

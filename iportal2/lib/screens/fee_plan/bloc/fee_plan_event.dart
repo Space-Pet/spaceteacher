@@ -23,7 +23,6 @@ class SendFeeRequested extends FeePlanEvent {
   const SendFeeRequested({required this.listItemFee, this.learnYear});
 
   @override
-  // TODO: implement props
   List<Object> get props => [listItemFee];
 }
 
@@ -33,7 +32,6 @@ class AddFeeToListVerify extends FeePlanEvent {
   const AddFeeToListVerify({required this.feeItem});
 
   @override
-  // TODO: implement props
   List<Object> get props => [feeItem];
 }
 
@@ -47,7 +45,6 @@ class GetListLearnYear extends FeePlanEvent {
   final int number;
   const GetListLearnYear({required this.number});
   @override
-  // TODO: implement props
   List<Object> get props => [number];
 }
 

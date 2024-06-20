@@ -3,7 +3,6 @@
 import 'dart:convert';
 
 import '../../core.dart';
-import '../models/teacher_detail.dart';
 
 part 'local_teacher.g.dart';
 

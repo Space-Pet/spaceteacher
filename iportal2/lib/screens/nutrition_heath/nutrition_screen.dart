@@ -1,5 +1,4 @@
 import 'package:core/core.dart';
-import 'package:core/resources/app_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
@@ -74,7 +73,7 @@ class NutritionScreenState extends State<NutritionScreen> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
                               child: Text(
-                                nutrition?.statusNote ?? '',
+                                nutrition.statusNote,
                                 textAlign: TextAlign.center,
                                 maxLines: 2,
                                 style: AppTextStyles.semiBold16(
@@ -87,13 +86,13 @@ class NutritionScreenState extends State<NutritionScreen> {
                                 child: Column(
                                   children: [
                                     ...List.generate(
-                                        nutrition?.dataNutrition.length ?? 0,
+                                        nutrition.dataNutrition.length,
                                         (index) => CardNutrition(
                                             isExpanded: expandedIndex == index,
                                             index: index,
                                             onExpansionChanged: () =>
                                                 _handleExpansion(index),
-                                            nutritionItem: nutrition!
+                                            nutritionItem: nutrition
                                                 .dataNutrition.reversed
                                                 .toList()[index],
                                             lastIndex: index ==

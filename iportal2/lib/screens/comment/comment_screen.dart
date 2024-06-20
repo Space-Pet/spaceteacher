@@ -1,12 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:core/core.dart';
-import 'package:core/data/models/models.dart';
-import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';

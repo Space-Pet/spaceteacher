@@ -13,9 +13,23 @@ enum PreScoreStatus {
 
   loadingGetComment,
   successGetComment,
+
+  loadingPostComment,
+  successPostComment,
+  failPost,
+
+  loadingGetForm,
+  successGetForm,
+
+  loadingGetListStudentReport,
+  successGetListStudentReport,
+
+  loadingGetFormDetail,
+  successGetFormDetail,
 }
 
 class PreScoreState {
+  final String status;
   final PreScoreStatus preScoreStatus;
   final TeacherDetail userData;
   final List<PhoneBookStudent> listStudent;
@@ -23,7 +37,13 @@ class PreScoreState {
   final List<Comment> comment;
   final DateTime startDate;
   final DateTime endDate;
+  final List<ListAllForm> listAllForm;
+  final List<ListStudentFormReport> listStudentFormReport;
+  final FormDetail formDetail;
   PreScoreState({
+    required this.formDetail,
+    required this.status,
+    required this.listStudentFormReport,
     required this.startDate,
     required this.endDate,
     required this.armorial,
@@ -31,6 +51,7 @@ class PreScoreState {
     required this.comment,
     required this.userData,
     this.preScoreStatus = PreScoreStatus.init,
+    required this.listAllForm,
   });
 
   List<Object?> get props => [
@@ -41,8 +62,14 @@ class PreScoreState {
         comment,
         startDate,
         endDate,
+        status,
+        listAllForm,
+        listStudentFormReport,
+        formDetail,
       ];
   PreScoreState copyWith({
+    List<ListStudentFormReport>? listStudentFormReport,
+    String? status,
     List<PhoneBookStudent>? listStudent,
     PreScoreStatus? preScoreStatus,
     TeacherDetail? userData,
@@ -50,8 +77,15 @@ class PreScoreState {
     List<Comment>? comment,
     DateTime? startDate,
     DateTime? endDate,
+    List<ListAllForm>? listAllForm,
+    FormDetail? formDetail,
   }) {
     return PreScoreState(
+      formDetail: formDetail ?? this.formDetail,
+      listStudentFormReport:
+          listStudentFormReport ?? this.listStudentFormReport,
+      listAllForm: listAllForm ?? this.listAllForm,
+      status: status ?? this.status,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       comment: comment ?? this.comment,

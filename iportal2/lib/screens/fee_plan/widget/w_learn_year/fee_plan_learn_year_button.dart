@@ -29,8 +29,7 @@ class _FeePlanLearnYearButtonState extends State<FeePlanLearnYearButton> {
       value: context.read<FeePlanBloc>(),
       child: BlocConsumer<FeePlanBloc, FeePlanState>(
         listener: (context, state) {
-          if (state.learnYearsStatus ==
-              FeePlanLearnYearsStatus.loaded) {
+          if (state.learnYearsStatus == FeePlanLearnYearsStatus.loaded) {
             learnYears = state.learnYears ?? [];
             if (learnYears.isNotEmpty) {
               currentYear = learnYears.firstWhere(
@@ -39,8 +38,7 @@ class _FeePlanLearnYearButtonState extends State<FeePlanLearnYearButton> {
               );
               currentYearTXT = currentYear?.learnYear ?? '';
             }
-          } else if (state.learnYearsStatus ==
-              FeePlanLearnYearsStatus.error) {
+          } else if (state.learnYearsStatus == FeePlanLearnYearsStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Lỗi khi lấy dữ liệu năm học'),
@@ -76,8 +74,10 @@ class _FeePlanLearnYearButtonState extends State<FeePlanLearnYearButton> {
                                         Text(learnYears[index].learnYear ?? ''),
                                     onTap: () {
                                       context.read<FeePlanBloc>().add(
-                                          UpdateCurrentYear(
-                                           currentYearState:   learnYears[index]),);
+                                            UpdateCurrentYear(
+                                                currentYearState:
+                                                    learnYears[index]),
+                                          );
                                       setState(() {
                                         currentYearTXT =
                                             learnYears[index].learnYear ?? '';

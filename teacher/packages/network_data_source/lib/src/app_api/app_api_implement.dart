@@ -597,9 +597,9 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<List<PhoneBookStudent>> getPhoneBookStudent(
       {required int classId}) async {
     try {
-      // final data = await _authRestClient
-      //     .doHttpGet('/api/v1/member/class/$classId/pupils');
-      final data = await _authRestClient.doHttpGet('/api/v1/staff/pupil/class');
+      final data = await _authRestClient
+          .doHttpGet('/api/v1/staff/class/$classId/pupils');
+      // final data = await _authRestClient.doHttpGet('/api/v1/staff/pupil/class');
       log(data.toString());
       final dataList = data['data'] as List<dynamic>?;
 
@@ -1377,6 +1377,89 @@ class AppFetchApi extends AbstractAppFetchApi {
           .toList();
     } catch (e) {
       return Armorial.fakeData();
+    }
+  }
+
+  Future<Map<String, dynamic>> postScoreComment({
+    required String userKey,
+    required int pupilId,
+    required String weekDay,
+    required String commentMnContent,
+    required String huyHieuId,
+    required String commentMnTitle,
+  }) async {
+    final token = await _client.getAccessToken();
+    final data = await _partnerTokenRestClient.doHttpPost(
+      url: '/api/api.php?act=post_comment_mn',
+      headers: {'Parter-Token': token},
+      requestBody: {
+        "user_key": userKey,
+        "pupil_id": pupilId,
+        "week_day": weekDay,
+        "comment_mn_content": commentMnContent,
+        "huy_hieu_id": huyHieuId,
+        "comment_mn_time": commentMnTitle
+      },
+    );
+    return data;
+  }
+
+  Future<List<ListAllForm>> getListAllForm({
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    try {
+      DateTime now = DateTime.now();
+      String newLearnYear;
+      if (now.month > 8) {
+        newLearnYear = '${now.year}-${now.year + 1}';
+      } else {
+        newLearnYear = '${now.year - 1}-${now.year}';
+      }
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/bieu-mau-danh-gia?learn_year=$newLearnYear',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      final jsonData = data['data']['data'] as List<dynamic>;
+      return jsonData.map((e) => ListAllForm.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<ListStudentFormReport>> getListStudentFormReport({
+    required int id,
+    required int classId,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/bieu-mau-danh-gia/pupils?id=$id&class_id=$classId',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      final jsonData = data['data']['items'] as List<dynamic>;
+      return jsonData.map((e) => ListStudentFormReport.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<FormDetail> getFormDetail({
+    required int id,
+    required int pupilId,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/bieu-mau-danh-gia/result?id=$id&pupil_id=$pupilId',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      final jsonData = data['data'] as Map<String, dynamic>;
+      return FormDetail.fromJson(jsonData);
+    } catch (e) {
+      return FormDetail.empty();
     }
   }
 }

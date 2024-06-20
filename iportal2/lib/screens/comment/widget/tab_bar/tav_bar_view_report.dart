@@ -58,7 +58,7 @@ class TabBarViewReport extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: listReport.length ?? 0,
+                          itemCount: listReport.length,
                           itemBuilder: (context, index) {
                             final item = listReport[index];
                             return GFAccordion(
@@ -68,14 +68,14 @@ class TabBarViewReport extends StatelessWidget {
                                 onToggleCollapsed: (value) {
                                   context
                                       .read<CommentBloc>()
-                                      .add(GetReportStudent(id: item?.id ?? 0));
+                                      .add(GetReportStudent(id: item.id));
                                 },
                                 titleChild: Container(
                                   padding: const EdgeInsets.all(8),
                                   child: GestureDetector(
                                     onTap: () {
                                       context.read<CommentBloc>().add(
-                                          GetReportStudent(id: item?.id ?? 0));
+                                          GetReportStudent(id: item.id));
                                     },
                                     child: Row(
                                       crossAxisAlignment:
@@ -90,7 +90,7 @@ class TabBarViewReport extends StatelessWidget {
                                             padding:
                                                 const EdgeInsets.only(left: 5),
                                             child: Text(
-                                              item?.title ?? '',
+                                              item.title,
                                               style: AppTextStyles.normal16(
                                                 fontWeight: FontWeight.w600,
                                                 color: AppColors.brand600,
