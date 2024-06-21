@@ -36,9 +36,8 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                 context: context,
                 builder: (BuildContext context) {
                   return FeePlanDialogNoti(
-                    isSuccess: state.studentFeesData?.status == "success"
-                        ? true
-                        : false,
+                    isSuccess:
+                        state.sendRequestStatusText == "success" ? true : false,
                   );
                 }).then((value) {
               if (value['refresh'] == true && value['tabIndex'] != null) {
@@ -47,12 +46,16 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                     );
                 context.read<FeePlanBloc>().add(GetFeeRequested(
                     learnYear: state.currentYearState?.learnYear));
+                context.read<FeePlanBloc>().add(
+                    GetListFee(learnYear: state.currentYearState?.learnYear));
               } else {
                 context.read<FeePlanBloc>().add(
                       const UpdateCurrentTabIndex(currentTabIndex: 0),
                     );
                 context.read<FeePlanBloc>().add(
                     GetListFee(learnYear: state.currentYearState?.learnYear));
+                context.read<FeePlanBloc>().add(GetFeeRequested(
+                    learnYear: state.currentYearState?.learnYear));
               }
             });
           } else if (state.sendRequestStatus ==

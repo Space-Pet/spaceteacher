@@ -215,6 +215,21 @@ class FeeItem {
       _$FeeItemFromJson(json);
   Map<String, dynamic> toJson() => _$FeeItemToJson(this);
 
+  Map<String, dynamic> toRequestJson({required int pupilId}) {
+    return {
+      'pupil_id': pupilId,
+      'school_id': school_id,
+      'list_fee_detail_id': meta_data?.items?.first.list_fee_detail_id,
+      'list_fee_id': list_fee_id,
+      'price': price,
+      'unit': int.parse(unit ?? '0'),
+      'SPL1_Ma': SPL1_Ma,
+      'SPL2_Ma': SPL2_Ma,
+      'SPL3_Ma': SPL3_Ma,
+      'PB_11T_GROUP': PB_11T_GROUP,
+    };
+  }
+
   static int _priceFromJson(dynamic price) {
     if (price is int) {
       return price;

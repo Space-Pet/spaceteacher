@@ -826,7 +826,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<StudentFeesResponse> postFeeRequested({
+  Future<String> postFeeRequested({
     required String schoolBrand,
     required int schoolId,
     required int pupilId,
@@ -841,15 +841,15 @@ class AppFetchApi extends AbstractAppFetchApi {
           'pupil_id': pupilId,
           'learn_year': learnYear,
           'list_fee_items': listFee.map((e) {
-            return e.toJson();
+            return e.toRequestJson(pupilId: pupilId);
           }).toList(),
         },
       );
-      Log.d(data);
-      return StudentFeesResponse.fromJson(data);
+      Log.d(data['status']);
+      return data['status'];
     } catch (e) {
       Log.e(e.toString());
-      return StudentFeesResponse();
+      return 'fail';
     }
   }
 
