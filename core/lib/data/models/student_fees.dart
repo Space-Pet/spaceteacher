@@ -219,7 +219,7 @@ class FeeItem {
     return {
       'pupil_id': pupilId,
       'school_id': school_id,
-      'list_fee_detail_id': meta_data?.items?.first.list_fee_detail_id,
+      'list_fee_detail_id': list_fee_detail_id,
       'list_fee_id': list_fee_id,
       'price': price,
       'unit': int.parse(unit ?? '0'),

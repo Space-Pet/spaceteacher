@@ -26,44 +26,52 @@ class _TabBarViewRequested extends State<TabBarViewRequested> {
           return const Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state.historyStatus == FeePlanHistoryStatus.loaded) {
+          if (isNullOrEmpty(state.studentFeesRequestedData?.data)) {
+            return const Center(
+              child: Text('Không có dữ liệu'),
+            );
+          } else {
+            return CustomRefresh(
+              onRefresh: () async {
+                context.read<FeePlanBloc>().add(
+                      GetFeeRequested(
+                        learnYear: state.currentYearState?.learnYear,
+                      ),
+                    );
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (!isNullOrEmpty(it?.sp1_001))
+                      CardTopicFeeDetailRequested(
+                          titleTopic: "Học phí",
+                          feeCategoryData: it?.sp1_001?.data),
+                    if (!isNullOrEmpty(it?.sp1_002))
+                      CardTopicFeeDetailRequested(
+                          titleTopic: "Phí bán trú",
+                          feeCategoryData: it?.sp1_002?.data),
+                    if (!isNullOrEmpty(it?.sp1_003))
+                      CardTopicFeeDetailRequested(
+                          titleTopic: "Phí nội trú",
+                          feeCategoryData: it?.sp1_003?.data),
+                    if (!isNullOrEmpty(it?.sp1_004))
+                      CardTopicFeeDetailRequested(
+                          titleTopic: "Dịch vụ giáo dục",
+                          feeCategoryData: it?.sp1_004?.data),
+                    if (!isNullOrEmpty(it?.sp1_005))
+                      CardTopicFeeDetailRequested(
+                          titleTopic: "Lệ phí",
+                          feeCategoryData: it?.sp1_005?.data),
+                  ],
+                ),
+              ),
+            );
+          }
         }
-
-        return CustomRefresh(
-          onRefresh: () async {
-            context.read<FeePlanBloc>().add(
-                  GetFeeRequested(
-                    learnYear: state.currentYearState?.learnYear,
-                  ),
-                );
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (!isNullOrEmpty(it?.sp1_001))
-                  CardTopicFeeDetailRequested(
-                      titleTopic: "Học phí",
-                      feeCategoryData: it?.sp1_001?.data),
-                if (!isNullOrEmpty(it?.sp1_002))
-                  CardTopicFeeDetailRequested(
-                      titleTopic: "Phí bán trú",
-                      feeCategoryData: it?.sp1_002?.data),
-                if (!isNullOrEmpty(it?.sp1_003))
-                  CardTopicFeeDetailRequested(
-                      titleTopic: "Phí nội trú",
-                      feeCategoryData: it?.sp1_003?.data),
-                if (!isNullOrEmpty(it?.sp1_004))
-                  CardTopicFeeDetailRequested(
-                      titleTopic: "Dịch vụ giáo dục",
-                      feeCategoryData: it?.sp1_004?.data),
-                if (!isNullOrEmpty(it?.sp1_005))
-                  CardTopicFeeDetailRequested(
-                      titleTopic: "Lệ phí", feeCategoryData: it?.sp1_005?.data),
-              ],
-            ),
-          ),
-        );
+        return Container();
       },
     );
   }

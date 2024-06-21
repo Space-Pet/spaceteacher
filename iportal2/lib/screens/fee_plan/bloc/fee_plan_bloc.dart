@@ -48,6 +48,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
         studentFeesData: studentFeesData,
         status: FeePlanStatus.loaded,
         listVerify: [],
+        sendRequestStatusText: "",
       ));
     } catch (e) {
       Log.e('Error: $e');
@@ -76,6 +77,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       emit(state.copyWith(
         studentFeesRequestedData: studentFeesRequestedData,
         historyStatus: FeePlanHistoryStatus.loaded,
+        sendRequestStatusText: "",
       ));
     } catch (e) {
       Log.e('Error: $e');
