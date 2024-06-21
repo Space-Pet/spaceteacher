@@ -37,7 +37,15 @@ class _LearnYearWidgetButtonState extends State<LearnYearWidgetButton> {
                 (e) => e.currentLearnYear == 1,
                 orElse: () => learnYears.first,
               );
-              currentYearTXT = currentYear?.learnYear ?? '';
+              final activeChildLearnYear = context
+                  .read<SchoolFeeBloc>()
+                  .currentUserBloc
+                  .state
+                  .activeChild
+                  .learn_year;
+              currentYearTXT = !isNullOrEmpty(activeChildLearnYear)
+                  ? activeChildLearnYear ?? ""
+                  : currentYear?.learnYear ?? '';
             }
           } else if (state.schoolFeeGetLearnYearsStatus ==
               SchoolFeeGetLearnYearsStatus.error) {

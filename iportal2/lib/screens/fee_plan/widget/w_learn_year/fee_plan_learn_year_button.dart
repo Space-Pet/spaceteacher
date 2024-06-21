@@ -36,7 +36,15 @@ class _FeePlanLearnYearButtonState extends State<FeePlanLearnYearButton> {
                 (e) => e.currentLearnYear == 1,
                 orElse: () => learnYears.first,
               );
-              currentYearTXT = currentYear?.learnYear ?? '';
+              final activeChildLearnYear = context
+                  .read<FeePlanBloc>()
+                  .currentUserBloc
+                  .state
+                  .activeChild
+                  .learn_year;
+              currentYearTXT = !isNullOrEmpty(activeChildLearnYear)
+                  ? activeChildLearnYear ?? ""
+                  : currentYear?.learnYear ?? '';
             }
           } else if (state.learnYearsStatus == FeePlanLearnYearsStatus.error) {
             ScaffoldMessenger.of(context).showSnackBar(
