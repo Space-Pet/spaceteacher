@@ -2,9 +2,10 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/components/buttons/rounded_button.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/dialog/show_dialog.dart';
+import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_bloc.dart';
 import 'package:iportal2/screens/fee_plan/bloc/fee_plan_status.dart';
+import 'package:iportal2/screens/fee_plan/widget/dialog_tab_fee_plan.dart';
 
 import 'card_fee_detail/w_card_topic_fee_detail.dart';
 
@@ -22,7 +23,43 @@ class _TabBarViewAll extends State<TabBarViewAll> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: context.read<FeePlanBloc>(),
-      child: BlocBuilder<FeePlanBloc, FeePlanState>(
+      child: BlocConsumer<FeePlanBloc, FeePlanState>(
+        listener: (context, state) {
+          if (state.sendRequestStatus == FeePlanSendRequestStatus.loaded) {
+            LoadingDialog.hide(context);
+            context.read<FeePlanBloc>().add(
+                  const UpdateStatusFeePlan(
+                    sendRequestStatus: FeePlanSendRequestStatus.initial,
+                  ),
+                );
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return FeePlanDialogNoti(
+                    isSuccess: state.studentFeesData?.status == "success"
+                        ? true
+                        : false,
+                  );
+                }).then((value) {
+              if (value['refresh'] == true && value['tabIndex'] != null) {
+                context.read<FeePlanBloc>().add(
+                      const UpdateCurrentTabIndex(currentTabIndex: 1),
+                    );
+                context.read<FeePlanBloc>().add(GetFeeRequested(
+                    learnYear: state.currentYearState?.learnYear));
+              } else {
+                context.read<FeePlanBloc>().add(
+                      const UpdateCurrentTabIndex(currentTabIndex: 0),
+                    );
+                context.read<FeePlanBloc>().add(
+                    GetListFee(learnYear: state.currentYearState?.learnYear));
+              }
+            });
+          } else if (state.sendRequestStatus ==
+              FeePlanSendRequestStatus.loading) {
+            LoadingDialog.show(context);
+          }
+        },
         builder: (context, state) {
           final it = state.studentFeesData?.data;
           if (state.status == FeePlanStatus.loading) {
@@ -83,27 +120,6 @@ class _TabBarViewAll extends State<TabBarViewAll> {
                                 listItemFee: state.listVerify ?? [],
                               ),
                             );
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return const ShowDialog(
-                                title: 'Đã gửi yêu cầu đến trường.',
-                                textConten:
-                                    'Quý cha mẹ học sinh vui lòng chờ nhân viên trường kiểm tra và áp giảm giá (nếu có)',
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: Color(0xFFECFDF3),
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Color(0xFFD1FADF),
-                                    child: Icon(
-                                      Icons.done,
-                                      color: AppColors.green600,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            });
                       },
                       borderRadius: 70,
                       padding: EdgeInsets.zero,

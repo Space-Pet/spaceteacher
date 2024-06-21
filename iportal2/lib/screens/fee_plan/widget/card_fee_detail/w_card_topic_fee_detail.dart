@@ -65,20 +65,24 @@ class _CardTopicDetailFeePlanState extends State<CardTopicDetailFeePlan> {
                 children: List.generate(
                   widget.feeCategoryData.items?.length ?? 0,
                   (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _onChoose(index, !listSelected[index], context);
-                        });
-                      },
-                      child: CardFeeDetail(
-                        feeItem:
-                            widget.feeCategoryData.items?[index] ?? FeeItem(),
-                        isSelected: listSelected.length > index
-                            ? listSelected[index]
-                            : false,
-                      ),
-                    );
+                    if (widget.feeCategoryData.items?[index].disable == 0) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _onChoose(index, !listSelected[index], context);
+                          });
+                        },
+                        child: CardFeeDetail(
+                          feeItem:
+                              widget.feeCategoryData.items?[index] ?? FeeItem(),
+                          isSelected: listSelected.length > index
+                              ? listSelected[index]
+                              : false,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
                   },
                 ),
               ),

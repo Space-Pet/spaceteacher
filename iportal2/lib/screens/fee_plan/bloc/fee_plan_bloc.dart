@@ -24,6 +24,8 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
     on<RemoveFeeFromListVerify>(_onRemoveFeeFromListVerify);
     on<GetListLearnYear>(_onGetLearnYears);
     on<UpdateCurrentYear>(_onUpdateCurrentYear);
+    on<UpdateCurrentTabIndex>(_onUpdateTabIndexEvent);
+    on<UpdateStatusFeePlan>(_onUpdateStatusFeePlan);
   }
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
@@ -45,6 +47,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       emit(state.copyWith(
         studentFeesData: studentFeesData,
         status: FeePlanStatus.loaded,
+        listVerify: [],
       ));
     } catch (e) {
       Log.e('Error: $e');
@@ -57,7 +60,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
 
   Future<void> _onGetFeeRequested(
       GetFeeRequested event, Emitter<FeePlanState> emit) async {
-    emit(state.copyWith(status: FeePlanStatus.loading));
+    emit(state.copyWith(historyStatus: FeePlanHistoryStatus.loading));
     final user = currentUserBloc.state.activeChild;
     try {
       final studentFeesRequestedData =
@@ -72,7 +75,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
 
       emit(state.copyWith(
         studentFeesRequestedData: studentFeesRequestedData,
-        status: FeePlanStatus.loaded,
+        historyStatus: FeePlanHistoryStatus.loaded,
       ));
     } catch (e) {
       Log.e('Error: $e');
@@ -88,7 +91,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
     emit(state.copyWith(status: FeePlanStatus.loading));
 
     final user = currentUserBloc.state.activeChild;
-
+    emit(state.copyWith(sendRequestStatus: FeePlanSendRequestStatus.loading));
     try {
       final studentFeesData = await appFetchApiRepo.postFeeRequested(
         schoolBrand: user.school_brand,
@@ -101,9 +104,8 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       );
 
       emit(state.copyWith(
-        studentFeesData: studentFeesData,
-        status: FeePlanStatus.loaded,
-      ));
+          studentFeesData: studentFeesData,
+          sendRequestStatus: FeePlanSendRequestStatus.loaded));
     } catch (e) {
       Log.e('Error: $e');
       emit(state.copyWith(
@@ -162,5 +164,21 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
         learnYearsStatus: FeePlanLearnYearsStatus.updated,
       ),
     );
+  }
+
+  Future<void> _onUpdateTabIndexEvent(
+      UpdateCurrentTabIndex event, Emitter<FeePlanState> emit) async {
+    emit(state.copyWith(currentTabIndex: event.currentTabIndex));
+    Log.d(state.currentTabIndex);
+  }
+
+  Future<void> _onUpdateStatusFeePlan(
+      UpdateStatusFeePlan event, Emitter<FeePlanState> emit) async {
+    emit(state.copyWith(
+      status: event.status,
+      sendRequestStatus: event.sendRequestStatus,
+      historyStatus: event.historyStatus,
+      learnYearsStatus: event.learnYearsStatus,
+    ));
   }
 }

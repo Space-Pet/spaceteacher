@@ -10,9 +10,30 @@ import 'package:iportal2/screens/fee_plan/widget/tab_bar_tariff.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_learn_year/fee_plan_learn_year_button.dart';
 import 'package:repository/repository.dart';
 
-class FeePlanScreen extends StatelessWidget {
+class FeePlanScreen extends StatefulWidget {
   const FeePlanScreen({super.key});
   static const routeName = '/fee-plan';
+
+  @override
+  State<FeePlanScreen> createState() => _FeePlanScreenState();
+}
+
+class _FeePlanScreenState extends State<FeePlanScreen>
+    with SingleTickerProviderStateMixin {
+  int initialIndex = 0;
+
+  TabController? tabController;
+
+  @override
+  void initState() {
+    tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: initialIndex,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -30,36 +51,49 @@ class FeePlanScreen extends StatelessWidget {
         ..add(
           const GetFeeRequested(),
         ),
-      child: BackGroundContainer(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ScreensAppBar(
-              'Chọn biểu phí',
-              canGoBack: true,
-              onBack: () {
-                context.pop();
-              },
-              actionWidget: const FeePlanLearnYearButton(),
-            ),
-            Flexible(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+      child: BlocConsumer<FeePlanBloc, FeePlanState>(
+        listener: (context, state) {
+          if (state.currentTabIndex == 1) {
+            tabController?.animateTo(1);
+          }
+        },
+        builder: (context, state) {
+          return BackGroundContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScreensAppBar(
+                  'Chọn biểu phí',
+                  canGoBack: true,
+                  onBack: () {
+                    context.pop();
+                  },
+                  actionWidget: const FeePlanLearnYearButton(),
+                ),
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: TabBarTariff(
+                      tabController: tabController,
+                      tabTitles: const [
+                        'Danh sách biẻu phí',
+                        'Lịch sử biểu phí'
+                      ],
+                    ),
                   ),
-                ),
-                child: const TabBarTariff(
-                  tabTitles: ['Tất cả', 'Đã yêu cầu'],
-                ),
-              ),
-            )
-          ],
-        ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

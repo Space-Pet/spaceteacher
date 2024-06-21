@@ -5,16 +5,18 @@ import 'package:iportal2/screens/fee_plan/widget/tab_bar_view_requested.dart';
 
 class TabBarTariff extends StatefulWidget {
   final List<String> tabTitles;
-
+  final TabController? tabController;
   const TabBarTariff({
     super.key,
     required this.tabTitles,
+    required this.tabController,
   });
   @override
   State<TabBarTariff> createState() => _TabBaTariff();
 }
 
-class _TabBaTariff extends State<TabBarTariff> {
+class _TabBaTariff extends State<TabBarTariff>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -22,57 +24,56 @@ class _TabBaTariff extends State<TabBarTariff> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: widget.tabTitles.length,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: AppColors.gray100,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: TabBar(
-                  labelColor: AppColors.redMenu,
-                  unselectedLabelColor: AppColors.gray400,
-                  dividerColor: Colors.transparent,
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  unselectedLabelStyle: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
-                  indicator: BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.circular(100),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, 0.10),
-                        offset: Offset(0.0, 5.0),
-                        blurRadius: 20.0,
-                      ),
-                    ],
-                  ),
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
-                  tabs: _buildTabs(),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 12),
+          child: Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: AppColors.gray100,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: TabBar(
+                controller: widget.tabController,
+                labelColor: AppColors.redMenu,
+                unselectedLabelColor: AppColors.gray400,
+                dividerColor: Colors.transparent,
+                labelStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
+                unselectedLabelStyle:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                indicator: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(100),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.10),
+                      offset: Offset(0.0, 5.0),
+                      blurRadius: 20.0,
+                    ),
+                  ],
+                ),
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
+                tabs: _buildTabs(),
               ),
             ),
           ),
-          const Expanded(
-            child: TabBarView(
-              children: [
-                TabBarViewAll(),
-                TabBarViewRequested(),
-              ],
-            ),
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: widget.tabController,
+            children: const [
+              TabBarViewAll(),
+              TabBarViewRequested(),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

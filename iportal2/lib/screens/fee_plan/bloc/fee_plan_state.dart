@@ -7,9 +7,12 @@ class FeePlanState extends Equatable {
   final StudentFeesResponse? studentFeesRequestedData;
   final LearnYearPayment? currentYearState;
   final FeePlanLearnYearsStatus? learnYearsStatus;
+  final FeePlanSendRequestStatus? sendRequestStatus;
+  final FeePlanHistoryStatus? historyStatus;
 
   final List<FeeItem>? listVerify;
   final List<LearnYearPayment>? learnYears;
+  final int? currentTabIndex;
 
   const FeePlanState({
     this.errorsText,
@@ -20,6 +23,9 @@ class FeePlanState extends Equatable {
     this.learnYears,
     this.currentYearState,
     this.learnYearsStatus = FeePlanLearnYearsStatus.initial,
+    this.sendRequestStatus = FeePlanSendRequestStatus.initial,
+    this.currentTabIndex = 0,
+    this.historyStatus = FeePlanHistoryStatus.initial,
   });
 
   @override
@@ -32,6 +38,9 @@ class FeePlanState extends Equatable {
         learnYears,
         currentYearState,
         learnYearsStatus,
+        sendRequestStatus,
+        currentTabIndex,
+        historyStatus,
       ];
 
   FeePlanState copyWith({
@@ -43,6 +52,9 @@ class FeePlanState extends Equatable {
     List<LearnYearPayment>? learnYears,
     LearnYearPayment? currentYearState,
     FeePlanLearnYearsStatus? learnYearsStatus,
+    FeePlanSendRequestStatus? sendRequestStatus,
+    int? currentTabIndex,
+    FeePlanHistoryStatus? historyStatus,
   }) {
     return FeePlanState(
       errorsText: errorsText ?? this.errorsText,
@@ -54,6 +66,9 @@ class FeePlanState extends Equatable {
       learnYears: learnYears ?? this.learnYears,
       currentYearState: currentYearState ?? this.currentYearState,
       learnYearsStatus: learnYearsStatus ?? this.learnYearsStatus,
+      sendRequestStatus: sendRequestStatus ?? this.sendRequestStatus,
+      currentTabIndex: currentTabIndex ?? this.currentTabIndex,
+      historyStatus: historyStatus ?? this.historyStatus,
     );
   }
 }

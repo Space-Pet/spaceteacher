@@ -53,3 +53,31 @@ class UpdateCurrentYear extends FeePlanEvent {
 
   const UpdateCurrentYear({required this.currentYearState});
 }
+
+class UpdateCurrentTabIndex extends FeePlanEvent {
+  final int currentTabIndex;
+
+  const UpdateCurrentTabIndex({required this.currentTabIndex});
+}
+
+class UpdateStatusFeePlan extends FeePlanEvent {
+  final FeePlanStatus status;
+  final FeePlanSendRequestStatus sendRequestStatus;
+  final FeePlanHistoryStatus historyStatus;
+  final FeePlanLearnYearsStatus learnYearsStatus;
+
+  const UpdateStatusFeePlan({
+    this.status = FeePlanStatus.initial,
+    this.sendRequestStatus = FeePlanSendRequestStatus.initial,
+    this.historyStatus = FeePlanHistoryStatus.initial,
+    this.learnYearsStatus = FeePlanLearnYearsStatus.initial,
+  });
+  @override
+  // TODO: implement props
+  List<Object> get props => [
+        status,
+        sendRequestStatus,
+        historyStatus,
+        learnYearsStatus,
+      ];
+}

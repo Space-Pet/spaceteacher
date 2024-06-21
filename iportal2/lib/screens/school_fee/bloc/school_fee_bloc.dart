@@ -23,6 +23,7 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
     add(const GetPaymentGateways());
 
     on<OpenPaymentGateway>(_openPaymentGateway);
+    on<GetSchoolFeePaymentPreview>(_onGetSchoolFeePaymentPreview);
     on<GetSchoolFeePayWithBalancePreview>(
       _onGetPreviewSchoolFeePayWithBalance,
     );
@@ -241,5 +242,30 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
           currentYearState: event.currentYear,
           schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.updated),
     );
+  }
+
+  Future<void> _onGetSchoolFeePaymentPreview(
+      GetSchoolFeePaymentPreview event, Emitter<SchoolFeeState> emit) async {
+    emit(
+        state.copyWith(schoolFeePreviewStatus: SchoolFeePreviewStatus.loading));
+    try {
+      final res = await appFetchApiRepo.getSchoolFeePaymentPreview(
+        pupilId: currentUserBloc.state.activeChild.pupil_id,
+        totalMoneyPayment: event.totalMoneyPayment,
+        learnYear: event.learnYear ??
+            currentUserBloc.state.activeChild.learn_year ??
+            '',
+      );
+      emit(state.copyWith(
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.loaded,
+        schoolFeePaymentPreview: res,
+      ));
+    } catch (e) {
+      Log.e("SchoolFeeBloc --> _onGetSchoolFeePaymentPreview: $e");
+      emit(state.copyWith(
+        schoolFeePreviewStatus: SchoolFeePreviewStatus.error,
+        error: e.toString(),
+      ));
+    }
   }
 }

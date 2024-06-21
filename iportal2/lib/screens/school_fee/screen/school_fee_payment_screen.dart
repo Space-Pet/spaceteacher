@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
+import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/screens/fee_plan/widget/w_field_row_card_detail.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_bloc.dart';
 import 'package:iportal2/screens/school_fee/bloc/school_fee_status.dart';
@@ -30,8 +31,18 @@ class SchoolFeePaymentScreen extends StatefulWidget {
 class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
   bool _btnTypePayment1 = true;
   bool _btnTypePayment2 = false;
+  bool isTitleBtnChange = false;
+  String titleButton = "Thanh toán";
   final TextEditingController _textController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  SchoolFeePaymentPreview _schoolFeePaymentPreview = SchoolFeePaymentPreview();
+
+  @override
+  void initState() {
+    _schoolFeePaymentPreview = widget.schoolFeePaymentPreview;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +65,17 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                 }
               },
             );
+          } else if (state.schoolFeePreviewStatus ==
+              SchoolFeePreviewStatus.loaded) {
+            LoadingDialog.hide(context);
+            _schoolFeePaymentPreview =
+                state.schoolFeePaymentPreview ?? SchoolFeePaymentPreview();
+            _btnTypePayment1 = true;
+            _btnTypePayment2 = false;
+            isTitleBtnChange = false;
+          } else if (state.schoolFeePreviewStatus ==
+              SchoolFeePreviewStatus.loading) {
+            LoadingDialog.show(context);
           }
         },
         builder: (context, state) {
@@ -70,26 +92,24 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                         children: [
                           _buildFieldRowCardDetail(
                             title: "Họ và tên học sinh",
-                            value: widget
-                                    .schoolFeePaymentPreview.pupil?.fullName ??
-                                "",
+                            value:
+                                _schoolFeePaymentPreview.pupil?.fullName ?? "",
                           ),
                           _buildFieldRowCardDetail(
                             title: "Số tiền thu",
                             value: NumberFormatUtils.displayMoney(
                                   double.parse(
-                                      '${widget.schoolFeePaymentPreview.tongPhaiNop ?? 0}'),
+                                      '${_schoolFeePaymentPreview.tongPhaiNop ?? 0}'),
                                 ) ??
                                 "",
                           ),
                           _buildFieldRowCardDetail(
                             title: "Ngày thu",
-                            value:
-                                widget.schoolFeePaymentPreview.ngayThanhToan ??
-                                    DateTime.now().ddMMyyyySlash,
+                            value: _schoolFeePaymentPreview.ngayThanhToan ??
+                                DateTime.now().ddMMyyyySlash,
                           ),
                           _buildCardInfoPayment(
-                              widget.schoolFeePaymentPreview.items ?? []),
+                              _schoolFeePaymentPreview.items ?? []),
                         ],
                       ),
                     ),
@@ -216,54 +236,57 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
 
   Widget _buildBottomBar(
       BuildContext context, List<PaymentGateway> paymentGateways) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            widget.isPayWithBalance == false
-                ? "Chọn số tiền cần thanh toán"
-                : "${widget.schoolFeePaymentPreview.hinhThucThanhToan}",
-            style: AppTextStyles.bold14(),
-          ),
-          const SizedBox(height: 10),
-          if (widget.isPayWithBalance == false)
-            Row(
-              children: [
-                _buildPaymentButton(
-                  context,
-                  label: "Nộp toàn bộ",
-                  isSelected: _btnTypePayment1,
-                  onPressed: () => _selectPaymentType(1),
-                ),
-                const SizedBox(width: 5),
-                _buildPaymentButton(
-                  context,
-                  label: "Nộp một phần",
-                  isSelected: _btnTypePayment2,
-                  onPressed: () => _selectPaymentType(2),
-                ),
-              ],
+    return BlocProvider.value(
+      value: context.read<SchoolFeeBloc>(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.isPayWithBalance == false
+                  ? "Chọn số tiền cần thanh toán"
+                  : "${_schoolFeePaymentPreview.hinhThucThanhToan}",
+              style: AppTextStyles.bold14(),
             ),
-          const SizedBox(height: 10),
-          _buildPaymentAmount(),
-          const SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              _handlePayment(context);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.brand500,
-              elevation: 0,
+            const SizedBox(height: 10),
+            if (widget.isPayWithBalance == false)
+              Row(
+                children: [
+                  _buildPaymentButton(
+                    context,
+                    label: "Nộp toàn bộ",
+                    isSelected: _btnTypePayment1,
+                    onPressed: () => _selectPaymentType(1),
+                  ),
+                  const SizedBox(width: 5),
+                  _buildPaymentButton(
+                    context,
+                    label: "Nộp một phần",
+                    isSelected: _btnTypePayment2,
+                    onPressed: () => _selectPaymentType(2),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 10),
+            _buildPaymentAmount(),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                _handlePayment(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.brand500,
+                elevation: 0,
+              ),
+              child: Text(
+                isTitleBtnChange == false ? "Thanh toán" : titleButton,
+                style: AppTextStyles.bold14(color: AppColors.white),
+              ),
             ),
-            child: Text(
-              "Thanh toán",
-              style: AppTextStyles.bold14(color: AppColors.white),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -298,6 +321,11 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     setState(() {
       _btnTypePayment1 = type == 1;
       _btnTypePayment2 = type == 2;
+      if (type == 2) {
+        isTitleBtnChange = true;
+      } else if (type == 1) {
+        isTitleBtnChange = false;
+      }
     });
   }
 
@@ -319,7 +347,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
             Text("Số tiền cần thanh toán: ", style: AppTextStyles.normal14()),
             Text(
               "${NumberFormatUtils.displayMoney(
-                double.parse('${widget.schoolFeePaymentPreview.tongThanhToan}'),
+                double.parse('${_schoolFeePaymentPreview.tongThanhToan}'),
               )}",
               style: AppTextStyles.bold14(),
             ),
@@ -336,8 +364,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
               Text("Tổng:", style: AppTextStyles.normal14()),
               Text(
                 "${NumberFormatUtils.displayMoney(
-                  double.parse(
-                      '${widget.schoolFeePaymentPreview.tongThanhToan}'),
+                  double.parse('${_schoolFeePaymentPreview.tongThanhToan}'),
                 )}",
                 style: AppTextStyles.bold14(),
               ),
@@ -369,6 +396,12 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                   borderSide: const BorderSide(color: AppColors.brand600),
                 ),
               ),
+              onChanged: (value) {
+                setState(() {
+                  titleButton = _handleTitleAndFuncButtonPayment(
+                      _schoolFeePaymentPreview.tongThanhToan ?? 0, value);
+                });
+              },
             ),
           ),
         ],
@@ -397,19 +430,24 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
     if (widget.isPayWithBalance == true) {
       context.read<SchoolFeeBloc>().add(
             PayWithBalance(
-                totalMoneyPayment:
-                    widget.schoolFeePaymentPreview.tongThanhToan ?? 0),
+                totalMoneyPayment: _schoolFeePaymentPreview.tongThanhToan ?? 0),
           );
     } else {
       if (_btnTypePayment2 == true) {
         if (_formKey.currentState?.validate() ?? false) {
           final value = _textController.text.replaceAll('.', '');
-          _showMethodPaymentScreen(context, int.parse(value));
+          // _showMethodPaymentScreen(context, int.parse(value));
+
+          context.read<SchoolFeeBloc>().add(
+                GetSchoolFeePaymentPreview(totalMoneyPayment: int.parse(value)),
+              );
+          isTitleBtnChange = false;
+          setState(() {});
         }
       } else {
         _showMethodPaymentScreen(
           context,
-          widget.schoolFeePaymentPreview.tongThanhToan ?? 0,
+          _schoolFeePaymentPreview.tongThanhToan ?? 0,
         );
       }
     }
@@ -426,5 +464,28 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
         ),
       ),
     );
+  }
+
+  String _handleTitleAndFuncButtonPayment(int totalMoney, String valueInput) {
+    // Chuyển đổi giá trị nhập từ người dùng thành số nguyên
+    final int valueInputParse =
+        int.tryParse(valueInput.replaceAll('.', '')) ?? 0;
+
+    // Kiểm tra điều kiện isTitleBtnChange trước khi xử lý logic
+    if (isTitleBtnChange == true) {
+      // Nếu giá trị nhập không rỗng
+      if (valueInput.isNotEmpty) {
+        // So sánh giá trị nhập với tổng số tiền
+        if (valueInputParse == totalMoney) {
+          return "Thanh toán";
+        } else if (valueInputParse < totalMoney) {
+          return "Xem lại thông tin thanh toán";
+        }
+      }
+    } else {
+      // Giá trị mặc định của nút
+      return "Thanh toán";
+    }
+    return "Thanh toán";
   }
 }
