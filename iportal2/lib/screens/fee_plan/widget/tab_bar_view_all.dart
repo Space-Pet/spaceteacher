@@ -70,74 +70,80 @@ class _TabBarViewAll extends State<TabBarViewAll> {
               child: CircularProgressIndicator(),
             );
           } else if (state.status == FeePlanStatus.loaded) {
-            return Stack(
-              children: [
-                CustomRefresh(
-                  onRefresh: () async {
-                    context.read<FeePlanBloc>().add(
-                          GetListFee(
-                            learnYear: state.currentYearState?.learnYear,
-                          ),
-                        );
-                  },
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        if (!isNullOrEmpty(it?.sp1_001))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Học phí",
-                              feeCategoryData:
-                                  it?.sp1_001?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_002))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Phí bán trú",
-                              feeCategoryData:
-                                  it?.sp1_002?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_003))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Phí nội trú",
-                              feeCategoryData:
-                                  it?.sp1_003?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_004))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Dịch vụ giáo dục",
-                              feeCategoryData:
-                                  it?.sp1_004?.data ?? FeeCategoryData()),
-                        if (!isNullOrEmpty(it?.sp1_005))
-                          CardTopicDetailFeePlan(
-                              titleTopic: "Lệ phí",
-                              feeCategoryData:
-                                  it?.sp1_005?.data ?? FeeCategoryData()),
-                      ],
+            if (isNullOrEmpty(state.studentFeesRequestedData?.data)) {
+              return const Center(
+                child: Text('Không có dữ liệu'),
+              );
+            } else {
+              return Stack(
+                children: [
+                  CustomRefresh(
+                    onRefresh: () async {
+                      context.read<FeePlanBloc>().add(
+                            GetListFee(
+                              learnYear: state.currentYearState?.learnYear,
+                            ),
+                          );
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          if (!isNullOrEmpty(it?.sp1_001))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Học phí",
+                                feeCategoryData:
+                                    it?.sp1_001?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_002))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Phí bán trú",
+                                feeCategoryData:
+                                    it?.sp1_002?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_003))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Phí nội trú",
+                                feeCategoryData:
+                                    it?.sp1_003?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_004))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Dịch vụ giáo dục",
+                                feeCategoryData:
+                                    it?.sp1_004?.data ?? FeeCategoryData()),
+                          if (!isNullOrEmpty(it?.sp1_005))
+                            CardTopicDetailFeePlan(
+                                titleTopic: "Lệ phí",
+                                feeCategoryData:
+                                    it?.sp1_005?.data ?? FeeCategoryData()),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SizedBox(
-                    height: 44,
-                    child: RoundedButton(
-                      onTap: () {
-                        context.read<FeePlanBloc>().add(
-                              SendFeeRequested(
-                                listItemFee: state.listVerify ?? [],
-                              ),
-                            );
-                      },
-                      borderRadius: 70,
-                      padding: EdgeInsets.zero,
-                      buttonColor: AppColors.red90001,
-                      child: Text(
-                        'Xác nhận biểu phí',
-                        style: AppTextStyles.semiBold16(
-                          color: AppColors.white,
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      height: 44,
+                      child: RoundedButton(
+                        onTap: () {
+                          context.read<FeePlanBloc>().add(
+                                SendFeeRequested(
+                                  listItemFee: state.listVerify ?? [],
+                                ),
+                              );
+                        },
+                        borderRadius: 70,
+                        padding: EdgeInsets.zero,
+                        buttonColor: AppColors.red90001,
+                        child: Text(
+                          'Xác nhận biểu phí',
+                          style: AppTextStyles.semiBold16(
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
+                ],
+              );
+            }
           } else if (state.status == FeePlanStatus.error) {
             return Center(
               child: Text(state.errorsText ?? ""),
