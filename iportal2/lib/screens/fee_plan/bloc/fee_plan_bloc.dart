@@ -104,7 +104,7 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
       );
 
       emit(state.copyWith(
-          studentFeesData: studentFeesData,
+          sendRequestStatusText: studentFeesData,
           sendRequestStatus: FeePlanSendRequestStatus.loaded));
     } catch (e) {
       Log.e('Error: $e');

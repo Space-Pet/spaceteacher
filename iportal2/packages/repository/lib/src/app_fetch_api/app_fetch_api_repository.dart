@@ -491,7 +491,7 @@ class AppFetchApiRepository {
         learnYear: learnYear,
       );
 
-  Future<StudentFeesResponse> postFeeRequested({
+  Future<String> postFeeRequested({
     required String schoolBrand,
     required int schoolId,
     required int pupilId,
