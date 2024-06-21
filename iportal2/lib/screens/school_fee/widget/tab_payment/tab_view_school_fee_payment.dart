@@ -55,6 +55,10 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                   context.read<SchoolFeeBloc>().add(
                         const UpdateTabIndexEvent(1),
                       );
+                  context.read<SchoolFeeBloc>().add(
+                        FetchSchoolFeeHistory(
+                            learnYear: state.currentYearState?.learnYear),
+                      );
                 }
               },
             );
@@ -73,37 +77,39 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
           }
         },
         builder: (context, state) {
+          if (state.schoolFeeStatus == SchoolFeeStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return Scaffold(
             backgroundColor: AppColors.white,
-            body: Skeletonizer(
-              enabled: state.schoolFeeStatus == SchoolFeeStatus.loading,
-              child: CustomRefresh(
-                onRefresh: () async {
-                  context.read<SchoolFeeBloc>().add(
-                        FetchSchoolFee(
-                            learnYear: state.currentYearState?.learnYear),
-                      );
-                },
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isShowDetailList[index] = !isShowDetailList[index];
-                        });
-                      },
-                      child: CardDetailSchoolFeePayment(
-                        isShowDetail: isShowDetailList.length > index
-                            ? isShowDetailList[index]
-                            : false,
-                        item: state.schoolFee?.schoolFeeItems?[index] ??
-                            SchoolFeeItem(),
-                      ),
+            body: CustomRefresh(
+              onRefresh: () async {
+                context.read<SchoolFeeBloc>().add(
+                      FetchSchoolFee(
+                          learnYear: state.currentYearState?.learnYear),
                     );
-                  },
-                  itemCount: state.schoolFee?.schoolFeeItems?.length ?? 0,
-                ),
+              },
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isShowDetailList[index] = !isShowDetailList[index];
+                      });
+                    },
+                    child: CardDetailSchoolFeePayment(
+                      isShowDetail: isShowDetailList.length > index
+                          ? isShowDetailList[index]
+                          : false,
+                      item: state.schoolFee?.schoolFeeItems?[index] ??
+                          SchoolFeeItem(),
+                    ),
+                  );
+                },
+                itemCount: state.schoolFee?.schoolFeeItems?.length ?? 0,
               ),
             ),
             bottomNavigationBar: _buildBottomNavigationBar(context, state),

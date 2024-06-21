@@ -99,7 +99,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
                             title: "Số tiền thu",
                             value: NumberFormatUtils.displayMoney(
                                   double.parse(
-                                      '${_schoolFeePaymentPreview.tongPhaiNop ?? 0}'),
+                                      '${_schoolFeePaymentPreview.tongThanhToan ?? 0}'),
                                 ) ??
                                 "",
                           ),

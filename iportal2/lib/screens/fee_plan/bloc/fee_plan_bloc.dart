@@ -44,12 +44,42 @@ class FeePlanBloc extends Bloc<FeePlanEvent, FeePlanState> {
             currentUserBloc.state.activeChild.learn_year ??
             "",
       );
-      emit(state.copyWith(
-        studentFeesData: studentFeesData,
-        status: FeePlanStatus.loaded,
-        listVerify: [],
-        sendRequestStatusText: "",
-      ));
+
+      bool areAllDisabledOrEmpty(
+          FeeCategory? category, List<FeeItem>? dataList) {
+        return (category == null ||
+            dataList == null ||
+            dataList.isEmpty ||
+            dataList.every((e) => e.disable == 1));
+      }
+
+      final sp1Data = studentFeesData.data?.sp1_001?.data?.items ?? [];
+      final sp2Data = studentFeesData.data?.sp1_002?.data?.items ?? [];
+      final sp3Data = studentFeesData.data?.sp1_003?.data?.items ?? [];
+      final sp4Data = studentFeesData.data?.sp1_004?.data?.items ?? [];
+      final sp5Data = studentFeesData.data?.sp1_005?.data?.items ?? [];
+
+      if (areAllDisabledOrEmpty(studentFeesData.data?.sp1_001, sp1Data) &&
+          areAllDisabledOrEmpty(studentFeesData.data?.sp1_002, sp2Data) &&
+          areAllDisabledOrEmpty(studentFeesData.data?.sp1_003, sp3Data) &&
+          areAllDisabledOrEmpty(studentFeesData.data?.sp1_004, sp4Data) &&
+          areAllDisabledOrEmpty(studentFeesData.data?.sp1_005, sp5Data)) {
+        emit(state.copyWith(
+          studentFeesData: studentFeesData,
+          status: FeePlanStatus.loaded,
+          listVerify: [],
+          sendRequestStatusText: "",
+          isListEmpty: true,
+        ));
+      } else {
+        emit(state.copyWith(
+          studentFeesData: studentFeesData,
+          status: FeePlanStatus.loaded,
+          listVerify: [],
+          sendRequestStatusText: "",
+          isListEmpty: false,
+        ));
+      }
     } catch (e) {
       Log.e('Error: $e');
       emit(state.copyWith(

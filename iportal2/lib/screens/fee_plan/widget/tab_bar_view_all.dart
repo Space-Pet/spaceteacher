@@ -70,7 +70,8 @@ class _TabBarViewAll extends State<TabBarViewAll> {
               child: CircularProgressIndicator(),
             );
           } else if (state.status == FeePlanStatus.loaded) {
-            if (isNullOrEmpty(state.studentFeesRequestedData?.data)) {
+            if (isNullOrEmpty(state.studentFeesRequestedData?.data) ||
+                state.isListEmpty == true) {
               return const Center(
                 child: Text('Không có dữ liệu'),
               );

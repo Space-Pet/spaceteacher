@@ -113,8 +113,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     try {
       // [TEST] - clear before commit
-      final userName = kDebugMode ? '02031230009' : state.userName;
-      final password = kDebugMode ? 'apel1z' : state.password;
+      final userName = kDebugMode ? '0563230001' : state.userName;
+      final password = kDebugMode ? 'ab6ujo' : state.password;
       final deviceInfo = state.deviceInfo;
 
       emit(state.copyWith(status: LoginStatus.loading));

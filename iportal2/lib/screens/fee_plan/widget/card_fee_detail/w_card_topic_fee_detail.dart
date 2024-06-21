@@ -53,6 +53,7 @@ class _CardTopicDetailFeePlanState extends State<CardTopicDetailFeePlan> {
           }
         },
         builder: (context, state) {
+          
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
