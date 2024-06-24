@@ -72,7 +72,7 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
               Padding(
                 padding: const EdgeInsets.only(left: 4),
                 child: Text(
-                  '${widget.title} (${_filteredPhoneBookTeacher == null ? widget.phoneBookStudent?.length : widget.phoneBookStudent?.length})',
+                  '${widget.title} (${_filteredPhoneBookTeacher == null ? widget.phoneBookStudent?.length : widget.phoneBookTeacher?.length})',
                   style: AppTextStyles.normal16(
                     color: AppColors.brand600,
                     fontWeight: FontWeight.w600,

@@ -19,3 +19,8 @@ class BackGroundUpdatedState extends CurrentUserEvent {
   final SchoolBrand bg;
 }
 
+class CurrentUserNotify extends CurrentUserEvent {
+  CurrentUserNotify(this.pushNotify);
+
+  final int pushNotify;
+}

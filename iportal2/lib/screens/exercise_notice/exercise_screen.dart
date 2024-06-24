@@ -12,6 +12,7 @@ import 'package:iportal2/components/dropdown/dropdown_subject.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/exercise_notice/bloc/exercise_bloc.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
+import 'package:iportal2/screens/score/widgets/score_filter.dart';
 import 'package:repository/repository.dart';
 
 class ExerciseScreen extends StatelessWidget {
@@ -78,42 +79,20 @@ class ExerciseScreenView extends StatelessWidget {
                               .add(ExerciseSelectDate(datePicked: date));
                         },
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 12),
                       if (!isEmpty)
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/exercise.svg',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Chọn môn',
-                                  style: AppTextStyles.normal14(),
-                                )
-                              ],
-                            ),
-                            const SizedBox(width: 40),
-                            Expanded(
-                              child: DropdownSelectSubject(
-                                hint: 'Tất cả các môn',
-                                optionList: [
-                                  'Tất cả các môn',
-                                  ...listSubject,
-                                ],
-                                selectedOption: state.selectedSubject,
-                                onUpdateOption: (value) {
-                                  exerciseBloc.add(
-                                    ExerciseSelectSubject(
-                                        selectedSubject: value),
-                                  );
-                                },
-                              ),
-                            ),
+                        FilterItem(
+                          title: 'Chọn môn học',
+                          options: [
+                            'Tất cả môn',
+                            ...listSubject,
                           ],
+                          selectedOption: state.selectedSubject,
+                          onUpdateOption: (value) {
+                            exerciseBloc.add(
+                              ExerciseSelectSubject(selectedSubject: value),
+                            );
+                          },
                         ),
                       const SizedBox(height: 12),
                       Expanded(

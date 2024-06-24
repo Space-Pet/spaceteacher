@@ -82,7 +82,7 @@ class _PinFeaturesState extends State<PinFeatures> {
     if (feature.category == FeatureCategory.all) {
       showFlexibleBottomSheet(
         minHeight: 0,
-        initHeight: widget.isKinderGarten ? 0.9 : 0.95,
+        initHeight: widget.isKinderGarten ? 0.8 : 0.8,
         maxHeight: 1,
         context: context,
         builder: (

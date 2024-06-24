@@ -68,9 +68,9 @@ class TimeSelectBoxStartState extends State<TimeSelectBoxStart> {
                     setState(() {
                       selectedTime = TimeOfDay.fromDateTime(newDateTime);
                       dataTime =
-                          '${selectedTime!.hourOfPeriod}:${selectedTime!.minute} ${selectedTime!.period == DayPeriod.am ? 'AM' : 'PM'}';
+                          '${DateFormat('hh').format(newDateTime)}:${DateFormat('mm').format(newDateTime)} ${selectedTime!.period == DayPeriod.am ? 'AM' : 'PM'}';
                     });
-                      widget.onTimeChanged(newDateTime);
+                    widget.onTimeChanged(newDateTime);
                   },
                 ),
               ),
@@ -92,9 +92,12 @@ class TimeSelectBoxStartState extends State<TimeSelectBoxStart> {
   @override
   void initState() {
     super.initState();
+    final now = DateTime.now();
+    final dateTime = DateTime(
+        now.year, now.month, now.day, widget.time.hour, widget.time.minute);
+    final formatDate = DateFormat('yyyy-MM-dd'); // or whatever format you need
     datePicked = formatDate.format(now);
-    dataTime =
-        '${widget.time.hourOfPeriod}:${widget.time.minute} ${widget.time.period == DayPeriod.am ? 'AM' : 'PM'}';
+    dataTime = DateFormat('hh:mm a').format(dateTime);
   }
 
   @override

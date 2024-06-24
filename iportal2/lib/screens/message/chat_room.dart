@@ -1,33 +1,36 @@
 // ignore_for_file: unused_field
 import 'dart:io';
+
 import 'package:core/core.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
-import 'package:iportal2/components/app_bar/app_bar.dart';
-import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/resources/assets.gen.dart';
-import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 import 'package:iportal2/screens/message/widgets/list_message_detail.dart';
 
 class ChatRoomScreen extends StatelessWidget {
-  const ChatRoomScreen(
-      {super.key, this.messageChatRoom, this.phoneBookStudent});
-  final Message? messageChatRoom;
-  final PhoneBookStudent? phoneBookStudent;
+  const ChatRoomScreen({
+    super.key,
+    required this.messageChatRoom,
+  });
+
+  final Message messageChatRoom;
   static const String routeName = '/chatMessages';
 
   @override
   Widget build(BuildContext context) {
     final messageBloc = context.read<MessageBloc>();
-    final conversationId = messageChatRoom?.conversationId?.toString() ?? '';
+    final conversationId = messageChatRoom.conversationId.toString();
 
-    if (!isNullOrEmpty(conversationId)) {
+    if (!isNullOrEmpty(conversationId) && conversationId != '0') {
       messageBloc
-        ..add(GetMessageDetail(conversationId: conversationId))
+        ..add(GetMessageDetail(
+          conversationId: conversationId,
+          showLoading: true,
+        ))
         ..add(GetPinMessage());
     }
 
@@ -38,6 +41,7 @@ class ChatRoomScreen extends StatelessWidget {
             messageBloc.add(GetMessageDetailRestart(
               conversationId: state.conversationID.toString(),
             ));
+
           case MessageStatus.successDelete:
             messageBloc
                 .add(GetMessageDetailRestart(conversationId: conversationId));
@@ -45,15 +49,15 @@ class ChatRoomScreen extends StatelessWidget {
           case MessageStatus.successPostPinMessage:
           case MessageStatus.successDeletePinMessage:
             messageBloc.add(GetPinMessage());
-            LoadingDialog.hide(context);
+            // LoadingDialog.hide(context);
             break;
           case MessageStatus.loadingGetPinMessage:
-            LoadingDialog.show(context);
+          // LoadingDialog.show(context);
           case MessageStatus.loadingDeletePinMessage:
-            LoadingDialog.show(context);
+            // LoadingDialog.show(context);
             break;
           case MessageStatus.successGetPinMessage:
-            LoadingDialog.hide(context);
+            // LoadingDialog.hide(context);
             break;
 
           default:
@@ -62,16 +66,14 @@ class ChatRoomScreen extends StatelessWidget {
       },
       child: ChatRoomView(
         messageChatRoom: messageChatRoom,
-        phoneBookStudent: phoneBookStudent,
       ),
     );
   }
 }
 
 class ChatRoomView extends StatefulWidget {
-  const ChatRoomView({super.key, this.messageChatRoom, this.phoneBookStudent});
-  final Message? messageChatRoom;
-  final PhoneBookStudent? phoneBookStudent;
+  const ChatRoomView({super.key, required this.messageChatRoom});
+  final Message messageChatRoom;
 
   @override
   State<ChatRoomView> createState() => _ChatRoomViewState();
@@ -84,9 +86,33 @@ class _ChatRoomViewState extends State<ChatRoomView> {
       RefreshController(initialRefresh: false);
   final Map<int, GlobalKey> _messageKeys = {};
   final TextEditingController textFieldController = TextEditingController();
-  List<MessageDetail> messages = [];
+  final TextEditingController lastTextFieldController = TextEditingController();
   File? _pickedImage, _pickedFile;
   int currentPage = 1;
+  bool isFocus = false;
+
+  final FocusNode _focus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.requestFocus();
+    _focus.addListener(_onFocusChange);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    _focus.unfocus();
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      isFocus = _focus.hasFocus;
+    });
+  }
 
   void _pickImage() async {
     final pickedImageFile =
@@ -144,235 +170,319 @@ class _ChatRoomViewState extends State<ChatRoomView> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (didPop) =>
-          didPop ? context.read<MessageBloc>().add(GetListMessage()) : null,
-      child: BlocListener<MessageBloc, MessageState>(
-        listener: (context, state) {
-          if (state.messageStatus == MessageStatus.success) {
-            messages.addAll(state.messageDetail);
-            currentPage = state.currentPage ?? 1;
-          } else if (state.messageStatus == MessageStatus.successRestart) {
-            messages = state.messageDetail;
-            currentPage = state.currentPage ?? 1;
-            _scrollController.animateTo(0,
-                duration: Durations.long2, curve: Curves.easeInOut);
-          }
-        },
-        child: BlocBuilder<MessageBloc, MessageState>(
-          builder: (context, state) {
-            final isLoading = state.messageStatus == MessageStatus.loading;
-            final profileInfo = state.profileInfo;
-            final messagePin = state.messagePin;
-            final userId = profileInfo?.user_id.toString();
-            final recipient = messages.isNotEmpty && messages.first.id != 0
-                ? (messages.first.recipient.toString() == userId
-                    ? messages.first.userId.toString()
-                    : messages.first.recipient.toString())
-                : widget.phoneBookStudent?.userId.toString() ?? '';
+    return BlocBuilder<CurrentUserBloc, CurrentUserState>(
+      builder: (context, state) {
+        final profileInfo = state.user;
+        final userLoginId = profileInfo.user_id.toString();
+        final message = widget.messageChatRoom;
 
-            return Scaffold(
-              body: BackGroundContainer(
-                child: GestureDetector(
-                  onTap: () => FocusScope.of(context).unfocus(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ScreenAppBar(
-                        title: widget.messageChatRoom?.fullName ?? '',
-                        canGoback: true,
-                        onBack: () => mainNavKey.currentContext!.pop(true),
-                      ),
-                      Flexible(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppColors.white,
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              if (!isNullOrEmpty(messagePin?.content) &&
-                                  messagePin?.conversationId ==
-                                      widget.messageChatRoom?.conversationId)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () =>
-                                        _scrollToPinnedMessage(messages),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.blackTransparent,
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                            color: AppColors.gray200),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.message),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8),
-                                              child: Text(
-                                                  messagePin?.content ?? ''),
+        final recipientId = message.receiverId.toString() == userLoginId
+            ? message.senderId.toString()
+            : message.receiverId.toString();
+
+        return Scaffold(
+          body: Container(
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: BlocListener<MessageBloc, MessageState>(
+                    listener: (context, state) {
+                      if (state.messageStatus == MessageStatus.success) {
+                        currentPage = state.currentPage ?? 1;
+                      } else if (state.messageStatus ==
+                          MessageStatus.successRestart) {
+                        currentPage = state.currentPage ?? 1;
+                        _scrollController.animateTo(0,
+                            duration: Durations.long2, curve: Curves.easeInOut);
+                      }
+                    },
+                    child: BlocBuilder<MessageBloc, MessageState>(
+                      builder: (context, state) {
+                        final messages = state.messageDetail;
+                        final messagePin = state.messagePin;
+                        final userId = profileInfo.user_id;
+                        final isLoading =
+                            state.roomStatus == MessageStatus.loadingMessage;
+
+                        final friendInfo = messages.firstWhere(
+                          (message) => message.userId != userId,
+                          orElse: () => MessageDetail.empty(),
+                        );
+
+                        return InkWell(
+                          onTap: () {
+                            _focus.unfocus();
+                          },
+                          child: AppSkeleton(
+                            isLoading: isLoading,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                ChatRoomAppBar(
+                                  friendInfo: friendInfo,
+                                ),
+
+                                // Pin message
+                                if (!isNullOrEmpty(messagePin?.content) &&
+                                    messagePin?.conversationId ==
+                                        widget.messageChatRoom.conversationId)
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          _scrollToPinnedMessage(messages),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.blackTransparent,
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          border: Border.all(
+                                              color: AppColors.gray200),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.message),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8),
+                                                child: Text(
+                                                    messagePin?.content ?? ''),
+                                              ),
                                             ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              context.read<MessageBloc>().add(
-                                                  DeletePinMessage(
-                                                      idMessage:
-                                                          messagePin?.id ?? 0));
-                                            },
-                                            child: const Icon(Icons.close,
-                                                color: AppColors.red),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              Expanded(
-                                child: AppSkeleton(
-                                  isLoading: isLoading,
-                                  child: SmartRefresher(
-                                    controller: _refreshController,
-                                    onLoading: () {
-                                      if (state.hasMoreData == true) {
-                                        context
-                                            .read<MessageBloc>()
-                                            .add(GetMessageDetail(
-                                              conversationId: widget
-                                                      .messageChatRoom
-                                                      ?.conversationId
-                                                      ?.toString() ??
-                                                  '',
-                                              page: currentPage += 1,
-                                            ));
-                                        _refreshController.loadComplete();
-                                      }
-                                    },
-                                    enablePullUp: state.hasMoreData == true
-                                        ? true
-                                        : false,
-                                    enablePullDown: false,
-                                    header: const Loader(),
-                                    child: ListView.builder(
-                                      controller: _scrollController,
-                                      reverse: true,
-                                      itemCount: messages.length,
-                                      itemBuilder: (_, index) {
-                                        final message = messages[index];
-                                        _messageKeys[message.id ?? 0] =
-                                            GlobalKey();
-                                        return ListMessageDetail(
-                                          key: _messageKeys[message.id ?? 0],
-                                          messageDatail: message,
-                                          profileInfo: profileInfo!,
-                                          message: widget.messageChatRoom,
-                                          phoneBookStudent:
-                                              widget.phoneBookStudent,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              if (state.messageStatus ==
-                                      MessageStatus.loadingMessage ||
-                                  state.messageStatus ==
-                                      MessageStatus.loadingRestart)
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.blue600,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8),
-                                      child: Text(
-                                        'Đang gửi',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              Container(
-                                height: 60,
-                                padding: const EdgeInsets.all(8),
-                                color: AppColors.primarySurface,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: GestureDetector(
-                                        onTap: _showOptions,
-                                        child: SvgPicture.asset(
-                                            Assets.icons.fileMessage),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        controller: textFieldController,
-                                        decoration: InputDecoration(
-                                          hintText: 'Nhập tin nhắn',
-                                          filled: true,
-                                          fillColor: AppColors.white,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30),
-                                            borderSide: BorderSide.none,
-                                          ),
-                                          contentPadding:
-                                              const EdgeInsets.symmetric(
-                                                  horizontal: 16),
+                                            GestureDetector(
+                                              onTap: () {
+                                                context.read<MessageBloc>().add(
+                                                    DeletePinMessage(
+                                                        idMessage:
+                                                            messagePin?.id ??
+                                                                0));
+                                              },
+                                              child: const Icon(Icons.close,
+                                                  color: AppColors.red),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (textFieldController
-                                              .text.isNotEmpty) {
-                                            context
-                                                .read<MessageBloc>()
-                                                .add(PostMessage(
-                                                  content:
-                                                      textFieldController.text,
-                                                  recipient: recipient,
-                                                ));
+                                  ),
 
-                                            textFieldController.clear();
-                                          }
-                                        },
-                                        child: SvgPicture.asset(
-                                            Assets.icons.sendMessage),
+                                // List of messages
+                                Expanded(
+                                  child: ListView.builder(
+                                    controller: _scrollController,
+                                    reverse: true,
+                                    itemCount: messages.length,
+                                    itemBuilder: (_, index) {
+                                      final message = messages[index];
+                                      final nextMessage =
+                                          index + 1 < messages.length
+                                              ? messages[index + 1]
+                                              : null;
+
+                                      final isSamePeople = nextMessage !=
+                                              null &&
+                                          nextMessage.userId == message.userId;
+
+                                      _messageKeys[message.id ?? 0] =
+                                          GlobalKey();
+
+                                      return ListMessageDetail(
+                                        key: _messageKeys[message.id ?? 0],
+                                        isSamePeople: isSamePeople,
+                                        messageDatail: message,
+                                        profileInfo: profileInfo,
+                                        message: widget.messageChatRoom,
+                                      );
+                                    },
+                                  ),
+                                ),
+
+                                // New message sending..
+                                if (state.messageStatus ==
+                                        MessageStatus.loadingPostPinMessage ||
+                                    state.messageStatus ==
+                                        MessageStatus.loadingRestart)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.blue600,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 4),
+                                        child: Text(
+                                          lastTextFieldController.text,
+                                          style: AppTextStyles.custom(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500),
+                                        ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                                  ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
+
+                // TextField and Send Button
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  padding: EdgeInsets.only(bottom: isFocus ? 0 : 24),
+                  color: AppColors.primarySurface,
+                  child: Container(
+                    height: 60,
+                    padding: const EdgeInsets.all(8),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: GestureDetector(
+                            onTap: _showOptions,
+                            child: SvgPicture.asset(
+                              Assets.icons.fileMessage,
+                              width: 20,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            focusNode: _focus,
+                            controller: textFieldController,
+                            onChanged: (value) {
+                              lastTextFieldController.text = value;
+                              textFieldController.text = value;
+                            },
+                            decoration: InputDecoration(
+                              hintText: 'Nhập tin nhắn',
+                              filled: true,
+                              fillColor: AppColors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (textFieldController.text.isNotEmpty) {
+                                context.read<MessageBloc>().add(PostMessage(
+                                      content: textFieldController.text,
+                                      recipient: recipientId,
+                                    ));
+                              }
+                              textFieldController.clear();
+                            },
+                            child: SvgPicture.asset(
+                              Assets.icons.sendMessage,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ChatRoomAppBar extends StatelessWidget {
+  const ChatRoomAppBar({super.key, required this.friendInfo});
+
+  final MessageDetail friendInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 4),
+      decoration: BoxDecoration(
+        color: AppColors.white.withOpacity(0.9),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    mainNavKey.currentContext!.pop(true);
+                    mainNavKey.currentState!.context
+                        .read<MessageBloc>()
+                        .add(GetListMessageResert());
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.fromLTRB(22, 0, 8, 0),
+                    child: Icon(
+                      Icons.arrow_back_ios_sharp,
+                      size: 20,
+                      color: AppColors.brand600,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white,
+                    border: Border.all(
+                      color: AppColors.white,
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/default-user.png',
+                      image: friendInfo.avatarUrl ?? '',
+                      fit: BoxFit.cover,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/default-user.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    friendInfo.fullName ?? '',
+                    style: AppTextStyles.semiBold16(),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // if (iconRight != null)
+          //   GestureDetector(onTap: onRight, child: SvgPicture.asset(iconRight!))
+        ],
       ),
     );
   }

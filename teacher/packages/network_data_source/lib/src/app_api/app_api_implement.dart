@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:js_interop';
 
 import 'package:core/core.dart';
 import 'package:core/data/models/list_attendance_bus.dart';
@@ -42,10 +43,17 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<WeeklyLessonData> getRegisterNoteBook({
     required String userKey,
     required String txtDate,
+    required int classSelect,
   }) async {
+    String type = '';
+    if (classSelect == 1) {
+      type = 'weeklylesson_teacher_gvcn';
+    } else {
+      type = 'weeklylesson_teacher';
+    }
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api.php?act=weeklylesson&type=json&user_key=$userKey&txt_date=$txtDate');
+          '/api/api.php?act=$type&type=json&user_key=$userKey&txt_date=$txtDate');
 
       final weeklylessonData = WeeklyLessonData.fromMap(data);
       return weeklylessonData;
@@ -1175,34 +1183,75 @@ class AppFetchApi extends AbstractAppFetchApi {
     return data;
   }
 
-  Future<Map<String, dynamic>> getLessonRegister({
+  Future<List<ObservationData>> getLessonRegister({
     required String userKey,
     required int schoolId,
     required String txtDate,
-    int? teacherId,
+    required String teacherId,
   }) async {
-    var query =
-        'act=get_lesson_register&user_key=$userKey&school_id=$schoolId&txt_date=$txtDate';
+    try {
+      final data = await _partnerTokenRestClient
+          .doHttpGet('/api.php?act=get_lesson_register', queryParameters: {
+        'user_key': userKey,
+        'txt_date': txtDate,
+        'teacher_id': teacherId,
+      });
 
-    if (teacherId != null) {
-      query += '&teacher_id=$teacherId';
+      if (data['data'] == null) {
+        return [];
+      }
+
+      final jsonData = data['data'] as List<dynamic>;
+      return jsonData.map((e) => ObservationData.fromMap(e)).toList();
+    } catch (e) {
+      return [];
     }
-
-    final response = await _client.doHttpGet(
-      '/api/api.php?$query',
-    );
-
-    return response;
   }
 
-  Future<Map<String, dynamic>> getTeacherListBySchool({
+  Future<List<RegisteredLesson>> getLessonRegistered({
+    required String userKey,
+    required String txtDate,
+  }) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php?act=lesson_register',
+        queryParameters: {
+          'user_key': userKey,
+          'date_from': txtDate,
+          'date_to': txtDate,
+          // "user_key": "duongvt.quynhon",
+          // "date_from": "26-02-2024",
+          // "date_to": "26-02-2024",
+        },
+      );
+
+      if (data['data'] == null) {
+        return [];
+      }
+
+      final jsonData = data['data'] as List<dynamic>;
+      return jsonData
+          .map((e) => RegisteredLesson.fromMap(e as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<TeacherItem>> getTeacherListBySchool({
     required int schoolId,
   }) async {
-    final response = await _client.doHttpGet(
-      '/api.php?act=list_teacher&school_id=$schoolId',
-    );
+    try {
+      final res = await _client.doHttpGet(
+        '/api.php?act=list_teacher&school_id=$schoolId',
+      );
 
-    return response;
+      final jsonData = res['data'] as List<dynamic>;
+      return jsonData.map((item) => TeacherItem.fromJson(item)).toList();
+    } catch (e) {
+      print('error: $e');
+      return [];
+    }
   }
 
   Future<Map<String, dynamic>> getTeacherListByTeacherId({
@@ -1315,9 +1364,66 @@ class AppFetchApi extends AbstractAppFetchApi {
         'TIET_NUM': tietNum,
         'CLASS_ID': classId,
         'SUBJECT_ID': subjectId,
+        // "user_key": "duongvt.quynhon",
+        // "txt_date": "26-02-2024",
+        // "SCHOOL_ID": 104,
+        // "TEACHER_ID": 10007523,
+        // "TIET_NUM": 9,
+        // "CLASS_ID": 5691,
+        // "SUBJECT_ID": 52
       },
     );
     return response;
+  }
+
+  Future<Map<String, dynamic>> deleteLessonRegistered({
+    required String userKey,
+    required String lessonRegisterId,
+  }) async {
+    final response = await _client.doHttpDelete(
+      url: '/api/api.php?act=delete_lesson_register',
+      requestBody: {
+        // "user_key": "duongvt.quynhon",
+        'user_key': userKey,
+        'lesson_register_id': lessonRegisterId,
+      },
+    );
+    return response;
+  }
+
+  Future<MoetEvaluation> getMoetEvaluation({
+    required String userKey,
+    required String lessonRegisterId,
+    required String lessonRegisterIdType,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/api.php?act=lesson_register_note',
+        queryParameters: {
+          'user_key': userKey,
+          'lesson_register_id': lessonRegisterId,
+          'lesson_register_id_type': lessonRegisterIdType,
+        },
+      );
+
+      return MoetEvaluation.fromMap(data);
+    } catch (e) {
+      return MoetEvaluation.empty();
+    }
+  }
+
+  Future<Map<String, dynamic>?> updateMoetEvaluation(body) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api/api.php?act=post_lesson_register_note',
+        requestBody: body,
+      );
+
+      return data;
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 
   Future<Map<String, dynamic>> postNutritionHealth({
@@ -1462,6 +1568,131 @@ class AppFetchApi extends AbstractAppFetchApi {
       return FormDetail.empty();
     }
   }
+
+  Future<Map<String, dynamic>> postUpdateReportTeacher({
+    required int pupilId,
+    required String evaluationFormId,
+    required String commentText,
+    required String teacherEvaluation,
+    required int classId,
+    required List<List<UpdateReport>> updateReport,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    try {
+      final List<Map<String, dynamic>> newUpdate = [];
+      for (var itemList in updateReport) {
+        for (var item in itemList) {
+          newUpdate.add(updateReportToJson(item));
+        }
+      }
+
+      final data = await _client
+          .doHttpPost(url: '/api/v1/staff/bieu-mau-danh-gia/comment', headers: {
+        'School-Id': schoolId,
+        'School-Brand': schoolBrand
+      }, requestBody: {
+        "pupil_id": pupilId.toString(),
+        "evaluation_form_id": evaluationFormId,
+        "comment_text": commentText,
+        "teacher_evaluation": teacherEvaluation,
+        "class_id": classId.toString(),
+        "list_criterial": newUpdate
+      });
+      return data;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<ViolationData> getViolationData({
+    required String userKey,
+    required String classId,
+  }) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api/api.php?act=list_pupil_in_class&user_key=$userKey&class_id=$classId',
+      );
+      return ViolationData.fromMap(data);
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<List<ListViolation>> getListViolation() async {
+    final data = await _partnerTokenRestClient.doHttpGet(
+      '/api/api.php?act=list_vi_pham_hs',
+    );
+    final jsonData = data['data'] as List<dynamic>;
+    return jsonData.map((e) => ListViolation.fromJson(e)).toList();
+  }
+
+  Future<Map<String, dynamic>> postRegisterBook({
+    required String lessionId,
+    required String lessionTitle,
+    required String lessionNote,
+    required String tietPpct,
+    required String lessionRank,
+    required String danDoBaoBai,
+    required File fileBaoBai,
+    required String linkBaoBai,
+    required String hanNop,
+    required String userKey,
+  }) async {
+    var formData = FormData.fromMap(
+      {
+        "user_key": userKey,
+        "lession_id": lessionId,
+        "lession_title": lessionTitle,
+        "lession_note": lessionNote,
+        "tiet_ppct": tietPpct,
+        "lession_rank": lessionRank,
+        "dan_do_bao_bai": danDoBaoBai,
+        "link_bao_bai": linkBaoBai,
+        "han_nop": hanNop,
+      },
+    );
+    formData.files.add(
+      MapEntry(
+        'file_bao_bai',
+        MultipartFile.fromFileSync(fileBaoBai.path),
+      ),
+    );
+    final data = await _partnerTokenRestClient.dio.post(
+      '/api/api.php?act=weeklylesson_post_new',
+      data: formData,
+      //options: Options(headers: )
+    );
+    return data.data;
+  }
+}
+
+Map<String, dynamic> updateReportToJson(UpdateReport report) {
+  return {
+    'pupil_id': report.pupil_id,
+    'evaluation_form_id': report.evaluation_form_id,
+    'criterial_mapping_id': report.criterial_mapping_id,
+    'mark_id': report.mark_id,
+    'criterial_id': report.criterial_id,
+    'other_result_text': report.other_result_text,
+  };
+}
+
+class UpdateReport {
+  final int pupil_id;
+  final int evaluation_form_id;
+  final int criterial_mapping_id;
+  late int mark_id;
+  final int criterial_id;
+  final String other_result_text;
+  UpdateReport({
+    required this.criterial_id,
+    required this.criterial_mapping_id,
+    required this.evaluation_form_id,
+    required this.mark_id,
+    required this.other_result_text,
+    required this.pupil_id,
+  });
 }
 
 class GetNotificationsFailure implements Exception {}

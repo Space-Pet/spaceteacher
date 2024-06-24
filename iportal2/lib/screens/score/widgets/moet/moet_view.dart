@@ -46,17 +46,17 @@ class _TabViewMonet extends State<MoetView> {
           Column(
             children: [
               SummaryGroup(
-                category: 'Điểm trung bình học kỳ',
+                category: 'Điểm trung bình',
                 evaluation: averageData.diemTrungBinhHocKy.toString(),
                 textColor: AppColors.red90001,
               ),
               SummaryGroup(
-                category: 'Kết quả học tập học kỳ',
+                category: 'Kết quả học tập',
                 evaluation: averageData.ketQuaHocTapHocKy,
                 textColor: AppColors.brand600,
               ),
               SummaryGroup(
-                category: 'Kết quả rèn luyện học kỳ',
+                category: 'Kết quả rèn luyện',
                 evaluation: averageData.ketQuaRenLuyenHocKy,
                 textColor: AppColors.brand600,
               ),
@@ -91,6 +91,7 @@ class _TabViewMonet extends State<MoetView> {
           Container(
             padding: const EdgeInsets.all(6),
             width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 6),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(8)),
               gradient: LinearGradient(
@@ -103,13 +104,6 @@ class _TabViewMonet extends State<MoetView> {
                   0.9356,
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 0.10),
-                  offset: Offset(0.0, 5.0),
-                  blurRadius: 20.0,
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,34 +128,22 @@ class _TabViewMonet extends State<MoetView> {
                     )
                   ],
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
+                const SizedBox(height: 8),
                 Container(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       color: AppColors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.10),
-                          offset: Offset(0.0, 5.0),
-                          blurRadius: 20.0,
-                        ),
-                      ],
                     ),
-                    child: Text(widget.diemMoetTxt.nhanXetGvcnCn!,
+                    child: Text(averageData.nhanXetGvcnCaNam ?? 'nhan xet',
                         style:
                             AppTextStyles.normal14(color: AppColors.gray600))),
               ],
             ),
           ),
-        const SizedBox(
-          height: 8,
-        ),
         if ((widget.diemMoetTxt.scoreData ?? []).isNotEmpty)
           Container(
+            margin: const EdgeInsets.only(top: 6),
             decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 border: Border(
@@ -188,7 +170,6 @@ class _TabViewMonet extends State<MoetView> {
               ],
             ),
           ),
-        // const StudentEvaluation()
       ]),
     );
   }
@@ -218,8 +199,8 @@ class SummaryGroup extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.10),
-            offset: Offset(0.0, 5.0),
-            blurRadius: 20.0,
+            offset: Offset(0.0, 4.0),
+            blurRadius: 4.0,
           ),
         ],
       ),

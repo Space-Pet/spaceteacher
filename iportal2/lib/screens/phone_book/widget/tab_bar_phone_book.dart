@@ -35,7 +35,7 @@ class TabBarPhoneBook extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: TabBar(
-                  labelColor: AppColors.red,
+                  labelColor: AppColors.brand500,
                   unselectedLabelColor: AppColors.gray400,
                   dividerColor: Colors.transparent,
                   labelStyle: const TextStyle(
@@ -58,6 +58,9 @@ class TabBarPhoneBook extends StatelessWidget {
                   ),
                   indicatorPadding: const EdgeInsets.symmetric(horizontal: -15),
                   tabs: _buildTabs(),
+                  onTap: (value) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
                 ),
               ),
             ),

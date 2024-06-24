@@ -16,7 +16,12 @@ class SurveyState extends Equatable {
   });
 
   @override
-  List<Object?> get props => [surveyList, surveyDetail, surveyStatus, checkBox];
+  List<Object?> get props => [
+        surveyList,
+        surveyDetail,
+        surveyStatus,
+        checkBox,
+      ];
 
   SurveyState copyWith({
     List<Survey>? surveyList,

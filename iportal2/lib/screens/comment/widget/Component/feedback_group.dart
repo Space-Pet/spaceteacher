@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FeedbackGroup extends StatelessWidget {
-  const FeedbackGroup({super.key,  this.comment});
+  const FeedbackGroup({super.key, this.comment});
   final Comment? comment;
   @override
   Widget build(BuildContext context) {
@@ -49,14 +49,6 @@ class FeedbackGroup extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset(
-                  'assets/icons/conversation-icon.svg',
-                  width: 16,
-                  height: 16,
-                  colorFilter: const ColorFilter.mode(
-                      AppColors.redMenu, BlendMode.srcIn),
-                ),
-                const SizedBox(width: 6),
                 Expanded(
                   // Wrap the Text widget with Expanded
                   child: Text(

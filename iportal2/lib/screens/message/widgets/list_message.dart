@@ -25,7 +25,6 @@ class ListMessage extends StatelessWidget {
                   routeName: ChatRoomScreen.routeName,
                   arguments: {
                     'message': message,
-                    'phoneBookStudent': PhoneBookStudent.empty(),
                   },
                 );
               },

@@ -1,19 +1,19 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:core/resources/resources.dart';
 
-enum EslCardType { mark, gpa, comment }
+enum EslCardType { gpa, midTermComment, endSemesterComment }
 
 extension EslCardTypeExtension on EslCardType {
   String get name {
     switch (this) {
-      case EslCardType.mark:
-        return 'Điểm';
       case EslCardType.gpa:
         return 'GPA';
-      case EslCardType.comment:
+      case EslCardType.midTermComment:
+        return 'Midterm comments';
+      case EslCardType.endSemesterComment:
         return 'End of Semester comments';
     }
   }
@@ -33,14 +33,17 @@ class EslCardExpand extends StatelessWidget {
       final score = coreDataList[index];
 
       final isGPA = score.markEslType == EslCardType.gpa.name;
-      final isComment = score.markEslType == EslCardType.comment.name;
+      final isCommentType =
+          score.markEslType == EslCardType.endSemesterComment.name ||
+              score.markEslType == EslCardType.midTermComment.name;
 
       final subjectName = isGPA
           ? EslCardType.gpa.name
           : score.subjectEslCore.subjectEslCoreName;
 
-      return isComment
+      return isCommentType
           ? Container(
+              margin: const EdgeInsets.only(bottom: 10),
               decoration: const BoxDecoration(
                   color: AppColors.gray,
                   borderRadius: BorderRadius.all(Radius.circular(4))),
@@ -55,7 +58,7 @@ class EslCardExpand extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      EslCardType.comment.name,
+                      score.markEslType,
                       style: AppTextStyles.normal12(
                         color: AppColors.blueGray800,
                       ),

@@ -32,8 +32,8 @@ class WeekScheduleBloc extends Bloc<WeekScheduleEvent, WeekScheduleState> {
     ));
 
     final data = await appFetchApiRepo.getWeekSchedule(
-      // userKey: currentUserBloc.state.activeChild.user_key,
-      userKey: '0282810220108',
+      userKey: currentUserBloc.state.activeChild.user_key,
+      // userKey: '0282810220108',
       txtDate: event.txtDate,
     );
 

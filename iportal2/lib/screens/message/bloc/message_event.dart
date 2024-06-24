@@ -12,8 +12,15 @@ class GetPhoneBookStudent extends MessageEvent {}
 class GetMessageDetail extends MessageEvent {
   final String conversationId;
   final int page;
-  GetMessageDetail({required this.conversationId, this.page = 1});
-  List<Object> get props => [conversationId, page];
+  final bool showLoading;
+
+  GetMessageDetail({
+    required this.conversationId,
+    this.page = 1,
+    this.showLoading = false,
+  });
+
+  List<Object> get props => [conversationId, page, showLoading];
 }
 
 class PostMessage extends MessageEvent {

@@ -3,12 +3,18 @@ import 'package:intl/intl.dart';
 import 'package:core/resources/resources.dart';
 
 class SelectDate extends StatefulWidget {
-  const SelectDate(
-      {super.key, this.onDatePicked, this.datePicked, this.selectDate});
+  const SelectDate({
+    super.key,
+    this.onDatePicked,
+    this.datePicked,
+    this.selectDate,
+    this.firstDateLimit,
+  });
 
   final Function(DateTime date)? onDatePicked;
   final DateTime? datePicked;
   final DateTime? selectDate;
+  final DateTime? firstDateLimit;
 
   @override
   State<SelectDate> createState() => _SelectDateState();
@@ -40,7 +46,7 @@ class _SelectDateState extends State<SelectDate> {
           cancelText: 'Trở về',
           confirmText: 'Xong',
           initialDate: widget.selectDate ?? formatDate.parse(datePickedFormat),
-          firstDate: DateTime(now.year - 1, now.month),
+          firstDate: widget.firstDateLimit ?? DateTime(now.year - 1, now.month),
           lastDate: DateTime(now.year + 1, now.month),
           initialEntryMode: DatePickerEntryMode.calendarOnly,
           builder: (context, child) {

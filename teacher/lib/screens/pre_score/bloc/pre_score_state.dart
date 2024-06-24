@@ -26,6 +26,9 @@ enum PreScoreStatus {
 
   loadingGetFormDetail,
   successGetFormDetail,
+
+  loadingPostUpdateReport,
+  successPostUpdateReport,
 }
 
 class PreScoreState {

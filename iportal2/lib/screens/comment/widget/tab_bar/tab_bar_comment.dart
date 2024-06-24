@@ -32,7 +32,7 @@ class TabBarComment extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(5),
               child: TabBar(
-                labelColor: AppColors.red,
+                labelColor: AppColors.brand500,
                 unselectedLabelColor: AppColors.gray400,
                 dividerColor: Colors.transparent,
                 labelStyle: const TextStyle(

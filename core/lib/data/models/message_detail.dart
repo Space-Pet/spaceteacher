@@ -54,9 +54,45 @@ class MessageDetail {
 
   Map<String, dynamic> toJson() => _$MessageDetailToJson(this);
 
-  @override
-  String toString() {
-    return 'MessageDetail{id: $id, content: $content, attachments: $attachments, schoolId: $schoolId, userId: $userId, userType: $userType, recipient: $recipient, fullName: $fullName, avatarUrl: $avatarUrl, viewedAt: $viewedAt}';
+  factory MessageDetail.empty() => const MessageDetail(
+        id: 0,
+        content: '',
+        attachments: [],
+        schoolId: 0,
+        userId: 0,
+        userType: 0,
+        recipient: 0,
+        fullName: '',
+        avatarUrl: '',
+        viewedAt: '',
+        conversationId: 0,
+        createdBy: '',
+        createdAt: '',
+        updatedAt: '',
+        sticky: 0,
+      );
+
+  static List<MessageDetail> fakeData() {
+    return List.generate(
+      10,
+      (index) => MessageDetail(
+        id: index,
+        content: 'content $index',
+        attachments: [],
+        schoolId: index,
+        userId: index,
+        userType: index,
+        recipient: index,
+        fullName: 'fullName $index',
+        avatarUrl: 'avatarUrl $index',
+        viewedAt: 'viewedAt $index',
+        conversationId: index,
+        createdBy: 'createdBy $index',
+        createdAt: 'createdAt $index',
+        updatedAt: 'updatedAt $index',
+        sticky: index,
+      ),
+    );
   }
 
   MessageDetail copyWith({

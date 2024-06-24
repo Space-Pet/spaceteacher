@@ -57,8 +57,8 @@ class AuthRepository {
 
       // email = 'liemlv.baria@uka.edu.vn';
       //email = 'vyntd@saigonacademy.com';
-      // email = 'elearning_1@nhg.vn';
-      email = 'k12.testapp@uka.edu.vn';
+      email = 'elearning_1@nhg.vn';
+      // email = 'k12.testapp@uka.edu.vn';
 
       if (email.isEmpty) {
         return null;

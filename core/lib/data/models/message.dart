@@ -38,6 +38,19 @@ class Message {
   factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
 
+  factory Message.empty() => const Message(
+        id: 0,
+        senderId: 0,
+        receiverId: 0,
+        conversationId: 0,
+        content: '',
+        userType: 0,
+        fullName: '',
+        avatarUrl: '',
+        unRead: 0,
+        createAt: '',
+      );
+
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 
   @override

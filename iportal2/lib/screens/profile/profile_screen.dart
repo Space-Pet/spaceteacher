@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/back_ground_container.dart';
+import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
+import 'package:iportal2/components/dialog/dialog_update_phone.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
 import 'package:iportal2/screens/profile/widget/profile_app_bar.dart';
 import 'package:iportal2/screens/profile/widget/tab_bar_parent.dart';
@@ -42,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
                         context.pop();
                       },
                     ),
-                    Flexible(
+                    Expanded(
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.only(bottom: 32),
@@ -60,8 +62,20 @@ class ProfileScreen extends StatelessWidget {
                               height: 100,
                             ),
                             isParent
-                                ? TabBarParent(parentData: parentData)
-                                : TabBarStudent(studentData: studentData)
+                                ? TabBarParent(
+                                    parentData: parentData,
+                                    studentData: studentData,
+                                    onEditPhone: (
+                                        {isFather = false, isParent = false}) {
+                                      onEditPhone(context, isFather, isParent);
+                                    },
+                                  )
+                                : TabBarStudent(
+                                    studentData: studentData,
+                                    onEditPhone: () {
+                                      onEditPhone(context, false, false);
+                                    },
+                                  )
                           ],
                         ),
                       ),
@@ -73,6 +87,21 @@ class ProfileScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<void> onEditPhone(BuildContext context, bool isFather, bool isParent) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return DialogScaleAnimated(
+          dialogContent: PhoneUpdate(
+            bloc: profileBloc,
+            isFather: isFather,
+            isParent: isParent,
+          ),
+        );
+      },
     );
   }
 }

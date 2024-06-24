@@ -490,6 +490,14 @@ class $AssetsIconsGen {
   SvgGenImage get readIndicatorNoti =>
       const SvgGenImage('assets/icons/read-indicator-noti.svg');
 
+  /// File path: assets/icons/register_document.svg
+  SvgGenImage get registerDocument =>
+      const SvgGenImage('assets/icons/register_document.svg');
+
+  /// File path: assets/icons/register_teacher.svg
+  SvgGenImage get registerTeacher =>
+      const SvgGenImage('assets/icons/register_teacher.svg');
+
   /// File path: assets/icons/report copy.svg
   SvgGenImage get reportCopy =>
       const SvgGenImage('assets/icons/report copy.svg');
@@ -713,6 +721,8 @@ class $AssetsIconsGen {
         qrcodeCopy,
         qrcode,
         readIndicatorNoti,
+        registerDocument,
+        registerTeacher,
         reportCopy,
         report,
         reset,

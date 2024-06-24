@@ -7,7 +7,6 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/dropdown/dropdown.dart';
 import 'package:iportal2/screens/score/bloc/score_bloc.dart';
 import 'package:iportal2/screens/score/widgets/esl/esl_view.dart';
 import 'package:iportal2/screens/score/widgets/moet/moet_view.dart';
@@ -33,7 +32,9 @@ class ScoreScreen extends StatelessWidget {
         final scoreBloc = context.read<ScoreBloc>();
         final isPrimary = state.isPrimaryStudent;
 
-        final programListName = state.programList.map((e) => e.ctName).toList();
+        final programListName =
+            state.programList.map((e) => e.ctName).toSet().toList();
+
         final isLoadingProgramList =
             state.programListStatus == ScoreProgramStatus.loading;
 
@@ -139,6 +140,10 @@ class ScoreScreen extends StatelessWidget {
                                                         .statusNote
                                                         .contains('MOET'),
                                                     semester: state.txtTihHocKy,
+                                                    nhanXetChungCuaGvcn: state
+                                                        .primaryConduct
+                                                        .data
+                                                        .nhanXetChungCuaGvcn,
                                                   )
                                                 : MoetView(
                                                     diemMoetTxt:
@@ -181,36 +186,39 @@ class ScoreAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: ScreenAppBar(
-            title: 'Xem điểm',
-            canGoback: true,
-            onBack: () {
-              context.pop();
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ScreenAppBar(
+              title: 'Xem điểm',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
+          ),
+          BlocBuilder<CurrentUserBloc, CurrentUserState>(
+            builder: (context, state) {
+              final learnYear = state.activeChild.learnYearList!.toList();
+
+              return Container(
+                margin: const EdgeInsets.only(top: 28, right: 16),
+                child: FilterItem(
+                  width: 140,
+                  selectedOption: selectedOption,
+                  onUpdateOption: onUpdateYear,
+                  title: 'Chọn năm học',
+                  options: learnYear,
+                  isTransparentStyle: true,
+                ),
+              );
             },
           ),
-        ),
-        BlocBuilder<CurrentUserBloc, CurrentUserState>(
-          builder: (context, state) {
-            final learnYear = state.activeChild.learnYearList!.toList();
-
-            return Container(
-              margin: const EdgeInsets.only(top: 28, right: 16),
-              width: 130,
-              child: DropdownButtonComponent(
-                selectedOption: selectedOption,
-                onUpdateOption: onUpdateYear,
-                hint: 'Chọn năm học',
-                optionList: learnYear,
-                isSelectYear: true,
-              ),
-            );
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

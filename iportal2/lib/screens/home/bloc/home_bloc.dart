@@ -44,9 +44,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(statusExercise: HomeStatus.loading));
 
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
-      // userKey: currentUserBloc.state.activeChild.user_key,
+      userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
-      userKey: '0253230044',
+      // userKey: '0253230044',
     );
 
     emit(
@@ -74,11 +74,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       // create DateTime for 29/05/2024
       final dateTimeTest = DateTime(2024, 9, 25);
       final exerciseDataList = await appFetchApiRepo.getExercises(
-        // userKey: currentUserBloc.state.activeChild.user_key,
-        datePicked: dateTimeTest,
+        userKey: currentUserBloc.state.activeChild.user_key,
+        datePicked: state.datePicked,
         isDueDate: event.isDueDate,
         // txtDate: '18-03-2024',
-        userKey: '0253230044',
+        // userKey: '0253230044',
       );
 
       if (event.isDueDate) {

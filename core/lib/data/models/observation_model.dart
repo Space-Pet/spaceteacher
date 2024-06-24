@@ -142,8 +142,22 @@ class ObservationData {
   factory ObservationData.fromJson(String source) =>
       ObservationData.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  @override
-  String toString() {
-    return 'ObservationModel(SCHOOL_ID: $schooldId, TIET_NUM: $lessonNum, CLASS_ID: $classId, CLASS_NAME: $className, ROOM_ID: $roomId, ROOM_NAME: $roomName, SUBJECT_ID: $subjectId, SUBJECT_NAME: $subjectName, TEACHER_ID: $teacherId, TEACHER_FULLNAME: $teacherFullname, WEEK_DAY: $weekDay)';
+  static List<ObservationData> fakeData() {
+    return List.generate(
+      10,
+      (index) => ObservationData(
+        schooldId: 'schoolId $index',
+        lessonNum: 'lessonNum $index',
+        classId: 'classId $index',
+        className: 'className $index',
+        roomId: 'roomId $index',
+        roomName: 'roomName $index',
+        subjectId: 'subjectId $index',
+        subjectName: 'subjectName $index',
+        teacherId: 'teacherId $index',
+        teacherFullname: 'teacherFullname $index',
+        weekDay: 'weekDay $index',
+      ),
+    );
   }
 }

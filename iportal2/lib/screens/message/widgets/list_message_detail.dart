@@ -1,126 +1,143 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
 
-class ListMessageDetail extends StatefulWidget {
-  const ListMessageDetail(
-      {super.key,
-      this.phoneBookStudent,
-      required this.messageDatail,
-      required this.profileInfo,
-      this.message});
+class ListMessageDetail extends StatelessWidget {
+  const ListMessageDetail({
+    super.key,
+    this.phoneBookStudent,
+    required this.messageDatail,
+    required this.profileInfo,
+    this.message,
+    required this.isSamePeople,
+  });
+
   final MessageDetail messageDatail;
   final Message? message;
   final LocalIPortalProfile profileInfo;
   final PhoneBookStudent? phoneBookStudent;
-
-  @override
-  State<ListMessageDetail> createState() => _ListMessageDetailState();
-}
-
-class _ListMessageDetailState extends State<ListMessageDetail> {
-  void _showMessageOptions(MessageDetail message) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.push_pin),
-              title: const Text('Ghim tin nhắn'),
-              onTap: () {
-                _pinMessage(message);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Xoá tin nhắn'),
-              onTap: () async {
-                _deleteMessage(message).whenComplete(() => context.pop());
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.copy),
-              title: const Text('Copy tin nhắn'),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _pinMessage(MessageDetail message) {
-    context.read<MessageBloc>().add(PinMessage(idMessage: message.id ?? 0));
-  }
-
-  Future<void> _deleteMessage(MessageDetail message) async {
-    context.read<MessageBloc>().add(DeleteMessageDetail(
-        content: message.content ?? "",
-        idMessage: message.id ?? 0,
-        recipient: message.recipient.toString()));
-  }
+  final bool isSamePeople;
 
   @override
   Widget build(BuildContext context) {
+    void pinMessage(MessageDetail message) {
+      context.read<MessageBloc>().add(PinMessage(idMessage: message.id ?? 0));
+    }
+
+    Future<void> deleteMessage(MessageDetail message) async {
+      context.read<MessageBloc>().add(DeleteMessageDetail(
+          content: message.content ?? "",
+          idMessage: message.id ?? 0,
+          recipient: message.recipient.toString()));
+    }
+
+    void showMessageOptions(MessageDetail message) {
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.push_pin),
+                title: const Text('Ghim tin nhắn'),
+                onTap: () {
+                  pinMessage(message);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete),
+                title: const Text('Xoá tin nhắn'),
+                onTap: () async {
+                  deleteMessage(message)
+                      .whenComplete(() => Navigator.of(context).pop());
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.copy),
+                title: const Text('Copy tin nhắn'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.only(
         left: 10,
         right: 10,
-        top: (widget.messageDatail.userId == widget.profileInfo.user_id)
-            ? 0
-            : 10,
+        top: (messageDatail.userId == profileInfo.user_id) ? 4 : 4,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment:
-            widget.messageDatail.userId == widget.profileInfo.user_id
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
+        mainAxisAlignment: messageDatail.userId == profileInfo.user_id
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
-          if (widget.messageDatail.userId != widget.profileInfo.user_id)
-            const CircleAvatar(
-              radius: 24,
-              backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage('assets/images/image-phone-book.png'),
-            ),
+          messageDatail.userId != profileInfo.user_id && !isSamePeople
+              ? Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white,
+                    border: Border.all(
+                      color: AppColors.white,
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/default-user.png',
+                      image: message?.avatarUrl ?? '',
+                      fit: BoxFit.cover,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/images/default-user.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                )
+              : const SizedBox(width: 40),
           GestureDetector(
             onLongPress: () {
-              _showMessageOptions(widget.messageDatail);
+              showMessageOptions(messageDatail);
             },
             child: IntrinsicWidth(
               child: Column(
-                crossAxisAlignment:
-                    (widget.message?.id ?? widget.phoneBookStudent?.userId) ==
-                            widget.profileInfo.user_id
-                        ? CrossAxisAlignment.end
-                        : CrossAxisAlignment.start,
+                crossAxisAlignment: (message?.id ?? phoneBookStudent?.userId) ==
+                        profileInfo.user_id
+                    ? CrossAxisAlignment.end
+                    : CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Text(
-                      widget.messageDatail.userId != widget.profileInfo.user_id
-                          ? widget.message?.fullName ??
-                              widget.phoneBookStudent?.fullName ??
-                              ''
-                          : '',
-                      style:
-                          AppTextStyles.normal14(fontWeight: FontWeight.w600),
+                  if (!isSamePeople)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0, bottom: 2),
+                      child: Text(
+                        messageDatail.userId != profileInfo.user_id
+                            ? message?.fullName ??
+                                phoneBookStudent?.fullName ??
+                                ''
+                            : '',
+                        style:
+                            AppTextStyles.normal14(fontWeight: FontWeight.w600),
+                      ),
                     ),
-                  ),
                   Container(
-                    padding: widget.messageDatail.userId ==
-                            widget.profileInfo.user_id
-                        ? const EdgeInsets.all(8.0)
-                        : const EdgeInsets.only(left: 5),
+                    padding: messageDatail.userId == profileInfo.user_id
+                        ? const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4)
+                        : const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: widget.messageDatail.userId ==
-                              widget.profileInfo.user_id
+                      color: messageDatail.userId == profileInfo.user_id
                           ? AppColors.blue600
-                          : Colors.transparent,
+                          : AppColors.gray100,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Container(
@@ -129,14 +146,13 @@ class _ListMessageDetailState extends State<ListMessageDetail> {
                         maxWidth: 300,
                       ),
                       child: Text(
-                        widget.messageDatail.content ?? "",
-                        style: TextStyle(
-                          color: widget.messageDatail.userId ==
-                                  widget.profileInfo.user_id
+                        messageDatail.content ?? "",
+                        style: AppTextStyles.custom(
+                          color: messageDatail.userId == profileInfo.user_id
                               ? Colors.white
                               : Colors.black,
                           fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                          fontWeight: FontWeight.w500,
                         ),
                         softWrap: true,
                         overflow: TextOverflow.visible,

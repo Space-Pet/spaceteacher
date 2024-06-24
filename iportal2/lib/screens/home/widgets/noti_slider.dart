@@ -97,7 +97,7 @@ class _NotiSliderState extends State<NotiSlider> {
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          height: 144,
+          height: 140,
           child: isEmptyNoti
               ? const EmptyNoti()
               : AppSkeleton(
@@ -155,7 +155,6 @@ class EmptyNoti extends StatelessWidget {
                 children: [
                   Text('Chưa có thông báo mới',
                       style: AppTextStyles.bold14(
-                        height: 18 / 12,
                         color: AppColors.gray90002,
                       )),
                 ],

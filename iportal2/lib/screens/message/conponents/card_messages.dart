@@ -89,7 +89,6 @@ class ChatRoomItem extends StatelessWidget {
                   color: Colors.white,
                   child: PopupMenuButton<int>(
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
@@ -115,6 +114,7 @@ class ChatRoomItem extends StatelessWidget {
                               ),
                           ],
                         ),
+                        const SizedBox(width: 8),
                         const Icon(
                           Icons.more_vert_outlined,
                           color: AppColors.gray400,

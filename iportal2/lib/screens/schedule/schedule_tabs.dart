@@ -22,12 +22,15 @@ class ScheduleTabs extends StatefulWidget {
 
 class _ScheduleTabsState extends State<ScheduleTabs>
     with SingleTickerProviderStateMixin {
-  late TabController tabBarController;
+  TabController? tabBarController;
 
   @override
   void initState() {
     super.initState();
+    initTabBarController();
+  }
 
+  void initTabBarController() {
     if ((widget.lessons ?? []).isNotEmpty) {
       tabBarController = TabController(
         length: (widget.lessons ?? []).length,
@@ -36,8 +39,23 @@ class _ScheduleTabsState extends State<ScheduleTabs>
     }
   }
 
+  @override
+  void didUpdateWidget(covariant ScheduleTabs oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.lessons != oldWidget.lessons) {
+      tabBarController?.dispose();
+      initTabBarController();
+    }
+  }
+
+  @override
+  dispose() {
+    tabBarController?.dispose();
+    super.dispose();
+  }
+
   Future<void> _onItemTapped(int index) async {
-    tabBarController.animateTo(index);
+    tabBarController?.animateTo(index);
   }
 
   @override
@@ -107,14 +125,20 @@ class _ScheduleTabsState extends State<ScheduleTabs>
 
   List<Container> tabView(int index, DateTime startOfWeek) {
     final listLesson = widget.lessons?[index].dateSubject;
-    final indexSeparate =
-        listLesson!.indexWhere((element) => element.tietNum == 5) + 1;
+    bool hasAfternoon = false;
 
-    listLesson.insert(indexSeparate, DateSubject.empty());
+    final indexSeparate =
+        listLesson!.indexWhere((element) => element.tietNum! > 5);
+
+    if (indexSeparate != -1) {
+      hasAfternoon = true;
+      listLesson.insert(indexSeparate, DateSubject.empty());
+    }
 
     return List.generate(listLesson.length, (innerIndex) {
       final lesson = listLesson[innerIndex];
       final lastIndex = listLesson.length - 1;
+      final isAfternoonLesson = hasAfternoon && innerIndex < indexSeparate;
 
       return innerIndex == indexSeparate
           ? Container(
@@ -150,7 +174,7 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tiết ${innerIndex < indexSeparate ? lesson.tietNum : lesson.tietNum! - 5}',
+                              'Tiết ${isAfternoonLesson ? lesson.tietNum : lesson.tietNum! - 5}',
                               style: AppTextStyles.normal14(
                                   color: AppColors.black24),
                             ),

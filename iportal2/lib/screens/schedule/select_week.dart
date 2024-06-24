@@ -33,7 +33,7 @@ class _WeekSelectState extends State<WeekSelect> {
   @override
   void initState() {
     super.initState();
-    weekSchedule = getWeek(now);
+    weekSchedule = getWeek(widget.date);
   }
 
   WeekSelectModel getWeek(DateTime date) {

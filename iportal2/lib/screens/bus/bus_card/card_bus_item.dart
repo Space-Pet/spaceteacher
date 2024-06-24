@@ -76,26 +76,15 @@ class CardBusItem extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: _Item(
-                  label: 'Loại tuyến',
-                  value: busSchedule.scheduleType.text,
-                ),
+              BusItem(
+                label: 'Loại tuyến',
+                value: busSchedule.scheduleType.text,
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: _Divider(),
+              BusItem(
+                label: 'Biển số xe',
+                value: busSchedule.driverInfo.numberPlate,
+                isShowDivider: false,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: _Item(
-                  label: 'Biển số xe',
-                  value: busSchedule.driverInfo.numberPlate,
-                ),
-              ),
-              const _Divider(),
-              const SizedBox(height: 6),
               TeacherInfo(busSchedule: busSchedule),
             ],
           ),
@@ -106,71 +95,35 @@ class CardBusItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Tuyến',
-                      value: '${busSchedule.route.routeId}',
-                    ),
+                  BusItem(
+                    label: 'Tuyến',
+                    value: '${busSchedule.route.routeId}',
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: _Divider(),
+                  BusItem(
+                    label: 'Biển số xe',
+                    value: busSchedule.driverInfo.numberPlate,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Biển số xe',
-                      value: busSchedule.driverInfo.numberPlate,
-                    ),
+                  BusItem(
+                    label: 'Ngày',
+                    value: busSchedule.attendanceDateString(),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: _Divider(),
+                  BusItem(
+                    label: 'Loại tuyến',
+                    value: busSchedule.scheduleType.text,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Ngày',
-                      value: busSchedule.attendanceDateString(),
-                    ),
+                  BusItem(
+                    label: 'Điểm đón',
+                    value: busSchedule.pickupLocation(),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: _Divider(),
+                  BusItem(
+                    label: 'Thời gian dự kiến đón',
+                    value: busSchedule.estimatedTime(),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Loại tuyến',
-                      value: busSchedule.scheduleType.text,
-                    ),
+                  BusItem(
+                    label: 'Tài xế',
+                    value: busSchedule.driverInfo.driverName,
+                    isShowDivider: false,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: _Divider(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Điểm đón',
-                      value: busSchedule.pickupLocation(),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5),
-                    child: _Divider(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: _Item(
-                      label: 'Thời gian dự kiến đón',
-                      value: busSchedule.estimatedTime(),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  )
                 ],
               ),
             ),
@@ -184,39 +137,7 @@ class CardBusItem extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(12),
-              child: Column(
-                children: [
-                  TeacherInfo(busSchedule: busSchedule),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    decoration: const BoxDecoration(
-                        color: AppColors.blueGray50,
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Lái xe',
-                            softWrap: true,
-                            style: AppTextStyles.semiBold14(
-                              color: AppColors.gray600,
-                            )),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Text(busSchedule.driverInfo.driverName,
-                            softWrap: true,
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            )),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: TeacherInfo(busSchedule: busSchedule),
             ),
           ],
         ),
@@ -314,36 +235,54 @@ class _Divider extends StatelessWidget {
   }
 }
 
-class _Item extends StatelessWidget {
-  const _Item({
-    // ignore: unused_element
+class BusItem extends StatelessWidget {
+  const BusItem({
     super.key,
     required this.label,
     required this.value,
+    this.isShowDivider = true,
   });
   final String label;
   final String value;
+  final bool isShowDivider;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          softWrap: true,
-          style: AppTextStyles.normal14(
-            color: AppColors.gray600,
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                label,
+                softWrap: true,
+                style: AppTextStyles.normal14(
+                  color: AppColors.gray600,
+                ),
+              ),
+              Text(
+                value,
+                softWrap: true,
+                style: AppTextStyles.semiBold14(
+                  color: AppColors.gray600,
+                ),
+              ),
+            ],
           ),
-        ),
-        Text(
-          value,
-          softWrap: true,
-          style: AppTextStyles.semiBold14(
-            color: AppColors.gray600,
-          ),
-        ),
-      ],
+          isShowDivider
+              ? Container(
+                  margin: const EdgeInsets.only(top: 12),
+                  width: double.infinity,
+                  child: const DottedLine(
+                    dashLength: 2,
+                    dashColor: AppColors.gray300,
+                  ),
+                )
+              : const SizedBox(height: 12),
+        ],
+      ),
     );
   }
 }

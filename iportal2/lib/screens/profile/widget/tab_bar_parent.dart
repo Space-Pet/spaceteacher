@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
-import 'package:iportal2/components/dialog/dialog_update_phone.dart';
 import 'package:core/resources/resources.dart';
-import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:network_data_source/network_data_source.dart';
 
 import '../../../components/tab/tab_bar.dart';
@@ -13,7 +9,13 @@ class TabBarParent extends StatelessWidget {
   const TabBarParent({
     super.key,
     required this.parentData,
+    required this.studentData,
+    required this.onEditPhone,
   });
+
+  final void Function({bool isParent, bool isFather}) onEditPhone;
+  final ParentData parentData;
+  final StudentData studentData;
 
   static const statusMap = {
     0: 'Đang học',
@@ -21,8 +23,6 @@ class TabBarParent extends StatelessWidget {
     7: 'Đã tốt nghiệp',
     8: 'Bảo lưu',
   };
-
-  final ParentData parentData;
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +56,7 @@ class TabBarParent extends StatelessWidget {
         content: parent.fatherPhone,
         isEditPhone: true,
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (_) => DialogScaleAnimated(
-                dialogContent: PhoneUpdate(
-              bloc: context.read<ProfileBloc>(),
-              isParent: true,
-            )),
-          );
+          onEditPhone(isParent: true, isFather: true);
         },
       ),
       RowContent(
@@ -106,15 +99,7 @@ class TabBarParent extends StatelessWidget {
         content: parent.motherPhone,
         isEditPhone: true,
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (_) => DialogScaleAnimated(
-                dialogContent: PhoneUpdate(
-              bloc: context.read<ProfileBloc>(),
-              isParent: true,
-              isFather: false,
-            )),
-          );
+          onEditPhone(isParent: true, isFather: false);
         },
       ),
       RowContent(
@@ -124,58 +109,52 @@ class TabBarParent extends StatelessWidget {
       ),
     ];
 
-    return BlocBuilder<ProfileBloc, ProfileState>(
-      buildWhen: (previous, current) =>
-          previous.studentData != current.studentData,
-      builder: (context, state) {
-        final studentData = state.studentData;
+    final studentList = [
+      RowContent(
+        title: 'Trường',
+        content: studentData.school.name,
+      ),
+      RowContent(
+        title: 'Lớp',
+        content: studentData.classInfo.name,
+      ),
+      RowContent(
+        title: 'Mã học sinh',
+        content: studentData.pupil.pupilId.toString(),
+      ),
+      RowContent(
+        title: 'Mã định danh',
+        content: studentData.pupil.identifier,
+      ),
+      RowContent(
+        title: 'Ngày sinh',
+        content: studentData.pupil.birthday,
+      ),
+      RowContent(
+        title: 'Địa chỉ ',
+        content: studentData.pupil.address,
+      ),
+      RowContent(
+          title: 'Số điện thoại',
+          content: studentData.pupil.phone,
+          isEditPhone: true,
+          onTap: () {
+            onEditPhone(isParent: false, isFather: false);
+          }),
+      RowContent(
+        title: 'Email',
+        content: studentData.pupil.email,
+      ),
+      RowContent(
+        title: 'Tình trạng học sinh',
+        isShowDottedLine: false,
+        content: statusMap[studentData.pupil.status]?.toString() ?? '',
+      ),
+    ];
 
-        final studentList = [
-          RowContent(
-            title: 'Trường',
-            content: studentData.school.name,
-          ),
-          RowContent(
-            title: 'Lớp',
-            content: studentData.classInfo.name,
-          ),
-          RowContent(
-            title: 'Mã học sinh',
-            content: studentData.pupil.pupilId.toString(),
-          ),
-          RowContent(
-            title: 'Mã định danh',
-            content: studentData.pupil.identifier,
-          ),
-          RowContent(
-            title: 'Ngày sinh',
-            content: studentData.pupil.birthday,
-          ),
-          RowContent(
-            title: 'Địa chỉ ',
-            content: studentData.pupil.address,
-          ),
-          RowContent(
-              title: 'Số điện thoại',
-              content: studentData.pupil.phone,
-              isEditPhone: true,
-              onTap: () {}),
-          RowContent(
-            title: 'Email',
-            content: studentData.pupil.email,
-          ),
-          RowContent(
-            title: 'Tình trạng học sinh',
-            isShowDottedLine: false,
-            content: statusMap[studentData.pupil.status]?.toString() ?? '',
-          ),
-        ];
-
-        return TabBarFlexible(
-          tabTitles: const ['Cha mẹ học sinh', 'Thông tin học sinh'],
-          tabContent: [parentsList, studentList],
-        );
-      },
+    return TabBarFlexible(
+      tabTitles: const ['Cha mẹ học sinh', 'Thông tin học sinh'],
+      tabContent: [parentsList, studentList],
     );
   }
 }

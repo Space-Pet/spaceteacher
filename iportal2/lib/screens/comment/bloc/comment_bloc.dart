@@ -41,10 +41,10 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
   void _onGetComment(GetComment event, Emitter<CommentState> emit) async {
     emit(state.copyWith(commentStatus: CommentStatus.loading));
     final data = await appFetchApiRepo.getComment(
-      // userKey: currentUserBloc.state.activeChild.user_key,
-      // txtDate: event.txtDate,
-      userKey: '0282810220108',
-      txtDate: '22-04-2024',
+      userKey: currentUserBloc.state.activeChild.user_key,
+      txtDate: event.txtDate,
+      // userKey: '0282810220108',
+      // txtDate: '22-04-2024',
     );
 
     emit(state.copyWith(

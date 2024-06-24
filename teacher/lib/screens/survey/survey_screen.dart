@@ -148,7 +148,7 @@ class SurveyList extends StatelessWidget {
                     child: Text(
                       isCompleted
                           ? 'Đã hoàn thành khảo sát'
-                          : 'Tham giao khảo sát',
+                          : 'Tham gia khảo sát',
                       style: AppTextStyles.semiBold12(
                           color: isCompleted
                               ? AppColors.green600

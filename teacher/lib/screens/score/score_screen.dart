@@ -26,7 +26,7 @@ class ScoreScreen extends StatelessWidget {
     scoreBloc.add(ScoreFilterSemester());
     return BlocProvider.value(
       value: scoreBloc,
-      child: ScoreView(),
+      child: const ScoreView(),
     );
   }
 }

@@ -260,7 +260,6 @@ class AppFetchApi extends AbstractAppFetchApi {
       });
 
       final res = PrimaryConduct.fromMap(data);
-
       return res;
     } catch (e) {
       return PrimaryConduct.empty();
@@ -700,12 +699,11 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<Map<String, dynamic>?> turnOffNoti(
-      {required bool isDisableNoti,
-      required Map<String, Object> headers}) async {
+      {required int pushNotify, required Map<String, Object> headers}) async {
     try {
       final data = await _client.doHttpPost(
         url: '/api/v1/staff/notifications/switch',
-        requestBody: {'status': isDisableNoti ? 1 : 0},
+        requestBody: {'status': pushNotify},
         headers: headers,
       );
       return data;

@@ -35,10 +35,11 @@ class _EslView extends State<EslView> {
     final eslScore = widget.eslScore;
 
     final listEslId = eslScore
-        .map((e) => e.subjectEsl.subjectEslId)
+        .map((e) => e.subjectEsl?.subjectEslId ?? '')
         .toList()
         .toSet()
         .toList();
+
 
     final listEslW = List.generate(listEslId.length, (index) {
       final eslId = listEslId[index];

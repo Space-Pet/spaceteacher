@@ -151,6 +151,8 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: TitleAndInputText(
+                              showIconEye: true,
+                              obscureText: true,
                               hintText: AppStrings.password,
                               prefixIcon: Assets.icons.lock.image(),
                               onChanged: (value) {
@@ -282,7 +284,7 @@ class _LoginViewState extends State<LoginView> {
                         Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
-                            'iPortal version 1.0.0 (44) - 20240220',
+                            'iPortal version 1.0.0 (48) - 20240220',
                             style: AppTextStyles.normal12(
                               color: AppColors.gray400,
                             ),

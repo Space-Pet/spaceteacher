@@ -47,7 +47,7 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-        height: widget.isExpanded ? 138 : 48,
+        height: widget.isExpanded ? 140.v : 48.v,
         decoration: BoxDecoration(
             color: Colors.white,
             border: const Border(

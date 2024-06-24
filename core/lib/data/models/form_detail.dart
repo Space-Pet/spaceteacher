@@ -164,10 +164,16 @@ class Item {
 class Criterial {
   final int id;
   final String criterialTitle;
+  final int evaluationFormId;
+  final int criterialMappingId;
+  final int criterialCategoryId;
   final List<ResultTeacher> result;
   final List<Mark> listMarks;
 
   Criterial({
+    required this.criterialCategoryId,
+    required this.criterialMappingId,
+    required this.evaluationFormId,
     required this.id,
     required this.criterialTitle,
     required this.result,
@@ -176,6 +182,9 @@ class Criterial {
 
   factory Criterial.fromJson(Map<String, dynamic> json) {
     return Criterial(
+      criterialCategoryId: json['criterial_category_id'] ?? 0,
+      criterialMappingId: json['criterial_mapping_id'] ?? 0,
+      evaluationFormId: json['evaluation_form_id'] ?? 0,
       id: json['id'],
       criterialTitle: json['criterial_title'],
       result: (json['result'] as List)
@@ -188,6 +197,9 @@ class Criterial {
   }
 
   factory Criterial.empty() => Criterial(
+        evaluationFormId: 0,
+        criterialCategoryId: 0,
+        criterialMappingId: 0,
         id: 0,
         criterialTitle: '',
         result: [],
@@ -195,6 +207,9 @@ class Criterial {
       );
 
   static Criterial fakeData(int index) => Criterial(
+        evaluationFormId: index,
+        criterialCategoryId: index,
+        criterialMappingId: index,
         id: index,
         criterialTitle: 'criterialTitle $index',
         result: List.generate(4, (i) => ResultTeacher.fakeData(i)),

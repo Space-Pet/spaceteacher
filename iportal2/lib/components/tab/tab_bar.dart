@@ -32,12 +32,15 @@ class TabBarFlexible extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(4),
                   child: TabBar(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     labelColor: AppColors.red90001,
                     unselectedLabelColor: AppColors.gray700,
                     dividerColor: Colors.transparent,
                     labelStyle: AppTextStyles.semiBold14(),
+                    labelPadding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                     unselectedLabelStyle: AppTextStyles.normal14(),
                     indicator: BoxDecoration(
                       color: AppColors.white,

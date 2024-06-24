@@ -58,7 +58,7 @@ class SettingScreenBloc extends Bloc<SettingScreenEvent, SettingScreenState> {
 
     try {
       final data = await appFetchApiRepo.turnOffNoti(
-        isDisableNoti: event.isDisableNoti,
+        pushNotify: event.pushNotify,
         headers: headers,
       );
       if (data!['code'] == 200) {

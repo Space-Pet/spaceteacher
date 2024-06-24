@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iportal2/components/dialog/dialog_update_phone.dart';
-import 'package:iportal2/components/dialog/dialog_scale_animated.dart';
 import 'package:iportal2/components/tab/tab_bar.dart';
 import 'package:iportal2/components/tab/tab_content.dart';
 import 'package:iportal2/screens/profile/bloc/profile_bloc.dart';
@@ -11,6 +9,7 @@ class TabBarStudent extends StatelessWidget {
   const TabBarStudent({
     super.key,
     required this.studentData,
+    required this.onEditPhone,
   });
 
   static const statusMap = {
@@ -21,6 +20,7 @@ class TabBarStudent extends StatelessWidget {
   };
 
   final StudentData studentData;
+  final void Function() onEditPhone;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +65,7 @@ class TabBarStudent extends StatelessWidget {
                   content: studentData.pupil.phone,
                   isEditPhone: true,
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => DialogScaleAnimated(
-                          dialogContent: PhoneUpdate(
-                        bloc: profileBloc,
-                      )),
-                    );
+                    onEditPhone();
                   }),
               RowContent(
                 title: 'Email',

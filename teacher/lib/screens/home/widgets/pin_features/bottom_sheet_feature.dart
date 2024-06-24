@@ -12,7 +12,7 @@ import 'package:teacher/screens/home/widgets/pin_features/list_feature.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
 import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
-import 'package:teacher/screens/observation_schedule/screen/observation_schedule_screen.dart';
+import 'package:teacher/screens/observation_schedule/observation_schedule_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';

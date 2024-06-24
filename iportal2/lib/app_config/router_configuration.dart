@@ -77,12 +77,10 @@ class CustomRouter {
       case ChatRoomScreen.routeName:
         final arguments = settings.arguments as Map<String, dynamic>;
         final message = arguments['message'] as Message;
-        final phoneBookStudent =
-            arguments['phoneBookStudent'] as PhoneBookStudent;
+
         return transitionAnimation(
           child: ChatRoomScreen(
             messageChatRoom: message,
-            phoneBookStudent: phoneBookStudent,
           ),
           routeName: ChatRoomScreen.routeName,
         );

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../resources/app_colors.dart';
 
-class TitleAndInputText extends StatelessWidget {
-  const TitleAndInputText({
+class TitleAndInputText extends StatefulWidget {
+  TitleAndInputText({
     super.key,
     this.paddingTop = 0,
     this.paddingBottom = 0,
@@ -22,6 +22,7 @@ class TitleAndInputText extends StatelessWidget {
     this.onTap,
     this.labelStyles,
     this.prefixIcon,
+    this.showIconEye = false,
   });
 
   final String? title;
@@ -30,13 +31,13 @@ class TitleAndInputText extends StatelessWidget {
 
   // prefix icon
   final Image? prefixIcon;
-
+  final bool showIconEye;
   final double paddingTop;
   final double paddingBottom;
   final bool isRequired;
   final bool textInputType;
   final ValueChanged<String>? onChanged;
-  final bool obscureText;
+  late bool obscureText;
   final Function()? onPressedIcon;
   final bool isValid;
   final TextStyle titleStyle;
@@ -45,76 +46,97 @@ class TitleAndInputText extends StatelessWidget {
   final Function()? onTap;
 
   @override
+  State<TitleAndInputText> createState() => _TitleAndInputTextState();
+}
+
+class _TitleAndInputTextState extends State<TitleAndInputText> {
+  @override
   Widget build(BuildContext context) {
     const redColor = AppColors.redMenu;
     return Padding(
       padding: EdgeInsets.only(
-        top: paddingTop,
-        bottom: paddingBottom,
+        top: widget.paddingTop,
+        bottom: widget.paddingBottom,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if ((title ?? '').isNotEmpty)
+          if ((widget.title ?? '').isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
               child: Text(
-                title ?? '',
-                style: titleStyle,
+                widget.title ?? '',
+                style: widget.titleStyle,
               ),
             ),
           TextField(
-            focusNode: focusNode,
+            focusNode: widget.focusNode,
             obscuringCharacter: '*',
-            onChanged: onChanged,
+            onChanged: widget.onChanged,
             onTap: () {
-              if (null != onTap) {
-                onTap!();
+              if (null != widget.onTap) {
+                widget.onTap!();
               }
             },
             onSubmitted: (_) {
-              if (null != onSubmit) {
-                onSubmit!();
+              if (null != widget.onSubmit) {
+                widget.onSubmit!();
               }
             },
-            cursorColor: isValid ? null : redColor,
-            keyboardType:
-                textInputType ? TextInputType.text : TextInputType.number,
+            cursorColor: widget.isValid ? null : redColor,
+            keyboardType: widget.textInputType
+                ? TextInputType.text
+                : TextInputType.number,
             decoration: InputDecoration(
-              constraints: const BoxConstraints(
-                maxHeight: 50,
-                minHeight: 42,
-              ),
-              contentPadding: prefixIcon == null
-                  ? const EdgeInsets.symmetric(horizontal: 16)
-                  : EdgeInsets.zero,
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: isValid ? AppColors.gray300 : redColor),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: isValid ? Colors.blue : redColor),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              border: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: isValid ? AppColors.gray300 : redColor),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              hintText: hintText,
-              hintStyle: const TextStyle(
-                  color: AppColors.gray500,
-                  fontFamily: 'Inter',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
-              filled: true,
-              fillColor: Colors.white,
-              prefixIconColor: isValid ? AppColors.gray500 : redColor,
-              prefixIcon: prefixIcon,
-            ),
-            obscureText: obscureText,
+                constraints: const BoxConstraints(
+                  maxHeight: 50,
+                  minHeight: 42,
+                ),
+                contentPadding: widget.prefixIcon == null
+                    ? const EdgeInsets.symmetric(horizontal: 16)
+                    : EdgeInsets.zero,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isValid ? AppColors.gray300 : redColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isValid ? Colors.blue : redColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: widget.isValid ? AppColors.gray300 : redColor),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(
+                    color: AppColors.gray500,
+                    fontFamily: 'Inter',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+                filled: true,
+                fillColor: Colors.white,
+                prefixIconColor: widget.isValid ? AppColors.gray500 : redColor,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: widget.showIconEye
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.obscureText = !widget.obscureText;
+                          });
+                        },
+                        icon: Icon(
+                          widget.obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: AppColors.gray500,
+                        ),
+                      )
+                    : null),
+            obscureText: widget.obscureText,
           ),
         ],
       ),

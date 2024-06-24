@@ -71,8 +71,8 @@ class TeacherItem {
 
   String toJson() => json.encode(toMap());
 
-  factory TeacherItem.fromJson(String source) =>
-      TeacherItem.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory TeacherItem.fromJson(Map<String, dynamic> json) =>
+      TeacherItem.fromMap(json);
 
   @override
   String toString() {

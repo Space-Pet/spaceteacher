@@ -17,8 +17,8 @@ class ChangePassword extends SettingScreenEvent {
 
 class TurnOffNoti extends SettingScreenEvent {
   TurnOffNoti({
-    required this.isDisableNoti,
+    required this.pushNotify,
   });
 
-  final bool isDisableNoti;
+  final int pushNotify;
 }

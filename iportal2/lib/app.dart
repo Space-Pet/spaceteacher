@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:core/common/constants/app_locale.dart';
 import 'package:core/common/services/firebase_notification_service.dart';
 import 'package:core/core.dart';
+import 'package:core/data/data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -65,9 +66,20 @@ class _IPortal2AppState extends State<IPortal2App> {
         break;
 
       case 'message':
+        final conversationId = data?['conversation_id'];
+        print('conversationId: $conversationId');
+
         mainNavKey.currentContext?.push(
-          const MessageScreen(),
+          ChatRoomScreen(
+            messageChatRoom: Message.empty(),
+          ),
         );
+
+        final currentContext = mainNavKey.currentState!.context;
+        currentContext
+            .read<MessageBloc>()
+            .add(GetMessageDetail(conversationId: conversationId));
+
       default:
     }
   }
@@ -82,13 +94,14 @@ class _IPortal2AppState extends State<IPortal2App> {
         final currentContext = mainNavKey.currentState!.context;
         bool isMessageScreen = false;
         bool isMessageDetail = false;
+
         currentContext.popUntil(predicate: (Route route) {
-          log('navKey.currentState!.context.popUntil ${route.settings.name}');
           if (route.settings.name == MessageScreen.routeName) {
             isMessageScreen = true;
           }
           return true;
         });
+
         if (isMessageScreen) {
           currentContext.read<MessageBloc>().add(GetListMessageResert());
         }

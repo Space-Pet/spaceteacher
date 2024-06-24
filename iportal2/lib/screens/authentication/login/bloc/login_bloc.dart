@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:core/core.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/app_config/domain_saver.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
@@ -54,7 +53,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _initDeviceInfo(InitDeviceInfo event, Emitter<LoginState> emit) async {
     final firebaseMessaging = FirebaseMessaging.instance;
     final fcmToken = await firebaseMessaging.getToken();
-    print('fcm: $fcmToken');
     final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
     final isAndroid = Platform.isAndroid;
 
@@ -113,8 +111,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     try {
       // [TEST] - clear before commit
-      final userName = kDebugMode ? '0563230001' : state.userName;
-      final password = kDebugMode ? 'ab6ujo' : state.password;
+      // final userName = kDebugMode ? '02031230009' : state.userName;
+      // final password = kDebugMode ? 'apel1z' : state.password;
+      final userName = state.userName;
+      final password = state.password;
       final deviceInfo = state.deviceInfo;
 
       emit(state.copyWith(status: LoginStatus.loading));
@@ -156,7 +156,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           status: LoginStatus.failure, failureMessage: e.message));
     } catch (_) {
       emit(state.copyWith(
-          status: LoginStatus.failure, failureMessage: 'Unknown error'));
+        status: LoginStatus.failure,
+        failureMessage: 'Có lỗi xảy ra, vui lòng thử lại',
+      ));
     }
   }
 
@@ -173,7 +175,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         tokenFirebase: deviceInfo.tokenFirebase,
       );
 
-      final isStudentUser = user.isStudent();
       final localChildren = user.children
           .map((e) =>
               e.toLocalChildren(isDefaultActive: user.pupil_id == e.pupil_id))
@@ -196,7 +197,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           status: LoginStatus.failure, failureMessage: e.message));
     } catch (_) {
       emit(state.copyWith(
-          status: LoginStatus.failure, failureMessage: 'Unknown error'));
+        status: LoginStatus.failure,
+        failureMessage: 'Có lỗi xảy ra, vui lòng thử lại',
+      ));
     }
   }
 }

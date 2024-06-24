@@ -57,3 +57,21 @@ class GetFormDetail extends PreScoreEvent {
     required this.pupilId,
   });
 }
+
+class PostUpdateReport extends PreScoreEvent {
+  final int pupilId;
+  final String evaluationFormId;
+  final String commentText;
+  final String teacherEvaluation;
+  final int classId;
+  final List<List<UpdateReport>> updateReport;
+
+  PostUpdateReport({
+    required this.classId,
+    required this.commentText,
+    required this.evaluationFormId,
+    required this.pupilId,
+    required this.teacherEvaluation,
+    required this.updateReport,
+  });
+}

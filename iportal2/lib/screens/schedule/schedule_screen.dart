@@ -40,6 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
           final bloc = context.read<ScheduleBloc>();
           final isLoading = state.status == ScheduleStatus.loading;
           final scheduleData = state.scheduleData.tkbData;
+          final isEmpty = scheduleData.isEmpty && !isLoading;
           final exerciseData = state.exerciseDataList;
 
           onViewExercise(DateTime date, int tietNum) {
@@ -103,14 +104,16 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                           ),
                           const SizedBox(height: 8),
                           Expanded(
-                            child: ClipRRect(
-                              borderRadius: AppRadius.rounded10,
-                              child: ScheduleTabs(
-                                lessons: scheduleData,
-                                datePicked: state.datePicked,
-                                onViewExercise: onViewExercise,
-                              ),
-                            ),
+                            child: isEmpty
+                                ? const EmptyScreen(text: 'Không có dữ liệu')
+                                : ClipRRect(
+                                    borderRadius: AppRadius.rounded10,
+                                    child: ScheduleTabs(
+                                      lessons: scheduleData,
+                                      datePicked: state.datePicked,
+                                      onViewExercise: onViewExercise,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),

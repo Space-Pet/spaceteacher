@@ -44,7 +44,7 @@ class _SettingScreenState extends State<SettingScreen> {
       authRepository: context.read<AuthRepository>(),
       userRepository: context.read<UserRepository>(),
       currentUserBloc: context.read<CurrentUserBloc>(),
-  );
+    );
 
     final isDisableNoti = widget.isParent
         ? widget.parentData.pushNotify == 0
@@ -91,19 +91,32 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   child: SingleChildScrollView(
                     child: Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 18),
-                        child: AccountSetting(
-                          text: AppStrings.turnOffNoti,
-                          iconAsset: Assets.icons.bell,
-                          isDisableNoti: isDisableNoti,
-                          isNotiSetting: true,
-                          onPressed: () {
-                            settingBloc.add(TurnOffNoti(
-                              isDisableNoti: isDisableNoti,
-                            ));
-                          },
-                        ),
+                      BlocBuilder<CurrentUserBloc, CurrentUserState>(
+                        builder: (context, state) {
+                          final pushNotify = state.pushNotify;
+                          final currentUserBloc =
+                              context.read<CurrentUserBloc>();
+
+                          final updateValue = pushNotify == 0 ? 1 : 0;
+
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 18),
+                            child: AccountSetting(
+                              text: AppStrings.turnOffNoti,
+                              iconAsset: Assets.icons.bell,
+                              isDisableNoti: pushNotify == 0,
+                              isNotiSetting: true,
+                              onPressed: () {
+                                settingBloc.add(TurnOffNoti(
+                                  pushNotify: updateValue,
+                                ));
+
+                                currentUserBloc
+                                    .add(CurrentUserNotify(updateValue));
+                              },
+                            ),
+                          );
+                        },
                       ),
                       AccountSetting(
                         text: AppStrings.userManual,
@@ -114,7 +127,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         text: 'FAQ',
                         iconAsset: Assets.icons.faq,
                         onPressed: onViewGuide,
-                      ), 
+                      ),
                       if (widget.isParent &&
                           widget.parentData.children.length > 1)
                         AccountSetting(

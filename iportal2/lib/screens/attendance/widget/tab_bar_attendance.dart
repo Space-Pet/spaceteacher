@@ -29,8 +29,7 @@ class CTabBarAttendance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-        child: DefaultTabController(
+    return DefaultTabController(
       length: tabs.length,
       child: Column(
         children: [
@@ -91,7 +90,7 @@ class CTabBarAttendance extends StatelessWidget {
           ))
         ],
       ),
-    ));
+    );
   }
 
   List<Widget> _buildTabs() {

@@ -135,8 +135,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     emit(state.copyWith(status: ScoreStatus.loading));
 
     final scoreData = await appFetchApiRepo.getEslScore(
-      // userKey: currentUserBloc.state.activeChild.user_key,
-      userKey: '0253220010',
+      userKey: currentUserBloc.state.activeChild.user_key,
+      // userKey: '0253220010',
       txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
     );

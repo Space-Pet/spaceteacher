@@ -31,16 +31,20 @@ class CardExpandNutrition extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            children: [
-              HeightGroup(nutritionItem: nutritionItem),
-              const SizedBox(
-                height: 12,
-              ),
-              WeightGroup(nutritionItem: nutritionItem)
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Column(
+              children: [
+                HeightGroup(nutritionItem: nutritionItem),
+                const SizedBox(
+                  height: 12,
+                ),
+                WeightGroup(nutritionItem: nutritionItem)
+              ],
+            ),
           ),
-          BMIGroup(nutritionItem: nutritionItem)
+          const SizedBox(width: 12),
+          Expanded(child: BMIGroup(nutritionItem: nutritionItem))
         ],
       ),
     );
@@ -58,7 +62,6 @@ class BMIGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
@@ -80,9 +83,7 @@ class BMIGroup extends StatelessWidget {
                   'BMI',
                   style: AppTextStyles.normal14(color: AppColors.gray600),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
+                const SizedBox(width: 8),
                 Text(
                   nutritionItem.bmi.toString(),
                   style: AppTextStyles.bold16(color: AppColors.lightBlue600),
@@ -126,19 +127,14 @@ class WeightGroup extends StatelessWidget {
           decoration: const BoxDecoration(
               color: AppColors.lightSkyBlue,
               borderRadius: BorderRadius.all(Radius.circular(8))),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 7,
-            vertical: 8,
-          ),
+          padding: const EdgeInsets.fromLTRB(12, 12, 6, 6),
           child: SvgPicture.asset(
             'assets/icons/nutri-weight.svg',
             height: 32,
             width: 32,
           ),
         ),
-        const SizedBox(
-          width: 8,
-        ),
+        const SizedBox(width: 8),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,7 +174,7 @@ class HeightGroup extends StatelessWidget {
               color: AppColors.lightSkyBlue,
               borderRadius: BorderRadius.all(Radius.circular(8))),
           padding: const EdgeInsets.symmetric(
-            horizontal: 12,
+            horizontal: 14,
             vertical: 8,
           ),
           child: SvgPicture.asset(
@@ -187,9 +183,7 @@ class HeightGroup extends StatelessWidget {
             width: 32,
           ),
         ),
-        const SizedBox(
-          width: 8,
-        ),
+        const SizedBox(width: 8),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,9 +192,7 @@ class HeightGroup extends StatelessWidget {
               "Chiều cao",
               style: AppTextStyles.normal14(color: AppColors.black24),
             ),
-            const SizedBox(
-              height: 6,
-            ),
+            const SizedBox(height: 6),
             Text(
               nutritionItem.height.toString(),
               style: AppTextStyles.semiBold14(color: AppColors.black24),

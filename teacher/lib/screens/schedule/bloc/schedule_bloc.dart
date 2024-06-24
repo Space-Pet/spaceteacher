@@ -29,9 +29,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   _onFetchDueDateExercises(
       ScheduleFetchExercise event, Emitter<ScheduleState> emit) async {
     final exerciseDataList = await appFetchApiRepo.getExercises(
-      // userKey: currentUserBloc.state.user.user_key,
+      userKey: currentUserBloc.state.user.user_key,
       datePicked: event.datePicked,
-      userKey: '0723210020',
+      // userKey: '0723210020',
     );
 
     emit(

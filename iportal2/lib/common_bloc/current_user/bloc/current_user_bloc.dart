@@ -15,6 +15,7 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     on<CurrentUserUpdated>(_onUpdateUser);
     on<BackGroundUpdatedState>(updateBg);
     on<CurrentUserChangeActiveChild>(_changeActiveChild);
+    on<CurrentUserNotify>(_onUpdateNotify);
   }
 
   final UserRepository userRepository;
@@ -59,6 +60,15 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
   ) async {
     emit(state.copyWith(
       background: event.bg,
+    ));
+  }
+
+  Future<void> _onUpdateNotify(
+    CurrentUserNotify event,
+    Emitter<CurrentUserState> emit,
+  ) async {
+    emit(state.copyWith(
+      pushNotify: event.pushNotify,
     ));
   }
 }

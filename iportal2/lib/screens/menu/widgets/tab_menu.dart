@@ -53,8 +53,11 @@ class TabMenu extends StatelessWidget {
               tabs: listTab,
             ),
             Expanded(
-              child: TabBarView(
-                children: listTabContent,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: TabBarView(
+                  children: listTabContent,
+                ),
               ),
             ),
           ],
@@ -83,7 +86,7 @@ class TabMenu extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 8, left: 8),
+                padding: const EdgeInsets.only(left: 8),
                 child: Text(
                   category,
                   style: AppTextStyles.normal14(
@@ -111,14 +114,14 @@ class TabMenu extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsets.zero,
+                              padding: const EdgeInsets.all(8.0),
                               child: ConstrainedBox(
                                 constraints: const BoxConstraints(
-                                  maxHeight: 60,
-                                  maxWidth: 100,
-                                  minHeight: 50,
-                                  minWidth: 100,
-                                ),
+                                    // maxHeight: 60,
+                                    // maxWidth: 100,
+                                    // minHeight: 50,
+                                    // minWidth: 100,
+                                    ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(
                                       5), // Border radius of 20

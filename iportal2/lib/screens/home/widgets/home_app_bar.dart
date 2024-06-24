@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
+import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
@@ -95,42 +96,49 @@ class _HomeAppBarState extends State<HomeAppBar> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    activeChildData.full_name,
-                                    style: AppTextStyles.semiBold12(
-                                      color: AppColors.white,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        activeChildData.full_name,
+                                        style: AppTextStyles.semiBold14(
+                                          color: AppColors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      if (!isStudent && listChildren.length > 1)
+                                        InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              isScrollControlled: true,
+                                              builder: (BuildContext context) =>
+                                                  const SelectChildrenBottomSheet(),
+                                            );
+                                          },
+                                          child: const Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: AppColors.white,
+                                            size: 28,
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                   Text(
                                     'Lớp ${activeChildData.class_name}',
-                                    style: AppTextStyles.normal12(
+                                    style: AppTextStyles.normal14(
                                       color: AppColors.white,
                                     ),
                                   )
                                 ],
                               ),
-                              if (!isStudent && listChildren.length > 1)
-                                IconButton(
-                                  padding: const EdgeInsets.only(left: 16),
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: AppColors.white,
-                                  ),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      builder: (BuildContext context) =>
-                                          const SelectChildrenBottomSheet(),
-                                    );
-                                  },
-                                ),
                             ],
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
-                            context.push(const MessageScreen());
+                            mainNavKey.currentContext!.pushNamed(
+                              routeName: MessageScreen.routeName,
+                            );
                           },
                           child: CircleAvatar(
                             backgroundColor:

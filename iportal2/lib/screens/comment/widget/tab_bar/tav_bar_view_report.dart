@@ -3,7 +3,7 @@ import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
-import 'package:iportal2/screens/comment/widget/select_button/score_filter.dart';
+import 'package:iportal2/screens/score/widgets/score_filter.dart';
 import 'package:iportal2/screens/survey/widget/list_view_report.dart';
 
 class TabBarViewReport extends StatelessWidget {
@@ -25,18 +25,28 @@ class TabBarViewReport extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 12, left: 8, right: 8),
-              child: ScoreFilter(
-                selectedOption: ViewScoreSelectedParam(
-                  selectedTerm: state.txtHocKy!,
-                ),
-                onUpdateTerm: (value) {
+              padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+              child: FilterItem(
+                title: 'Chọn học kỳ',
+                options: TermType.values.map((e) => e.text()).toList(),
+                selectedOption: state.txtHocKy != null
+                    ? TermType.values
+                        .firstWhere(
+                            (element) => element.getValue() == state.txtHocKy)
+                        .text()
+                    : TermType.term1.text(),
+                onUpdateOption: (value) {
+                  print(value);
                   if (value == 'Học kỳ 1 - Năm học $learnYear') {
                     context.read<CommentBloc>().add(GetListReportStudent(
-                        learnYear: learnYear, semester: 1));
+                          learnYear: learnYear,
+                          semester: 1,
+                        ));
                   } else {
                     context.read<CommentBloc>().add(GetListReportStudent(
-                        learnYear: learnYear, semester: 2));
+                          learnYear: learnYear,
+                          semester: 2,
+                        ));
                   }
                 },
               ),
@@ -74,8 +84,9 @@ class TabBarViewReport extends StatelessWidget {
                                   padding: const EdgeInsets.all(8),
                                   child: GestureDetector(
                                     onTap: () {
-                                      context.read<CommentBloc>().add(
-                                          GetReportStudent(id: item.id));
+                                      context
+                                          .read<CommentBloc>()
+                                          .add(GetReportStudent(id: item.id));
                                     },
                                     child: Row(
                                       crossAxisAlignment:
@@ -142,8 +153,8 @@ class TabBarViewReport extends StatelessWidget {
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets
-                                                            .only(left: 8),
+                                                        const EdgeInsets.only(
+                                                            left: 8),
                                                     child: Text(
                                                       'Nhận xét của giáo viên',
                                                       style: AppTextStyles
@@ -166,8 +177,8 @@ class TabBarViewReport extends StatelessWidget {
                                                     const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: AppColors.white),
                                                 child: Text(
                                                   reportStudent
@@ -198,19 +209,17 @@ class TabBarViewReport extends StatelessWidget {
                                                 children: [
                                                   CircleAvatar(
                                                     backgroundColor:
-                                                        AppColors
-                                                            .ellipse818,
+                                                        AppColors.ellipse818,
                                                     radius: 10,
                                                     child: SvgPicture.asset(
                                                         Assets.icons.emoji),
                                                   ),
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets
-                                                            .only(left: 8),
+                                                        const EdgeInsets.only(
+                                                            left: 8),
                                                     child: Text(
-                                                      reportStudent
-                                                              ?.teacherName
+                                                      reportStudent?.teacherName
                                                               .label ??
                                                           '',
                                                       style: AppTextStyles
@@ -233,12 +242,12 @@ class TabBarViewReport extends StatelessWidget {
                                                     const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius
-                                                            .circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: AppColors.white),
                                                 child: Text(
-                                                  reportStudent?.teacherName
-                                                          .value ??
+                                                  reportStudent
+                                                          ?.teacherName.value ??
                                                       '',
                                                 ),
                                               )
@@ -251,17 +260,15 @@ class TabBarViewReport extends StatelessWidget {
                                             left: 8, right: 8),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: AppColors
-                                                  .backgroundBrandRest,
+                                              color:
+                                                  AppColors.backgroundBrandRest,
                                               borderRadius:
-                                                  BorderRadius.circular(
-                                                      10)),
+                                                  BorderRadius.circular(10)),
                                           child: Column(
                                             children: [
                                               Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                        top: 6, left: 6),
+                                                padding: const EdgeInsets.only(
+                                                    top: 6, left: 6),
                                                 child: Row(
                                                   children: [
                                                     SvgPicture.asset(
@@ -271,16 +278,14 @@ class TabBarViewReport extends StatelessWidget {
                                                     ),
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsets
-                                                              .only(
+                                                          const EdgeInsets.only(
                                                               left: 6),
                                                       child: Text(
                                                         'Thang đánh giá',
                                                         style: AppTextStyles
                                                             .normal16(
                                                           fontWeight:
-                                                              FontWeight
-                                                                  .w600,
+                                                              FontWeight.w600,
                                                           color: AppColors
                                                               .brand600,
                                                         ),
@@ -295,97 +300,94 @@ class TabBarViewReport extends StatelessWidget {
                                                 child: Container(
                                                   width: double.infinity,
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          12),
+                                                      const EdgeInsets.all(12),
                                                   decoration: BoxDecoration(
-                                                      color:
-                                                          AppColors.white,
+                                                      color: AppColors.white,
                                                       borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                                  20)),
+                                                          BorderRadius.circular(
+                                                              20)),
                                                   child: Column(
-                                                    children: reportStudent
-                                                            ?.listMarks
-                                                            .map((entry) {
-                                                          int textToShow =
-                                                              entry.value;
-                                                          Color textColor;
-                                                          if (textToShow ==
-                                                              1) {
-                                                            textColor =
-                                                                Colors.red;
-                                                          } else if (textToShow ==
-                                                              2) {
-                                                            textColor =
-                                                                AppColors
-                                                                    .brand600;
-                                                          } else if (textToShow ==
-                                                              3) {
-                                                            textColor =
-                                                                AppColors
-                                                                    .green700;
-                                                          } else {
-                                                            textColor =
-                                                                Colors
-                                                                    .black;
-                                                          }
-                                                          return Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              CircleAvatar(
-                                                                backgroundColor:
-                                                                    textColor,
-                                                                radius: 10,
-                                                                child: Text(
-                                                                  entry
-                                                                      .value
-                                                                      .toString(),
-                                                                  style: AppTextStyles.normal14(
-                                                                      color:
-                                                                          AppColors.white),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 8),
-                                                              Expanded(
-                                                                child:
-                                                                    RichText(
-                                                                  text:
-                                                                      TextSpan(
-                                                                    text:
-                                                                        '',
-                                                                    style: DefaultTextStyle.of(context)
-                                                                        .style,
-                                                                    children: <TextSpan>[
-                                                                      TextSpan(
-                                                                        text:
-                                                                            '${entry.title}: ',
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontWeight: FontWeight.bold,
-                                                                          fontSize: 16,
-                                                                        ),
-                                                                      ),
-                                                                      TextSpan(
-                                                                        text:
-                                                                            entry.description,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontWeight: FontWeight.w400,
-                                                                          fontSize: 14,
-                                                                        ),
-                                                                      ),
-                                                                    ],
+                                                    children:
+                                                        reportStudent?.listMarks
+                                                                .map((entry) {
+                                                              int textToShow =
+                                                                  entry.value;
+                                                              Color textColor;
+                                                              if (textToShow ==
+                                                                  1) {
+                                                                textColor =
+                                                                    Colors.red;
+                                                              } else if (textToShow ==
+                                                                  2) {
+                                                                textColor =
+                                                                    AppColors
+                                                                        .brand600;
+                                                              } else if (textToShow ==
+                                                                  3) {
+                                                                textColor =
+                                                                    AppColors
+                                                                        .green700;
+                                                              } else {
+                                                                textColor =
+                                                                    Colors
+                                                                        .black;
+                                                              }
+                                                              return Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  CircleAvatar(
+                                                                    backgroundColor:
+                                                                        textColor,
+                                                                    radius: 10,
+                                                                    child: Text(
+                                                                      entry
+                                                                          .value
+                                                                          .toString(),
+                                                                      style: AppTextStyles.normal14(
+                                                                          color:
+                                                                              AppColors.white),
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        }).toList() ??
-                                                        [],
+                                                                  const SizedBox(
+                                                                      width: 8),
+                                                                  Expanded(
+                                                                    child:
+                                                                        RichText(
+                                                                      text:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '',
+                                                                        style: DefaultTextStyle.of(context)
+                                                                            .style,
+                                                                        children: <TextSpan>[
+                                                                          TextSpan(
+                                                                            text:
+                                                                                '${entry.title}: ',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontSize: 16,
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text:
+                                                                                entry.description,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontWeight: FontWeight.w400,
+                                                                              fontSize: 14,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }).toList() ??
+                                                            [],
                                                   ),
                                                 ),
                                               ),

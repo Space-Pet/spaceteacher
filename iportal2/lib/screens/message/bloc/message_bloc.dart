@@ -12,7 +12,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   final AppFetchApiRepository appApiRepository;
   final CurrentUserBloc currentUserBloc;
   MessageBloc({required this.appApiRepository, required this.currentUserBloc})
-      : super(const MessageState()) {
+      : super(MessageState(
+          messageDetail: MessageDetail.fakeData(),
+        )) {
     on<GetListMessage>(_onGetListMessage);
     on<GetPhoneBookStudent>(_onGetPhoneBookStudent);
     on<GetMessageDetail>(_onGetMessageDetail);
@@ -120,7 +122,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     PostMessage event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingMessage));
+    emit(state.copyWith(messageStatus: MessageStatus.loadingPostPinMessage));
     final data = await appApiRepository.postMessage(
       recipient: event.recipient,
       content: event.content,
@@ -136,16 +138,25 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     GetMessageDetail event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loading));
+    if (event.showLoading) {
+      emit(state.copyWith(
+        messageDetail: MessageDetail.fakeData(),
+        roomStatus: MessageStatus.loadingMessage,
+        isFirstLoadChatRoom: false,
+      ));
+    }
     final data = await appApiRepository.getMessageDetail(
       conversationId: event.conversationId,
       schoolId: currentUserBloc.state.activeChild.school_id,
       schoolBrand: currentUserBloc.state.activeChild.school_brand,
       page: event.page,
     );
+
+    await Future.delayed(const Duration(milliseconds: 1000));
+
     emit(
       state.copyWith(
-          messageStatus: MessageStatus.success,
+          roomStatus: MessageStatus.success,
           messageDetail: data['data'].map<MessageDetail>((e) {
             return MessageDetail.fromJson(e);
           }).toList(),
@@ -210,11 +221,11 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
         classId: currentUserBloc.state.user.children[0].class_id.toString(),
         userId: currentUserBloc.state.user.user_id.toString(),
       );
-      // final List<Message> combinedData = [...state.messages, ...data];
+
       emit(state.copyWith(
-          messageStatus: MessageStatus.success,
-          // messages: combinedData,
-          messages: data));
+        messageStatus: MessageStatus.success,
+        messages: data,
+      ));
     } catch (e) {
       emit(state.copyWith(messageStatus: MessageStatus.error));
     }

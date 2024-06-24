@@ -1,6 +1,7 @@
 import 'package:core/core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:iportal2/app.dart';
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
@@ -99,11 +100,13 @@ class SurveyList extends StatelessWidget {
       final isCompleted = survey.status == 1;
       return InkWell(
         onTap: () {
-          context.push(
-            SurveyDetailScreen(
-              khaoSatId: survey.khaoSatId,
-            ),
-          );
+          if (!isCompleted) {
+            mainNavKey.currentContext?.push(
+              SurveyDetailScreen(
+                khaoSatId: survey.khaoSatId,
+              ),
+            );
+          }
         },
         child: Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -148,7 +151,7 @@ class SurveyList extends StatelessWidget {
                     child: Text(
                       isCompleted
                           ? 'Đã hoàn thành khảo sát'
-                          : 'Tham giao khảo sát',
+                          : 'Tham gia khảo sát',
                       style: AppTextStyles.semiBold12(
                           color: isCompleted
                               ? AppColors.green600

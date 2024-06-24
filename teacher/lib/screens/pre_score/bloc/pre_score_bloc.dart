@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:core/data/models/models.dart';
 import 'package:equatable/equatable.dart';
+import 'package:network_data_source/network_data_source.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
 
@@ -34,6 +35,31 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
     on<GetListAllForm>(_onGetListAllForm);
     on<GetListStudentReport>(_onGetListStudentReport);
     on<GetFormDetail>(_onGetFormDetail);
+    on<PostUpdateReport>(_onPostUpdateReport);
+  }
+  _onPostUpdateReport(
+    PostUpdateReport event,
+    Emitter<PreScoreState> emit,
+  ) async {
+    emit(
+        state.copyWith(preScoreStatus: PreScoreStatus.loadingPostUpdateReport));
+    final data = await appFetchApiRepo.postUpdateReportTeacher(
+      pupilId: event.pupilId,
+      evaluationFormId: event.evaluationFormId,
+      commentText: event.commentText,
+      teacherEvaluation: event.teacherEvaluation,
+      classId: event.classId,
+      updateReport: event.updateReport,
+      schoolId: currentUserBloc.state.user.school_id,
+      schoolBrand: currentUserBloc.state.user.school_brand,
+    );
+    emit(
+      state.copyWith(
+        preScoreStatus: data['code'] == 200
+            ? PreScoreStatus.successPostUpdateReport
+            : PreScoreStatus.failPost,
+      ),
+    );
   }
 
   _onGetFormDetail(

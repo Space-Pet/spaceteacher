@@ -83,7 +83,6 @@ class _WeeklyTabsState extends State<WeeklyTabs>
             ),
             Expanded(
               child: TabBarView(
-                
                 controller: tabBarController,
                 children: listTabContent,
               ),
@@ -110,7 +109,7 @@ class _WeeklyTabsState extends State<WeeklyTabs>
           children: [
             Container(
                 padding: const EdgeInsets.only(top: 6),
-                width: 100,
+                width: 100.h,
                 child: Text(
                   lesson?.planTime ?? '',
                   overflow: TextOverflow.ellipsis,

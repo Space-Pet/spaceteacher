@@ -86,42 +86,22 @@ class _ListNewMessagesViewState extends State<ListNewMessagesView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10, bottom: 4),
+                                    padding: const EdgeInsets.only(bottom: 4),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            context.pop();
-                                          },
-                                          child: Text(
-                                            'Huỷ',
-                                            style: AppTextStyles.normal16(
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
                                         Text(
                                           'Tin nhắn mới',
                                           style: AppTextStyles.normal16(
                                               fontWeight: FontWeight.w500),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Text(
-                                            'Huỷ',
-                                            style: AppTextStyles.normal16(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white),
-                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                        top: 8, left: 10, right: 10),
+                                        top: 8, left: 2, right: 2),
                                     child: SizedBox(
                                       height: 55,
                                       child: TextField(

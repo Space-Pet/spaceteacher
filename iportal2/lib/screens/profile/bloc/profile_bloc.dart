@@ -38,28 +38,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) {
     final isStudent = currentUserBloc.state.user.isStudent();
 
-    if (isStudent) {
-      add(const GetProfileStudent());
-    } else {
+    if (!isStudent) {
       add(const GetProfileParent());
     }
-  }
-
-  void _onGetProfileStudent(
-    GetProfileStudent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(profileStatus: ProfileStatus.init));
-      final data = await userRepository.getProfileStudent(
-          pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
-      emit(state.copyWith(
-        studentData: data,
-        profileStatus: ProfileStatus.success,
-      ));
-    } catch (e) {
-      print('err: $e');
-    }
+    add(const GetProfileStudent());
   }
 
   void _onGetProfileParent(
@@ -71,8 +53,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       final data = await userRepository.getProfileParent(
           pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
       emit(state.copyWith(parentData: data));
+    } catch (e) {
+      print('err: $e');
+    }
+  }
 
-      add(const GetProfileStudent());
+  void _onGetProfileStudent(
+    GetProfileStudent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(profileStatus: ProfileStatus.init));
+      final data = await userRepository.getProfileStudent(
+          pupilId: currentUserBloc.state.activeChild.pupil_id.toString());
+
+      emit(state.copyWith(
+        studentData: data,
+        profileStatus: ProfileStatus.success,
+      ));
     } catch (e) {
       print('err: $e');
     }

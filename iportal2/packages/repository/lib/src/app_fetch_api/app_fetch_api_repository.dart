@@ -421,11 +421,11 @@ class AppFetchApiRepository {
   }
 
   Future<Map<String, dynamic>?> turnOffNoti({
-    required bool isDisableNoti,
+    required int pushNotify,
     required Map<String, Object> headers,
   }) async {
     final data = await _appFetchApi.turnOffNoti(
-      isDisableNoti: isDisableNoti,
+      pushNotify: pushNotify,
       headers: headers,
     );
     return data;

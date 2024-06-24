@@ -14,11 +14,13 @@ import 'package:iportal2/components/textfield/input_text.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});
-  static const String routeName = '/messages';
+  static const String routeName = '/message_screen';
+  
   @override
   Widget build(BuildContext context) {
     final messageBloc = context.read<MessageBloc>();
     messageBloc.add(GetListMessage());
+
     return BlocListener<MessageBloc, MessageState>(
         listenWhen: (previous, current) {
           return previous.messageStatus != current.messageStatus;
@@ -51,7 +53,6 @@ class _MessageViewState extends State<MessageView> {
     return BlocBuilder<MessageBloc, MessageState>(
       builder: (context, state) {
         final isLoading = state.messageStatus == MessageStatus.loading;
-
         final message = state.messages;
 
         final filteredChatRooms = message.where((chatRoom) {

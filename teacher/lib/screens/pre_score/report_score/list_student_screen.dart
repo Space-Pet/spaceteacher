@@ -52,6 +52,7 @@ class ListStudentView extends StatelessWidget {
     return BlocBuilder<PreScoreBloc, PreScoreState>(
       builder: (context, state) {
         final listStudentReport = state.listStudentFormReport;
+        final classId = state.userData.lopChuNhiem.id;
         return BackGroundContainer(
           child: Column(
             children: [
@@ -90,6 +91,7 @@ class ListStudentView extends StatelessWidget {
                               onTap: () {
                                 context.push(FormDetailScreen(
                                   listStudentFormReport: item,
+                                  classId: classId,
                                 ));
                               },
                               child: Container(

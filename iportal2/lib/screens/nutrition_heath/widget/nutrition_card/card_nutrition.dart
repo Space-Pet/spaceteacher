@@ -32,40 +32,45 @@ class _CardNutritionState extends State<CardNutrition> {
         ..lineTo(size.width, size.height)
         ..lineTo(size.width, size.height)
         ..lineTo(0, size.height),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.fromLTRB(0, 12, 0, 10),
-        height: widget.isExpanded ? 220 : 48,
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tháng ${widget.nutritionItem.month}',
-                  style: widget.isExpanded
-                      ? AppTextStyles.semiBold14(
-                          color: AppColors.gray600,
-                        )
-                      : AppTextStyles.normal14(
-                          color: AppColors.gray600,
-                        ),
-                ),
-                GestureDetector(
-                  onTap: widget.onExpansionChanged,
-                  child: SvgPicture.asset(
-                    'assets/icons/${widget.isExpanded ? 'chevron-up' : 'chevron-down'}.svg',
+      child: GestureDetector(
+        onTap: () {
+          widget.onExpansionChanged();
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.fromLTRB(0, 12, 0, 10),
+          height: widget.isExpanded ? 210 : 48,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tháng ${widget.nutritionItem.month}',
+                    style: widget.isExpanded
+                        ? AppTextStyles.semiBold14(
+                            color: AppColors.gray600,
+                          )
+                        : AppTextStyles.normal14(
+                            color: AppColors.gray600,
+                          ),
                   ),
-                ),
-              ],
-            ),
-            if (widget.isExpanded)
-              Expanded(
-                  child: SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: CardExpandNutrition(
-                          nutritionItem: widget.nutritionItem)))
-          ],
+                  GestureDetector(
+                    onTap: widget.onExpansionChanged,
+                    child: SvgPicture.asset(
+                      'assets/icons/${widget.isExpanded ? 'chevron-up' : 'chevron-down'}.svg',
+                    ),
+                  ),
+                ],
+              ),
+              if (widget.isExpanded)
+                Expanded(
+                    child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: CardExpandNutrition(
+                            nutritionItem: widget.nutritionItem)))
+            ],
+          ),
         ),
       ),
     );

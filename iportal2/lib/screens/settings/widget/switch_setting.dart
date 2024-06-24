@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class AccountSetting extends StatefulWidget {
+class AccountSetting extends StatelessWidget {
   const AccountSetting({
     super.key,
     required this.text,
@@ -22,23 +22,11 @@ class AccountSetting extends StatefulWidget {
   final bool showDottedLine;
   final bool isNotiSetting;
   final bool isDisableNoti;
-  @override
-  State<AccountSetting> createState() => _AccountSettingState();
-}
-
-class _AccountSettingState extends State<AccountSetting> {
-  bool isSwitched = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.isNotiSetting) isSwitched = widget.isDisableNoti;
-  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onPressed,
+      onTap: onPressed,
       child: Padding(
         padding: const EdgeInsets.only(left: 10.5, right: 10.5, bottom: 10),
         child: Column(
@@ -52,14 +40,14 @@ class _AccountSettingState extends State<AccountSetting> {
                   child: Row(
                     children: [
                       SvgPicture.asset(
-                        widget.iconAsset,
+                        iconAsset,
                         height: 20,
                         width: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Text(
-                          widget.text,
+                          text,
                           style:
                               AppTextStyles.normal16(color: AppColors.gray600),
                         ),
@@ -67,28 +55,25 @@ class _AccountSettingState extends State<AccountSetting> {
                     ],
                   ),
                 ),
-                if (widget.isNotiSetting)
+                if (isNotiSetting)
                   Transform.scale(
                     scale: 0.6,
                     child: CupertinoSwitch(
-                      value: isSwitched,
+                      value: isDisableNoti,
                       onChanged: (value) {
-                        setState(() {
-                          isSwitched = value;
-                        });
-                        widget.onPressed!();
+                        onPressed!();
                       },
                     ),
                   ),
-                if (!widget.isNotiSetting)
+                if (!isNotiSetting)
                   Row(
                     children: [
                       Text(
-                        widget.textRight ?? '',
+                        textRight ?? '',
                         style: AppTextStyles.normal16(),
                       ),
                       IconButton(
-                          onPressed: widget.onPressed,
+                          onPressed: onPressed,
                           icon: const Icon(
                             Icons.keyboard_arrow_right,
                             color: AppColors.gray400,
@@ -97,7 +82,7 @@ class _AccountSettingState extends State<AccountSetting> {
                   ),
               ],
             ),
-            if (widget.showDottedLine)
+            if (showDottedLine)
               const Padding(
                 padding: EdgeInsets.only(top: 5),
                 child: SizedBox(

@@ -15,8 +15,14 @@ class AppFetchApiRepository {
   final AppFetchApi _appFetchApi;
 
   Future<WeeklyLessonData> getRegisterNoteBook(
-          {required String userKey, required String txtDate}) =>
-      _appFetchApi.getRegisterNoteBook(userKey: userKey, txtDate: txtDate);
+          {required String userKey,
+          required String txtDate,
+          required int classSelect}) =>
+      _appFetchApi.getRegisterNoteBook(
+        userKey: userKey,
+        txtDate: txtDate,
+        classSelect: classSelect,
+      );
 
   Future<Schedule> getSchedule(
           {required String userKey, required String txtDate}) =>
@@ -707,31 +713,32 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<Map<String, dynamic>> getTeacherListBySchool({
+  Future<List<TeacherItem>> getTeacherListBySchool({
     required int schoolId,
-  }) async {
-    final response = await _appFetchApi.getTeacherListBySchool(
-      schoolId: schoolId,
-    );
+  }) =>
+      _appFetchApi.getTeacherListBySchool(schoolId: schoolId);
 
-    return response;
-  }
-
-  Future<Map<String, dynamic>> getLessonRegister({
+  Future<List<ObservationData>> getLessonRegister({
     required String userKey,
     required String txtDate,
     required int schoolId,
-    int? teacherId,
-  }) async {
-    final response = await _appFetchApi.getLessonRegister(
-      userKey: userKey,
-      txtDate: txtDate,
-      schoolId: schoolId,
-      teacherId: teacherId,
-    );
+    required String teacherId,
+  }) =>
+      _appFetchApi.getLessonRegister(
+        userKey: userKey,
+        txtDate: txtDate,
+        schoolId: schoolId,
+        teacherId: teacherId,
+      );
 
-    return response;
-  }
+  Future<List<RegisteredLesson>> getLessonRegistered({
+    required String userKey,
+    required String txtDate,
+  }) =>
+      _appFetchApi.getLessonRegistered(
+        userKey: userKey,
+        txtDate: txtDate,
+      );
 
   Future<Map<String, dynamic>> getTeacherListByTeacherId({
     required int teacherId,
@@ -817,19 +824,40 @@ class AppFetchApiRepository {
     required int tietNum,
     required int classId,
     required int subjectId,
-  }) async {
-    final response = await _appFetchApi.postLessonRegister(
-      userKey: userKey,
-      txtDate: txtDate,
-      schoolId: schoolId,
-      teacherId: teacherId,
-      tietNum: tietNum,
-      classId: classId,
-      subjectId: subjectId,
-    );
+  }) =>
+      _appFetchApi.postLessonRegister(
+        userKey: userKey,
+        txtDate: txtDate,
+        schoolId: schoolId,
+        teacherId: teacherId,
+        tietNum: tietNum,
+        classId: classId,
+        subjectId: subjectId,
+      );
 
-    return response;
-  }
+  Future<Map<String, dynamic>> deleteLessonRegistered({
+    required String userKey,
+    required String lessonRegisterId,
+  }) =>
+      _appFetchApi.deleteLessonRegistered(
+        userKey: userKey,
+        lessonRegisterId: lessonRegisterId,
+      );
+
+  Future<MoetEvaluation> getMoetEvaluation({
+    required String userKey,
+    required String lessonRegisterId,
+    required String lessonRegisterIdType,
+  }) async =>
+      _appFetchApi.getMoetEvaluation(
+        userKey: userKey,
+        lessonRegisterId: lessonRegisterId,
+        lessonRegisterIdType: lessonRegisterIdType,
+      );
+
+  Future<Map<String, dynamic>?> updateMoetEvaluation(
+          Map<String, dynamic> body) async =>
+      _appFetchApi.updateMoetEvaluation(body);
 
   Future<Map<String, dynamic>> postNutritionHealth({
     required int pupilId,
@@ -915,6 +943,72 @@ class AppFetchApiRepository {
       pupilId: pupilId,
       schoolBrand: schoolBrand,
       schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postUpdateReportTeacher({
+    required int pupilId,
+    required String evaluationFormId,
+    required String commentText,
+    required String teacherEvaluation,
+    required int classId,
+    required List<List<UpdateReport>> updateReport,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.postUpdateReportTeacher(
+      pupilId: pupilId,
+      evaluationFormId: evaluationFormId,
+      commentText: commentText,
+      teacherEvaluation: teacherEvaluation,
+      classId: classId,
+      updateReport: updateReport,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<ViolationData> getViolationData({
+    required String userKey,
+    required String classId,
+  }) async {
+    final data = await _appFetchApi.getViolationData(
+      userKey: userKey,
+      classId: classId,
+    );
+    return data;
+  }
+
+  Future<List<ListViolation>> getListViolation() async {
+    final data = await _appFetchApi.getListViolation();
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postRegisterBook({
+    required String lessionId,
+    required String lessionTitle,
+    required String lessionNote,
+    required String tietPpct,
+    required String lessionRank,
+    required String danDoBaoBai,
+    required File fileBaoBai,
+    required String linkBaoBai,
+    required String hanNop,
+    required String userKey,
+  }) async {
+    final data = await _appFetchApi.postRegisterBook(
+      lessionId: lessionId,
+      lessionTitle: lessionTitle,
+      lessionNote: lessionNote,
+      tietPpct: tietPpct,
+      lessionRank: lessionRank,
+      danDoBaoBai: danDoBaoBai,
+      fileBaoBai: fileBaoBai,
+      linkBaoBai: linkBaoBai,
+      userKey: userKey,
+      hanNop: hanNop,
     );
     return data;
   }

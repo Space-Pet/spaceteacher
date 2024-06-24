@@ -67,7 +67,8 @@ class SurveyDetail {
     return SurveyDetail(
       info: SurveyInfo.fromMap(map['info']),
       questions: List<SurveyQuestion>.from(
-        map['questions'].map(SurveyQuestion.fromMap),
+        map['questions']
+            .map((x) => SurveyQuestion.fromMap(x as Map<String, dynamic>)),
       ),
     );
   }
@@ -140,7 +141,8 @@ class SurveyQuestion {
   factory SurveyQuestion.fromMap(Map<String, dynamic> map) {
     return SurveyQuestion(
       nhomCauHoi: map['NHOM_CAU_HOI'],
-      cauHoi: List<CauHoi>.from(map['Cau_Hoi'].map(CauHoi.fromMap)),
+      cauHoi: List<CauHoi>.from(
+          map['Cau_Hoi'].map((x) => CauHoi.fromMap(x as Map<String, dynamic>))),
     );
   }
 

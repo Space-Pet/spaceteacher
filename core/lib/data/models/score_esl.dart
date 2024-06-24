@@ -20,7 +20,9 @@ class EslScore {
       learnYear: map['txt_learn_year'],
       data: List<EslScoreData>.from(
         (map['data'] as List<dynamic>?)
-                ?.map((e) => EslScoreData.fromMap(e))
+                ?.map((e) => EslScoreData.fromMap(e as Map<String, dynamic>))
+                .toList()
+                .where((score) => score.markEslType.isNotEmpty)
                 .toList() ??
             [],
       ),
@@ -66,12 +68,27 @@ class EslScoreData {
   });
 
   factory EslScoreData.fromMap(Map<String, dynamic> map) {
+    if (map['SUBJECT_ESL'] == null) {
+      return EslScoreData.empty();
+    }
+
     return EslScoreData(
       markEslType: map['MARK_ESL_TYPE'],
       subjectEsl: SubjectEsl.fromMap(map['SUBJECT_ESL']),
       subjectEslCore: SubjectEslCore.fromMap(map['SUBJECT_ESL_CORE']),
     );
   }
+
+  factory EslScoreData.empty() => EslScoreData(
+        markEslType: '',
+        subjectEsl: SubjectEsl(subjectEslId: '', subjectEslName: ''),
+        subjectEslCore: SubjectEslCore(
+          subjectEslCoreId: '',
+          subjectEslCoreName: '',
+          subjectEslCoreValue: '',
+          subjectEslComment: '',
+        ),
+      );
 
   Map<String, dynamic> toMap() {
     return {
