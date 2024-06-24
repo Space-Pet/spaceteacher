@@ -14,6 +14,7 @@ class FeePlanState extends Equatable {
   final List<LearnYearPayment>? learnYears;
   final int? currentTabIndex;
   final String? sendRequestStatusText;
+  final bool? isListEmpty;
 
   const FeePlanState({
     this.errorsText,
@@ -28,6 +29,7 @@ class FeePlanState extends Equatable {
     this.currentTabIndex = 0,
     this.historyStatus = FeePlanHistoryStatus.initial,
     this.sendRequestStatusText,
+    this.isListEmpty,
   });
 
   @override
@@ -44,6 +46,7 @@ class FeePlanState extends Equatable {
         currentTabIndex,
         historyStatus,
         sendRequestStatusText,
+        isListEmpty,
       ];
 
   FeePlanState copyWith({
@@ -59,6 +62,7 @@ class FeePlanState extends Equatable {
     int? currentTabIndex,
     FeePlanHistoryStatus? historyStatus,
     String? sendRequestStatusText,
+    bool? isListEmpty,
   }) {
     return FeePlanState(
       errorsText: errorsText ?? this.errorsText,
@@ -75,6 +79,7 @@ class FeePlanState extends Equatable {
       historyStatus: historyStatus ?? this.historyStatus,
       sendRequestStatusText:
           sendRequestStatusText ?? this.sendRequestStatusText,
+      isListEmpty: isListEmpty ?? this.isListEmpty,
     );
   }
 }

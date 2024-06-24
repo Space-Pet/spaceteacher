@@ -7,7 +7,7 @@ class StudentFeesResponse {
   final String? status;
   final String? message;
   final int? code;
-  final dynamic data;
+  final _Data? data;
 
   StudentFeesResponse({
     this.status,
@@ -21,12 +21,7 @@ class StudentFeesResponse {
       status: json['status'] as String?,
       message: json['message'] as String?,
       code: json['code'] as int?,
-      data: json['data'] == null
-          ? null
-          : json['data'] is List
-              // ignore: unnecessary_lambdas
-              ? (json['data'] as List).map((e) => _Data.fromJson(e)).toList()
-              : _Data.fromJson(json['data'] as Map<String, dynamic>),
+      data: _Data.fromJson(json['data'] as Map<String, dynamic>),
     );
   }
   Map<String, dynamic> toJson() => _$StudentFeesResponseToJson(this);
