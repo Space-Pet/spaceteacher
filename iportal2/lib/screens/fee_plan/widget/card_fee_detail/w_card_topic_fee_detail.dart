@@ -53,14 +53,15 @@ class _CardTopicDetailFeePlanState extends State<CardTopicDetailFeePlan> {
           }
         },
         builder: (context, state) {
-          
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                widget.feeCategoryData.title ?? '',
-                style: AppTextStyles.bold16(color: AppColors.brand600),
-              ),
+              if (!isNullOrEmpty(widget.feeCategoryData.items) &&
+                  widget.feeCategoryData.items!.any((e) => e.disable == 0))
+                Text(
+                  widget.feeCategoryData.title ?? '',
+                  style: AppTextStyles.bold16(color: AppColors.brand600),
+                ),
               const SizedBox(height: 10),
               Column(
                 children: List.generate(
