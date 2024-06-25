@@ -36,19 +36,19 @@ class CardFeeDetailRequested extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    flex: 7,
-                    child: Text(
+                  Flexible(
+                    flex: 9,
+                    child: AutoSizeText(
                       feeItem.content ?? "",
                       style: AppTextStyles.bold14(
                         color: AppColors.blueForgorPassword,
                       ),
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+                      maxLines: 5,
                     ),
                   ),
-                  const Spacer(),
                   Expanded(
                     flex: 3,
                     child: Text(

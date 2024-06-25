@@ -84,7 +84,7 @@ class _FeePlanScreenState extends State<FeePlanScreen>
                     child: TabBarTariff(
                       tabController: tabController,
                       tabTitles: const [
-                        'Danh sách biẻu phí',
+                        'Danh sách biểu phí',
                         'Lịch sử biểu phí'
                       ],
                     ),
