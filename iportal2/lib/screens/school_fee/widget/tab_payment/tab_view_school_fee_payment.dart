@@ -47,6 +47,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                     SchoolFeePaymentPreview(),
                 paymentGateways: state.paymentGateways ?? [],
                 isPayWithBalance: isPayWithBalance,
+                learnYear: state.currentYearState?.learnYear ?? "",
               ),
             )
                 .then(
@@ -152,6 +153,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                     _payWithBalance(
                       state.schoolFee ?? SchoolFee(),
                       context,
+                      state.currentYearState?.learnYear ?? "",
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -196,6 +198,7 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                   paymentGateways: state.paymentGateways ?? [],
                   // amountToBePaid: int.parse('${totalThanhTien.round()}'),
                   isPayWithBalance: isPayWithBalance,
+                  learnYear: state.currentYearState?.learnYear ?? "",
                 ),
               )
                   .then((res) {
@@ -228,11 +231,15 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
   }
 
   // Thanh toán cấn trừ.
-  void _payWithBalance(SchoolFee schoolFee, BuildContext context) {
+  void _payWithBalance(
+      SchoolFee schoolFee, BuildContext context, String learnYear) {
     setState(() {
       isPayWithBalance = true;
       context.read<SchoolFeeBloc>().add(GetSchoolFeePayWithBalancePreview(
-            totalMoneyPayment: int.parse('${schoolFee.totalCanTru}'),
+            totalMoneyPayment: int.parse(
+              '${schoolFee.totalCanTru}',
+            ),
+            learnYear: learnYear,
           ));
     });
   }

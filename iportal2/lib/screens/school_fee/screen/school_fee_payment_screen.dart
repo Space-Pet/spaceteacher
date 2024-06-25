@@ -17,13 +17,14 @@ class SchoolFeePaymentScreen extends StatefulWidget {
     required this.schoolFeePaymentPreview,
     required this.paymentGateways,
     this.isPayWithBalance,
+    required this.learnYear,
     super.key,
   });
 
   final SchoolFeePaymentPreview schoolFeePaymentPreview;
   final List<PaymentGateway> paymentGateways;
   final bool? isPayWithBalance;
-
+  final String learnYear;
   @override
   State<SchoolFeePaymentScreen> createState() => _SchoolFeePaymentScreenState();
 }
@@ -274,7 +275,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                _handlePayment(context);
+                _handlePayment(context, widget.learnYear);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.brand500,
@@ -426,11 +427,13 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
   }
 
   // Thanh toán dựa trên điều kiện thanh toán bằng số dư hiện tại hoặc các phương thức thanh toán khác.
-  void _handlePayment(BuildContext context) {
+  void _handlePayment(BuildContext context, String learnYear) {
     if (widget.isPayWithBalance == true) {
       context.read<SchoolFeeBloc>().add(
             PayWithBalance(
-                totalMoneyPayment: _schoolFeePaymentPreview.tongThanhToan ?? 0),
+              totalMoneyPayment: _schoolFeePaymentPreview.tongThanhToan ?? 0,
+              learnYear: learnYear,
+            ),
           );
     } else {
       if (_btnTypePayment2 == true) {
@@ -439,7 +442,8 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
           // _showMethodPaymentScreen(context, int.parse(value));
 
           context.read<SchoolFeeBloc>().add(
-                GetSchoolFeePaymentPreview(totalMoneyPayment: int.parse(value)),
+                GetSchoolFeePaymentPreview(
+                    totalMoneyPayment: int.parse(value), learnYear: learnYear),
               );
           isTitleBtnChange = false;
           setState(() {});
