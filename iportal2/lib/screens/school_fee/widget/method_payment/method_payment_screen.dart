@@ -16,9 +16,11 @@ class MethodPaymentScreen extends StatefulWidget {
   const MethodPaymentScreen(
       {required this.paymentGateways,
       required this.totalMoneyPayment,
+      required this.learnyear,
       super.key});
   final List<PaymentGateway> paymentGateways;
   final int totalMoneyPayment;
+  final String learnyear;
   @override
   State<MethodPaymentScreen> createState() => _MethodPaymentScreenState();
 }
@@ -117,7 +119,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
             ),
             const Spacer(),
             BlocConsumer<SchoolFeeBloc, SchoolFeeState>(
-              listener: (context, state) {
+              listener: (context, state) async {
                 if (state.paymentStatus == PaymentStatus.error) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -145,7 +147,10 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                         (resDialog) {
                           if (resDialog != null && resDialog == true) {
                             context.pop(true);
-                            context.pop(true);
+                            context.pop({
+                              "refresh": true,
+                              "tabIndex": 1,
+                            });
                           } else if (resDialog != null && resDialog == false) {
                             context.pop();
                           }
@@ -166,6 +171,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                             OpenPaymentGateway(
                               paymentId: _paymentId,
                               totalMoneyPayment: widget.totalMoneyPayment,
+                              learnYear: widget.learnyear,
                             ),
                           );
                     },

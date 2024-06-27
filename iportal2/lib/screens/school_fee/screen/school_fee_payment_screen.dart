@@ -465,6 +465,7 @@ class _SchoolFeePaymentScreenState extends State<SchoolFeePaymentScreen> {
         child: MethodPaymentScreen(
           paymentGateways: widget.paymentGateways,
           totalMoneyPayment: totalMoneyPayment,
+          learnyear: widget.learnYear,
         ),
       ),
     );

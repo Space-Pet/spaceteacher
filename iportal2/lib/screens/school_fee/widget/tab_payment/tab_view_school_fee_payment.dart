@@ -196,15 +196,17 @@ class _TabViewSchoolFeePayment extends State<TabViewSchoolFeePayment>
                   schoolFeePaymentPreview: state.schoolFeePaymentPreview ??
                       SchoolFeePaymentPreview(),
                   paymentGateways: state.paymentGateways ?? [],
-                  // amountToBePaid: int.parse('${totalThanhTien.round()}'),
                   isPayWithBalance: isPayWithBalance,
                   learnYear: state.currentYearState?.learnYear ?? "",
                 ),
               )
                   .then((res) {
-                if (res['refresh'] == true) {
+                if (res['refresh'] == true && res['tabIndex'] == 1) {
+                  context
+                      .read<SchoolFeeBloc>()
+                      .add(const UpdateTabIndexEvent(1));
                   context.read<SchoolFeeBloc>().add(
-                        FetchSchoolFee(
+                        FetchSchoolFeeHistory(
                           learnYear: state.currentYearState?.learnYear,
                         ),
                       );

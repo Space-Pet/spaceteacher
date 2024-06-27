@@ -1,24 +1,25 @@
 part of 'school_fee_bloc.dart';
 
 class SchoolFeeState extends Equatable {
-  const SchoolFeeState(
-      {this.schoolFeeStatus = SchoolFeeStatus.initial,
-      this.schoolFeeHistoryStatus = SchoolFeeHistoryStatus.initial,
-      this.paymentStatus = PaymentStatus.initial,
-      this.schoolFeePreviewStatus = SchoolFeePreviewStatus.initial,
-      this.schoolFee,
-      this.historySchoolFee,
-      this.schoolFeePaymentPreview,
-      this.schoolFeePayWithBalancePreview,
-      this.paymentGateways,
-      this.gateway,
-      this.isLoading = false,
-      this.error,
-      this.isPayWithBalance = false,
-      this.currentTabIndex = 0,
-      this.learnYears,
-      this.schoolFeeGetLearnYearsStatus = SchoolFeeGetLearnYearsStatus.initial,
-      this.currentYearState});
+  const SchoolFeeState({
+    this.schoolFeeStatus = SchoolFeeStatus.initial,
+    this.schoolFeeHistoryStatus = SchoolFeeHistoryStatus.initial,
+    this.paymentStatus = PaymentStatus.initial,
+    this.schoolFeePreviewStatus = SchoolFeePreviewStatus.initial,
+    this.schoolFee,
+    this.historySchoolFee,
+    this.schoolFeePaymentPreview,
+    this.schoolFeePayWithBalancePreview,
+    this.paymentGateways,
+    this.gateway,
+    this.isLoading = false,
+    this.error,
+    this.isPayWithBalance = false,
+    this.currentTabIndex = 0,
+    this.learnYears,
+    this.schoolFeeGetLearnYearsStatus = SchoolFeeGetLearnYearsStatus.initial,
+    this.currentYearState,
+  });
 
   // state status
   final SchoolFeeStatus schoolFeeStatus;
