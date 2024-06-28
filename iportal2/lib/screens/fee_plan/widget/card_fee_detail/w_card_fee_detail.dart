@@ -22,7 +22,9 @@ class _CardFeeDetailState extends State<CardFeeDetail> {
 
   // Format date from dd-MM-yyyy to dd/MM/yyyy
   String parseDate(int index) {
-    final tryParseDate = (widget.feeItem.meta_data?.items?[index].date ?? '').toDDMMYYYY;
+    final tryParseDate =
+        (widget.feeItem.meta_data?.listFeeDetailItems?[index].date ?? '')
+            .toDDMMYYYY;
     return tryParseDate?.ddMMyyyySlash ?? '';
   }
 
@@ -98,15 +100,19 @@ class _CardFeeDetailState extends State<CardFeeDetail> {
                   ),
                   Column(
                     children: List.generate(
-                        widget.feeItem.meta_data?.items?.length ?? 1, (index) {
+                        widget.feeItem.meta_data?.listFeeDetailItems?.length ??
+                            1, (index) {
                       return FieldRowCardDetail(
-                        title:
-                            widget.feeItem.meta_data?.items?[index].label ?? "",
+                        title: widget.feeItem.meta_data
+                                ?.listFeeDetailItems?[index].label ??
+                            "",
                         value: parseDate(index),
-                        isLastItem:
-                            index == widget.feeItem.meta_data!.items!.length - 1
-                                ? true
-                                : false,
+                        isLastItem: index ==
+                                widget.feeItem.meta_data!.listFeeDetailItems!
+                                        .length -
+                                    1
+                            ? true
+                            : false,
                       );
                     }),
                   ),
