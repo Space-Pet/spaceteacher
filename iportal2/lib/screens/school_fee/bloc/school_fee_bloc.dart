@@ -137,7 +137,6 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
       );
       emit(state.copyWith(
         paymentStatus: PaymentStatus.loaded,
-        schoolFeePreviewStatus: SchoolFeePreviewStatus.initial,
         gateway: res,
       ));
     } catch (e) {
