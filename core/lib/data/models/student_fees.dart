@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../core.dart';
+
 part 'student_fees.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -303,10 +305,13 @@ class FeeItem {
 class MetaData {
   final MetaDataPrice? price;
   final List<MetaDataItem>? items;
+  @JsonKey(name: 'list_fee_detail_items')
+  final List<MetaDataListFeeDetailItem>? listFeeDetailItems;
 
   MetaData({
     this.price,
     this.items,
+    this.listFeeDetailItems,
   });
 
   factory MetaData.fromJson(Map<String, dynamic> json) =>
@@ -379,5 +384,43 @@ class MetaDataItem {
   @override
   String toString() {
     return 'MetaDataItem(list_fee_detail_id: $list_fee_detail_id, price: $price, label: $label, date: $date)';
+  }
+}
+
+@JsonSerializable()
+class MetaDataListFeeDetailItem {
+  final int? id;
+  final String? price;
+  final String? label;
+  final String? date;
+
+  MetaDataListFeeDetailItem({
+    this.id,
+    this.price,
+    this.label,
+    this.date,
+  });
+
+  factory MetaDataListFeeDetailItem.fromJson(Map<String, dynamic> json) =>
+      _$MetaDataListFeeDetailItemFromJson(json);
+  Map<String, dynamic> toJson() => _$MetaDataListFeeDetailItemToJson(this);
+
+  MetaDataListFeeDetailItem copyWith({
+    int? id,
+    String? price,
+    String? label,
+    String? date,
+  }) {
+    return MetaDataListFeeDetailItem(
+      id: id ?? this.id,
+      price: price ?? this.price,
+      label: label ?? this.label,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'MetaDataListFeeDetailItem(id: $id, price: $price, label: $label, date: $date)';
   }
 }
