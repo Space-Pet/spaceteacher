@@ -1,16 +1,14 @@
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
-import 'package:teacher/app_config/router_configuration.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:teacher/components/app_bar/app_bar.dart';
+import 'package:teacher/components/app_bar/app_bar_filter_class.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/dialog/dialog_view_exercise.dart';
-import 'package:teacher/components/dropdown/dropdown.dart';
 import 'package:teacher/screens/schedule/bloc/schedule_bloc.dart';
 import 'package:teacher/screens/schedule/schedule_tabs.dart';
 import 'package:teacher/screens/schedule/select_week.dart';
 import 'package:teacher/utils/validation_functions.dart';
-import 'package:repository/repository.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -23,8 +21,6 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen>
     with AutomaticKeepAliveClientMixin {
-  String _selectedFilter = 'Lớp giảng dạy';
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -81,23 +77,12 @@ class _ScheduleScreenState extends State<ScheduleScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlocBuilder<ScheduleBloc, ScheduleState>(
-                  builder: (context, state) {
-                    return ScheduleAppbar(
-                      optionList:
-                          ScheduleFilter.values.map((e) => e.name).toList(),
-                      selectedOption: state.filter.name,
-                      onUpdateOption: (value) {
-                        final filter = ScheduleFilter.values.firstWhere(
-                          (element) => element.name == value,
-                        );
-                        bloc.add(
-                          ScheduleFilterChanged(filter: filter),
-                        );
-                      },
-                    );
-                  },
-                ),
+                ScreenAppBarFilterClass(
+                    title: 'Thời khóa biểu',
+                    classSelect: state.classType.value,
+                    onChangeClassType: (value) {
+                      bloc.add(ScheduleChangeClassType(classTypeName: value));
+                    }),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
@@ -122,6 +107,7 @@ class _ScheduleScreenState extends State<ScheduleScreen>
                               child: ScheduleTabs(
                                 lessons: scheduleData,
                                 datePicked: state.datePicked,
+                                classType: state.classType,
                                 onViewExercise: onViewExercise,
                               ),
                             ),
@@ -141,44 +127,4 @@ class _ScheduleScreenState extends State<ScheduleScreen>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class ScheduleAppbar extends StatelessWidget {
-  const ScheduleAppbar({
-    super.key,
-    required this.optionList,
-    required this.selectedOption,
-    required this.onUpdateOption,
-  });
-
-  final List<String> optionList;
-  final String selectedOption;
-  final Function(String) onUpdateOption;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Expanded(
-          child: ScreenAppBar(
-            title: 'Thời khóa biểu',
-            onBack: () {
-              context.pop();
-            },
-          ),
-        ),
-        // Container(
-        //   margin: const EdgeInsets.only(top: 32, right: 16),
-        //   width: 140,
-        //   child: DropdownButtonComponent(
-        //     selectedOption: selectedOption,
-        //     onUpdateOption: onUpdateOption,
-        //     hint: 'Chọn năm học',
-        //     optionList: optionList,
-        //   ),
-        // ),
-      ],
-    );
-  }
 }

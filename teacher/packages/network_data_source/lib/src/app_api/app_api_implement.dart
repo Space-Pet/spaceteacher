@@ -1,8 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
-import 'dart:js_interop';
 
 import 'package:core/core.dart';
+import 'package:core/data/models/form_score_esl.dart';
 import 'package:core/data/models/list_attendance_bus.dart';
 import 'package:core/data/models/observation_model.dart';
 
@@ -53,7 +52,8 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          '/api/api.php?act=$type&type=json&user_key=$userKey&txt_date=$txtDate');
+        '/api/api.php?act=$type&type=json&user_key=$userKey&txt_date=$txtDate',
+      );
 
       final weeklylessonData = WeeklyLessonData.fromMap(data);
       return weeklylessonData;
@@ -65,13 +65,21 @@ class AppFetchApi extends AbstractAppFetchApi {
   Future<Schedule> getSchedule(
     String userKey,
     String txtDate,
+    int classType,
   ) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-          // '/api.php?act=timetable_week&user_key=$userKey&txt_date=$txtDate');
-          '/api.php?act=timetable_week&user_key=02033200186&txt_date=$txtDate');
+        '/api.php',
+        queryParameters: {
+          'act': classType == 1
+              ? 'timetable_teacher_gvcn_week'
+              : 'timetable_teacher_week',
+          'user_key': userKey,
+          'txt_date': txtDate,
+        },
+      );
 
-      final scheduleData = Schedule.fromMap(data);
+      final scheduleData = Schedule.fromMap(data['data']);
       return scheduleData;
     } catch (e) {
       throw GetWeekScheduleFailure();
@@ -125,7 +133,7 @@ class AppFetchApi extends AbstractAppFetchApi {
       final res = await _authRestClient.doHttpGet('/api/v1/staff/notifications',
           headers: headers,
           queryParameters: {
-            'status': status,
+            // 'status': status,
             'orderBy': orderBy,
           });
 
@@ -167,6 +175,59 @@ class AppFetchApi extends AbstractAppFetchApi {
       return notiDetail;
     } catch (e) {
       throw GetNotiDetailFailure();
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteNoti({
+    required int id,
+  }) async {
+    try {
+      final res = await _authRestClient.doHttpDelete(
+        url: '/api/v1/staff/notifications/$id',
+      );
+
+      return res;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteNotiFile({
+    required int notificationId,
+    required int attachmentId,
+  }) async {
+    try {
+      final res = await _authRestClient.doHttpDelete(
+          url: '/api/v1/staff/notifications/delete/attachment',
+          requestBody: {
+            'notification_id': notificationId,
+            'attachment_id': attachmentId,
+          });
+
+      return res;
+    } catch (e) {
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteImagesInGallery({
+    required int galleryId,
+    required List<int> listId,
+  }) async {
+    final requestBody = {
+      'gallery_id': galleryId,
+      'images': listId.map((e) => {'id': e}).toList(),
+    };
+
+    try {
+      final res = await _authRestClient.doHttpDelete(
+        url: '/api/v1/staff/gallery/delete-images',
+        requestBody: requestBody,
+      );
+
+      return res;
+    } catch (e) {
+      return {};
     }
   }
 
@@ -260,19 +321,37 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<Map<String, dynamic>> getMessageDetail({
-    required String conversationId,
+    String? conversationId,
+    String? recipientId,
+    bool isGetById = false,
     required int schoolId,
     required String schoolBrand,
-    int? page = 1,
+    required int page,
   }) async {
     try {
-      final data = await _client
-          .doHttpGet('/api/v1/staff/conversations/$conversationId', headers: {
-        'School_Id': schoolId,
-        'School_Brand': schoolBrand,
-      }, queryParameters: {
-        'page': page,
-      });
+      final slug =
+          isGetById ? 'get_conversation_by' : 'conversations/$conversationId';
+
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/$slug',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+        queryParameters: {
+          'recipient_id': recipientId,
+          'page': page,
+        },
+      );
+
+      if (data['data'] == null) {
+        return {
+          "data": [],
+          "last_page": 0,
+          "current_page": 0,
+        };
+      }
+
       final dataList = data['data']['data'] as List<dynamic>?;
 
       final res = {
@@ -292,29 +371,32 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String recipient,
     required int schoolId,
     required String schoolBrand,
+    required List<File> files,
   }) async {
     try {
       var formData = FormData.fromMap(
         {
-          "content": content,
+          "content": content.isEmpty ? 'images' : content,
           "class_id": classId,
           "recipient": "${[recipient]}",
         },
       );
-      // final data = await _client.doHttpPost(
-      //     url: '/api/v1/member/messages',
-      //     headers: {
-      //       'School_Id': schoolId,
-      //       'School_Brand': schoolBrand,
-      //     },
-      //     requestBody: formData);
 
-      final res = await _client.dio.post('/api/v1/member/messages',
-          options: Options(headers: {
-            'School_Id': schoolId,
-            'School_Brand': schoolBrand,
-          }),
-          data: formData);
+      for (int i = 0; i < files.length; i++) {
+        formData.files.add(MapEntry(
+          'attachment[$i]',
+          MultipartFile.fromFileSync(files[i].path),
+        ));
+      }
+
+      final res = await _client.dio.post(
+        '/api/v1/staff/messages',
+        options: Options(headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        }),
+        data: formData,
+      );
       return res.data['data']['conversation_id'];
     } catch (e) {
       Log.e(e.toString());
@@ -353,6 +435,38 @@ class AppFetchApi extends AbstractAppFetchApi {
     return data.data;
   }
 
+  Future<Map<String, dynamic>> updateGallery({
+    required String learnYear,
+    required int classId,
+    required String galleryName,
+    required List<File> listFiles,
+    required int galleryId,
+  }) async {
+    var formData = FormData.fromMap(
+      {
+        "learn_year": learnYear,
+        "class_id": classId,
+        "gallery_name": galleryName,
+        "status": 1,
+        "gallery_id": galleryId,
+      },
+    );
+
+    for (int i = 0; i < listFiles.length; i++) {
+      formData.files.add(MapEntry(
+        'files[$i]',
+        MultipartFile.fromFileSync(listFiles[i].path),
+      ));
+    }
+
+    final data = await _authRestClient.dio.post(
+      '/api/v1/staff/gallery/update',
+      data: formData,
+    );
+
+    return data.data;
+  }
+
   Future<Map<String, dynamic>> createNewNoti({
     required List<int> listPupilId,
     required int classId,
@@ -363,9 +477,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     required List<File> listFiles,
     required Map<String, dynamic> headers,
   }) async {
-    // parse listPupilId to sample [10055489, 10045775], includes []
     var pupilId = listPupilId.toString();
-    print(pupilId);
     var formData = FormData.fromMap(
       {
         "pupil_id": pupilId,
@@ -392,7 +504,65 @@ class AppFetchApi extends AbstractAppFetchApi {
     return data.data;
   }
 
-  Future<int> deleteMessageDetail({
+  Future<Map<String, dynamic>> updateDraftNoti({
+    required int id,
+    required List<int> listPupilId,
+    required int classId,
+    required String type,
+    required String title,
+    required String content,
+    required String status,
+    required List<File> listFiles,
+    required Map<String, dynamic> headers,
+  }) async {
+    var pupilId = listPupilId.toString();
+    var formData = FormData.fromMap(
+      {
+        "id": id,
+        "pupil_id": pupilId,
+        "class_id": classId,
+        "type": type,
+        "title": title,
+        "content": content,
+        "status": status,
+      },
+    );
+
+    for (int i = 0; i < listFiles.length; i++) {
+      formData.files.add(MapEntry(
+        'attachment[$i]',
+        MultipartFile.fromFileSync(listFiles[i].path),
+      ));
+    }
+
+    final data = await _authRestClient.dio.post(
+        '/api/v1/staff/notifications/update',
+        data: formData,
+        options: Options(headers: headers));
+
+    return data.data;
+  }
+
+  Future<int> deleteConservation({
+    required int schoolId,
+    required String schoolBrand,
+    required int conservationId,
+  }) async {
+    try {
+      final data = await _client.doHttpDelete(
+        url: '/api/v1/staff/conversations/$conservationId',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+      );
+      return data['code'];
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteMessage({
     required String content,
     required int schoolId,
     required String schoolBrand,
@@ -401,7 +571,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _client.doHttpDelete(
-        url: '/api/v1/member/messages/$idMessage',
+        url: '/api/v1/staff/messages/$idMessage',
         headers: {
           'School_Id': schoolId,
           'School_Brand': schoolBrand,
@@ -411,28 +581,9 @@ class AppFetchApi extends AbstractAppFetchApi {
           "recipient": [recipient]
         },
       );
-      return data['code'];
+      return data;
     } catch (e) {
-      return 0;
-    }
-  }
-
-  Future<int> deleteMessage({
-    required int schoolId,
-    required String schoolBrand,
-    required int idMessage,
-  }) async {
-    try {
-      final data = await _client.doHttpDelete(
-        url: '/api/v1/member/conversations/$idMessage',
-        headers: {
-          'School_Id': schoolId,
-          'School_Brand': schoolBrand,
-        },
-      );
-      return data['code'];
-    } catch (e) {
-      return 0;
+      return {};
     }
   }
 
@@ -512,6 +663,36 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
+  Future<Gallery> getGalleryDetail(String teacherId, int galleryId) async {
+    try {
+      final data = await _authRestClient
+          .doHttpGet('/api/v1/staff/gallery/show', queryParameters: {
+        'teacher_id': teacherId,
+        'gallery_id': galleryId,
+      });
+
+      final albumData = Gallery.fromMap(data['data']);
+      return albumData;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteAlbum(int albumId) async {
+    try {
+      final res = await _authRestClient.doHttpDelete(
+        url: '/api/v1/staff/gallery/delete',
+        requestBody: {
+          'gallery_id': albumId,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      return {};
+    }
+  }
+
   Future<List<String>> getListYear(int number) async {
     try {
       final data = await _authRestClient.doHttpGet(
@@ -540,27 +721,6 @@ class AppFetchApi extends AbstractAppFetchApi {
 
       final listClass = (data['data']['items'] as List<dynamic>)
           .map((e) => GalleryClass.fromMap(e))
-          .toList();
-
-      return listClass;
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<List<NotiClass>> getListClassNoti(
-      String learnYear, int teacherId) async {
-    try {
-      final data = await _authRestClient.doHttpGet(
-        '/api/v1/staff/class/teacher',
-        queryParameters: {
-          'learn_year': learnYear,
-          'teacher_id': teacherId,
-        },
-      );
-
-      final listClass = (data['data']['data'] as List<dynamic>)
-          .map((e) => NotiClass.fromMap(e))
           .toList();
 
       return listClass;
@@ -602,13 +762,19 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<List<PhoneBookStudent>> getPhoneBookStudent(
-      {required int classId}) async {
+  Future<List<PhoneBookStudent>> getPhoneBookStudent({
+    required int classId,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
     try {
-      final data = await _authRestClient
-          .doHttpGet('/api/v1/staff/class/$classId/pupils');
-      // final data = await _authRestClient.doHttpGet('/api/v1/staff/pupil/class');
-      log(data.toString());
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/class/$classId/pupils',
+        headers: {
+          'School-Id': schoolId,
+          'School-Brand': schoolBrand,
+        },
+      );
       final dataList = data['data'] as List<dynamic>?;
 
       if (dataList == null) {
@@ -619,9 +785,36 @@ class AppFetchApi extends AbstractAppFetchApi {
       for (final item in dataList) {
         dataPhoneBook.add(PhoneBookStudent.fromJson(item));
       }
-      log('dataPhoneBook: $dataPhoneBook');
 
       return dataPhoneBook;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<Parent>> getPhoneBookParent({
+    required int classId,
+    required int schoolId,
+  }) async {
+    try {
+      final data = await _client
+          .doHttpGet('/api/v1/staff/parent/class', queryParameters: {
+        'class_id': classId,
+        'school_id': schoolId,
+      });
+
+      final dataList = data['data']['items'] as List<dynamic>?;
+
+      if (dataList == null) {
+        return [];
+      }
+
+      List<Parent> parents = [];
+      for (final item in dataList) {
+        parents.add(Parent.fromMap(item as Map<String, dynamic>));
+      }
+
+      return parents;
     } catch (e) {
       return [];
     }
@@ -716,7 +909,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _client.doHttpPost(
-        url: '/api/v1/member/message/$idMessage/pin',
+        url: '/api/v1/staff/message/$idMessage/pin',
         headers: {
           'School_Brand': schoolBrand,
           'School_Id': schoolId,
@@ -735,7 +928,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _client.doHttpPost(
-        url: '/api/v1/member/message/$idMessage/un-pin',
+        url: '/api/v1/staff/message/$idMessage/un-pin',
         headers: {
           'School_Brand': schoolBrand,
           'School_Id': schoolId,
@@ -747,26 +940,30 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<MessageDetail?> getMessagePin({
+  Future<ConservationDetail?> getMessagePin({
     required String schoolBrand,
     required int schoolId,
+    required String recipientId,
   }) async {
     try {
       final data = await _client.doHttpGet(
-        '/api/v1/member/message/pinned',
+        '/api/v1/staff/message/pinned',
+        queryParameters: {
+          'recipient_id': recipientId,
+        },
         headers: {
           'School_Brand': schoolBrand,
           'School_Id': schoolId,
         },
       );
-      final jsonData = data['data'] as Map<String, dynamic>;
-      return MessageDetail.fromJson(jsonData);
+      final jsonData = data['data'] as List<dynamic>;
+      return ConservationDetail.fromJson(jsonData[0]);
     } catch (e) {
       return null;
     }
   }
 
-  Future<List<Message>> getlistMessage({
+  Future<List<Conservation>> getlistMessage({
     required int schoolId,
     required String classId,
     required String userId,
@@ -774,12 +971,16 @@ class AppFetchApi extends AbstractAppFetchApi {
   }) async {
     try {
       final data = await _client.doHttpGet(
-          '/api/v1/member/conversations?class_id=$classId&user_id=$userId',
-          headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
+        '/api/v1/staff/conversations',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+        queryParameters: {
+          'class_id': classId,
+          'user_id': userId,
+        },
+      );
       final dataList = data['data']['data'] as List<dynamic>?;
-      return dataList?.map((e) => Message.fromJson(e)).toList() ?? [];
+      return dataList?.map((e) => Conservation.fromJson(e)).toList() ?? [];
     } catch (e) {
-      print('error: $e');
       return [];
     }
   }
@@ -920,10 +1121,14 @@ class AppFetchApi extends AbstractAppFetchApi {
       }
 
       final data = await _authRestClient.doHttpGet(
-        '/api/v1/staff/class/teacher?teacher_id=$teacherId&learn_year=$learnYear',
+        '/api/v1/staff/class/teacher',
         headers: {
           'School-Id': schoolId,
           'School-Brand': schoolBrand,
+        },
+        queryParameters: {
+          'teacher_id': teacherId,
+          'learn_year': learnYear,
         },
       );
       final jsonData = data['data']['data'] as List<dynamic>;
@@ -1190,12 +1395,15 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String teacherId,
   }) async {
     try {
-      final data = await _partnerTokenRestClient
-          .doHttpGet('/api.php?act=get_lesson_register', queryParameters: {
-        'user_key': userKey,
-        'txt_date': txtDate,
-        'teacher_id': teacherId,
-      });
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php?act=get_lesson_register',
+        queryParameters: {
+          'user_key': userKey,
+          'txt_date': txtDate,
+          'teacher_id': teacherId,
+        },
+        hasDelay: true,
+      );
 
       if (data['data'] == null) {
         return [];
@@ -1219,9 +1427,6 @@ class AppFetchApi extends AbstractAppFetchApi {
           'user_key': userKey,
           'date_from': txtDate,
           'date_to': txtDate,
-          // "user_key": "duongvt.quynhon",
-          // "date_from": "26-02-2024",
-          // "date_to": "26-02-2024",
         },
       );
 
@@ -1289,9 +1494,10 @@ class AppFetchApi extends AbstractAppFetchApi {
     required int schoolId,
     required String schoolBrand,
     required String capDaoTao,
+    required String subjectType,
   }) async {
     final data = await _client.doHttpGet(
-      '/api/v1/staff/mark/get-semester?cap_dao_tao=$capDaoTao',
+      '/api/v1/staff/mark/get-semester?cap_dao_tao=$capDaoTao&subject_type=$subjectType',
       headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
     );
     final jsonData = data['data'] as List<dynamic>;
@@ -1364,13 +1570,6 @@ class AppFetchApi extends AbstractAppFetchApi {
         'TIET_NUM': tietNum,
         'CLASS_ID': classId,
         'SUBJECT_ID': subjectId,
-        // "user_key": "duongvt.quynhon",
-        // "txt_date": "26-02-2024",
-        // "SCHOOL_ID": 104,
-        // "TEACHER_ID": 10007523,
-        // "TIET_NUM": 9,
-        // "CLASS_ID": 5691,
-        // "SUBJECT_ID": 52
       },
     );
     return response;
@@ -1391,7 +1590,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     return response;
   }
 
-  Future<MoetEvaluation> getMoetEvaluation({
+  Future<Assessment> onGetAssessmentCriteria({
     required String userKey,
     required String lessonRegisterId,
     required String lessonRegisterIdType,
@@ -1406,9 +1605,9 @@ class AppFetchApi extends AbstractAppFetchApi {
         },
       );
 
-      return MoetEvaluation.fromMap(data);
+      return Assessment.fromMap(data);
     } catch (e) {
-      return MoetEvaluation.empty();
+      return Assessment.empty();
     }
   }
 
@@ -1634,36 +1833,402 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String tietPpct,
     required String lessionRank,
     required String danDoBaoBai,
-    required File fileBaoBai,
-    required String linkBaoBai,
+    required File? fileBaoBai,
+    required String? linkBaoBai,
     required String hanNop,
     required String userKey,
   }) async {
-    var formData = FormData.fromMap(
-      {
-        "user_key": userKey,
-        "lession_id": lessionId,
-        "lession_title": lessionTitle,
-        "lession_note": lessionNote,
-        "tiet_ppct": tietPpct,
-        "lession_rank": lessionRank,
-        "dan_do_bao_bai": danDoBaoBai,
-        "link_bao_bai": linkBaoBai,
-        "han_nop": hanNop,
-      },
-    );
-    formData.files.add(
-      MapEntry(
-        'file_bao_bai',
-        MultipartFile.fromFileSync(fileBaoBai.path),
-      ),
-    );
+    var formData = FormData();
+
+    formData.fields.add(MapEntry("user_key", userKey));
+    formData.fields.add(MapEntry("lesson_id", lessionId));
+    formData.fields.add(MapEntry("lesson_title", lessionTitle));
+    formData.fields.add(MapEntry("lesson_note", lessionNote));
+    formData.fields.add(MapEntry("tiet_ppct", tietPpct));
+    formData.fields.add(MapEntry("lesson_rank", lessionRank));
+    formData.fields.add(MapEntry("dan_do_bao_bai", danDoBaoBai));
+    formData.fields.add(MapEntry("han_nop", hanNop));
+
+    if (fileBaoBai != null) {
+      formData.files.add(
+        MapEntry(
+          'file_bao_bai',
+          await MultipartFile.fromFile(fileBaoBai.path),
+        ),
+      );
+    }
+
+    if (linkBaoBai != null) {
+      formData.fields.add(MapEntry("link_bao_bai", linkBaoBai));
+    }
+
     final data = await _partnerTokenRestClient.dio.post(
       '/api/api.php?act=weeklylesson_post_new',
       data: formData,
-      //options: Options(headers: )
+      options: Options(
+        headers: {
+          'Parter-Token':
+              'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTczMzE2ODgsImV4cCI6MTY4ODg2NzY4OCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.3PXXeua7B4UfGhvH4s8QWKCzf5w0M_uGUODs7-wXj_g',
+        },
+      ),
     );
+
     return data.data;
+  }
+
+  Future<Map<String, dynamic>> postViolation({
+    required List<Map<String, dynamic>>? containerData,
+  }) async {
+    Map<String, dynamic> data = {};
+
+    for (var item in containerData!) {
+      final dataPost = await _partnerTokenRestClient.doHttpPost(
+        url: '/api/api.php?act=post_hsvp',
+        requestBody: item,
+      );
+      data = dataPost;
+    }
+
+    return data;
+  }
+
+  Future<ScoreProgramList> getProgramList(
+      String userKey, String txtYear) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': 'list_chuong_trinh_khac',
+          'user_key': userKey,
+          'txt_learn_year': txtYear,
+        },
+      );
+
+      final scoreRes = ScoreProgramList.fromMap(data);
+      return scoreRes;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<ListClassLeader> getClassLeader({
+    required String learnyear,
+    required String userKey,
+  }) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api/api.php?act=list_class_gvcn&user_key=$userKey&learn_year=$learnyear',
+      );
+      return ListClassLeader.fromJson(data);
+    } catch (e) {
+      return ListClassLeader.empty();
+    }
+  }
+
+  Future<ScoreModel> getMoetTypeScore(
+    String userKey,
+    String txtHocKy,
+    String txtYear,
+    String ctId,
+    bool isMOET,
+  ) async {
+    try {
+      String type = '';
+      if (isMOET) {
+        type = 'show_score';
+      } else {
+        type = 'score_chuong_trinh_khac';
+      }
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': type,
+          'user_key': userKey,
+          'txt_learn_year': txtYear,
+          'txt_hoc_ky': txtHocKy,
+          if (!isMOET) 'ct_id': ctId,
+        },
+      );
+
+      final scoreRes = ScoreModel.fromMap(data);
+      return scoreRes;
+    } catch (e) {
+      throw GetScoreFailure();
+    }
+  }
+
+  Future<Data> getTeachingClassMoetPrimary({
+    required String subjectId,
+    required String classId,
+    required String semester,
+    required String learnYear,
+    required String schoolBrand,
+    required String schoolId,
+    required String capDaoTao,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/mark/primary-school/result?subject_id=$subjectId&class_id=$classId&semester=$semester&learn_year=$learnYear',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      return Data.fromJson(data['data']);
+    } catch (e) {
+      return Data.empty();
+    }
+  }
+
+  Future<MoetHighData> getTeachingClassMoetHigh({
+    required String subjectId,
+    required String classId,
+    required String semester,
+    required String learnYear,
+    required String schoolBrand,
+    required String schoolId,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/mark/high-school/result?subject_id=$subjectId&class_id=$classId&semester=$semester&learn_year=$learnYear',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      return MoetHighData.fromJson(data['data']);
+    } catch (e) {
+      return MoetHighData.empty();
+    }
+  }
+
+  Future<List<MarkTypeColumn>> getMarkType({
+    required String subjectType,
+    required int classId,
+    required String capDaoTao,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _client.doHttpGet(
+      '/api/v1/staff/mark/get-score-type?subject_type=$subjectType&class_id=$classId&cap_dao_tao=$capDaoTao',
+      headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+    );
+    final jsonData = data['data'] as List<dynamic>;
+    return jsonData.map((e) => MarkTypeColumn.fromJson(e)).toList();
+  }
+
+  Future<Map<String, dynamic>> postMoetPrimary({
+    required int subjectId,
+    required int classId,
+    required String semester,
+    required int pupilId,
+    required String markType,
+    required String? markValue,
+    required String? markNote,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _client.doHttpPost(
+        url: '/api/v1/staff/mark/bulk-insert/primary-school',
+        headers: {
+          'School-Id': schoolId,
+          'School-Brand': schoolBrand
+        },
+        requestBody: {
+          "subject_id": subjectId,
+          "class_id": classId,
+          "semester": semester,
+          "items": [
+            {
+              "pupil_id": pupilId,
+              "mark_type": markType,
+              "mark_coefficient": 0,
+              "mark_value": int.parse(markValue ?? '0'),
+              "mark_note": markNote ?? ''
+            }
+          ]
+        });
+    return data;
+  }
+
+  Future<FormMoet> getFormMoet({
+    required int classId,
+    required int subjectId,
+    required String learnYear,
+    required String semester,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/mark/form?class_id=$classId&subject_id=$subjectId&learn_year=$learnYear&semester=2',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      return FormMoet.fromJson(data['data']);
+    } catch (e) {
+      return FormMoet.empty();
+    }
+  }
+
+  Future<MoetAverage> getMoetAverage(
+    String userKey,
+    String txtLearnYear,
+    String txtHocKy,
+  ) async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api.php',
+        queryParameters: {
+          'act': 'total_score_moet',
+          'user_key': userKey,
+          'txt_learn_year': txtLearnYear,
+          'txt_hoc_ky': txtHocKy,
+        },
+      );
+
+      final moetAverage = MoetAverage.fromMap(data);
+      return moetAverage;
+    } catch (e) {
+      return MoetAverage.empty();
+    }
+  }
+
+  Future<Map<String, dynamic>> postCommentMoet({
+    required String userKey,
+    required int pupilId,
+    required int subjectId,
+    required String coomentContent,
+    required String learnYear,
+    required String hkTihValue,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    try {
+      final data = await _client.doHttpPost(
+        url: '/api.php?act=post_comment',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+        requestBody: {
+          "user_key": userKey,
+          "pupil_id": pupilId,
+          "subject_id": subjectId,
+          "comment_content": coomentContent,
+          "learn_year": learnYear,
+          "hk_tih_value": hkTihValue
+        },
+      );
+      return data;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<Map<String, dynamic>> postEslGpa({
+    required int classId,
+    required int semester,
+    required String learnYear,
+    required List<JsonDataESL> dataESL,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    try {
+      final List<Map<String, dynamic>> newData = [];
+      for (var item in dataESL) {
+        newData.add(updateESL(item));
+      }
+      final data = await _client
+          .doHttpPost(url: '/api/v1/staff/mark/bulk-insert/esl', headers: {
+        'School-Id': schoolId,
+        'School-Brand': schoolBrand
+      }, requestBody: {
+        "class_id": classId,
+        "semester": semester,
+        "learn_year": learnYear,
+        "items": newData
+      });
+      return data;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<Map<String, dynamic>> postPrimaryConduct({
+    required String userKey,
+    required int classId,
+    required String learnYear,
+    required int hocKy,
+    required int hocKyTih,
+    required List<ConductScore> dataConduct,
+  }) async {
+    final data = await _partnerTokenRestClient.doHttpPost(
+      url: '/api/api.php?act=post_hanhkiemtih',
+      requestBody: {
+        "user_key": userKey,
+        "class_id": classId,
+        "learn_year": learnYear,
+        "hoc_ky": hocKy,
+        "hoc_ky_tih": hocKyTih,
+        "items": dataConduct
+      },
+    );
+    return data;
+  }
+
+  Future<HanhKiemData> getFormConduct() async {
+    try {
+      final data = await _partnerTokenRestClient.doHttpGet(
+        '/api/api.php?act=list_hanhkiem_key',
+      );
+      return HanhKiemData.fromJson(data);
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
+  }
+
+  Future<List<FormScoreESL>> getFormScoreESL({
+    required int classId,
+    required int subjectId,
+    required String scoreType,
+    required int semester,
+    required String learnYear,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    try {
+      final data = await _client.doHttpGet(
+        '/api/v1/staff/mark/form-esl?class_id=$classId&subject_id=$subjectId&score_type=$scoreType&semester=$semester&learn_year=$learnYear',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+      );
+      final jsonData = data['data'] as List<dynamic>;
+      return jsonData.map((e) => FormScoreESL.fromJson(e)).toList();
+    } catch (e) {
+      return FormScoreESL.fakeData();
+    }
+  }
+
+  Future<Map<String, dynamic>> postScoreMoetHighSchool({
+    required int schoolId,
+    required int subjectId,
+    required int classId,
+    required String semester,
+    required List<JsonDataMoet> data,
+    required String schoolBrand,
+  }) async {
+    try {
+      final List<Map<String, dynamic>> newData = [];
+      for (var item in data) {
+        newData.add(updateScoreMoet(item));
+      }
+      final res = await _client.doHttpPost(
+          url: '/api/v1/staff/mark/bulk-insert/high-school',
+          headers: {
+            'School-Id': schoolId,
+            'School-Brand': schoolBrand
+          },
+          requestBody: {
+            "school_id": schoolId,
+            "subject_id": subjectId,
+            "class_id": classId,
+            "semester": semester,
+            "items": newData
+          });
+      return res;
+    } catch (e) {
+      throw GetAlbumFailure();
+    }
   }
 }
 
@@ -1675,6 +2240,39 @@ Map<String, dynamic> updateReportToJson(UpdateReport report) {
     'mark_id': report.mark_id,
     'criterial_id': report.criterial_id,
     'other_result_text': report.other_result_text,
+  };
+}
+
+Map<String, dynamic> updateScoreMoet(JsonDataMoet data) {
+  return {
+    "pupil_id": data.pupilId,
+    "mark_type": data.markType,
+    "mark_coefficient": data.markCoefficient,
+    "mark_value": data.markValue,
+    "mark_note": data.markNote
+  };
+}
+
+Map<String, dynamic> updateESL(JsonDataESL data) {
+  List<Map<String, dynamic>> fieldsList =
+      data.fields.map((field) => updateFields(field)).toList();
+
+  return {
+    "pupil_id": data.pupilId,
+    "class_id": data.classId,
+    "subject_id": data.subjectId,
+    "semester": data.semester,
+    "learn_year": data.learnYear,
+    "fields": fieldsList,
+  };
+}
+
+Map<String, dynamic> updateFields(ScoreFieldESL data) {
+  return {
+    "id": data.id,
+    "score_type": data.scoreType,
+    "key": data.key,
+    "input_value": data.inputValue
   };
 }
 
@@ -1692,6 +2290,58 @@ class UpdateReport {
     required this.mark_id,
     required this.other_result_text,
     required this.pupil_id,
+  });
+}
+
+class JsonDataMoet {
+  int pupilId;
+  String markType;
+  String markCoefficient;
+  String markValue;
+  String markNote;
+  JsonDataMoet({
+    required this.markCoefficient,
+    required this.markNote,
+    required this.markType,
+    required this.markValue,
+    required this.pupilId,
+  });
+}
+
+class ConductScore {
+  final int pupilId;
+  final String hanhKiemKey;
+  final String hanhKiemValue;
+
+  ConductScore({
+    required this.pupilId,
+    required this.hanhKiemKey,
+    required this.hanhKiemValue,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'pupil_id': pupilId,
+      'hanh_kiem_key': hanhKiemKey,
+      'hanh_kiem_value': hanhKiemValue,
+    };
+  }
+}
+
+class JsonDataESL {
+  final int pupilId;
+  final String classId;
+  final String subjectId;
+  final String semester;
+  final String learnYear;
+  final List<ScoreFieldESL> fields;
+  JsonDataESL({
+    required this.classId,
+    required this.fields,
+    required this.learnYear,
+    required this.pupilId,
+    required this.semester,
+    required this.subjectId,
   });
 }
 

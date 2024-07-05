@@ -5,7 +5,7 @@ import 'package:teacher/components/buttons/rounded_button.dart';
 import 'package:teacher/components/home_shadow_box.dart';
 import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/screens/gallery/gallery_screen.dart';
-import 'package:teacher/screens/gallery/widget/gallery_detail/gallery_detail.dart';
+import 'package:teacher/screens/gallery/screens/detail/gallery_detail.dart';
 import 'package:teacher/screens/home/bloc/home_bloc.dart';
 
 class ImagesLibrary extends StatelessWidget {
@@ -26,7 +26,7 @@ class ImagesLibrary extends StatelessWidget {
 
         final isLoading = state.statusAlbum == HomeStatus.loading;
 
-        final pinnedAlbumList = pinnedAlbumIdList.isNotEmpty  && !isLoading
+        final pinnedAlbumList = pinnedAlbumIdList.isNotEmpty && !isLoading
             ? albumList
                 .where(
                     (element) => pinnedAlbumIdList.contains(element.galleryId))
@@ -104,10 +104,7 @@ class ImagesLibrary extends StatelessWidget {
 
                             return InkWell(
                               onTap: () {
-                                context.push(GalleryDetail(
-                                  galleryItem: album,
-                                  isFromHomeScreen: true,
-                                ));
+                                context.push(GalleryDetailScreen(galleryId: album.galleryId));
                               },
                               child: SizedBox(
                                 width: 170.v,

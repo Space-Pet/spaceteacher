@@ -10,13 +10,6 @@ class TeacherGeneralInfo extends StatelessWidget {
 
   final TeacherDetail teacher;
 
-  static const statusMap = {
-    0: 'Đang học',
-    2: 'Đã nghỉ',
-    7: 'Đã tốt nghiệp',
-    8: 'Bảo lưu',
-  };
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,6 +21,10 @@ class TeacherGeneralInfo extends StatelessWidget {
         RowContent(
           title: 'Lớp chủ nhiệm',
           content: teacher.lopChuNhiem.name,
+        ),
+        RowContent(
+          title: 'Môn giảng dạy chính',
+          content: teacher.info.mainSubject,
         ),
         RowContent(
           title: 'Họ & Tên',

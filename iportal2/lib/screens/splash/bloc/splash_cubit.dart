@@ -31,7 +31,7 @@ class SplashCubit extends Cubit<SplashState> {
     if (isFistTime) {
       emit(state.copyWith(status: SplashStatus.firstLogin));
     } else {
-      if (isLogin) {
+      if (false) {
         emit(state.copyWith(status: SplashStatus.logined));
 
         final localUser = await userRepository.getLocalUser();

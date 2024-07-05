@@ -71,7 +71,7 @@ class _CardTopicDetailFeePlanState extends State<CardTopicDetailFeePlan> {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            _onChoose(index, !listSelected[index], context);
+                            _onChoose(index, context);
                           });
                         },
                         child: CardFeeDetail(
@@ -95,20 +95,25 @@ class _CardTopicDetailFeePlanState extends State<CardTopicDetailFeePlan> {
     );
   }
 
-  void _onChoose(int index, bool isSelected, BuildContext context) {
+  void _onChoose(int index, BuildContext context) {
     setState(() {
-      listSelected[index] = isSelected;
-      if (isSelected) {
-        context.read<FeePlanBloc>().add(
-              AddFeeToListVerify(
-                  feeItem: widget.feeCategoryData.items?[index] ?? FeeItem()),
-            );
-      } else {
-        context.read<FeePlanBloc>().add(
-              RemoveFeeFromListVerify(
-                  feeItem: widget.feeCategoryData.items?[index] ?? FeeItem()),
-            );
+      // Reset all selections
+      for (int i = 0; i < listSelected.length; i++) {
+        listSelected[i] = false;
       }
+      // Select the current item
+      listSelected[index] = true;
+
+      // Remove all items from the list in FeePlanBloc
+      widget.feeCategoryData.items?.forEach((item) {
+        context.read<FeePlanBloc>().add(RemoveFeeFromListVerify(feeItem: item));
+      });
+
+      // Add the selected item to the list in FeePlanBloc
+      context.read<FeePlanBloc>().add(
+            AddFeeToListVerify(
+                feeItem: widget.feeCategoryData.items?[index] ?? FeeItem()),
+          );
     });
   }
 }

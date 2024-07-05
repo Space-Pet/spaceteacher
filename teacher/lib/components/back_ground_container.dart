@@ -13,16 +13,18 @@ class BackGroundContainer extends StatelessWidget {
     return BlocBuilder<CurrentUserBloc, CurrentUserState>(
       builder: (context, state) {
         final bgImage = state.user.mainBackGround();
-
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: bgImage,
+    
+        return Scaffold(   
+          body : Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: bgImage,
+              ),
             ),
+            child: child,
           ),
-          child: child,
         );
       },
     );

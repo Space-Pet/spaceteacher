@@ -106,7 +106,6 @@ class _EditNutritionViewState extends State<EditNutritionView> {
                   setState(() {
                     edit = true;
                   });
-                  print('object: $edit');
                 },
               ),
               Expanded(
@@ -177,32 +176,26 @@ class NutritionDetailsView extends StatelessWidget {
       children: [
         RowContent(
           title: 'Học sinh',
-          formSize: 16,
           content: phoneBookStudent.fullName,
         ),
         RowContent(
           title: 'Tháng/Năm',
-          formSize: 16,
           content: nutrition?.month ?? '__',
         ),
         RowContent(
           title: 'Chiều cao',
-          formSize: 16,
           content: nutrition?.height ?? '__',
         ),
         RowContent(
           title: 'Cân nặng',
-          formSize: 16,
           content: nutrition?.weight ?? '__',
         ),
         RowContent(
           title: 'BMI',
-          formSize: 16,
           content: nutrition?.bmi.toString() ?? '__',
         ),
         RowContent(
           title: 'Ghi chú',
-          formSize: 16,
           content: nutrition?.ketLuan ?? '__',
         ),
       ],
@@ -240,14 +233,12 @@ class NutritionEditView extends StatelessWidget {
         children: [
           RowContent(
             title: 'Học sinh',
-            formSize: 16,
             content:
                 '${phoneBookStudent.fullName} - ${phoneBookStudent.pupilId}',
           ),
           RowContent(
             title: 'Tháng/Năm',
-            formSize: 16,
-            content: nutrition?.month ?? '', // Example date format
+            content: nutrition?.month ?? '', 
           ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -293,12 +284,10 @@ class NutritionEditView extends StatelessWidget {
           ),
           RowContent(
             title: 'BMI',
-            formSize: 16,
             content: nutrition?.bmi.toString() ?? '', // Example date format
           ),
           RowContent(
             title: 'Ghi chú',
-            formSize: 16,
             content: nutrition?.ketLuan ?? '', // Example date format
           ),
           Padding(

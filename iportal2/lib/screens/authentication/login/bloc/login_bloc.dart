@@ -110,9 +110,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) async {
     try {
-      // [TEST] - clear before commit
-      // final userName = kDebugMode ? '02031230009' : state.userName;
-      // final password = kDebugMode ? 'apel1z' : state.password;
       final userName = state.userName;
       final password = state.password;
       final deviceInfo = state.deviceInfo;
@@ -136,6 +133,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final localChildren = user.children
           .map((e) => e.toLocalChildren(
                 isDefaultActive: user.pupil_id == e.pupil_id,
+                isStudent: user.isStudent(),
               ))
           .toList();
 
@@ -176,8 +174,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       final localChildren = user.children
-          .map((e) =>
-              e.toLocalChildren(isDefaultActive: user.pupil_id == e.pupil_id))
+          .map((e) => e.toLocalChildren(
+                isDefaultActive: user.pupil_id == e.pupil_id,
+                isStudent: user.isStudent(),
+              ))
           .toList();
 
       final localUser = LocalIPortalProfile(

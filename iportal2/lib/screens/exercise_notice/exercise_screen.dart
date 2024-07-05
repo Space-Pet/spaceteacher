@@ -8,11 +8,9 @@ import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/components/dropdown/dropdown_subject.dart';
 import 'package:iportal2/components/select_date.dart';
 import 'package:iportal2/screens/exercise_notice/bloc/exercise_bloc.dart';
 import 'package:iportal2/screens/exercise_notice/widgets/excersise_note/exercise_note_list.dart';
-import 'package:iportal2/screens/score/widgets/score_filter.dart';
 import 'package:repository/repository.dart';
 
 class ExerciseScreen extends StatelessWidget {

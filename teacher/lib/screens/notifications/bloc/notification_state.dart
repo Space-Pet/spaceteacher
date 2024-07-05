@@ -38,7 +38,9 @@ enum NotificationStatus {
   failure,
   loadingSent,
   successSent,
-  failureSent
+  failureSent,
+  deleteSuccess,
+  deleteFailure,
 }
 
 enum ViewMode { all, unRead }

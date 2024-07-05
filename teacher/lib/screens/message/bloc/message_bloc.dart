@@ -1,9 +1,9 @@
-// ignore_for_file: unused_local_variable
+import 'dart:io';
 
 import 'package:core/core.dart';
+import 'package:meta/meta.dart';
 import 'package:repository/repository.dart';
-
-import '../../../common_bloc/current_user/current_user_bloc.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'message_event.dart';
 part 'message_state.dart';
@@ -12,52 +12,277 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   final AppFetchApiRepository appApiRepository;
   final CurrentUserBloc currentUserBloc;
   MessageBloc({required this.appApiRepository, required this.currentUserBloc})
-      : super(const MessageState()) {
-    on<GetListMessage>(_onGetListMessage);
-    on<GetPhoneBookStudent>(_onGetPhoneBookStudent);
-    on<GetMessageDetail>(_onGetMessageDetail);
-    on<PostMessage>(_onPostMessage);
-    on<GetMessageDetailRestart>(_onGetMessageDetailRestart);
-    on<DeleteMessageDetail>(_onDeleteMessageDetail);
+      : super(MessageState(
+          classTeacher: const [],
+          seletedClasss: ClassTeacher.empty(),
+          conservationList: Conservation.fakeData(),
+          conservationDetail: ConservationDetail.fakeData(),
+        )) {
+    on<GetListClass>(_onGetListClass);
+    on<GetConversationList>(_onGetConversationList);
+
+    on<GetConservationDetail>(_onGetConservationDetail);
+    on<SendMessage>(_onSendMessage);
     on<DeleteMessage>(_onDeleteMessage);
-    on<GetListMessageResert>(_onGetMessageResart);
-    on<PinMessage>(_onPinMessage);
-    on<DeletePinMessage>(_onDeletePinMessage);
+    on<DeleteConservation>(_onDeleteConservation);
+
     on<GetPinMessage>(_onGetPinMessage);
+    on<PinMessage>(_onPinMessage);
+    on<UnPinMessage>(_onUnPinMessage);
+
+    on<GetPhoneBookStudent>(_onGetPhoneBookStudent);
+  }
+
+  _onGetListClass(
+    GetListClass event,
+    Emitter<MessageState> emit,
+  ) async {
+    emit(state.copyWith(messageStatus: MessageStatus.loadingConservationList));
+    try {
+      final listClass = await appApiRepository.getListClassTeacher(
+        teacherId: currentUserBloc.state.user.teacher_id,
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand,
+      );
+
+      emit(
+        state.copyWith(
+          classTeacher: listClass,
+          seletedClasss:
+              listClass.isNotEmpty ? listClass.first : ClassTeacher.empty(),
+        ),
+      );
+
+      if (listClass.isNotEmpty) {
+        add(GetConversationList());
+      } else {
+        emit(
+          state.copyWith(
+            classTeacher: [],
+            seletedClasss: ClassTeacher.empty(),
+            messageStatus: MessageStatus.errorConservationList,
+            conservationList: [],
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          classTeacher: [],
+          seletedClasss: ClassTeacher.empty(),
+          messageStatus: MessageStatus.errorConservationList,
+          conservationList: [],
+        ),
+      );
+    }
+  }
+
+  _onGetConversationList(
+    GetConversationList event,
+    Emitter<MessageState> emit,
+  ) async {
+    try {
+      if (!event.isResetConservationDetail) {
+        emit(state.copyWith(
+            messageStatus: MessageStatus.loadingConservationList));
+      }
+
+      final user = currentUserBloc.state.user;
+
+      final data = await appApiRepository.getListMessage(
+        schoolId: user.school_id,
+        schoolBrand: user.school_brand,
+        classId: state.seletedClasss.classId.toString(),
+        userId: user.user_id.toString(),
+      );
+
+      emit(state.copyWith(
+        messageStatus: MessageStatus.successConservationList,
+        conservationList: data,
+      ));
+
+      if (event.isResetConservationDetail) {
+        emit(state.copyWith(
+          currentPage: 1,
+          hasMoreData: false,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        messageStatus: MessageStatus.errorConservationList,
+      ));
+    }
+  }
+
+  _onGetConservationDetail(
+    GetConservationDetail event,
+    Emitter<MessageState> emit,
+  ) async {
+    if (event.isFetchNextPage && !state.hasMoreData) {
+      return;
+    }
+
+    if (event.showLoading) {
+      emit(state.copyWith(
+        conservationDetail: ConservationDetail.fakeData(),
+        messageDetailStatus: MessageStatus.loadingConservationDetail,
+        isFirstLoadChatRoom: false,
+      ));
+    }
+
+    if (event.isFetchNextPage) {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.loadingLoadMoreMessages));
+    }
+
+    if (event.isGetNewMessage) {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.loadingGetNewMessage));
+    }
+
+    try {
+      final data = await appApiRepository.getMessageDetail(
+        conversationId: event.conversationId,
+        recipientId: event.recipientId,
+        isGetById: event.isGetById,
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand,
+        page: event.isFetchNextPage ? state.currentPage + 1 : state.currentPage,
+      );
+
+      if (event.isFetchNextPage) {
+        emit(state.copyWith(
+          conservationDetail: state.conservationDetail +
+              data['data'].map<ConservationDetail>((e) {
+                return ConservationDetail.fromJson(e);
+              }).toList(),
+          messageDetailStatus: MessageStatus.successLoadMoreMessages,
+        ));
+      } else {
+        emit(
+          state.copyWith(
+            conservationDetail: data['data'].map<ConservationDetail>((e) {
+              return ConservationDetail.fromJson(e);
+            }).toList(),
+            messageDetailStatus: MessageStatus.successGetNewMessage,
+          ),
+        );
+      }
+
+      emit(
+        state.copyWith(
+          currentPage: data['current_page'],
+          hasMoreData: data['current_page'] < data['last_page'] ?? false,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.errorConservationDetail));
+    }
+  }
+
+  _onSendMessage(
+    SendMessage event,
+    Emitter<MessageState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.loadingSendMessage));
+      final data = await appApiRepository.postMessage(
+        recipient: event.recipient,
+        content: event.content,
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand,
+        classId: state.seletedClasss.classId.toString(),
+        files: event.files,
+      );
+
+      emit(state.copyWith(
+        messageDetailStatus: MessageStatus.successSendMessage,
+        conversationID: data,
+      ));
+    } catch (e) {
+      emit(state.copyWith(messageDetailStatus: MessageStatus.errorSendMessage));
+    }
+  }
+
+  _onDeleteConservation(
+    DeleteConservation event,
+    Emitter<MessageState> emit,
+  ) async {
+    try {
+      emit(state.copyWith(
+          messageStatus: MessageStatus.loadingDeleteConservation));
+      await appApiRepository.deleteConservation(
+        schoolId: currentUserBloc.state.user.school_id,
+        schoolBrand: currentUserBloc.state.user.school_brand,
+        conservationId: event.conservationId,
+      );
+      emit(state.copyWith(
+          messageStatus: MessageStatus.successDeleteConservation));
+    } catch (e) {
+      emit(
+          state.copyWith(messageStatus: MessageStatus.errorDeleteConservation));
+    }
+  }
+
+  _onDeleteMessage(
+    DeleteMessage event,
+    Emitter<MessageState> emit,
+  ) async {
+    emit(state.copyWith(
+        messageDetailStatus: MessageStatus.loadingDeleteMessage));
+    final data = await appApiRepository.deleteMessage(
+      content: event.content,
+      schoolId: currentUserBloc.state.user.school_id,
+      schoolBrand: currentUserBloc.state.user.school_brand,
+      recipient: event.recipient,
+      idMessage: event.idMessage,
+    );
+
+    if (data['code'] == null) {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.errorDeleteMessage));
+      return;
+    }
+
+    if (data['code'] == 200) {
+      emit(state.copyWith(
+          messageDetailStatus: MessageStatus.successDeleteMessage));
+    }
   }
 
   _onPinMessage(
     PinMessage event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingPostPinMessage));
+    emit(state.copyWith(pinStatus: MessageStatus.loadingPinMessage));
     final data = await appApiRepository.postPinMessage(
       schoolId: currentUserBloc.state.user.school_id,
       schoolBrand: currentUserBloc.state.user.school_brand,
       idMessage: event.idMessage,
     );
     if (data?['code'] == 200) {
-      emit(state.copyWith(messageStatus: MessageStatus.successPostPinMessage));
+      emit(state.copyWith(pinStatus: MessageStatus.successPinMessage));
     } else {
-      emit(state.copyWith(messageStatus: MessageStatus.error));
+      emit(state.copyWith(pinStatus: MessageStatus.errorPinMessage));
     }
   }
 
-  _onDeletePinMessage(
-    DeletePinMessage event,
+  _onUnPinMessage(
+    UnPinMessage event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingDeletePinMessage));
+    emit(state.copyWith(pinStatus: MessageStatus.loadingUnpinMessage));
     final data = await appApiRepository.postDeletePinMessage(
       schoolId: currentUserBloc.state.user.school_id,
       schoolBrand: currentUserBloc.state.user.school_brand,
       idMessage: event.idMessage,
     );
     if (data?['code'] == 200) {
-      emit(
-          state.copyWith(messageStatus: MessageStatus.successDeletePinMessage));
+      emit(state.copyWith(pinStatus: MessageStatus.successUnpinMessage));
     } else {
-      emit(state.copyWith(messageStatus: MessageStatus.error));
+      emit(state.copyWith(pinStatus: MessageStatus.errorUnpinMessage));
     }
   }
 
@@ -65,18 +290,23 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     GetPinMessage event,
     Emitter<MessageState> emit,
   ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingGetPinMessage));
+    emit(state.copyWith(pinStatus: MessageStatus.loadingGetPinMessage));
+
     final data = await appApiRepository.getMessagePin(
+      recipientId: event.recipientId,
       schoolId: currentUserBloc.state.user.school_id,
       schoolBrand: currentUserBloc.state.user.school_brand,
     );
+
     if (data != null) {
       emit(state.copyWith(
-          messageStatus: MessageStatus.successGetPinMessage, messagePin: data));
+        pinStatus: MessageStatus.successGetPinMessage,
+        messagePin: data,
+      ));
     } else {
       emit(state.copyWith(
-          messageStatus: MessageStatus.successGetPinMessage,
-          messagePin: const MessageDetail(
+          pinStatus: MessageStatus.errorGetPinMessage,
+          messagePin: const ConservationDetail(
               avatarUrl: '',
               content: '',
               fullName: '',
@@ -88,144 +318,16 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     }
   }
 
-  _onDeleteMessage(
-    DeleteMessage event,
-    Emitter<MessageState> emit,
-  ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingDelete));
-    await appApiRepository.deleteMessage(
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
-      idMessage: event.idMessage,
-    );
-    emit(state.copyWith(messageStatus: MessageStatus.successDelete));
-  }
-
-  _onDeleteMessageDetail(
-    DeleteMessageDetail event,
-    Emitter<MessageState> emit,
-  ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingDelete));
-    await appApiRepository.deleteMessageDetail(
-      content: event.content,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
-      recipient: event.recipient,
-      idMessage: event.idMessage,
-    );
-    emit(state.copyWith(messageStatus: MessageStatus.successDelete));
-  }
-
-  _onPostMessage(
-    PostMessage event,
-    Emitter<MessageState> emit,
-  ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingMessage));
-    final data = await appApiRepository.postMessage(
-      recipient: event.recipient,
-      content: event.content,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
-      classId: 'currentUserBloc.state.user',
-    );
-    emit(state.copyWith(
-        messageStatus: MessageStatus.successMessage, conversationID: data));
-  }
-
-  _onGetMessageDetail(
-    GetMessageDetail event,
-    Emitter<MessageState> emit,
-  ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loading));
-    final data = await appApiRepository.getMessageDetail(
-      conversationId: event.conversationId,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
-      page: event.page,
-    );
-    emit(
-      state.copyWith(
-          messageStatus: MessageStatus.success,
-          messageDetail: data['data'].map<MessageDetail>((e) {
-            return MessageDetail.fromJson(e);
-          }).toList(),
-          currentPage: data['current_page'],
-          hasMoreData: data['current_page'] < data['last_page'] ?? false,
-          profileInfo: currentUserBloc.state.user,),
-    );
-  }
-
-  _onGetMessageDetailRestart(
-    GetMessageDetailRestart event,
-    Emitter<MessageState> emit,
-  ) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loadingRestart));
-    final data = await appApiRepository.getMessageDetail(
-      conversationId: event.conversationId,
-      schoolId: currentUserBloc.state.user.school_id,
-      schoolBrand: currentUserBloc.state.user.school_brand,
-      page: event.page,
-    );
-    emit(
-      state.copyWith(
-          messageStatus: MessageStatus.successRestart,
-          messageDetail: data['data'].map<MessageDetail>((e) {
-            return MessageDetail.fromJson(e);
-          }).toList(),
-          currentPage: data['current_page'],
-          hasMoreData: data['current_page'] < data['last_page'] ?? false,
-          profileInfo: currentUserBloc.state.user),
-    );
-  }
-
-  _onGetMessageResart(
-    GetListMessageResert event,
-    Emitter<MessageState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(messageStatus: MessageStatus.loadingRestart));
-      final data = await appApiRepository.getListMessage(
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
-        classId: 'currentUserBloc.state.user',
-        userId: currentUserBloc.state.user.user_id.toString(),
-      );
-
-      emit(state.copyWith(
-          messageStatus: MessageStatus.successRestart, messages: data));
-    } catch (e) {
-      emit(state.copyWith(messageStatus: MessageStatus.error));
-    }
-  }
-
-  _onGetListMessage(
-    GetListMessage event,
-    Emitter<MessageState> emit,
-  ) async {
-    try {
-      emit(state.copyWith(messageStatus: MessageStatus.loading));
-      final data = await appApiRepository.getListMessage(
-        schoolId: currentUserBloc.state.user.school_id,
-        schoolBrand: currentUserBloc.state.user.school_brand,
-        classId: 'currentUserBloc.state.user.children[0].class_id',
-        userId: currentUserBloc.state.user.user_id.toString(),
-      );
-      // final List<Message> combinedData = [...state.messages, ...data];
-      emit(state.copyWith(
-          messageStatus: MessageStatus.success,
-          // messages: combinedData,
-          messages: data));
-    } catch (e) {
-      emit(state.copyWith(messageStatus: MessageStatus.error));
-    }
-  }
-
   void _onGetPhoneBookStudent(
       GetPhoneBookStudent event, Emitter<MessageState> emit) async {
-    emit(state.copyWith(messageStatus: MessageStatus.loading));
-    final data = await appApiRepository.getPhoneBookStudent(
-        classId: 0);
     emit(state.copyWith(
-        messageStatus: MessageStatus.success, phoneBookStudent: data));
+        messageDetailStatus: MessageStatus.loadingGetPhoneBookStudent));
+    // TODO
+    // final data = await appApiRepository.getPhoneBookStudent(
+    //     classId: currentUserBloc.state.user.children[0].class_id);
+    // emit(state.copyWith(
+    //   messageDetailStatus: MessageStatus.successGetPhoneBookStudent,
+    //   phoneBookStudent: data,
+    // ));
   }
 }

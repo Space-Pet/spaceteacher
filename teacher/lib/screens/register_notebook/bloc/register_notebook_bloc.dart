@@ -1,9 +1,8 @@
 import 'dart:io';
 
 import 'package:core/core.dart';
-import 'package:meta/meta.dart';
-import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
+import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'register_notebook_event.dart';
 part 'register_notebook_state.dart';
@@ -15,20 +14,38 @@ class RegisterNotebookBloc
     required this.currentUserBloc,
   }) : super(RegisterNotebookState(
           listViolation: ListViolation.fakeData(),
-          classCn: [],
-          lessonData: [],
+          lessonData: LessonData.fakeDataList(),
+          classCn: const [],
           datePicked: DateTime.now(),
         )) {
     on<RegisterNotebookFetchData>(_onFetchWeeklyData);
     on<RegisterSelectDate>(_onSelectDate);
     add(RegisterNotebookFetchData());
+
     on<GetViolationData>(_onGetViolation);
     on<GetListViolation>(_onGetListViolation);
     on<PostRegister>(_onPostRegister);
+    on<PostViolation>(_onPostViolation);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
   final CurrentUserBloc currentUserBloc;
+
+  _onPostViolation(
+    PostViolation event,
+    Emitter<RegisterNotebookState> emit,
+  ) async {
+    emit(state.copyWith(status: RegisterNotebookStatus.loadingPostViolation));
+    final data = await appFetchApiRepo.postViolation(
+      containerData: event.containerData,
+    );
+    emit(state.copyWith(
+      status: data['status'] == 'Success'
+          ? RegisterNotebookStatus.successPostViolation
+          : RegisterNotebookStatus.failPost,
+      message: data['status_note'],
+    ));
+  }
 
   _onPostRegister(
     PostRegister event,
@@ -47,7 +64,13 @@ class RegisterNotebookBloc
       hanNop: event.hanNop,
       userKey: event.userKey,
     );
-    emit(state.copyWith(status: RegisterNotebookStatus.successPostRegister));
+    emit(state.copyWith(
+      status: data['status'] == 'Success'
+          ? RegisterNotebookStatus.successPostRegister
+          : RegisterNotebookStatus.failPost,
+      containerData: event.containerData,
+      message: data['status_note'],
+    ));
   }
 
   _onGetListViolation(
@@ -81,39 +104,31 @@ class RegisterNotebookBloc
 
   _onSelectDate(
       RegisterSelectDate event, Emitter<RegisterNotebookState> emit) async {
-    emit(state.copyWith(status: RegisterNotebookStatus.loading));
-    final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
+    emit(state.copyWith(
+      datePicked: event.datePicked,
       classSelect: event.classSelect,
-      userKey: currentUserBloc.state.user.user_key,
-      txtDate: event.datePicked.ddMMyyyyDash,
-    );
-    emit(
-      state.copyWith(
-        lessonData: weeklyLessonData.lessonDataList.isEmpty
-            ? []
-            : weeklyLessonData.lessonDataList,
-        datePicked: event.datePicked,
-        status: RegisterNotebookStatus.success,
-        classCn: event.classSelect == 1 ? weeklyLessonData.classCn : [],
-      ),
-    );
+    ));
+
+    add(RegisterNotebookFetchData());
   }
 
   _onFetchWeeklyData(RegisterNotebookFetchData event,
       Emitter<RegisterNotebookState> emit) async {
     emit(state.copyWith(status: RegisterNotebookStatus.loading));
+
     final weeklyLessonData = await appFetchApiRepo.getRegisterNoteBook(
-      classSelect: 1,
+      classSelect: state.classSelect,
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateTime.now().ddMMyyyyDash,
+      txtDate: state.datePicked.ddMMyyyyDash,
     );
     emit(
       state.copyWith(
-          status: RegisterNotebookStatus.success,
-          classCn: weeklyLessonData.classCn,
-          lessonData: weeklyLessonData.lessonDataList.isEmpty
-              ? []
-              : weeklyLessonData.lessonDataList),
+        status: RegisterNotebookStatus.success,
+        classCn: state.classSelect == 1 ? weeklyLessonData.classCn : [],
+        lessonData: weeklyLessonData.lessonDataList.isEmpty
+            ? []
+            : weeklyLessonData.lessonDataList,
+      ),
     );
   }
 }

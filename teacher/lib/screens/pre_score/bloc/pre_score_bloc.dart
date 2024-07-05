@@ -179,6 +179,8 @@ class PreScoreBloc extends Bloc<PreScoreEvent, PreScoreState> {
     emit(state.copyWith(preScoreStatus: PreScoreStatus.loadingGetListStudent));
     final data = await appFetchApiRepo.getPhoneBookStudent(
       classId: state.userData.lopChuNhiem.id,
+      schoolId: 125,
+      schoolBrand: 'uka',
     );
     emit(state.copyWith(
       preScoreStatus: PreScoreStatus.successGetListStudent,

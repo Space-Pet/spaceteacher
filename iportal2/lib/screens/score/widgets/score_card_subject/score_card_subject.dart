@@ -68,35 +68,36 @@ class _CardScoreSubjectState extends State<CardScoreSubject> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-                  decoration: const BoxDecoration(
-                      color: AppColors.backgroundBrandRest,
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icons/bold-note-document.svg',
-                        width: 16,
-                        height: 16,
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        constraints:
-                            const BoxConstraints(minWidth: 2, maxWidth: 170),
-                        child: Text(
-                          widget.scoreCard.subjectName,
-                          style: AppTextStyles.semiBold12(
-                            color: AppColors.blueGray800,
-                            height: 20 / 14,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                    decoration: const BoxDecoration(
+                        color: AppColors.backgroundBrandRest,
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/icons/bold-note-document.svg',
+                          width: 16,
+                          height: 16,
                         ),
-                      )
-                    ],
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            widget.scoreCard.subjectName,
+                            maxLines: 2,
+                            style: AppTextStyles.semiBold12(
+                              color: AppColors.blueGray800,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
+                const SizedBox(width: 4),
                 Row(
                   children: [
                     isEmptyTbmhk

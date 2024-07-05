@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core/core.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -17,7 +19,10 @@ class AppFetchApiRepository {
   // Member
   Future<WeeklyLessonData> getRegisterNoteBook(
           {required String userKey, required String txtDate}) =>
-      _appFetchApi.getRegisterNoteBook(userKey: userKey, txtDate: txtDate);
+      _appFetchApi.getRegisterNoteBook(
+        userKey: userKey,
+        txtDate: txtDate,
+      );
 
   Future<Schedule> getSchedule(
           {required String userKey, required String txtDate}) =>
@@ -273,7 +278,7 @@ class AppFetchApiRepository {
     return data.map((e) => BusSchedule.fromData(e)).toList();
   }
 
-  Future<List<Message>> getListMessage({
+  Future<List<Conservation>> getListMessage({
     required int schoolId,
     required String classId,
     required String userId,
@@ -348,16 +353,21 @@ class AppFetchApiRepository {
   }
 
   Future<Map<String, dynamic>> getMessageDetail({
-    required String conversationId,
+    String? conversationId,
+    String? recipientId,
+    isGetById = false,
     required int schoolId,
     required String schoolBrand,
-    int? page,
+    required int page,
   }) async {
     final data = await _appFetchApi.getMessageDetail(
-        conversationId: conversationId,
-        schoolId: schoolId,
-        schoolBrand: schoolBrand,
-        page: page);
+      conversationId: conversationId,
+      recipientId: recipientId,
+      isGetById: isGetById,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      page: page,
+    );
     return data;
   }
 
@@ -367,6 +377,7 @@ class AppFetchApiRepository {
     required String recipient,
     required int schoolId,
     required String schoolBrand,
+    required List<File> files,
   }) async {
     final data = await _appFetchApi.postMessage(
       content: content,
@@ -374,18 +385,19 @@ class AppFetchApiRepository {
       recipient: recipient,
       schoolId: schoolId,
       schoolBrand: schoolBrand,
+      files: files,
     );
     return data;
   }
 
-  Future<int> deleteMessageDetail({
+  Future<Map<String, dynamic>> deleteMessage({
     required String content,
     required int schoolId,
     required String schoolBrand,
     required String recipient,
     required int idMessage,
   }) async {
-    final data = await _appFetchApi.deleteMessageDetail(
+    final data = await _appFetchApi.deleteMessage(
         content: content,
         schoolId: schoolId,
         schoolBrand: schoolBrand,
@@ -394,15 +406,15 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<int> deleteMessage({
+  Future<int> deleteConservation({
     required int schoolId,
     required String schoolBrand,
-    required int idMessage,
+    required int conservationId,
   }) async {
-    final data = await _appFetchApi.deleteMessage(
+    final data = await _appFetchApi.deleteConservation(
       schoolId: schoolId,
       schoolBrand: schoolBrand,
-      idMessage: idMessage,
+      conservationId: conservationId,
     );
     return data;
   }
@@ -435,11 +447,13 @@ class AppFetchApiRepository {
     required String schoolBrand,
     required int schoolId,
     required int idMessage,
+    required String conservationId,
   }) async {
     final data = await _appFetchApi.postPinMessage(
       schoolBrand: schoolBrand,
       schoolId: schoolId,
       idMessage: idMessage,
+      conservationId: conservationId,
     );
     return data;
   }
@@ -457,12 +471,16 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<MessageDetail?> getMessagePin({
+  Future<ConservationDetail?> getMessagePin({
     required String schoolBrand,
     required int schoolId,
+    required String recipientId,
   }) async {
     final data = await _appFetchApi.getMessagePin(
-        schoolBrand: schoolBrand, schoolId: schoolId);
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      recipientId: recipientId,
+    );
 
     return data;
   }

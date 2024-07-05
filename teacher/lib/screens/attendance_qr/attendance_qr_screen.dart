@@ -150,9 +150,7 @@ class _AttendanceQRViewState extends State<AttendanceQRView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ScreenAppBar(
-                title: widget.type == 1
-                    ? 'LocaleKeys.attendance.tr()'
-                    : 'LocaleKeys.attendanceQR.tr()',
+                title: widget.type == 1 ? 'Điểm danh' : 'Điểm danh QR',
                 canGoback: true,
                 onBack: () {
                   context.pop();
@@ -332,23 +330,8 @@ class _AttendanceQRViewState extends State<AttendanceQRView> {
                                     children: [
                                       Row(
                                         children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: AssetImage(
-                                                    info.urlImage.mobile),
-                                              ),
-                                              shape: BoxShape.circle,
-                                              color: AppColors.white,
-                                              border: Border.all(
-                                                color: AppColors.white,
-                                                width: 2,
-                                              ),
-                                            ),
-                                          ),
+                                          CircleAvaImage(
+                                              urlAva: info.urlImage.mobile),
                                           const SizedBox(width: 8),
                                           Column(
                                             crossAxisAlignment:

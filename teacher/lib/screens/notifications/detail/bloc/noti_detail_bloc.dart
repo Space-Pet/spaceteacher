@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/notifications/bloc/notification_bloc.dart';
@@ -12,6 +14,7 @@ class NotiDetailBloc extends Bloc<NotiDetailEvent, NotiDetailState> {
     required this.currentUserBloc,
   }) : super(NotiDetailState(notiDetail: SentNotiDetail.empty())) {
     on<NotificationFetchDetail>(_onFetchNotiDetail);
+    on<NotificationDelete>(_onDeleteNoti);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -32,9 +35,31 @@ class NotiDetailBloc extends Bloc<NotiDetailEvent, NotiDetailState> {
       id: event.id,
     );
 
+    final imageFiles = notiDetailData.notification.attachments
+        .where((element) => element.fileType.contains('image'))
+        .toList();
+
+    final otherFiles = notiDetailData.notification.attachments
+        .where((element) => !element.fileType.contains('image'))
+        .toList();
+
     emit(state.copyWith(
       notiDetail: notiDetailData,
+      imageFiles: imageFiles,
+      otherFiles: otherFiles,
       status: NotificationStatus.success,
     ));
+  }
+
+  _onDeleteNoti(NotificationDelete event, Emitter<NotiDetailState> emit) async {
+    emit(state.copyWith(status: NotificationStatus.loading));
+
+    final response = await appFetchApiRepo.deleteNoti(id: event.id);
+
+    if (response['status'] == 'success' && response['code'] == 200) {
+      emit(state.copyWith(status: NotificationStatus.deleteSuccess));
+    } else if (response is Error) {
+      emit(state.copyWith(status: NotificationStatus.deleteFailure));
+    }
   }
 }

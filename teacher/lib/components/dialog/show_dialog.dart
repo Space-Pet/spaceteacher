@@ -1,7 +1,6 @@
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 
-
 class ShowDialog extends StatelessWidget {
   const ShowDialog(
       {super.key,
@@ -21,7 +20,7 @@ class ShowDialog extends StatelessWidget {
     return AlertDialog(
       title: Column(
         children: [
-          child!,
+          if (child != null) child!,
           Padding(
             padding: const EdgeInsets.only(top: 24),
             child: Text(

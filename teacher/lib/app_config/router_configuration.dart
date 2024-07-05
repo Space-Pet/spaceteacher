@@ -5,18 +5,18 @@ import 'package:teacher/screens/bus/bus_screen.dart';
 import 'package:teacher/screens/exercise_notice/exercise_screen.dart';
 import 'package:teacher/screens/fee_plan/fee_plan_screen.dart';
 import 'package:teacher/screens/gallery/gallery_screen.dart';
-import 'package:teacher/screens/gallery/widget/gallery_create/gallery_create.dart';
+import 'package:teacher/screens/gallery/screens/create_edit/gallery_create.dart';
 import 'package:teacher/screens/home/home_screen.dart';
 import 'package:teacher/screens/leave/on_leave_screen.dart';
 import 'package:teacher/screens/menu/menu_screen.dart';
+import 'package:teacher/screens/message/screens/conversation_detail.dart';
+import 'package:teacher/screens/message/screens/new_conversation.dart';
 import 'package:teacher/screens/notifications/create/noti_create_screen.dart';
 import 'package:teacher/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:teacher/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:teacher/screens/phone_book/phone_book_screen.dart';
 import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
-import 'package:teacher/screens/score/edit_score_screen.dart';
-import 'package:teacher/screens/score/views/class_score/class_score_screen.dart';
 import 'package:teacher/screens/splash/loading_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
 
@@ -107,11 +107,11 @@ class CustomRouter {
             child: const NutritionScreen(),
             routeName: NutritionScreen.routeName);
 
-      case EditScoreScreen.routeName:
-        return transitionAnimation(
-          child: const EditScoreScreen(),
-          routeName: EditScoreScreen.routeName,
-        );
+      // case EditScoreScreen.routeName:
+      //   return transitionAnimation(
+      //     child: const EditScoreScreen(),
+      //     routeName: EditScoreScreen.routeName,
+      //   );
 
       case PreScoreScreen.routeName:
         return transitionAnimation(
@@ -135,6 +135,31 @@ class CustomRouter {
         return transitionAnimation(
           child: const SurveyScreen(),
           routeName: SurveyScreen.routeName,
+        );
+
+      case ConversationDetail.routeName:
+        final arguments = settings.arguments as Map<String, dynamic>;
+        final conversationId = arguments['conversationId'] as String;
+        final recipientId = arguments['recipientId'] as String;
+        final isGetById = arguments['isGetById'] as bool;
+        final fullName = arguments['fullName'] as String?;
+        final urlImage = arguments['urlImage'] as String?;
+
+        return transitionAnimation(
+          child: ConversationDetail(
+            conversationId: conversationId,
+            recipientId: recipientId,
+            isGetById: isGetById,
+            fullName: fullName,
+            urlImage: urlImage,
+          ),
+          routeName: ConversationDetail.routeName,
+        );
+
+      case NewConversation.routeName:
+        return transitionAnimation(
+          child: const NewConversation(),
+          routeName: NewConversation.routeName,
         );
 
       default:
@@ -202,13 +227,8 @@ extension Navigation on BuildContext {
     Navigator.pop(this, result);
   }
 
-  popUntil({
-    required String routeName,
-  }) {
-    Navigator.popUntil(
-      this,
-      ModalRoute.withName(routeName),
-    );
+  popUntil({required bool Function(Route<dynamic>) predicate}) {
+    Navigator.popUntil(this, predicate);
   }
 
   pushNamedAndRemoveUntil({

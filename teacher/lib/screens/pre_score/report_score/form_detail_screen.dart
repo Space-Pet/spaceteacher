@@ -143,7 +143,13 @@ class _FormDetailViewState extends State<FormDetailView> {
                               )
                             ],
                           ),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           EvaluatioTarget(formDetail: formDetail),
+                          const SizedBox(
+                            height: 8,
+                          ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -339,7 +345,7 @@ class _ContentReportState extends State<ContentReport> {
                               // Render DropdownButton if in edit mode
                               if (widget.edit)
                                 DropdownButton<String>(
-                                  hint: Text('Chọn'),
+                                  hint: const Text('Chọn'),
                                   value: selectedResults[index][criterialIndex],
                                   icon: const Icon(Icons.arrow_drop_down),
                                   iconSize: 24,
@@ -356,7 +362,6 @@ class _ContentReportState extends State<ContentReport> {
                                       selectedResults[index][criterialIndex] =
                                           newValue;
                                       updateMarkId(newValue, itemData.id);
-                                      print('object: ${saveUpdate.toList()}');
                                     });
                                   },
                                   items: itemData.listMarks.map((mark) {
@@ -394,7 +399,7 @@ class _ContentReportState extends State<ContentReport> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TitleAndInputText(
                           textInputType: false,
                           hintText: 'Nhập nhận xét',
@@ -412,7 +417,7 @@ class _ContentReportState extends State<ContentReport> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         child: TitleAndInputText(
                           textInputType: false,
                           hintText: 'Nhập tên các giáo viên giảng dạy bé',
@@ -536,7 +541,7 @@ class EvaluatioTarget extends StatelessWidget {
         ),
       ),
       child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         itemCount: formDetail.listMarks.length,

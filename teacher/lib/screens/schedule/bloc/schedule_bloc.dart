@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:repository/repository.dart';
-import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 
 part 'schedule_event.dart';
 part 'schedule_state.dart';
@@ -18,7 +17,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<ScheduleFetchData>(_onFetchScheduleData);
     on<ScheduleSelectDate>(_onSelectDate);
     on<ScheduleFetchExercise>(_onFetchDueDateExercises);
-    on<ScheduleFilterChanged>(_onScheduleFilterChange);
+    on<ScheduleChangeClassType>(_onScheduleFilterChange);
 
     add(ScheduleFetchData());
   }
@@ -31,7 +30,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     final exerciseDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.user.user_key,
       datePicked: event.datePicked,
-      // userKey: '0723210020',
     );
 
     emit(
@@ -41,29 +39,17 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     );
   }
 
-  _onSelectDate(ScheduleSelectDate event, Emitter<ScheduleState> emit) async {
-    final scheduleData = await appFetchApiRepo.getSchedule(
-      userKey: currentUserBloc.state.user.user_key,
-      txtDate: event.datePicked.ddMMyyyyDash,
-      // userKey: '0563230098',
-    );
-    emit(
-      state.copyWith(
-        scheduleData: scheduleData,
-        datePicked: event.datePicked,
-      ),
-    );
-  }
-
   _onFetchScheduleData(
       ScheduleFetchData event, Emitter<ScheduleState> emit) async {
-    emit(state.copyWith(status: ScheduleStatus.loading));
+    emit(state.copyWith(
+      scheduleData: Schedule.empty(),
+      status: ScheduleStatus.loading,
+    ));
 
     final scheduleData = await appFetchApiRepo.getSchedule(
       userKey: currentUserBloc.state.user.user_key,
-      txtDate: DateTime.now().ddMMyyyyDash,
-      // txtDate: '18-03-2024',
-      // userKey: '0563230098',
+      txtDate: state.datePicked.ddMMyyyyDash,
+      classType: state.classType.value,
     );
     emit(
       state.copyWith(
@@ -73,14 +59,18 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     );
   }
 
-  void _onScheduleFilterChange(
-    ScheduleFilterChanged event,
-    Emitter<ScheduleState> emit,
-  ) {
-    emit(
-      state.copyWith(filter: event.filter),
-    );
+  _onSelectDate(ScheduleSelectDate event, Emitter<ScheduleState> emit) async {
+    emit(state.copyWith(datePicked: event.datePicked));
+    add(ScheduleFetchData());
+  }
 
-    //TODO: Fetch list when filter changed
+  void _onScheduleFilterChange(
+      ScheduleChangeClassType event, Emitter<ScheduleState> emit) {
+    final newClassType = event.classTypeName == ClassType.chuNhiem.name
+        ? ClassType.chuNhiem
+        : ClassType.giangDay;
+
+    emit(state.copyWith(classType: newClassType));
+    add(ScheduleFetchData());
   }
 }

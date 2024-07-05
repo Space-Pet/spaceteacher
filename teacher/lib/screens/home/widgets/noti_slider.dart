@@ -99,7 +99,7 @@ class _NotiSliderState extends State<NotiSlider> {
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          height: 144,
+          height: 132.h,
           child: isEmptyNoti
               ? const EmptyNoti()
               : AppSkeleton(
@@ -143,7 +143,7 @@ class EmptyNoti extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(12.0),
                 child: SvgPicture.asset(
                   'assets/icons/home-none-noti.svg',
                 ),

@@ -17,9 +17,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     on<GalleryFetchData>(_onFetchAlbumData);
     add(GalleryFetchData());
 
-    on<GalleryGetPinnedAlbumIdList>(_onGetPinnedAlbumIdList);
-    add(GalleryGetPinnedAlbumIdList());
-
     on<GalleryUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
   }
 
@@ -43,29 +40,21 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     ));
   }
 
-  _onGetPinnedAlbumIdList(
-      GalleryGetPinnedAlbumIdList event, Emitter<GalleryState> emit) async {
-    if (currentUserBloc.state.activeChild.isMN) {
-      final user = currentUserBloc.state.activeChild;
-
-      emit(state.copyWith(pinnedAlbumIdList: user.pinnedAlbumIdList));
-    }
-  }
-
   _onUpdatePinnedAlbum(
       GalleryUpdatePinnedAlbum event, Emitter<GalleryState> emit) {
     final currentPinnedAlbum =
         currentUserBloc.state.activeChild.pinnedAlbumIdList;
+
     final newPinnedAlbum = currentPinnedAlbum.contains(event.albumId)
         ? currentPinnedAlbum
             .where((element) => element != event.albumId)
             .toList()
         : [...currentPinnedAlbum, event.albumId];
 
-    emit(state.copyWith(pinnedAlbumIdList: newPinnedAlbum));
-
-    final newChildren = currentUserBloc.state.activeChild
-        .copyWith(pinnedAlbumIdList: newPinnedAlbum);
+    final newChildren = currentUserBloc.state.activeChild.copyWith(
+      pinnedAlbumIdList: newPinnedAlbum,
+      isActive: true,
+    );
 
     final newChildrenList = currentUserBloc.state.user.children
         .map((e) => e.pupil_id == newChildren.pupil_id ? newChildren : e)

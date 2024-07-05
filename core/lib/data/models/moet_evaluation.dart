@@ -1,4 +1,4 @@
-class MoetEvaluation {
+class Assessment {
   String userId;
   String schoolBrand;
   String teacherId;
@@ -15,9 +15,9 @@ class MoetEvaluation {
   String? xepLoai;
   String? tongDiem;
   String diemType;
-  List<MoetCriteria> listMoetCriteria;
+  List<Criteria> listMoetCriteria;
 
-  MoetEvaluation({
+  Assessment({
     required this.userId,
     required this.schoolBrand,
     required this.teacherId,
@@ -37,8 +37,8 @@ class MoetEvaluation {
     required this.listMoetCriteria,
   });
 
-  factory MoetEvaluation.fromMap(Map<String, dynamic> map) {
-    return MoetEvaluation(
+  factory Assessment.fromMap(Map<String, dynamic> map) {
+    return Assessment(
       userId: map['user_id'],
       schoolBrand: map['school_brand'],
       teacherId: map['teacher_id'],
@@ -55,13 +55,13 @@ class MoetEvaluation {
       xepLoai: map['xep_loai'],
       tongDiem: map['tong_diem'],
       diemType: map['diem_type'],
-      listMoetCriteria: List<MoetCriteria>.from(map['data']
-          ?.map((x) => MoetCriteria.fromMap(x as Map<String, dynamic>))),
+      listMoetCriteria: List<Criteria>.from(
+          map['data']?.map((x) => Criteria.fromMap(x as Map<String, dynamic>))),
     );
   }
 
-  factory MoetEvaluation.empty() {
-    return MoetEvaluation(
+  factory Assessment.empty() {
+    return Assessment(
       userId: '',
       schoolBrand: '',
       teacherId: '',
@@ -82,8 +82,8 @@ class MoetEvaluation {
     );
   }
 
-  factory MoetEvaluation.fakeData() {
-    return MoetEvaluation(
+  factory Assessment.fakeData() {
+    return Assessment(
         userId: '10014243',
         schoolBrand: 'ischool',
         teacherId: '10000586',
@@ -102,7 +102,7 @@ class MoetEvaluation {
         diemType: 'float',
         listMoetCriteria: List.generate(
           10,
-          (index) => MoetCriteria(
+          (index) => Criteria(
             stt: index,
             noteId: '10000586',
             tieuChiDanhMuc: '1.1',
@@ -116,37 +116,76 @@ class MoetEvaluation {
   }
 }
 
-class MoetCriteria {
+class Criteria {
   int stt;
   String noteId;
   String tieuChiDanhMuc;
-  int tieuChiTongDiem;
-  String tieuChiNoiDung;
-  int tieuChiDiem;
+  num? tieuChiTongDiem;
+  num? tieuChiDiemMax;
+  String? tieuChiNoiDung;
+  String? tieuChiNoiDungGiaoVien;
+  String? tieuChiNoiDungHocSinh;
+  num? tieuChiDiem;
   String? diemDat;
   String? nhanXet;
 
-  MoetCriteria({
+  Criteria({
     required this.stt,
     required this.noteId,
     required this.tieuChiDanhMuc,
-    required this.tieuChiTongDiem,
-    required this.tieuChiNoiDung,
-    required this.tieuChiDiem,
+    this.tieuChiTongDiem,
+    this.tieuChiDiemMax,
+    this.tieuChiNoiDung,
+    this.tieuChiNoiDungGiaoVien,
+    this.tieuChiNoiDungHocSinh,
+    this.tieuChiDiem,
     this.diemDat,
     this.nhanXet,
   });
 
-  factory MoetCriteria.fromMap(Map<String, dynamic> map) {
-    return MoetCriteria(
+  factory Criteria.fromMap(Map<String, dynamic> map) {
+    return Criteria(
       stt: map['STT'],
       noteId: map['NOTE_ID'],
       tieuChiDanhMuc: map['tieu_chi_danh_muc'],
       tieuChiTongDiem: map['tieu_chi_tong_diem'],
+      tieuChiDiemMax: map['tieu_chi_diem_max'],
       tieuChiNoiDung: map['tieu_chi_noi_dung'],
+      tieuChiNoiDungGiaoVien: map['tieu_chi_noi_dung_giao_vien'],
+      tieuChiNoiDungHocSinh: map['tieu_chi_noi_dung_hoc_sinh'],
       tieuChiDiem: map['tieu_chi_diem'],
       diemDat: map['diem_dat'],
       nhanXet: map['nhan_xet'],
+    );
+  }
+
+  Criteria copyWith({
+    int? stt,
+    String? noteId,
+    String? tieuChiDanhMuc,
+    num? tieuChiTongDiem,
+    num? tieuChiDiemMax,
+    String? tieuChiNoiDung,
+    String? tieuChiNoiDungGiaoVien,
+    String? tieuChiNoiDungHocSinh,
+    num? tieuChiDiem,
+    String? diemDat,
+    String? nhanXet,
+  }) {
+    return Criteria(
+      stt: stt ?? this.stt,
+      noteId: noteId ?? this.noteId,
+      tieuChiDanhMuc: tieuChiDanhMuc ?? this.tieuChiDanhMuc,
+      tieuChiTongDiem: tieuChiTongDiem ?? this.tieuChiTongDiem,
+      tieuChiDiemMax: tieuChiDiemMax ?? this.tieuChiDiemMax,
+      tieuChiNoiDung: tieuChiNoiDung ?? this.tieuChiNoiDung,
+      tieuChiNoiDungGiaoVien:
+          tieuChiNoiDungGiaoVien ?? this.tieuChiNoiDungGiaoVien,
+      tieuChiNoiDungHocSinh:
+          tieuChiNoiDungHocSinh ?? this.tieuChiNoiDungHocSinh,
+      tieuChiDiem: tieuChiDiem ?? this.tieuChiDiem,
+      diemDat: diemDat ?? this.diemDat,
+      nhanXet: nhanXet ?? this.nhanXet,
     );
   }
 }

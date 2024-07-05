@@ -2,15 +2,14 @@ part of 'phone_book_bloc.dart';
 
 enum PhoneBookStatus { init, success, error, loading }
 
-enum ApiCallStatus { init, loading, success, error }
-
 class PhoneBookState extends Equatable {
   final List<PhoneBookStudent> phoneBookStudent;
-  final PhoneBookStatus phoneBookStatus;
-  final List<PhoneBook> phoneBookParent;
+  final List<Parent> phoneBookParent;
   final List<PhoneBookTeacher> phoneBookTeacher;
   final List<ClassTeacher> classTeacher;
-  final ApiCallStatus classTeacherStatus;
+  final ClassTeacher seletedClasss;
+
+  final PhoneBookStatus phoneBookStatus;
 
   const PhoneBookState({
     this.phoneBookStatus = PhoneBookStatus.init,
@@ -18,8 +17,9 @@ class PhoneBookState extends Equatable {
     required this.phoneBookParent,
     required this.phoneBookTeacher,
     this.classTeacher = const [],
-    this.classTeacherStatus = ApiCallStatus.init,
+    required this.seletedClasss,
   });
+  
   @override
   List<Object?> get props => [
         phoneBookStatus,
@@ -27,16 +27,16 @@ class PhoneBookState extends Equatable {
         phoneBookStudent,
         phoneBookTeacher,
         classTeacher,
-        classTeacherStatus,
+        seletedClasss,
       ];
 
   PhoneBookState copyWith({
     PhoneBookStatus? phoneBookStatus,
     List<PhoneBookStudent>? phoneBookStudent,
-    List<PhoneBook>? phoneBookParent,
+    List<Parent>? phoneBookParent,
     List<PhoneBookTeacher>? phoneBookTeacher,
     List<ClassTeacher>? classTeacher,
-    ApiCallStatus? classTeacherStatus,
+    ClassTeacher? seletedClasss,
   }) {
     return PhoneBookState(
       phoneBookStatus: phoneBookStatus ?? this.phoneBookStatus,
@@ -44,7 +44,7 @@ class PhoneBookState extends Equatable {
       phoneBookStudent: phoneBookStudent ?? this.phoneBookStudent,
       phoneBookTeacher: phoneBookTeacher ?? this.phoneBookTeacher,
       classTeacher: classTeacher ?? this.classTeacher,
-      classTeacherStatus: classTeacherStatus ?? this.classTeacherStatus,
+      seletedClasss: seletedClasss ?? this.seletedClasss,
     );
   }
 }

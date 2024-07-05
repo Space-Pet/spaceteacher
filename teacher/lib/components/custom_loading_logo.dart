@@ -3,13 +3,18 @@ import 'package:core/resources/app_colors.dart';
 import 'package:teacher/resources/assets.gen.dart';
 
 class LoadingWithBrand extends StatelessWidget {
-  const LoadingWithBrand({super.key});
+  const LoadingWithBrand({
+    super.key,
+    this.isSmallSize = false,
+  });
+
+  final bool isSmallSize;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 80,
-      height: 80,
+      width: isSmallSize ? 40 : 80,
+      height: isSmallSize ? 40 : 80,
       child: Stack(
         children: [
           Center(
@@ -21,15 +26,15 @@ class LoadingWithBrand extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              height: 60,
-              width: 60,
+              height: isSmallSize ? 32 : 64,
+              width: isSmallSize ? 32 : 64,
             ),
           ),
-          const Center(
+          Center(
             child: SizedBox(
-              height: 80,
-              width: 80,
-              child: CircularProgressIndicator(
+              height: isSmallSize ? 40 : 80,
+              width: isSmallSize ? 40 : 80,
+              child: const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(AppColors.brand600),
               ),
             ),

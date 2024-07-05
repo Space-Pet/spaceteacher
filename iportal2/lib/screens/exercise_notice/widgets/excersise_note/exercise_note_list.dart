@@ -92,9 +92,7 @@ class ExerciseItemList extends StatelessWidget {
                       style: AppTextStyles.normal14(color: AppColors.brand600),
                     ),
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   if (exerCise.hanNopBaoBai != null)
                     Row(
                       children: [
@@ -106,15 +104,11 @@ class ExerciseItemList extends StatelessWidget {
                         const SizedBox(width: 6),
                         Text(
                           'Hạn nộp: ${DateFormat('dd/MM/yyyy').format(DateTime.parse(exerCise.hanNopBaoBai!))}',
-                          style: AppTextStyles.normal14(
-                            color: AppColors.brand600,
-                          ),
+                          style: AppTextStyles.normal14(),
                         ),
                       ],
                     ),
-                  const SizedBox(
-                    height: 8,
-                  ),
+                  const SizedBox(height: 8),
                   if (exerCise.fileBaoBai!.isNotEmpty)
                     GestureDetector(
                       onTap: () async {
@@ -128,10 +122,14 @@ class ExerciseItemList extends StatelessWidget {
                         children: [
                           SvgPicture.asset('assets/icons/paperclip.svg'),
                           const SizedBox(width: 4),
-                          Text(
-                            fileName,
-                            style: AppTextStyles.normal14(
-                                color: AppColors.brand600),
+                          Expanded(
+                            child: Text(
+                              fileName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.normal14(
+                                  color: AppColors.brand600),
+                            ),
                           ),
                         ],
                       ),

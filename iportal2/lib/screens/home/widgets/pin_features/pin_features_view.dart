@@ -55,7 +55,7 @@ class _PinFeaturesState extends State<PinFeatures> {
     final userRepository = context.read<UserRepository>();
 
     Navigator.of(context).pop();
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       pinnedFeatures = newListFeatures
           .where((element) => element.pinned)

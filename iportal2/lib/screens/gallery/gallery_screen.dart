@@ -30,8 +30,6 @@ class GalleryScreen extends StatelessWidget {
               .where((element) => element.galleryImages.isNotEmpty)
               .toList();
 
-          final pinnedAlbumIdList = state.pinnedAlbumIdList;
-
           final isLoading = state.status == GalleryStatus.loading;
           final isEmptyData = albumList.isEmpty && !isLoading;
 
@@ -80,28 +78,43 @@ class GalleryScreen extends StatelessWidget {
                                             child: EmptyScreen(
                                                 text:
                                                     'Thư viện ảnh của bạn trống!'))
-                                        : GalleryListView(
-                                            itemCount: albumList.length,
-                                            itemBuilder: (context, index) {
-                                              final isPinned = pinnedAlbumIdList
-                                                  .contains(albumList[index]
-                                                      .galleryId);
+                                        : BlocBuilder<CurrentUserBloc,
+                                            CurrentUserState>(
+                                            builder: (context, state) {
+                                              final pinnedAlbumIdList = state
+                                                  .activeChild
+                                                  .pinnedAlbumIdList;
 
-                                              return CardGallery(
-                                                galleryItem: albumList[index],
-                                                isPinned: isPinned,
-                                                isLoading: isLoading,
-                                                onUpdatePinAlbum: () {
-                                                  final albumId =
-                                                      albumList[index]
-                                                          .galleryId;
+                                              return GalleryListView(
+                                                  itemCount: albumList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    final isPinned =
+                                                        pinnedAlbumIdList
+                                                            .contains(
+                                                                albumList[index]
+                                                                    .galleryId);
 
-                                                  galleryBloc.add(
-                                                      GalleryUpdatePinnedAlbum(
-                                                          albumId));
-                                                },
-                                              );
-                                            }),
+                                                    return CardGallery(
+                                                      galleryItem:
+                                                          albumList[index],
+                                                      isPinned: isPinned,
+                                                      isLoading: isLoading,
+                                                      onUpdatePinAlbum: () {
+                                                        final albumId =
+                                                            albumList[index]
+                                                                .galleryId;
+
+                                                        print(albumId);
+
+                                                        galleryBloc.add(
+                                                            GalleryUpdatePinnedAlbum(
+                                                                albumId));
+                                                      },
+                                                    );
+                                                  });
+                                            },
+                                          ),
                                   ),
                                 ],
                               ),

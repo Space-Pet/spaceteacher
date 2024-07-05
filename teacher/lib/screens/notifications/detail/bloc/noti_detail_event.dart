@@ -9,3 +9,12 @@ class NotificationFetchDetail extends NotiDetailEvent {
 
   final int id;
 }
+
+
+class NotificationDelete extends NotiDetailEvent {
+  NotificationDelete({
+    required this.id,
+  });
+
+  final int id;
+}

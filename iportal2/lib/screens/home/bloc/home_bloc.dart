@@ -22,6 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         )) {
     on<HomeFetchExercise>(_onFetchExercise);
     add(HomeFetchExercise());
+    add(HomeFetchExercise(isDueDate: false));
     on<HomeExerciseSelectDate>(_onSelectDate);
 
     on<HomeFetchNotificationData>(_onFetchNotifications);
@@ -46,12 +47,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final exerciseDueDateDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
-      // userKey: '0253230044',
     );
 
-    emit(
-      state.copyWith(exerciseDueDateDataList: exerciseDueDateDataList),
-    );
+    emit(state.copyWith(exerciseDueDateDataList: exerciseDueDateDataList));
 
     final exerciseInDayDataList = await appFetchApiRepo.getExercises(
       userKey: currentUserBloc.state.activeChild.user_key,
@@ -71,14 +69,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (!currentUserBloc.state.activeChild.isMN) {
       emit(state.copyWith(statusExercise: HomeStatus.loading));
 
-      // create DateTime for 29/05/2024
-      final dateTimeTest = DateTime(2024, 9, 25);
       final exerciseDataList = await appFetchApiRepo.getExercises(
         userKey: currentUserBloc.state.activeChild.user_key,
         datePicked: state.datePicked,
         isDueDate: event.isDueDate,
-        // txtDate: '18-03-2024',
-        // userKey: '0253230044',
       );
 
       if (event.isDueDate) {

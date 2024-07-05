@@ -1,3 +1,4 @@
+import 'package:core/core.dart';
 import 'package:core/data/models/models.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,16 +10,23 @@ import 'package:intl/intl.dart';
 import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
 
 class SelectFeedBackType extends StatefulWidget {
-  const SelectFeedBackType(
-      {super.key, this.comment, this.endDate, this.startDate});
+  const SelectFeedBackType({
+    super.key,
+    this.comment,
+    this.endDate,
+    this.startDate,
+    required this.onSelectDate,
+  });
   final Comment? comment;
   final DateTime? endDate;
   final DateTime? startDate;
+  final Function(DateTime startDate, DateTime endDate) onSelectDate;
   @override
   State<SelectFeedBackType> createState() => _SelectFeedBackTypeState();
 }
 
 class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
+  DateTime now = DateTime.now();
   @override
   void initState() {
     super.initState();
@@ -46,7 +54,6 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
   }
 
   int getWeekNumber(DateTime date) {
-    print('object: $date');
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
     final firstDayOfYear = DateTime(firstDayOfWeek.year);
     final daysOffset = firstDayOfYear.weekday;
@@ -60,10 +67,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
       endDate = getWeekEndDate(endDate.subtract(const Duration(days: 7)));
     });
     getWeekNumber(endDate);
-    context.read<CommentBloc>().add(GetComment(
-        txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        inputEndDate: endDate,
-        inputStartDate: startDate));
+    widget.onSelectDate(startDate, endDate);
   }
 
   void getNextPeriodData() {
@@ -73,10 +77,7 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
     });
 
     getWeekNumber(endDate);
-    context.read<CommentBloc>().add(GetComment(
-        txtDate: DateFormat('dd-MM-yyyy').format(startDate).toString(),
-        inputEndDate: endDate,
-        inputStartDate: startDate));
+    widget.onSelectDate(startDate, endDate);
   }
 
   @override
@@ -102,15 +103,45 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
                     const ColorFilter.mode(AppColors.gray400, BlendMode.srcIn),
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  'Tuần $week (${DateFormat('dd/MM/yyyy').format(startDate)} - ${DateFormat('dd/MM/yyyy').format(endDate)})',
-                  style: AppTextStyles.semiBold14(
-                    color: AppColors.brand600,
+            GestureDetector(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  helpText: 'Chọn ngày',
+                  cancelText: 'Trở về',
+                  confirmText: 'Xong',
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(now.year - 3, now.month),
+                  lastDate: DateTime(now.year + 1, now.month),
+                  builder: (context, child) {
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: const ColorScheme.light(
+                          primary: AppColors.brand600,
+                          secondary: AppColors.white,
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+                if (pickedDate != null) {
+                  String formattedDate = pickedDate.ddMMyyyyDash;
+                  setState(() {
+                    widget.onSelectDate(pickedDate, pickedDate);
+                  });
+                } else {}
+              },
+              child: Row(
+                children: [
+                  Text(
+                    'Tuần $week (${DateFormat('dd/MM/yyyy').format(startDate)} - ${DateFormat('dd/MM/yyyy').format(endDate)})',
+                    style: AppTextStyles.semiBold14(
+                      color: AppColors.brand600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             GestureDetector(
               onTap: getNextPeriodData,

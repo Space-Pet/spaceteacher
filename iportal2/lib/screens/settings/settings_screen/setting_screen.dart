@@ -16,6 +16,7 @@ import 'package:iportal2/screens/settings/settings_screen/bloc/setting_screen_bl
 import 'package:iportal2/screens/settings/widget/show_dialog_logout.dart';
 import 'package:iportal2/screens/settings/widget/switch_setting.dart';
 import 'package:network_data_source/network_data_source.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:repository/repository.dart';
 
 class SettingScreen extends StatefulWidget {

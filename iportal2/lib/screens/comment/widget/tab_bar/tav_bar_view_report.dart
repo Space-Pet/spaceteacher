@@ -3,11 +3,28 @@ import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
+import 'package:iportal2/screens/comment/widget/select_button/select_date.dart';
 import 'package:iportal2/screens/score/widgets/score_filter.dart';
 import 'package:iportal2/screens/survey/widget/list_view_report.dart';
 
-class TabBarViewReport extends StatelessWidget {
+class TabBarViewReport extends StatefulWidget {
   const TabBarViewReport({super.key});
+
+  @override
+  State<TabBarViewReport> createState() => _TabBarViewReportState();
+}
+
+class _TabBarViewReportState extends State<TabBarViewReport> {
+  String learnyear = '${DateTime.now().year - 1}-${DateTime.now().year}';
+  String termType = 'Học kỳ 1';
+  @override
+  void initState() {
+    super.initState();
+    final currentYear = DateTime.now().year;
+    final lastYear = currentYear - 1;
+    learnyear = '$lastYear-$currentYear';
+    termType = 'Học kỳ 1';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,42 +33,60 @@ class TabBarViewReport extends StatelessWidget {
       final reportStudent = state.reportStudent;
       final isLoadingListReport =
           state.commentStatus == CommentStatus.loadingListReport;
-      final currentYear = DateTime.now().year;
-      final lastYear = currentYear - 1;
-      final learnYear = '$lastYear-$currentYear';
 
-      return AppSkeleton(
-        isLoading: isLoadingListReport,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-              child: FilterItem(
-                title: 'Chọn học kỳ',
-                options: TermType.values.map((e) => e.text()).toList(),
-                selectedOption: state.txtHocKy != null
-                    ? TermType.values
-                        .firstWhere(
-                            (element) => element.getValue() == state.txtHocKy)
-                        .text()
-                    : TermType.term1.text(),
-                onUpdateOption: (value) {
-                  print(value);
-                  if (value == 'Học kỳ 1 - Năm học $learnYear') {
-                    context.read<CommentBloc>().add(GetListReportStudent(
-                          learnYear: learnYear,
-                          semester: 1,
-                        ));
-                  } else {
-                    context.read<CommentBloc>().add(GetListReportStudent(
-                          learnYear: learnYear,
-                          semester: 2,
-                        ));
-                  }
-                },
-              ),
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FilterItem(
+              title: 'Select Semester',
+              options: ["2023-2024", "2022-2023"],
+              selectedOption: learnyear,
+              onUpdateOption: (value) {
+                setState(() {
+                  learnyear = value;
+                });
+                if (termType == 'Học kỳ 1') {
+                  context.read<CommentBloc>().add(GetListReportStudent(
+                        learnYear: learnyear,
+                        semester: 1,
+                      ));
+                } else if (termType == 'Học kỳ 2') {
+                  context.read<CommentBloc>().add(GetListReportStudent(
+                        learnYear: learnyear,
+                        semester: 2,
+                      ));
+                }
+              },
             ),
-            Expanded(
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: FilterItem(
+              title: 'Select Term',
+              options: ["Học kỳ 1", "Học kỳ 2"],
+              selectedOption: termType,
+              onUpdateOption: (value) {
+                setState(() {
+                  termType = value;
+                });
+                if (value == 'Học kỳ 1') {
+                  context.read<CommentBloc>().add(GetListReportStudent(
+                        learnYear: learnyear,
+                        semester: 1,
+                      ));
+                } else {
+                  context.read<CommentBloc>().add(GetListReportStudent(
+                        learnYear: learnyear,
+                        semester: 2,
+                      ));
+                }
+              },
+            ),
+          ),
+          AppSkeleton(
+            isLoading: isLoadingListReport,
+            child: Expanded(
               child: Container(
                 alignment: Alignment.topCenter,
                 width: double.infinity,
@@ -404,8 +439,8 @@ class TabBarViewReport extends StatelessWidget {
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }

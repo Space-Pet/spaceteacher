@@ -18,9 +18,6 @@ class UserRepository {
 
   Future<LocalIPortalProfile?> getLocalUser() => _userLocalStorage.getUser();
 
-  Future<List<LocalFeatures>?> getFeatures() =>
-      _userLocalStorage.getFeaturesLocal();
-
   Future saveUser(LocalIPortalProfile user) async {
     await _userLocalStorage.saveUser(user);
   }

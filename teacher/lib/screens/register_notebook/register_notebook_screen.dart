@@ -1,20 +1,18 @@
 import 'package:core/core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
-import 'package:teacher/components/app_bar/app_bar.dart';
+import 'package:teacher/components/app_bar/app_bar_filter_class.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/select_date.dart';
 import 'package:teacher/screens/register_notebook/bloc/register_notebook_bloc.dart';
 import 'package:teacher/screens/register_notebook/register_lesson.dart';
-import 'package:repository/repository.dart';
 import 'package:teacher/screens/schedule/select_week.dart';
 
 class RegisterNoteBoookScreen extends StatelessWidget {
-  const RegisterNoteBoookScreen({Key? key});
+  const RegisterNoteBoookScreen({super.key});
 
   static const routeName = '/register_notebook';
 
@@ -25,7 +23,7 @@ class RegisterNoteBoookScreen extends StatelessWidget {
               appFetchApiRepo: context.read<AppFetchApiRepository>(),
               currentUserBloc: context.read<CurrentUserBloc>(),
             ),
-        child: RegisterNoteBookView());
+        child: const RegisterNoteBookView());
   }
 }
 
@@ -38,12 +36,10 @@ class RegisterNoteBookView extends StatelessWidget {
       builder: (context, state) {
         final bloc = context.read<RegisterNotebookBloc>();
         final lessonData = state.lessonData;
-        final classCn = state.classCn;
 
         final isLoading = state.status == RegisterNotebookStatus.loading;
         final isEmpty = lessonData.isEmpty && !isLoading;
 
-        // Tạo danh sách các tab từ lessonData
         final listTab = List.generate(lessonData.length, (index) {
           String originalDate = lessonData[index].ngay.day;
           DateTime dateTime = DateFormat('dd-MM-yyyy').parse(originalDate);
@@ -58,47 +54,43 @@ class RegisterNoteBookView extends StatelessWidget {
           final lesson = lessonData[index].dataList;
 
           return RegisterItem(
+            onBack: () {
+              context.pop();
+              bloc.add(RegisterSelectDate(
+                datePicked: bloc.state.datePicked,
+                classSelect: state.classSelect,
+              ));
+            },
             lesson: lesson,
             noBoder: index == lessonData.length - 1,
           );
         });
 
-        // Tính toán initialIndex dựa trên ngày hiện tại
-        int initialIndex = 0;
-        DateTime currentDate = DateTime.now();
-        for (int i = 0; i < lessonData.length; i++) {
-          DateTime dateTime =
-              DateFormat('dd-MM-yyyy').parse(lessonData[i].ngay.day);
-          if (dateTime.isAtSameMomentAs(currentDate) ||
-              dateTime.isAfter(currentDate)) {
-            initialIndex = i;
-            break;
-          }
-        }
+        final initialIndex = lessonData.indexWhere(
+            (element) => element.ngay.date - 1 == DateTime.now().weekday);
 
         return BackGroundContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ScreenAppBar(
-                title: 'Sổ đầu bài',
-                canGoback: true,
-                onBack: () {
-                  Navigator.of(context).pop();
-                },
-                hasUpdateYear: true,
-                iconWidget: DropdownClassSelector(
-                  onClass: (value) {
+              ScreenAppBarFilterClass(
+                  title: 'Sổ đầu bài',
+                  onBack: () {
+                    context.pop();
+                  },
+                  classSelect: state.classSelect,
+                  onChangeClassType: (value) {
                     if (value == 'Lớp chủ nhiệm') {
                       bloc.add(RegisterSelectDate(
-                          datePicked: bloc.state.datePicked));
-                    } else if (value == 'Lớp giảng dạy') {
+                        datePicked: bloc.state.datePicked,
+                      ));
+                    } else {
                       bloc.add(RegisterSelectDate(
-                          classSelect: 2, datePicked: bloc.state.datePicked));
+                        classSelect: 2,
+                        datePicked: bloc.state.datePicked,
+                      ));
                     }
-                  },
-                ),
-              ),
+                  }),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.only(left: 12, right: 12),
@@ -136,7 +128,10 @@ class RegisterNoteBookView extends StatelessWidget {
                                 )
                               : DefaultTabController(
                                   length: lessonData.length,
-                                  initialIndex: initialIndex,
+                                  initialIndex: initialIndex == -1 ||
+                                          initialIndex > lessonData.length - 1
+                                      ? 0
+                                      : initialIndex,
                                   child: Column(
                                     children: [
                                       TabBar(
@@ -162,14 +157,15 @@ class RegisterNoteBookView extends StatelessWidget {
                                         tabs: listTab,
                                       ),
                                       Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 8),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              AppRadius.roundedBottom12,
                                           child: TabBarView(
                                             children: lessonListW,
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(height: 12),
                                     ],
                                   ),
                                 ),
@@ -183,60 +179,6 @@ class RegisterNoteBookView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class DropdownClassSelector extends StatefulWidget {
-  DropdownClassSelector({
-    required this.onClass,
-  });
-  final Function(String?) onClass;
-  @override
-  _DropdownClassSelectorState createState() => _DropdownClassSelectorState();
-}
-
-class _DropdownClassSelectorState extends State<DropdownClassSelector> {
-  String selectedClass = 'Lớp chủ nhiệm';
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> classOptions = [
-      'Lớp chủ nhiệm',
-      'Lớp giảng dạy',
-    ];
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade400),
-      ),
-      child: DropdownButton<String>(
-        padding: EdgeInsets.zero,
-        style: AppTextStyles.bold14(color: AppColors.black),
-        value: selectedClass,
-        onChanged: (newValue) {
-          setState(() {
-            selectedClass = newValue ?? '';
-          });
-          widget.onClass(newValue);
-        },
-        items: classOptions.map((String option) {
-          return DropdownMenuItem<String>(
-            value: option,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-              child: Text(
-                option,
-                style: AppTextStyles.normal14(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
     );
   }
 }

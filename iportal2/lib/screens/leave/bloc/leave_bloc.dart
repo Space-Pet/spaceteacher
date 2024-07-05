@@ -29,8 +29,6 @@ class LeaveBloc extends Bloc<LeaveEvent, LeaveState> {
         schoolId: currentUserBloc.state.activeChild.school_id,
         schoolBrand: currentUserBloc.state.activeChild.school_brand);
 
-    await Future.delayed(const Duration(milliseconds: 500));
-
     emit(state.copyWith(
       leaveStatus: LeaveStatusEnum.success,
       leaveData: data,

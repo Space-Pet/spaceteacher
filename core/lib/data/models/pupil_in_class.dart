@@ -1,3 +1,5 @@
+import 'teacher_detail.dart';
+
 class PupilInClass {
   final int pupilId;
   final String userId;
@@ -7,9 +9,9 @@ class PupilInClass {
   final String userKey;
   final int parentId;
   final String className;
-  // final Map<String, String> urlImage;
   final String email;
   final dynamic selected;
+  final UrlImage? urlImage;
 
   PupilInClass({
     required this.pupilId,
@@ -20,9 +22,9 @@ class PupilInClass {
     required this.userKey,
     required this.parentId,
     required this.className,
-    // required this.urlImage,
     required this.email,
     required this.selected,
+    this.urlImage,
   });
 
   factory PupilInClass.fromJson(Map<String, dynamic> json) {
@@ -35,9 +37,11 @@ class PupilInClass {
       userKey: json['user_key'],
       parentId: json['parent_id'],
       className: json['class_name'],
-      // urlImage: Map<String, String>.from(json['url_image']),
       email: json['email'],
       selected: json['selected'],
+      urlImage: json['url_image'] != null
+          ? UrlImage.fromMap(json['url_image'])
+          : null,
     );
   }
 
@@ -54,6 +58,7 @@ class PupilInClass {
       // urlImage: {},
       email: '',
       selected: '',
+      urlImage: null,
     );
   }
 

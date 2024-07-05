@@ -12,6 +12,7 @@ class AppTextStyles {
     Color? backgroundColor,
     FontStyle? fontStyle,
     double? height,
+    TextDecoration? decoration,
   }) =>
       GoogleFonts.inter(
         fontSize: fontSize,
@@ -20,6 +21,7 @@ class AppTextStyles {
         fontWeight: fontWeight,
         fontStyle: fontStyle,
         height: height,
+        decoration: decoration,
       );
 
   static TextStyle titlePage({Color color = AppColors.white}) =>

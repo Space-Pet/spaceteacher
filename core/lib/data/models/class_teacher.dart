@@ -29,9 +29,9 @@ class ClassTeacher {
   final int roomId;
 
   @JsonKey(name: 'room_title')
-  final String roomTitle;
+  final String? roomTitle;
 
-  final bool? selected;
+  final String? selected;
 
   ClassTeacher({
     required this.classId,
@@ -43,12 +43,26 @@ class ClassTeacher {
     required this.code,
     required this.level,
     required this.roomId,
-    required this.roomTitle,
-    this.selected,
+    this.roomTitle = '',
+    this.selected = '',
   });
 
   factory ClassTeacher.fromJson(Map<String, dynamic> json) =>
       _$ClassTeacherFromJson(json);
 
   Map<String, dynamic> toJson() => _$ClassTeacherToJson(this);
+
+  static ClassTeacher empty() => ClassTeacher(
+        classId: 0,
+        gradeId: 0,
+        schoolId: 0,
+        className: '',
+        gradeTitle: '',
+        title: '',
+        code: '',
+        level: '',
+        roomId: 0,
+        roomTitle: '',
+        selected: '',
+      );
 }

@@ -3,9 +3,8 @@ import 'dart:io';
 import 'package:core/core.dart';
 import 'package:core/data/models/list_attendance_bus.dart';
 import 'package:core/data/models/observation_model.dart';
-import 'package:network_data_source/network_data_source.dart';
-import 'package:repository/repository.dart';
 import 'package:intl/intl.dart';
+import 'package:network_data_source/network_data_source.dart';
 
 class AppFetchApiRepository {
   AppFetchApiRepository({
@@ -14,10 +13,11 @@ class AppFetchApiRepository {
 
   final AppFetchApi _appFetchApi;
 
-  Future<WeeklyLessonData> getRegisterNoteBook(
-          {required String userKey,
-          required String txtDate,
-          required int classSelect}) =>
+  Future<WeeklyLessonData> getRegisterNoteBook({
+    required String userKey,
+    required String txtDate,
+    required int classSelect,
+  }) =>
       _appFetchApi.getRegisterNoteBook(
         userKey: userKey,
         txtDate: txtDate,
@@ -25,8 +25,10 @@ class AppFetchApiRepository {
       );
 
   Future<Schedule> getSchedule(
-          {required String userKey, required String txtDate}) =>
-      _appFetchApi.getSchedule(userKey, txtDate);
+          {required String userKey,
+          required String txtDate,
+          required int classType}) =>
+      _appFetchApi.getSchedule(userKey, txtDate, classType);
 
   Future<List<ExerciseItem>> getExercises({
     required String userKey,
@@ -124,6 +126,29 @@ class AppFetchApiRepository {
         id: id,
       );
 
+  Future<Map<String, dynamic>> deleteNoti({
+    required int id,
+  }) =>
+      _appFetchApi.deleteNoti(id: id);
+
+  Future<Map<String, dynamic>> deleteNotiFile({
+    required int notificationId,
+    required int attachmentId,
+  }) =>
+      _appFetchApi.deleteNotiFile(
+        notificationId: notificationId,
+        attachmentId: attachmentId,
+      );
+
+  Future<Map<String, dynamic>> deleteImagesInGallery({
+    required int galleryId,
+    required List<int> listId,
+  }) =>
+      _appFetchApi.deleteImagesInGallery(
+        galleryId: galleryId,
+        listId: listId,
+      );
+
   Future<List<LeaveTeacher>> getLeavesTeacher(
       {required String status,
       required DateTime startDate,
@@ -202,15 +227,17 @@ class AppFetchApiRepository {
   Future<AlbumData> getAlbum(String teacherId) =>
       _appFetchApi.getAlbum(teacherId);
 
+  Future<Gallery> getGalleryDetail(String teacherId, int galleryId) =>
+      _appFetchApi.getGalleryDetail(teacherId, galleryId);
+
+  Future<Map<String, dynamic>> deleteAlbum(int albumId) =>
+      _appFetchApi.deleteAlbum(albumId);
+
   Future<List<String>> getListYear(int number) =>
       _appFetchApi.getListYear(number);
 
   Future<List<GalleryClass>> getListClass(String learnYear) =>
       _appFetchApi.getListClass(learnYear);
-
-  Future<List<NotiClass>> getListClassNoti(
-          {required String learnYear, required int teacherId}) =>
-      _appFetchApi.getListClassNoti(learnYear, teacherId);
 
   Future<List<PupilInClass>> getPupilInClass(
           {required Map<String, dynamic> headers, required int classId}) =>
@@ -229,6 +256,23 @@ class AppFetchApiRepository {
       galleryName: galleryName,
       listFiles: listFiles,
       teacherId: teacherId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> updateGallery({
+    required String learnYear,
+    required int classId,
+    required String galleryName,
+    required List<File> listFiles,
+    required int galleryId,
+  }) async {
+    final data = await _appFetchApi.updateGallery(
+      classId: classId,
+      learnYear: learnYear,
+      galleryName: galleryName,
+      listFiles: listFiles,
+      galleryId: galleryId,
     );
     return data;
   }
@@ -256,6 +300,31 @@ class AppFetchApiRepository {
     return data;
   }
 
+  Future<Map<String, dynamic>> updateDraftNoti({
+    required int id,
+    required List<int> listPupilId,
+    required int classId,
+    required String type,
+    required String title,
+    required String content,
+    required String status,
+    required List<File> listFiles,
+    required Map<String, dynamic> headers,
+  }) async {
+    final data = await _appFetchApi.updateDraftNoti(
+      id: id,
+      listPupilId: listPupilId,
+      classId: classId,
+      type: type,
+      title: title,
+      content: content,
+      status: status,
+      listFiles: listFiles,
+      headers: headers,
+    );
+    return data;
+  }
+
   Future<Menu> getMenu({
     required String userKey,
     required String date,
@@ -265,9 +334,26 @@ class AppFetchApiRepository {
   }
 
   Future<List<PhoneBookStudent>> getPhoneBookStudent(
-      {required int classId}) async {
-    final data = await _appFetchApi.getPhoneBookStudent(classId: classId);
+      {required int classId,
+      required int schoolId,
+      required String schoolBrand}) async {
+    final data = await _appFetchApi.getPhoneBookStudent(
+      classId: classId,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
     return data;
+  }
+
+  Future<List<Parent>> getPhoneBookParent({
+    required int classId,
+    required int schoolId,
+  }) async {
+    final parents = await _appFetchApi.getPhoneBookParent(
+      classId: classId,
+      schoolId: schoolId,
+    );
+    return parents;
   }
 
   Future<List<PhoneBookTeacher>> getPhoneBookTeacher(
@@ -311,7 +397,7 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<List<BusSchedule>> getBusSchedules({
+  Future<List<BusScheduleData>> getBusSchedules({
     required int pupilId,
     required int schoolId,
     required String schoolBrand,
@@ -323,7 +409,7 @@ class AppFetchApiRepository {
       schoolBrand: schoolBrand,
       startDate: startDate.yyyyMMdd,
     );
-    return data.map((e) => BusSchedule.fromData(e)).toList();
+    return data;
   }
 
   Future<Map<String, dynamic>?> postPinMessage({
@@ -352,17 +438,20 @@ class AppFetchApiRepository {
     return data;
   }
 
-  Future<MessageDetail?> getMessagePin({
+  Future<ConservationDetail?> getMessagePin({
     required String schoolBrand,
     required int schoolId,
+    required String recipientId,
   }) async {
     final data = await _appFetchApi.getMessagePin(
-        schoolBrand: schoolBrand, schoolId: schoolId);
-
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+      recipientId: recipientId,
+    );
     return data;
   }
 
-  Future<List<Message>> getListMessage({
+  Future<List<Conservation>> getListMessage({
     required int schoolId,
     required String classId,
     required String userId,
@@ -378,16 +467,21 @@ class AppFetchApiRepository {
   }
 
   Future<Map<String, dynamic>> getMessageDetail({
-    required String conversationId,
+    String? conversationId,
+    String? recipientId,
+    isGetById = false,
     required int schoolId,
     required String schoolBrand,
-    int? page,
+    required int page,
   }) async {
     final data = await _appFetchApi.getMessageDetail(
-        conversationId: conversationId,
-        schoolId: schoolId,
-        schoolBrand: schoolBrand,
-        page: page);
+      conversationId: conversationId,
+      recipientId: recipientId,
+      isGetById: isGetById,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      page: page,
+    );
     return data;
   }
 
@@ -397,6 +491,7 @@ class AppFetchApiRepository {
     required String recipient,
     required int schoolId,
     required String schoolBrand,
+    required List<File> files,
   }) async {
     final data = await _appFetchApi.postMessage(
       content: content,
@@ -404,36 +499,37 @@ class AppFetchApiRepository {
       recipient: recipient,
       schoolId: schoolId,
       schoolBrand: schoolBrand,
+      files: files,
     );
     return data;
   }
 
-  Future<int> deleteMessageDetail({
+  Future<int> deleteConservation({
+    required int schoolId,
+    required String schoolBrand,
+    required int conservationId,
+  }) async {
+    final data = await _appFetchApi.deleteConservation(
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+      conservationId: conservationId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> deleteMessage({
     required String content,
     required int schoolId,
     required String schoolBrand,
     required String recipient,
     required int idMessage,
   }) async {
-    final data = await _appFetchApi.deleteMessageDetail(
+    final data = await _appFetchApi.deleteMessage(
         content: content,
         schoolId: schoolId,
         schoolBrand: schoolBrand,
         recipient: recipient,
         idMessage: idMessage);
-    return data;
-  }
-
-  Future<int> deleteMessage({
-    required int schoolId,
-    required String schoolBrand,
-    required int idMessage,
-  }) async {
-    final data = await _appFetchApi.deleteMessage(
-      schoolId: schoolId,
-      schoolBrand: schoolBrand,
-      idMessage: idMessage,
-    );
     return data;
   }
 
@@ -754,12 +850,13 @@ class AppFetchApiRepository {
     required int schoolId,
     required String schoolBrand,
     required String capDaoTao,
+    required String subjectType,
   }) async {
     final data = await _appFetchApi.getSemester(
-      schoolId: schoolId,
-      schoolBrand: schoolBrand,
-      capDaoTao: capDaoTao,
-    );
+        schoolId: schoolId,
+        schoolBrand: schoolBrand,
+        capDaoTao: capDaoTao,
+        subjectType: subjectType);
     return data;
   }
 
@@ -844,12 +941,12 @@ class AppFetchApiRepository {
         lessonRegisterId: lessonRegisterId,
       );
 
-  Future<MoetEvaluation> getMoetEvaluation({
+  Future<Assessment> onGetAssessmentCriteria({
     required String userKey,
     required String lessonRegisterId,
     required String lessonRegisterIdType,
   }) async =>
-      _appFetchApi.getMoetEvaluation(
+      _appFetchApi.onGetAssessmentCriteria(
         userKey: userKey,
         lessonRegisterId: lessonRegisterId,
         lessonRegisterIdType: lessonRegisterIdType,
@@ -993,8 +1090,8 @@ class AppFetchApiRepository {
     required String tietPpct,
     required String lessionRank,
     required String danDoBaoBai,
-    required File fileBaoBai,
-    required String linkBaoBai,
+    required File? fileBaoBai,
+    required String? linkBaoBai,
     required String hanNop,
     required String userKey,
   }) async {
@@ -1011,5 +1108,268 @@ class AppFetchApiRepository {
       hanNop: hanNop,
     );
     return data;
+  }
+
+  Future<Map<String, dynamic>> postViolation({
+    required List<Map<String, dynamic>>? containerData,
+  }) async {
+    final data = await _appFetchApi.postViolation(
+      containerData: containerData,
+    );
+    return data;
+  }
+
+  Future<ScoreProgramList> getProgramList({
+    required String userKey,
+    required String txtYear,
+  }) async {
+    try {
+      final programList = await _appFetchApi.getProgramList(userKey, txtYear);
+      return programList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ListClassLeader> getClassLeader({
+    required String learnYear,
+    required String userKey,
+  }) async {
+    final data = await _appFetchApi.getClassLeader(
+        learnyear: learnYear, userKey: userKey);
+    return data;
+  }
+
+  Future<ScoreModel> getMoetTypeScore({
+    required String userKey,
+    required String txtHocKy,
+    required String txtYear,
+    required String ctId,
+    required bool isMOET,
+  }) async {
+    try {
+      final scoreData = await _appFetchApi.getMoetTypeScore(
+          userKey, txtHocKy, txtYear, ctId, isMOET);
+      return scoreData;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Data> getTeachingClassMoetPrimary({
+    required String subjectId,
+    required String classId,
+    required String semester,
+    required String learnYear,
+    required String schoolBrand,
+    required String schoolId,
+    required String capDaoTao,
+  }) async {
+    final data = await _appFetchApi.getTeachingClassMoetPrimary(
+        subjectId: subjectId,
+        classId: classId,
+        semester: semester,
+        learnYear: learnYear,
+        schoolBrand: schoolBrand,
+        schoolId: schoolId,
+        capDaoTao: capDaoTao);
+    return data;
+  }
+
+  Future<MoetHighData> getTeachingClassMoetHigh({
+    required String subjectId,
+    required String classId,
+    required String semester,
+    required String learnYear,
+    required String schoolBrand,
+    required String schoolId,
+  }) async {
+    final data = await _appFetchApi.getTeachingClassMoetHigh(
+      subjectId: subjectId,
+      classId: classId,
+      semester: semester,
+      learnYear: learnYear,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<List<MarkTypeColumn>> getMarkType({
+    required String subjectType,
+    required int classId,
+    required String capDaoTao,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.getMarkType(
+      subjectType: subjectType,
+      classId: classId,
+      capDaoTao: capDaoTao,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> postMoetPrimary({
+    required int subjectId,
+    required int classId,
+    required String semester,
+    required int pupilId,
+    required String markType,
+    required String? markValue,
+    required String? markNote,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.postMoetPrimary(
+      subjectId: subjectId,
+      classId: classId,
+      semester: semester,
+      pupilId: pupilId,
+      markType: markType,
+      markValue: markValue,
+      markNote: markNote,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+
+  Future<FormMoet> getFormMoet({
+    required int classId,
+    required int subjectId,
+    required String learnYear,
+    required String semester,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getFormMoet(
+      classId: classId,
+      subjectId: subjectId,
+      learnYear: learnYear,
+      semester: semester,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+  Future<MoetAverage> getMoetAverage({
+    required String userKey,
+    required String txtHocKy,
+    required String txtYear,
+  }) async {
+    try {
+      final moetAverage =
+          await _appFetchApi.getMoetAverage(userKey, txtYear, txtHocKy);
+      return moetAverage;
+    } catch (e) {
+      return MoetAverage.empty();
+    }
+  }
+ Future<Map<String, dynamic>> postCommentMoet({
+    required String userKey,
+    required int pupilId,
+    required int subjectId,
+    required String coomentContent,
+    required String learnYear,
+    required String hkTihValue,
+    required String schoolBrand,
+    required int schoolId,
+  }) async {
+    final data = await _appFetchApi.postCommentMoet(
+      userKey: userKey,
+      pupilId: pupilId,
+      subjectId: subjectId,
+      coomentContent: coomentContent,
+      learnYear: learnYear,
+      hkTihValue: hkTihValue,
+      schoolBrand: schoolBrand,
+      schoolId: schoolId,
+    );
+    return data;
+  }
+    Future<LearnYear> getLearnYearList(int schoolId) async {
+    final data = await _appFetchApi.getLearnYearList(schoolId);
+    return data;
+  }
+   Future<Map<String, dynamic>> postEslGpa({
+    required int classId,
+    required int semester,
+    required String learnYear,
+    required List<JsonDataESL> dataESL,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.postEslGpa(
+      classId: classId,
+      semester: semester,
+      learnYear: learnYear,
+      dataESL: dataESL,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+  Future<Map<String, dynamic>> postPrimaryConduct({
+    required String userKey,
+    required int classId,
+    required String learnYear,
+    required int hocKy,
+    required int hocKyTih,
+    required List<ConductScore> dataConduct,
+  }) async {
+    final data = await _appFetchApi.postPrimaryConduct(
+      userKey: userKey,
+      classId: classId,
+      learnYear: learnYear,
+      hocKy: hocKy,
+      hocKyTih: hocKyTih,
+      dataConduct: dataConduct,
+    );
+    return data;
+  }
+    Future<HanhKiemData> getFormConduct() async {
+    final data = await _appFetchApi.getFormConduct();
+    return data;
+  }
+  Future<List<FormScoreESL>> getFormScoreESL({
+    required int classId,
+    required int subjectId,
+    required String scoreType,
+    required int semester,
+    required String learnYear,
+    required int schoolId,
+    required String schoolBrand,
+  }) async {
+    final data = await _appFetchApi.getFormScoreESL(
+      classId: classId,
+      subjectId: subjectId,
+      scoreType: scoreType,
+      semester: semester,
+      learnYear: learnYear,
+      schoolId: schoolId,
+      schoolBrand: schoolBrand,
+    );
+    return data;
+  }
+  Future<Map<String, dynamic>> postScoreMoetHighSchool({
+    required int schoolId,
+    required int subjectId,
+    required int classId,
+    required String semester,
+    required List<JsonDataMoet> data,
+    required String schoolBrand,
+  }) async {
+    final res = await _appFetchApi.postScoreMoetHighSchool(
+      schoolId: schoolId,
+      subjectId: subjectId,
+      classId: classId,
+      semester: semester,
+      data: data,
+      schoolBrand: schoolBrand,
+    );
+    return res;
   }
 }

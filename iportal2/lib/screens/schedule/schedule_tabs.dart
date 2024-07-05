@@ -174,7 +174,9 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Tiết ${isAfternoonLesson ? lesson.tietNum : lesson.tietNum! - 5}',
+                              hasAfternoon
+                                  ? 'Tiết ${isAfternoonLesson ? lesson.tietNum : lesson.tietNum! - 5}'
+                                  : 'Tiết ${lesson.tietNum}',
                               style: AppTextStyles.normal14(
                                   color: AppColors.black24),
                             ),

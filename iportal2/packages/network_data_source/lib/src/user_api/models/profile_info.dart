@@ -368,8 +368,14 @@ class Children {
 
   LocalChildren toLocalChildren({
     required bool isDefaultActive,
+    required bool isStudent,
   }) {
     final defaultFeatureList = isKinderGarten() ? preSFeatures : hihgSFeatures;
+    if (isStudent) {
+      defaultFeatureList.removeWhere((element) =>
+          element.key == FeatureKey.tuition ||
+          element.key == FeatureKey.tariff);
+    }
 
     return LocalChildren(
       pupil_id: pupil_id,

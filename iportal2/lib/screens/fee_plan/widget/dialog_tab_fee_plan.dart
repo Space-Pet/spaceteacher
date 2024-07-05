@@ -17,7 +17,7 @@ class FeePlanDialogNoti extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.3,
+        height: MediaQuery.of(context).size.height * 0.33,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,

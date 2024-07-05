@@ -52,31 +52,7 @@ class _ProfileAppBarState extends State<ProfileAppBar> {
                       ),
                     ),
                     const SizedBox(width: 4),
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.white,
-                        border: Border.all(
-                          color: AppColors.white,
-                          width: 2,
-                        ),
-                      ),
-                      child: ClipOval(
-                        child: FadeInImage.assetNetwork(
-                          placeholder: 'assets/images/default-user.png',
-                          image: studentData.avatar.mobile,
-                          fit: BoxFit.cover,
-                          imageErrorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              'assets/images/default-user.png',
-                              fit: BoxFit.cover,
-                            );
-                          },
-                        ),
-                      ),
-                    ),
+                    CircleAvaImage(urlAva: studentData.avatar.mobile),
                     const SizedBox(width: 6),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

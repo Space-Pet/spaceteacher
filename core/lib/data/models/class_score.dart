@@ -5,6 +5,7 @@ class ClassScore {
   final int subjectId;
   final String subjectName;
   final String titel;
+  final String value;
   const ClassScore({
     required this.capDaoTao,
     required this.classId,
@@ -12,9 +13,11 @@ class ClassScore {
     required this.subjectId,
     required this.subjectName,
     required this.titel,
+    required this.value,
   });
   factory ClassScore.fromJson(Map<String, dynamic> json) {
     return ClassScore(
+      value: json['type']['value'] ?? '',
       capDaoTao: json['cap_dao_tao'] ?? '',
       classId: json['class_id'] ?? 0,
       classTitle: json['class_title'] ?? '',

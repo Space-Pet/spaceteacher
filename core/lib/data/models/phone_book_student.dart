@@ -11,6 +11,7 @@ class PhoneBookStudent {
   final int parentId;
   final String email;
   final bool selected;
+  final String phone;
 
   const PhoneBookStudent({
     required this.classId,
@@ -25,6 +26,7 @@ class PhoneBookStudent {
     required this.parentId,
     required this.email,
     required this.selected,
+    required this.phone,
   });
 
   factory PhoneBookStudent.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class PhoneBookStudent {
       parentId: json['parent_id'] ?? 0,
       email: json['email'] ?? '',
       selected: json['selected'] ?? false,
+      phone: json['phone'] ?? '',
     );
   }
 
@@ -58,6 +61,7 @@ class PhoneBookStudent {
         parentId: 0,
         email: '',
         selected: false,
+        phone: '',
       );
 
   static List<PhoneBookStudent> fakeData() {
@@ -76,6 +80,7 @@ class PhoneBookStudent {
               parentId: index,
               email: 'email $index',
               selected: false,
+              phone: 'phone $index',
             ));
   }
 }

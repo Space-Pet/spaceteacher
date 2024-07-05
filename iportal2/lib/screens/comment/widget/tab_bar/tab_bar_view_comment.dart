@@ -3,6 +3,7 @@ import 'package:core/resources/assets.gen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:iportal2/screens/comment/bloc/comment_bloc.dart';
 import 'package:iportal2/screens/comment/widget/Component/badge_pre_school.dart';
 import 'package:iportal2/screens/comment/widget/Component/feedback_group.dart';
@@ -24,14 +25,23 @@ class TabBarViewComment extends StatelessWidget {
     return BlocBuilder<CommentBloc, CommentState>(
       builder: (context, state) {
         final isLoading = state.commentStatus == CommentStatus.loading;
+        final start = state.startDate;
+        final end = state.endDate;
         return Column(
           children: [
             Container(
                 padding: const EdgeInsets.fromLTRB(12, 10, 12, 24),
                 child: SelectFeedBackType(
+                  onSelectDate: (start, end) {
+                    context.read<CommentBloc>().add(GetComment(
+                        txtDate:
+                            DateFormat('dd-MM-yyyy').format(start).toString(),
+                        inputEndDate: end,
+                        inputStartDate: start));
+                  },
                   comment: comment,
-                  endDate: endDate,
-                  startDate: startDate,
+                  endDate: end,
+                  startDate: start,
                 )),
             Expanded(
               child: (comment?.huyHieuImg ?? '').isEmpty

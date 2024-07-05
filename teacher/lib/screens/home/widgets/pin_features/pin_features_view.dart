@@ -2,7 +2,6 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:repository/repository.dart';
-import 'package:teacher/app.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/screens/bus/bus_screen.dart';
@@ -20,19 +19,16 @@ import 'package:teacher/screens/pre_score/preS_score_screen.dart';
 import 'package:teacher/screens/register_notebook/register_notebook_screen.dart';
 import 'package:teacher/screens/score/score_screen.dart';
 import 'package:teacher/screens/survey/survey_screen.dart';
-// import 'package:teacher/screens/survey_iportal2/survey_screen.dart';
 
 class PinFeatures extends StatefulWidget {
   const PinFeatures({
     super.key,
     required this.isKinderGarten,
     required this.userFeatures,
-    required this.isLoading,
   });
 
   final bool isKinderGarten;
   final List<FeatureModel> userFeatures;
-  final bool isLoading;
 
   @override
   State<PinFeatures> createState() => _PinFeaturesState();
@@ -140,7 +136,7 @@ class _PinFeaturesState extends State<PinFeatures> {
           break;
 
         case FeatureKey.observation:
-          mainNavKey.currentContext?.push(const ObservationSchedule());
+          context.push(const ObservationSchedule());
           break;
 
         default:
@@ -180,9 +176,8 @@ class _PinFeaturesState extends State<PinFeatures> {
     return Container(
       margin: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       width: double.infinity,
-      child: AppSkeleton(
-        isLoading: widget.isLoading,
-        child: Wrap(children: listFeature),
+      child: Wrap(
+        children: listFeature,
       ),
     );
   }

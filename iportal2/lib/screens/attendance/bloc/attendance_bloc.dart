@@ -62,8 +62,6 @@ class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
         schoolBrand: user.school_brand,
       );
 
-      await Future.delayed(const Duration(seconds: 2));
-
       emit(state.copyWith(
         attendanceStatus: AttendanceStatus.success,
         attendanceday: data,

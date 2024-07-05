@@ -37,16 +37,16 @@ class Comment {
   }
 
   factory Comment.empty() => const Comment(
-        commentDate: 'No Comment',
-        commentId: 'No Comment',
-        commentNote: 'No Comment',
-        commentTimePost: 'No Comment',
+        commentDate: 'Không có dữ liệu',
+        commentId: 'Không có dữ liệut',
+        commentNote: 'Không có dữ liệu',
+        commentTimePost: 'No CommentKhông có dữ liệu',
         huyHieuImg: 'https://cdn-icons-png.freepik.com/512/9776/9776920.png',
-        huyHieuName: 'No Comment',
-        teacherId: 'No Comment',
-        teacherName: 'No Comment',
-        teacherimg: 'No Comment',
-        weekDayNote: 'No Comment',
+        huyHieuName: 'Không có dữ liệu',
+        teacherId: 'Không có dữ liệu',
+        teacherName: 'Không có dữ liệu',
+        teacherimg: 'Không có dữ liệu',
+        weekDayNote: 'Không có dữ liệu',
       );
 
   static List<Comment> fakeData() => List.generate(

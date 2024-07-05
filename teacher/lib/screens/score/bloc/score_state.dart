@@ -1,5 +1,7 @@
 part of 'score_bloc.dart';
 
+final now = DateTime.now().year;
+
 class ScoreState extends Equatable {
   ScoreState({
     required this.localTeacher,
@@ -17,18 +19,31 @@ class ScoreState extends Equatable {
     this.listClassScore = const [],
     this.semesterTabTeaching = const [],
     required this.formInputScore,
+    required this.phoneBookStudent,
+    required this.userData,
+    required this.programList,
+    required this.scoreProgram,
+    this.isPrimaryStudent = false,
+    required this.classLeader,
+    this.isMOET = '',
+    this.type = '',
+    this.ctId = '',
+    this.edit = false,
+    required this.learnYear,
+    this.message = '',
+    required this.moetAverage,
+    required this.markType,
+    this.learnYearSelected,
   });
-
+  final String? learnYearSelected;
   final ScoreModel moetScore;
   final int termType;
   final EslScore eslScore;
   final PrimaryConduct primaryConduct;
-
-  // final TermType txtHocKy;
-  // final PrimaryTermType txtTihHocKy;
-
+  final List<PhoneBookStudent> phoneBookStudent;
   final String txtLearnYear;
   final String scoreType;
+  final List<MarkTypeColumn> markType;
 
   final ScoreStatus status;
 
@@ -36,19 +51,35 @@ class ScoreState extends Equatable {
   final List<Semester> semesterTabTeaching;
   /////
   LocalTeacher localTeacher;
+  final TeacherDetail userData;
 
   final List<ClassTeacher> listClass;
   final List<ClassScore> listClassScore;
 
   final FormInputScore formInputScore;
 
+  final List<ScoreProgram> programList;
+  final ScoreProgram scoreProgram;
+  final bool isPrimaryStudent;
+
+  final ListClassLeader classLeader;
+  final String type;
+  final String isMOET;
+  final String ctId;
+  final bool edit;
+  final String message;
+
+  final LearnYear learnYear;
+  final MoetAverage moetAverage;
   @override
   List<Object?> get props => [
+        learnYearSelected,
+        message,
         formInputScore,
         semesterTabTeaching,
         semester,
         scoreType,
-        moetScore,
+        learnYear,
         primaryConduct,
         // txtHocKy,
         // txtTihHocKy,
@@ -59,6 +90,18 @@ class ScoreState extends Equatable {
         localTeacher,
         listClass,
         listClassScore,
+        phoneBookStudent,
+        userData,
+        programList,
+        scoreProgram,
+        isPrimaryStudent,
+        classLeader,
+        type,
+        isMOET,
+        ctId,
+        edit,
+        moetAverage,
+        markType,
       ];
 
   static String _calculateYearRange() {
@@ -69,6 +112,19 @@ class ScoreState extends Equatable {
   }
 
   ScoreState copyWith({
+    List<MarkTypeColumn>? markType,
+    MoetAverage? moetAverage,
+    String? message,
+    LearnYear? learnYear,
+    bool? edit,
+    String? ctId,
+    String? type,
+    String? isMOET,
+    bool? isPrimaryStudent,
+    List<ScoreProgram>? programList,
+    ScoreProgram? scoreProgram,
+    TeacherDetail? userData,
+    List<PhoneBookStudent>? phoneBookStudent,
     FormInputScore? formInputScore,
     List<Semester>? semesterTabTeaching,
     List<ClassScore>? listClassScore,
@@ -79,14 +135,27 @@ class ScoreState extends Equatable {
     EslScore? eslScore,
     PrimaryConduct? primaryConduct,
     List<String>? yearList,
-    // TermType? txtHocKy,
-    // PrimaryTermType? txtTihHocKy,
     String? txtLearnYear,
     String? scoreType,
     ScoreStatus? status,
     List<ClassTeacher>? listClass,
+    ListClassLeader? classLeader,
   }) {
     return ScoreState(
+      markType: markType ?? this.markType,
+      moetAverage: moetAverage ?? this.moetAverage,
+      message: message ?? this.message,
+      learnYear: learnYear ?? this.learnYear,
+      edit: edit ?? this.edit,
+      ctId: ctId ?? this.ctId,
+      type: type ?? this.type,
+      isMOET: isMOET ?? this.isMOET,
+      classLeader: classLeader ?? this.classLeader,
+      isPrimaryStudent: isPrimaryStudent ?? this.isPrimaryStudent,
+      programList: programList ?? this.programList,
+      scoreProgram: scoreProgram ?? this.scoreProgram,
+      userData: userData ?? this.userData,
+      phoneBookStudent: phoneBookStudent ?? this.phoneBookStudent,
       formInputScore: formInputScore ?? this.formInputScore,
       semesterTabTeaching: semesterTabTeaching ?? this.semesterTabTeaching,
       listClassScore: listClassScore ?? this.listClassScore,
@@ -97,8 +166,6 @@ class ScoreState extends Equatable {
       moetScore: moetScore ?? this.moetScore,
       eslScore: eslScore ?? this.eslScore,
       primaryConduct: primaryConduct ?? this.primaryConduct,
-      // txtHocKy: txtHocKy ?? this.txtHocKy,
-      // txtTihHocKy: txtTihHocKy ?? this.txtTihHocKy,
       txtLearnYear: txtLearnYear ?? this.txtLearnYear,
       status: status ?? this.status,
       listClass: listClass ?? this.listClass,
@@ -107,6 +174,10 @@ class ScoreState extends Equatable {
 }
 
 enum ScoreStatus {
+  loading,
+  success,
+  loadingClassLeader,
+  successClassLeader,
   initial,
   loadingListClass,
   successListClass,
@@ -116,6 +187,36 @@ enum ScoreStatus {
   successSemesterTeacher,
   loadingFormScore,
   successFormScore,
+
+  loadingGetListStudent,
+  successGetListStudent,
+
+  loadingGetTeacherDetail,
+  successGetTeacherDetail,
+
+  loadingGetEsl,
+  successGetEsl,
+
+  loadingGetMoetOther,
+  successGetMoetOther,
+
+  loadedUpdateProgram,
+
+  loadingPrimaryConduct,
+  successPrimaryConduct,
+
+  loadingLearnYear,
+  successLearnYear,
+
+  loadingPostComment,
+  successPostComment,
+  fail,
+
+  loadingGetMoetAverage,
+  successGetMoetAverage,
+
+  loadingMarkType,
+  successMarkType,
 }
 
 // enum PrimaryTermType {

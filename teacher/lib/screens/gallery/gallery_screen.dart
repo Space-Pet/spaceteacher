@@ -1,7 +1,6 @@
 import 'package:core/core.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
@@ -9,8 +8,9 @@ import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
 import 'package:teacher/screens/gallery/bloc/gallery_bloc.dart';
-import 'package:teacher/screens/gallery/widget/gallery_card/card_gallery.dart';
-import 'package:teacher/screens/gallery/widget/gallery_create/gallery_create.dart';
+import 'package:teacher/screens/gallery/screens/create_edit/gallery_create.dart';
+import 'package:teacher/screens/gallery/screens/detail/gallery_detail.dart';
+import 'package:teacher/screens/gallery/widgets/card_gallery.dart';
 
 class GalleryScreen extends StatelessWidget {
   const GalleryScreen({super.key});
@@ -23,7 +23,7 @@ class GalleryScreen extends StatelessWidget {
         context.read<AppFetchApiRepository>(),
         userRepository: context.read<UserRepository>(),
         currentUserBloc: context.read<CurrentUserBloc>(),
-      ),
+      )..add(GalleryFetchData()),
       child: BlocBuilder<GalleryBloc, GalleryState>(
         builder: (context, state) {
           final galleryBloc = context.read<GalleryBloc>();
@@ -104,20 +104,31 @@ class GalleryScreen extends StatelessWidget {
                                                                 albumList[index]
                                                                     .galleryId);
 
-                                                    return CardGallery(
-                                                      galleryItem:
-                                                          albumList[index],
-                                                      isPinned: isPinned,
-                                                      onUpdatePinAlbum: () {
-                                                        final albumId =
-                                                            albumList[index]
-                                                                .galleryId;
-
-                                                        galleryBloc.add(
-                                                            GalleryUpdatePinnedAlbum(
-                                                          albumId: albumId,
+                                                    return InkWell(
+                                                      onTap: () {
+                                                        context.push(
+                                                            GalleryDetailScreen(
+                                                          galleryId:
+                                                              albumList[index]
+                                                                  .galleryId,
                                                         ));
                                                       },
+                                                      child: CardGallery(
+                                                        isLoading: isLoading,
+                                                        galleryItem:
+                                                            albumList[index],
+                                                        isPinned: isPinned,
+                                                        onUpdatePinAlbum: () {
+                                                          final albumId =
+                                                              albumList[index]
+                                                                  .galleryId;
+
+                                                          galleryBloc.add(
+                                                              GalleryUpdatePinnedAlbum(
+                                                            albumId: albumId,
+                                                          ));
+                                                        },
+                                                      ),
                                                     );
                                                   });
                                             },

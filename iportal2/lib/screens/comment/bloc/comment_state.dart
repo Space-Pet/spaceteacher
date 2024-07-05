@@ -4,22 +4,25 @@ class CommentState {
   final List<Comment>? comment;
   final CommentStatus commentStatus;
   final List<ListReportStudent> listReportStudent;
-  final DateTime? endDate;
-  final DateTime? startDate;
+  final DateTime endDate;
+  final DateTime startDate;
   final ReportStudent? reportStudent;
   final String? txtHocKy;
+  final String learnYear;
 
   const CommentState({
+    this.learnYear = '',
     required this.comment,
     String? txtHocKy,
     this.commentStatus = CommentStatus.loading,
     required this.listReportStudent,
-    this.endDate,
+    required this.endDate,
     this.reportStudent,
-    this.startDate,
+    required this.startDate,
   }) : txtHocKy = txtHocKy ?? '1';
 
   List<Object?> get props => [
+        learnYear,
         comment,
         commentStatus,
         endDate,
@@ -37,6 +40,7 @@ class CommentState {
   }
 
   CommentState copyWith({
+    String? learnYear,
     List<Comment>? comment,
     CommentStatus? commentStatus,
     List<ListReportStudent>? listReportStudent,
@@ -46,6 +50,7 @@ class CommentState {
     DateTime? startDate,
   }) {
     return CommentState(
+      learnYear: learnYear ?? this.learnYear,
       txtHocKy: txtHocKy ?? this.txtHocKy,
       reportStudent: reportStudent ?? this.reportStudent,
       listReportStudent: listReportStudent ?? this.listReportStudent,
@@ -95,5 +100,32 @@ extension TermTypeX on TermType {
       default:
         return "3";
     }
+  }
+}
+
+//////
+enum TermYear {
+  year1,
+  year2,
+  year3,
+}
+
+extension TermYearX on TermYear {
+  String text() {
+    int currentYear = DateTime.now().year;
+    switch (this) {
+      case TermYear.year1:
+        return "${currentYear - 1}-${currentYear}";
+      case TermYear.year2:
+        return "${currentYear - 2}-${currentYear - 1}";
+      case TermYear.year3:
+        return "${currentYear - 3}-${currentYear - 2}";
+      default:
+        return "";
+    }
+  }
+
+  String getValue() {
+    return text();
   }
 }

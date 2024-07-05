@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core/core.dart';
 import 'package:network_data_source/network_data_source.dart';
 
@@ -125,8 +127,10 @@ class AppFetchApi extends AbstractAppFetchApi {
       required String schoolBrand}) async {
     try {
       final data = await _authRestClient.doHttpGet(
-          '/api/v1/member/leave-application/pupil?class_id=$classId&pupil_id=$pupilId',
-          headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
+        '/api/v1/member/leave-application/pupil?class_id=$classId&pupil_id=$pupilId',
+        headers: {'School-Id': schoolId, 'School-Brand': schoolBrand},
+        hasDelay: true,
+      );
       final dataList = data['data']['data'] as List<dynamic>;
       List<LeaveData> dataLeaves = [];
       for (final item in dataList) {
@@ -227,7 +231,7 @@ class AppFetchApi extends AbstractAppFetchApi {
   ) async {
     try {
       final data = await _partnerTokenRestClient.doHttpGet(
-        '/api.php',
+        '/api/api.php',
         queryParameters: {
           'act': 'esl_score',
           'user_key': userKey,
@@ -439,12 +443,13 @@ class AppFetchApi extends AbstractAppFetchApi {
         'School-Id': schoolId,
         'School-Brand': schoolBrand,
       },
+      hasDelay: true,
     );
     final dataList = data['data'] as List<dynamic>?;
     return dataList?.map((e) => BusScheduleData.fromJson(e)).toList() ?? [];
   }
 
-  Future<List<Message>> getlistMessage({
+  Future<List<Conservation>> getlistMessage({
     required int schoolId,
     required String classId,
     required String userId,
@@ -455,7 +460,7 @@ class AppFetchApi extends AbstractAppFetchApi {
           '/api/v1/member/conversations?class_id=$classId&user_id=$userId',
           headers: {'School-Id': schoolId, 'School-Brand': schoolBrand});
       final dataList = data['data']['data'] as List<dynamic>?;
-      return dataList?.map((e) => Message.fromJson(e)).toList() ?? [];
+      return dataList?.map((e) => Conservation.fromJson(e)).toList() ?? [];
     } catch (e) {
       print('error: $e');
       return [];
@@ -473,9 +478,10 @@ class AppFetchApi extends AbstractAppFetchApi {
       );
 
       final dataList = data['data_comment'] as List<dynamic>?;
-      return dataList?.map((e) => Comment.fromJson(e)).toList() ?? [];
+      return dataList?.map((e) => Comment.fromJson(e)).toList() ??
+          [Comment.empty()];
     } catch (e) {
-      return [];
+      return [Comment.empty()];
     }
   }
 
@@ -592,19 +598,37 @@ class AppFetchApi extends AbstractAppFetchApi {
   }
 
   Future<Map<String, dynamic>> getMessageDetail({
-    required String conversationId,
+    String? conversationId,
+    String? recipientId,
+    bool isGetById = false,
     required int schoolId,
     required String schoolBrand,
-    int? page = 1,
+    required int page,
   }) async {
     try {
-      final data = await _client
-          .doHttpGet('/api/v1/staff/conversations/$conversationId', headers: {
-        'School_Id': schoolId,
-        'School_Brand': schoolBrand,
-      }, queryParameters: {
-        'page': page,
-      });
+      final slug =
+          isGetById ? 'get_conversation_by' : 'conversations/$conversationId';
+
+      final data = await _client.doHttpGet(
+        '/api/v1/member/$slug',
+        headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        },
+        queryParameters: {
+          'recipient_id': recipientId,
+          'page': page,
+        },
+      );
+
+      if (data['data'] == null) {
+        return {
+          "data": [],
+          "last_page": 0,
+          "current_page": 0,
+        };
+      }
+
       final dataList = data['data']['data'] as List<dynamic>?;
 
       final res = {
@@ -624,29 +648,32 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String recipient,
     required int schoolId,
     required String schoolBrand,
+    required List<File> files,
   }) async {
     try {
       var formData = FormData.fromMap(
         {
-          "content": content,
+          "content": content.isEmpty ? 'images' : content,
           "class_id": classId,
           "recipient": "${[recipient]}",
         },
       );
-      // final data = await _client.doHttpPost(
-      //     url: '/api/v1/member/messages',
-      //     headers: {
-      //       'School_Id': schoolId,
-      //       'School_Brand': schoolBrand,
-      //     },
-      //     requestBody: formData);
 
-      final res = await _client.dio.post('/api/v1/member/messages',
-          options: Options(headers: {
-            'School_Id': schoolId,
-            'School_Brand': schoolBrand,
-          }),
-          data: formData);
+      for (int i = 0; i < files.length; i++) {
+        formData.files.add(MapEntry(
+          'attachment[$i]',
+          MultipartFile.fromFileSync(files[i].path),
+        ));
+      }
+
+      final res = await _client.dio.post(
+        '/api/v1/member/messages',
+        options: Options(headers: {
+          'School_Id': schoolId,
+          'School_Brand': schoolBrand,
+        }),
+        data: formData,
+      );
       return res.data['data']['conversation_id'];
     } catch (e) {
       Log.e(e.toString());
@@ -654,7 +681,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<int> deleteMessageDetail({
+  Future<Map<String, dynamic>> deleteMessage({
     required String content,
     required int schoolId,
     required String schoolBrand,
@@ -673,20 +700,20 @@ class AppFetchApi extends AbstractAppFetchApi {
           "recipient": [recipient]
         },
       );
-      return data['code'];
+      return data;
     } catch (e) {
-      return 0;
+      return {};
     }
   }
 
-  Future<int> deleteMessage({
+  Future<int> deleteConservation({
     required int schoolId,
     required String schoolBrand,
-    required int idMessage,
+    required int conservationId,
   }) async {
     try {
       final data = await _client.doHttpDelete(
-        url: '/api/v1/member/conversations/$idMessage',
+        url: '/api/v1/member/conversations/$conservationId',
         headers: {
           'School_Id': schoolId,
           'School_Brand': schoolBrand,
@@ -736,6 +763,7 @@ class AppFetchApi extends AbstractAppFetchApi {
     required String schoolBrand,
     required int schoolId,
     required int idMessage,
+    required String conservationId,
   }) async {
     try {
       final data = await _client.doHttpPost(
@@ -743,6 +771,9 @@ class AppFetchApi extends AbstractAppFetchApi {
         headers: {
           'School_Brand': schoolBrand,
           'School_Id': schoolId,
+        },
+        requestBody: {
+          'conversation_id': conservationId,
         },
       );
       return data;
@@ -770,20 +801,24 @@ class AppFetchApi extends AbstractAppFetchApi {
     }
   }
 
-  Future<MessageDetail?> getMessagePin({
+  Future<ConservationDetail?> getMessagePin({
     required String schoolBrand,
     required int schoolId,
+    required String recipientId,
   }) async {
     try {
       final data = await _client.doHttpGet(
         '/api/v1/member/message/pinned',
+        queryParameters: {
+          'recipient_id': recipientId,
+        },
         headers: {
           'School_Brand': schoolBrand,
           'School_Id': schoolId,
         },
       );
-      final jsonData = data['data'] as Map<String, dynamic>;
-      return MessageDetail.fromJson(jsonData);
+      final jsonData = data['data'] as List<dynamic>;
+      return ConservationDetail.fromJson(jsonData[0]);
     } catch (e) {
       return null;
     }

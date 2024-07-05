@@ -15,7 +15,7 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
       required this.todayString})
       : super(
           ExerciseState(
-            subjectList: [],
+            subjectList: const [],
             tempData: ExerciseItem.fakeData(),
             exerciseDataList: ExerciseItem.fakeData(),
           ),
@@ -60,7 +60,6 @@ class ExerciseBloc extends Bloc<ExerciseEvent, ExerciseState> {
     ));
 
     final exerciseDataList = await appFetchApiRepo.getExercises(
-      // userKey: '0723210020',
       userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
     );

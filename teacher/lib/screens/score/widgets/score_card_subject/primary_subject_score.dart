@@ -6,15 +6,15 @@ import 'package:core/resources/resources.dart';
 class PrimarySubjectScore extends StatelessWidget {
   const PrimarySubjectScore({
     super.key,
-    // required this.subjectScore,
-    this.subjectName,
+    required this.subjectScore,
+    required this.subjectName,
     required this.index,
     required this.lastIndex,
     required this.isExpanded,
     required this.onExpansionChanged,
   });
-  // final DiemItemType? subjectScore;
-  final String? subjectName;
+  final DiemItemType? subjectScore;
+  final String subjectName;
   final num index;
   final num lastIndex;
   final bool isExpanded;
@@ -77,7 +77,7 @@ class PrimarySubjectScore extends StatelessWidget {
                         constraints:
                             const BoxConstraints(minWidth: 2, maxWidth: 170),
                         child: Text(
-                          'Toán',
+                          subjectName,
                           style: AppTextStyles.semiBold12(
                             color: AppColors.blueGray800,
                             height: 20 / 14,
@@ -99,95 +99,92 @@ class PrimarySubjectScore extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8, bottom: 2),
                 child: IntrinsicHeight(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Điểm đạt:',
-                            style: AppTextStyles.normal14(
-                              color: AppColors.gray600,
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              child: TextField(
-                                keyboardType:
-                                    const TextInputType.numberWithOptions(
-                                        decimal: true),
-                                maxLines: null,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                style: AppTextStyles.normal14(
-                                    color: AppColors.gray600),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Container(
-                          width: 4,
-                          decoration: BoxDecoration(
-                              color: AppColors.backgroundBrandRest2,
-                              borderRadius: BorderRadius.circular(14)),
-                        ),
+                      Container(
+                        width: 4,
+                        decoration: BoxDecoration(
+                            color: AppColors.backgroundBrandRest2,
+                            borderRadius: BorderRadius.circular(14)),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Mức đạt được',
+                                  style: AppTextStyles.normal14(
+                                    color: AppColors.gray600,
+                                  ),
+                                ),
+                                Text(
+                                  subjectScore?.mucDatDuoc ?? '',
+                                  style: AppTextStyles.semiBold14(
+                                    color: AppColors.brand600,
+                                  ),
+                                ),
+                              ],
+                            ),
                             Container(
-                              margin: const EdgeInsets.only(top: 6),
-                              decoration: const BoxDecoration(
-                                  color: AppColors.gray,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4))),
-                              padding: const EdgeInsets.all(6),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/icons/conversation-icon.svg',
-                                          width: 16,
-                                          height: 16,
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          'Nhận xét của giáo viên',
-                                          style: AppTextStyles.normal12(
-                                            color: AppColors.brand600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 4),
-                                    TextField(
-                                      maxLines: null,
-                                      keyboardType: TextInputType.multiline,
-                                      decoration: const InputDecoration(
-                                        border: InputBorder.none,
+                              height: 1,
+                              color: AppColors.gray300,
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Điểm kiểm tra định kỳ',
+                                  style: AppTextStyles.normal14(
+                                    color: AppColors.gray600,
+                                  ),
+                                ),
+                                Text(
+                                  subjectScore?.diemKtdk ?? '',
+                                  style: AppTextStyles.semiBold14(
+                                    color: AppColors.brand600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if ((subjectScore!.nhanXet ?? '').isNotEmpty)
+                              Container(
+                                margin: const EdgeInsets.only(top: 6),
+                                decoration: const BoxDecoration(
+                                    color: AppColors.gray,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(4))),
+                                padding: const EdgeInsets.all(6),
+                                child: Column(children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/icons/conversation-icon.svg',
+                                        width: 16,
+                                        height: 16,
                                       ),
-                                      style: AppTextStyles.normal14(
-                                          color: AppColors.gray600),
-                                    ),
-                                    Text(
-                                      'GV: Nguyen Hong An',
-                                      style: AppTextStyles.normal14(
-                                        color: AppColors.brand600,
-                                        fontWeight: FontWeight.w400,
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        'Nhận xét của giáo viên',
+                                        style: AppTextStyles.normal12(
+                                          color: AppColors.brand600,
+                                        ),
                                       ),
-                                    )
-                                  ]),
-                            )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    subjectScore!.nhanXet ?? '',
+                                    style: AppTextStyles.normal12(
+                                        color: AppColors.gray700),
+                                  ),
+                                ]),
+                              )
                           ],
                         ),
                       )

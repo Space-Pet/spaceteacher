@@ -180,23 +180,13 @@ class RegisterView extends StatelessWidget {
                                         ? 'Vui lòng chọn giáo viên'
                                         : 'Không có tiết dự giờ nào'),
                               )
-                            // radius wrap list view 20px
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: ListView.builder(
                                   padding: EdgeInsets.zero,
                                   itemBuilder: (ctx, index) {
                                     final lesson = listObservation[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        // context.push(
-                                        //   ObservationDetailScreen(data: lesson),
-                                        // );
-                                      },
-                                      child: CardObservation(
-                                        lesson: lesson,
-                                      ),
-                                    );
+                                    return CardObservation(lesson: lesson);
                                   },
                                   itemCount: listObservation.length,
                                 ),

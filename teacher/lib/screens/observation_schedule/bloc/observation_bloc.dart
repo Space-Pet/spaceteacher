@@ -22,17 +22,11 @@ class ObservationBloc extends Bloc<ObservationEvent, ObservationState> {
 
     on<DateChanged>(_onDateChange);
     on<ObservationScheduleFetched>(_onObservationScheduleFetch);
-    //
-    on<SubjectChanged>(_onSubjectChange);
-    on<ClassChanged>(_onClassChange);
-    on<InfoChanged>(_onInfoChange);
-
     on<LessonRegisterPosted>(_onLessonRegisterPosted);
-
-    on<RegisteredDateChanged>(_onRegisteredDateChange);
 
     on<RegisteredLessonFetch>(_onRegisteredLessonFetch);
     add(RegisteredLessonFetch());
+    on<RegisteredDateChanged>(_onRegisteredDateChange);
 
     on<DeleteLessonRegistered>(_deleteRegisteredLesson);
   }
@@ -63,8 +57,6 @@ class ObservationBloc extends Bloc<ObservationEvent, ObservationState> {
       schoolId: schoolId,
       teacherId: teacherId,
     );
-
-    await Future.delayed(const Duration(milliseconds: 300));
 
     emit(
       state.copyWith(
@@ -108,6 +100,8 @@ class ObservationBloc extends Bloc<ObservationEvent, ObservationState> {
     Emitter<ObservationState> emit,
   ) {
     emit(state.copyWith(datePicked: event.datePicked));
+
+    add(ObservationScheduleFetched());
   }
 
   void _onRegisteredDateChange(
@@ -117,27 +111,6 @@ class ObservationBloc extends Bloc<ObservationEvent, ObservationState> {
     emit(state.copyWith(datePickedRegistered: event.datePicked));
 
     add(RegisteredLessonFetch());
-  }
-
-  void _onSubjectChange(
-    SubjectChanged event,
-    Emitter<ObservationState> emit,
-  ) {
-    emit(state.copyWith(selectedSubject: event.subject));
-  }
-
-  void _onClassChange(
-    ClassChanged event,
-    Emitter<ObservationState> emit,
-  ) {
-    emit(state.copyWith(selectedClass: event.className));
-  }
-
-  void _onInfoChange(
-    InfoChanged event,
-    Emitter<ObservationState> emit,
-  ) {
-    emit(state.copyWith(selectedInfo: event.info));
   }
 
   Future<void> _onLessonRegisterPosted(
@@ -181,8 +154,6 @@ class ObservationBloc extends Bloc<ObservationEvent, ObservationState> {
       userKey: userKey,
       txtDate: state.datePickedRegistered.ddMMyyyyDash,
     );
-
-    await Future.delayed(const Duration(milliseconds: 300));
 
     emit(
       state.copyWith(

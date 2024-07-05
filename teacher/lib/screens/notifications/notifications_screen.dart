@@ -10,6 +10,7 @@ import 'package:teacher/components/back_ground_container.dart';
 import 'package:teacher/components/custom_refresh.dart';
 import 'package:teacher/screens/notifications/bloc/notification_bloc.dart';
 import 'package:teacher/screens/notifications/create/noti_create_screen.dart';
+import 'package:teacher/screens/notifications/create/noti_edit_screen.dart';
 import 'package:teacher/screens/notifications/detail/notification_detail_screen.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -88,12 +89,16 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const ScreenAppBar(
-                      title: 'Thông báo ',
-                    ),
+                    const Expanded(child: ScreenAppBar(title: 'Thông báo')),
                     InkWell(
-                      onTap: () {
-                        mainNavKey.currentContext?.push(const NotiCreateNew());
+                      onTap: () async {
+                        final isRefreshData = await mainNavKey.currentContext
+                            ?.push(const NotiCreateNew());
+
+                        if (isRefreshData == true) {
+                          notiBloc.add(NotificationFetchSentNoti());
+                          tabBarController.animateTo(1);
+                        }
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 16, top: 40),
@@ -109,6 +114,7 @@ class _NotificationsScreenState extends State<NotificationsScreen>
                 DefaultTabController(
                   length: tabs.length,
                   child: TabBar(
+                    controller: tabBarController,
                     padding: const EdgeInsets.all(0),
                     labelPadding: EdgeInsets.zero,
                     labelColor: AppColors.brand600,
@@ -196,23 +202,28 @@ class _ReceiveViewState extends State<ReceivedView> {
 
     final listNotiW = List.generate(widget.listNoti.length, (index) {
       final notiItem = widget.listNoti[index];
-      final isNotView = (notiItem.viewedAt ?? '').isEmpty && !isSentView;
+      final isDraft = notiItem.status == 'draft';
       final createdAt = DateTime.parse(notiItem.createdAt);
       final formattedDate =
           DateFormat('EEEE, dd/MM/yyyy - HH:mm', 'vi_VN').format(createdAt);
 
       return InkWell(
-        onTap: () {
-          context.push(NotiDetailScreen(
-            id: notiItem.id,
-          ));
+        onTap: () async {
+          final isRefresh = await context.push(
+            isDraft
+                ? NotiEdit(id: notiItem.id)
+                : NotiDetailScreen(id: notiItem.id),
+          );
+          if (isRefresh == true) {
+            notiBloc.add(NotificationFetchSentNoti());
+          }
         },
         child: Stack(
           children: [
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: isNotView ? AppColors.gray100 : Colors.white,
+                color: isDraft ? AppColors.gray100 : Colors.white,
                 border: Border(
                   bottom: BorderSide(
                     color: index == widget.listNoti.length - 1
@@ -230,9 +241,7 @@ class _ReceiveViewState extends State<ReceivedView> {
                       notiItem.title,
                       style: AppTextStyles.semiBold16(color: AppColors.gray800),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    const SizedBox(height: 8),
                     Text(
                       formattedDate,
                       style: AppTextStyles.normal14(
@@ -242,16 +251,14 @@ class _ReceiveViewState extends State<ReceivedView> {
                 ),
               ),
             ),
-            if (isNotView)
+            if (isDraft)
               Positioned(
-                top: 16,
-                right: 12,
-                child: SvgPicture.asset(
-                  'assets/icons/read-indicator-noti.svg',
-                  width: 8,
-                  height: 8,
-                ),
-              ),
+                  top: 16,
+                  right: 12,
+                  child: Text(
+                    'Lưu nháp',
+                    style: AppTextStyles.semiBold14(color: AppColors.gray500),
+                  )),
           ],
         ),
       );
@@ -280,40 +287,43 @@ class _ReceiveViewState extends State<ReceivedView> {
                             : 'Bạn chưa có thông báo mới',
                       ),
                     )
-                  : Column(children: [
-                      if (!isSentView)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Chỉ thông báo chưa đọc',
-                              style: AppTextStyles.semiBold14(
-                                  color: AppColors.gray600),
-                            ),
-                            Transform.scale(
-                              scale: 0.7,
-                              child: Switch.adaptive(
-                                value: isNotRead,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isNotRead = value;
-                                  });
-
-                                  notiBloc.add(NotificationChageViewMode(
-                                    viewed:
-                                        value ? ViewMode.unRead : ViewMode.all,
-                                  ));
-                                },
-                                activeTrackColor: AppColors.brand600,
-                                activeColor: AppColors.white,
-                                inactiveThumbColor: AppColors.white,
+                  : SingleChildScrollView(
+                      child: Column(children: [
+                        if (!isSentView)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Chỉ thông báo chưa đọc',
+                                style: AppTextStyles.semiBold14(
+                                    color: AppColors.gray600),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                          ],
-                        ),
-                      SingleChildScrollView(child: Column(children: listNotiW))
-                    ]),
+                              Transform.scale(
+                                scale: 0.7,
+                                child: Switch.adaptive(
+                                  value: isNotRead,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isNotRead = value;
+                                    });
+
+                                    notiBloc.add(NotificationChageViewMode(
+                                      viewed: value
+                                          ? ViewMode.unRead
+                                          : ViewMode.all,
+                                    ));
+                                  },
+                                  activeTrackColor: AppColors.brand600,
+                                  activeColor: AppColors.white,
+                                  inactiveThumbColor: AppColors.white,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                          ),
+                        Column(children: listNotiW)
+                      ]),
+                    ),
             ),
           ],
         ),

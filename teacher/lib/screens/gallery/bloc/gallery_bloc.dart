@@ -14,9 +14,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     required this.userRepository,
   }) : super(GalleryState(albumData: AlbumData.fakeData)) {
     on<GalleryFetchData>(_onFetchAlbumData);
-    add(GalleryFetchData());
-
     on<GalleryUpdatePinnedAlbum>(_onUpdatePinnedAlbum);
+    on<GalleryDelete>(_onDeleteAlbum);
   }
 
   final AppFetchApiRepository appFetchApiRepo;
@@ -31,11 +30,8 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
     final albumData = await appFetchApiRepo.getAlbum(
       user.teacher_id.toString(),
     );
-    emit(state.copyWith(albumData: albumData));
 
-    // delay 500ms
-    await Future.delayed(const Duration(milliseconds: 500));
-    emit(state.copyWith(status: GalleryStatus.success));
+    emit(state.copyWith(albumData: albumData, status: GalleryStatus.success));
   }
 
   _onUpdatePinnedAlbum(
@@ -51,5 +47,19 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
 
     currentUserBloc.add(CurrentUserUpdated(user: newUser));
     userRepository.saveUser(newUser);
+  }
+
+  _onDeleteAlbum(GalleryDelete event, Emitter<GalleryState> emit) async {
+    final res = await appFetchApiRepo.deleteAlbum(event.albumId);
+
+    if (res['status'] == 'success') {
+      emit(state.copyWith(status: GalleryStatus.deleteSuccess));
+      add(GalleryFetchData());
+    } else {
+      emit(state.copyWith(
+        error: res['message'],
+        status: GalleryStatus.deleteFailure,
+      ));
+    }
   }
 }

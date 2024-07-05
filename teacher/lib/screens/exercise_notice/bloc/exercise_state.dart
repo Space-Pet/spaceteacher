@@ -4,40 +4,37 @@ enum ExerciseStatus { initial, loading, loaded, error }
 
 class ExerciseState extends Equatable {
   const ExerciseState({
-    required this.exerciseDataList,
-    required this.subjectList,
-    required this.tempData,
+    required this.lessonData,
+    this.classCn,
     this.status = ExerciseStatus.initial,
-    this.selectedSubject = 'Tất cả các môn',
+    this.classType = ClassType.giangDay,
+    required this.datePicked,
   });
 
-  final List<ExerciseItem> exerciseDataList;
-  final List<ExerciseItem> tempData;
+  final List<LessonData> lessonData;
+  final ClassCn? classCn;
+  final DateTime datePicked;
 
-  final List<String> subjectList;
-  final String selectedSubject;
-
+  final ClassType classType;
   final ExerciseStatus status;
 
   @override
   List<Object?> get props =>
-      [exerciseDataList, tempData, subjectList, status, selectedSubject];
+      [lessonData, status, classType, datePicked, classCn];
 
   ExerciseState copyWith({
-    List<ExerciseItem>? exerciseDataList,
-    List<ExerciseItem>? tempData,
-    List<String>? subjectList,
-    String? userKey,
-    String? txtDate,
+    List<LessonData>? lessonData,
+    ClassCn? classCn,
     ExerciseStatus? status,
-    String? selectedSubject,
+    ClassType? classType,
+    DateTime? datePicked,
   }) {
     return ExerciseState(
-      exerciseDataList: exerciseDataList ?? this.exerciseDataList,
-      tempData: tempData ?? this.tempData,
-      subjectList: subjectList ?? this.subjectList,
+      lessonData: lessonData ?? this.lessonData,
+      classCn: classCn ?? this.classCn,
       status: status ?? this.status,
-      selectedSubject: selectedSubject ?? this.selectedSubject,
+      classType: classType ?? this.classType,
+      datePicked: datePicked ?? this.datePicked,
     );
   }
 }

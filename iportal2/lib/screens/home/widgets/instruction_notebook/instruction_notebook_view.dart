@@ -5,6 +5,7 @@ import 'package:iportal2/components/home_shadow_box.dart';
 import 'package:iportal2/screens/home/bloc/home_bloc.dart';
 import 'package:iportal2/screens/home/widgets/instruction_notebook/home_tab_instruction.dart';
 import 'package:iportal2/utils/validation_functions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InstructionNotebook extends StatefulWidget {
   const InstructionNotebook({
@@ -59,37 +60,41 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                         borderRadius: BorderRadius.circular(14)),
                   ),
                   const SizedBox(width: 10),
-                  InkWell(
-                    onTap: () {
-                      launchUrl(
-                        Uri.parse(
-                            'https://${lesson.fileBaoBaiDomain}/${lesson.fileBaoBai}'),
-                        mode: LaunchMode.inAppBrowserView,
-                      );
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          lesson.subjectName,
-                          style: AppTextStyles.semiBold14(
-                              color: AppColors.black24),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            SvgPicture.asset('assets/icons/paperclip.svg'),
-                            const SizedBox(width: 4),
-                            Text(
-                              fileName,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.normal12(
-                                  color: AppColors.brand600),
-                            ),
-                          ],
-                        ),
-                      ],
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        launchUrl(
+                          Uri.parse(
+                              'https://${lesson.fileBaoBaiDomain}/${lesson.fileBaoBai}'),
+                          mode: LaunchMode.inAppBrowserView,
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            lesson.subjectName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.semiBold14(
+                                color: AppColors.black24),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              SvgPicture.asset('assets/icons/paperclip.svg'),
+                              const SizedBox(width: 4),
+                              Text(
+                                fileName,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.normal12(
+                                    color: AppColors.brand600),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

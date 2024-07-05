@@ -21,8 +21,8 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen>
-    // with AutomaticKeepAliveClientMixin 
-    {
+// with AutomaticKeepAliveClientMixin
+{
   @override
   Widget build(BuildContext context) {
     // super.build(context);
@@ -160,7 +160,7 @@ class AttendanceView extends StatelessWidget {
           children: [
             ScreenAppBar(
               canGoback: false,
-              title: 'attendance',
+              title: 'Điểm danh',
               hasUpdateYear: true,
               iconWidget: Assets.icons.leaveAttendance.svg(),
               onOpenIcon: () {

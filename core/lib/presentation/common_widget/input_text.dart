@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core.dart';
 import '../../resources/app_colors.dart';
 
 class TitleAndInputText extends StatefulWidget {
@@ -23,6 +24,9 @@ class TitleAndInputText extends StatefulWidget {
     this.labelStyles,
     this.prefixIcon,
     this.showIconEye = false,
+    this.controller,
+    this.minLines,
+    this.isMultipleLines = false,
   });
 
   final String? title;
@@ -37,19 +41,30 @@ class TitleAndInputText extends StatefulWidget {
   final bool isRequired;
   final bool textInputType;
   final ValueChanged<String>? onChanged;
-  late bool obscureText;
+  final bool obscureText;
   final Function()? onPressedIcon;
   final bool isValid;
   final TextStyle titleStyle;
   final FocusNode? focusNode;
   final Function()? onSubmit;
   final Function()? onTap;
+  final TextEditingController? controller;
+  final int? minLines;
+  final bool isMultipleLines;
 
   @override
   State<TitleAndInputText> createState() => _TitleAndInputTextState();
 }
 
 class _TitleAndInputTextState extends State<TitleAndInputText> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obscureText;
+  }
+
   @override
   Widget build(BuildContext context) {
     const redColor = AppColors.redMenu;
@@ -71,6 +86,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
               ),
             ),
           TextField(
+            controller: widget.controller,
             focusNode: widget.focusNode,
             obscuringCharacter: '*',
             onChanged: widget.onChanged,
@@ -84,17 +100,19 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
                 widget.onSubmit!();
               }
             },
+            minLines: widget.minLines ?? 1,
+            maxLines: widget.isMultipleLines ? (widget.minLines ?? 1) + 4 : 1,
             cursorColor: widget.isValid ? null : redColor,
             keyboardType: widget.textInputType
                 ? TextInputType.text
                 : TextInputType.number,
             decoration: InputDecoration(
-                constraints: const BoxConstraints(
-                  maxHeight: 50,
-                  minHeight: 42,
+                constraints: BoxConstraints(
+                  maxHeight: widget.isMultipleLines ? 100 : 44,
+                  minHeight: 44,
                 ),
                 contentPadding: widget.prefixIcon == null
-                    ? const EdgeInsets.symmetric(horizontal: 16)
+                    ? const EdgeInsets.symmetric(horizontal: 12, vertical: 4)
                     : EdgeInsets.zero,
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -112,11 +130,7 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 hintText: widget.hintText,
-                hintStyle: const TextStyle(
-                    color: AppColors.gray500,
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400),
+                hintStyle: AppTextStyles.normal14(),
                 filled: true,
                 fillColor: Colors.white,
                 prefixIconColor: widget.isValid ? AppColors.gray500 : redColor,
@@ -125,18 +139,18 @@ class _TitleAndInputTextState extends State<TitleAndInputText> {
                     ? IconButton(
                         onPressed: () {
                           setState(() {
-                            widget.obscureText = !widget.obscureText;
+                            _obscureText = !_obscureText;
                           });
                         },
                         icon: Icon(
-                          widget.obscureText
+                          _obscureText
                               ? Icons.visibility_off
                               : Icons.visibility,
                           color: AppColors.gray500,
                         ),
                       )
                     : null),
-            obscureText: widget.obscureText,
+            obscureText: _obscureText,
           ),
         ],
       ),

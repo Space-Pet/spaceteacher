@@ -44,44 +44,40 @@ class _SurveyViewState extends State<SurveyView> {
       final isLoading = state.surveyStatus == SurveyStatus.loadingSurvey;
       final isEmpty = surveyList.isEmpty && !isLoading;
 
-      return Scaffold(
-        body: BackGroundContainer(
-            child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ScreenAppBar(
-                title: 'Khảo sát',
-                canGoback: true,
-                onBack: () {
-                  context.pop();
-                },
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: AppSkeleton(
-                    isLoading: isLoading,
-                    child: isEmpty
-                        ? const EmptyScreen(text: 'Chưa có khảo sát nào')
-                        : SurveyList(surveyList: surveyList),
+      return BackGroundContainer(
+          child: GestureDetector(
+        onTap: () {},
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ScreenAppBar(
+              title: 'Khảo sát',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
-              )
-            ],
-          ),
-        )),
-      );
+                child: AppSkeleton(
+                  isLoading: isLoading,
+                  child: isEmpty
+                      ? const EmptyScreen(text: 'Chưa có khảo sát nào')
+                      : SurveyList(surveyList: surveyList),
+                ),
+              ),
+            )
+          ],
+        ),
+      ));
     });
   }
 }

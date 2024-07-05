@@ -38,14 +38,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
         builder: (context, state) {
           final activeChildData = state.activeChild;
           final listChildren = state.user.children;
-          final urlImage = activeChildData.url_image.mobile;
 
           final isStudent = state.user.isStudent();
 
           return BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
-              final urlAva =
-                  isStudent ? state.studentData.avatar.mobile : urlImage;
+              final studentData = state.studentData;
+              final urlAva = studentData.avatar.mobile;
               final isLoading = state.profileStatus == ProfileStatus.init;
 
               return AppSkeleton(
@@ -65,41 +64,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
                           flex: 3,
                           child: Row(
                             children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.white,
-                                  border: Border.all(
-                                    color: AppColors.white,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: ClipOval(
-                                  child: FadeInImage.assetNetwork(
-                                    placeholder:
-                                        'assets/images/default-user.png',
-                                    image: urlAva,
-                                    fit: BoxFit.cover,
-                                    imageErrorBuilder:
-                                        (context, error, stackTrace) {
-                                      return Image.asset(
-                                        'assets/images/default-user.png',
-                                        fit: BoxFit.cover,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
+                              CircleAvaImage(urlAva: urlAva),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
                                       Text(
-                                        activeChildData.full_name,
+                                        studentData.pupil.name,
                                         style: AppTextStyles.semiBold14(
                                           color: AppColors.white,
                                         ),
@@ -124,7 +97,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                                     ],
                                   ),
                                   Text(
-                                    'Lớp ${activeChildData.class_name}',
+                                    'Lớp ${studentData.classInfo.name}',
                                     style: AppTextStyles.normal14(
                                       color: AppColors.white,
                                     ),

@@ -1,20 +1,19 @@
 import 'dart:developer';
+
 import 'package:core/common/constants/app_locale.dart';
-import 'package:core/common/services/firebase_notification_service.dart';
 import 'package:core/core.dart';
-import 'package:core/data/data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/common_bloc/current_user/bloc/current_user_bloc.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
-import 'package:iportal2/screens/message/chat_room.dart';
+import 'package:iportal2/screens/message/screens/conversation_detail.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
 import 'package:repository/repository.dart';
-import 'package:intl/intl.dart' as intl;
 
 final mainNavKey = GlobalKey<NavigatorState>();
 
@@ -67,18 +66,19 @@ class _IPortal2AppState extends State<IPortal2App> {
 
       case 'message':
         final conversationId = data?['conversation_id'];
-        print('conversationId: $conversationId');
+        final recipientId = data?['recipient_id'];
 
         mainNavKey.currentContext?.push(
-          ChatRoomScreen(
-            messageChatRoom: Message.empty(),
+          ConversationDetail(
+            conversationId: conversationId,
+            recipientId: recipientId,
           ),
         );
 
         final currentContext = mainNavKey.currentState!.context;
         currentContext
             .read<MessageBloc>()
-            .add(GetMessageDetail(conversationId: conversationId));
+            .add(GetConservationDetail(conversationId: conversationId));
 
       default:
     }
@@ -103,10 +103,10 @@ class _IPortal2AppState extends State<IPortal2App> {
         });
 
         if (isMessageScreen) {
-          currentContext.read<MessageBloc>().add(GetListMessageResert());
+          currentContext.read<MessageBloc>().add(GetConversationList());
         }
         currentContext.popUntil(predicate: (Route route) {
-          if (route.settings.name == ChatRoomScreen.routeName) {
+          if (route.settings.name == ConversationDetail.routeName) {
             isMessageDetail = true;
           }
           return true;
@@ -114,7 +114,7 @@ class _IPortal2AppState extends State<IPortal2App> {
         if (isMessageDetail) {
           currentContext
               .read<MessageBloc>()
-              .add(GetMessageDetail(conversationId: conversationId));
+              .add(GetConservationDetail(conversationId: conversationId));
         }
       default:
     }

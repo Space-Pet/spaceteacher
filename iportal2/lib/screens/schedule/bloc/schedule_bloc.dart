@@ -34,7 +34,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       userKey: currentUserBloc.state.activeChild.user_key,
       datePicked: event.datePicked,
       isDueDate: true,
-      // userKey: '0253230044',
     );
 
     emit(state.copyWith(exerciseDataList: exerciseDataList));
@@ -46,7 +45,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     final scheduleData = await appFetchApiRepo.getSchedule(
       userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(event.datePicked),
-      // userKey: '0563230098',
     );
     emit(
       state.copyWith(
@@ -64,8 +62,6 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     final scheduleData = await appFetchApiRepo.getSchedule(
       userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: DateFormat('dd-MM-yyyy').format(DateTime.now()),
-      // txtDate: '18-03-2024',
-      // userKey: '0563230098',
     );
 
     emit(

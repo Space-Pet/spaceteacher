@@ -2,78 +2,133 @@ part of 'message_bloc.dart';
 
 enum MessageStatus {
   init,
-  loading,
-  success,
-  error,
-  loadingMessage,
-  successMessage,
-  loadingRestart,
-  successRestart,
-  loadingDelete,
-  successDelete,
-  loadingPostPinMessage,
-  successPostPinMessage,
+
+  loadingConservationList,
+  successConservationList,
+  errorConservationList,
+
+  loadingConservationDetail,
+  successConservationDetail,
+  errorConservationDetail,
+
+  loadingGetNewMessage,
+  successGetNewMessage,
+
+  loadingLoadMoreMessages,
+  successLoadMoreMessages,
+  errorLoadMoreMessages,
+
+  loadingSendMessage,
+  successSendMessage,
+  errorSendMessage,
+
+  loadingDeleteMessage,
+  successDeleteMessage,
+  errorDeleteMessage,
+
+  loadingDeleteConservation,
+  successDeleteConservation,
+  errorDeleteConservation,
+
+  loadingPinMessage,
+  successPinMessage,
+  errorPinMessage,
+
+  loadingUnpinMessage,
+  successUnpinMessage,
+  errorUnpinMessage,
+
   loadingGetPinMessage,
   successGetPinMessage,
-  loadingDeletePinMessage,
-  successDeletePinMessage,
+  errorGetPinMessage,
+
+  loadingGetPhoneBookStudent,
+  successGetPhoneBookStudent,
 }
 
 class MessageState {
-  final List<Message> messages;
-  final MessageStatus messageStatus;
+  final List<ClassTeacher> classTeacher;
+  final ClassTeacher seletedClasss;
+
+  final List<Conservation> conservationList;
+  final List<ConservationDetail> conservationDetail;
   final List<PhoneBookStudent> phoneBookStudent;
-  final List<MessageDetail> messageDetail;
-  final MessageDetail? messagePin;
-  final LocalTeacher? profileInfo;
-  final int? currentPage;
-  final bool? hasMoreData;
+  final ConservationDetail? messagePin;
+  final LocalIPortalProfile? profileInfo;
+  final int currentPage;
+  final bool hasMoreData;
   final int? conversationID;
+  final bool isFirstLoadChatRoom;
+
+  final MessageStatus messageStatus;
+  final MessageStatus messageDetailStatus;
+  final MessageStatus pinStatus;
 
   const MessageState({
+    this.classTeacher = const [],
+    required this.seletedClasss,
+    required this.conservationList,
     this.messagePin,
-    this.messages = const [],
-    this.messageStatus = MessageStatus.init,
     this.profileInfo,
-    this.messageDetail = const [],
+    required this.conservationDetail,
     this.phoneBookStudent = const [],
     this.currentPage = 1,
-    this.hasMoreData = true,
+    this.hasMoreData = false,
     this.conversationID,
+    this.isFirstLoadChatRoom = true,
+    this.messageStatus = MessageStatus.init,
+    this.messageDetailStatus = MessageStatus.init,
+    this.pinStatus = MessageStatus.init,
   });
 
   List<Object?> get props => [
-        messageDetail,
-        messageStatus,
-        messages,
+        classTeacher,
+        seletedClasss,
+        conservationDetail,
+        conservationList,
         profileInfo,
         phoneBookStudent,
         messagePin,
         currentPage,
         hasMoreData,
-        conversationID
+        conversationID,
+        isFirstLoadChatRoom,
+        messageStatus,
+        messageDetailStatus,
+        pinStatus,
       ];
+
   MessageState copyWith({
-    List<Message>? messages,
-    MessageStatus? messageStatus,
+    List<ClassTeacher>? classTeacher,
+    ClassTeacher? seletedClasss,
+    List<Conservation>? conservationList,
+    List<ConservationDetail>? conservationDetail,
     List<PhoneBookStudent>? phoneBookStudent,
-    List<MessageDetail>? messageDetail,
-    LocalTeacher? profileInfo,
-    MessageDetail? messagePin,
+    LocalIPortalProfile? profileInfo,
+    ConservationDetail? messagePin,
     int? currentPage,
     bool? hasMoreData,
     int? conversationID,
+    bool? isFirstLoadChatRoom,
+    MessageStatus? messageStatus,
+    MessageStatus? messageDetailStatus,
+    MessageStatus? pinStatus,
   }) {
     return MessageState(
+      classTeacher: classTeacher ?? this.classTeacher,
+      seletedClasss: seletedClasss ?? this.seletedClasss,
+      conservationList: conservationList ?? this.conservationList,
+      conservationDetail: conservationDetail ?? this.conservationDetail,
       messagePin: messagePin ?? this.messagePin,
       profileInfo: profileInfo ?? this.profileInfo,
-      messageDetail: messageDetail ?? this.messageDetail,
       phoneBookStudent: phoneBookStudent ?? this.phoneBookStudent,
       messageStatus: messageStatus ?? this.messageStatus,
-      messages: messages ?? this.messages,
+      messageDetailStatus: messageDetailStatus ?? this.messageDetailStatus,
       currentPage: currentPage ?? this.currentPage,
       hasMoreData: hasMoreData ?? this.hasMoreData,
       conversationID: conversationID ?? this.conversationID,
+      isFirstLoadChatRoom: isFirstLoadChatRoom ?? this.isFirstLoadChatRoom,
+      pinStatus: pinStatus ?? this.pinStatus,
     );
   }
 }

@@ -89,7 +89,6 @@ class _TabBarViewCommentViewState extends State<TabBarViewCommentView> {
                   padding: const EdgeInsets.all(12),
                   child: SelectFeedBackType(
                     onGetComment: (startDate, endDate) {
-                      print('start: $startDate - end: $endDate');
                       context.read<PreScoreBloc>().add(GetComment(
                           startDate: startDate,
                           endDate: endDate,
@@ -127,7 +126,6 @@ class _TabBarViewCommentViewState extends State<TabBarViewCommentView> {
                               setState(() {
                                 edit = true;
                               });
-                              print('$edit');
                             },
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.all(6),

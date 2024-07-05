@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
+import 'package:teacher/screens/schedule/bloc/schedule_bloc.dart';
 
 class ScheduleTabs extends StatefulWidget {
   const ScheduleTabs({
@@ -11,11 +12,13 @@ class ScheduleTabs extends StatefulWidget {
     this.lessons,
     required this.datePicked,
     required this.onViewExercise,
+    required this.classType,
   });
 
   final List<ScheduleData>? lessons;
   final DateTime datePicked;
   final Function(DateTime date, int tietNum) onViewExercise;
+  final ClassType classType;
 
   @override
   State<ScheduleTabs> createState() => _ScheduleTabsState();
@@ -74,8 +77,6 @@ class _ScheduleTabsState extends State<ScheduleTabs>
               ),
             ));
 
-    // _onItemTapped(days);
-
     return DefaultTabController(
         length: (widget.lessons ?? []).length,
         child: Column(
@@ -115,14 +116,20 @@ class _ScheduleTabsState extends State<ScheduleTabs>
 
   List<Container> tabView(int index, DateTime startOfWeek, String? teacherId) {
     final listLesson = widget.lessons?[index].dateSubject;
+    bool hasAfternoon = false;
+
     final indexSeparate =
-        listLesson!.indexWhere((element) => element.tietNum == 5) + 1;
+        listLesson!.indexWhere((element) => element.tietNum! > 5);
 
-    listLesson.insert(indexSeparate, DateSubject.empty());
-
+    if (indexSeparate != -1) {
+      hasAfternoon = true;
+      listLesson.insert(indexSeparate, DateSubject.empty());
+    }
     return List.generate(listLesson.length, (innerIndex) {
       final lesson = listLesson[innerIndex];
       final lastIndex = (listLesson.length) - 1;
+      final isAfternoonLesson = hasAfternoon && innerIndex < indexSeparate;
+      final isGiangDay = widget.classType == ClassType.giangDay;
 
       return innerIndex == indexSeparate
           ? Container(
@@ -157,7 +164,9 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Tiết ${innerIndex < indexSeparate ? lesson.tietNum : lesson.tietNum! - 5}',
+                            hasAfternoon
+                                ? 'Tiết ${isAfternoonLesson ? lesson.tietNum : lesson.tietNum! - 5}'
+                                : 'Tiết ${lesson.tietNum}',
                             style: AppTextStyles.normal14(
                                 color: AppColors.black24),
                           ),
@@ -170,53 +179,57 @@ class _ScheduleTabsState extends State<ScheduleTabs>
                         ],
                       )),
                   Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              color: AppColors.brand600,
-                              borderRadius: BorderRadius.circular(14)),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                              lesson.subjectName ?? 'Tự học',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.semiBold14(
-                                  color: AppColors.black24),
-                            ),
-                            const SizedBox(height: 4),
-                            lesson.teacherName != null
-                                ? Text(
-                                    lesson.teacherId == teacherId
-                                        ? 'GVCN: ${lesson.teacherName}'
-                                        : 'GV: ${lesson.teacherName}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AppTextStyles.normal14(
-                                        color: AppColors.gray61),
-                                  )
-                                : const SizedBox(height: 16),
-                          ],
-                        )),
-                        // if (lesson?.subjectId != null)
-                        //   InkWell(
-                        //     onTap: () {
-                        //       widget.onViewExercise(
-                        //         startOfWeek.add(Duration(days: index)),
-                        //         lesson?.tietNum ?? 0,
-                        //       );
-                        //     },
-                        //     child: SvgPicture.asset('assets/icons/advice.svg'),
-                        //   ),
-                      ],
+                    child: IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            width: 4,
+                            decoration: BoxDecoration(
+                                color: AppColors.brand600,
+                                borderRadius: BorderRadius.circular(14)),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 4),
+                              Text(
+                                isGiangDay
+                                    ? 'Lớp: ${lesson.className}'
+                                    : lesson.subjectName ?? 'Tự học',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.semiBold14(
+                                    color: isGiangDay
+                                        ? AppColors.green600
+                                        : AppColors.black24),
+                              ),
+                              const SizedBox(height: 4),
+                              lesson.teacherName != null
+                                  ? Text(
+                                      isGiangDay
+                                          ? '${lesson.subjectName}'
+                                          : 'GV: ${lesson.teacherName}',
+                                      style: AppTextStyles.normal14(
+                                          color: AppColors.gray61),
+                                    )
+                                  : const SizedBox(height: 16),
+                            ],
+                          )),
+                          // if (lesson?.subjectId != null)
+                          //   InkWell(
+                          //     onTap: () {
+                          //       widget.onViewExercise(
+                          //         startOfWeek.add(Duration(days: index)),
+                          //         lesson?.tietNum ?? 0,
+                          //       );
+                          //     },
+                          //     child: SvgPicture.asset('assets/icons/advice.svg'),
+                          //   ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

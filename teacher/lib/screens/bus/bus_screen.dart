@@ -48,7 +48,7 @@ class _BusViewState extends State<BusView> {
         child: Column(
           children: [
             ScreenAppBar(
-              title: 'Lịch xe đưa đón',
+              title: 'Lịch xe đưa rước',
               canGoback: true,
               onBack: () {
                 context.pop();
@@ -118,7 +118,7 @@ class _BusViewState extends State<BusView> {
                               )
                             : const Center(
                                 child: EmptyScreen(
-                                    text: 'Bạn không có lịch xe đưa đón'),
+                                    text: 'Bạn không có lịch xe đưa rước'),
                               ),
                       ),
                     ),

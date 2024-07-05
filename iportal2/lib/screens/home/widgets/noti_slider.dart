@@ -97,7 +97,7 @@ class _NotiSliderState extends State<NotiSlider> {
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          height: 140,
+          height: 132.h,
           child: isEmptyNoti
               ? const EmptyNoti()
               : AppSkeleton(

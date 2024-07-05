@@ -33,32 +33,8 @@ class HomeAppBar extends StatelessWidget {
                     flex: 3,
                     child: Row(
                       children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.white,
-                            border: Border.all(
-                              color: AppColors.white,
-                              width: 2,
-                            ),
-                          ),
-                          child: ClipOval(
-                            child: FadeInImage.assetNetwork(
-                              placeholder: 'assets/images/default-user.png',
-                              image: urlImage,
-                              fit: BoxFit.cover,
-                              imageErrorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/images/default-user.png',
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
+                        CircleAvaImage(urlAva: urlImage),
+                        const SizedBox(width: 12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

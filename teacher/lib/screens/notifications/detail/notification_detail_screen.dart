@@ -6,12 +6,16 @@ import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
+import 'package:teacher/components/dialog/dialog_confirm_delete.dart';
 import 'package:teacher/screens/notifications/bloc/notification_bloc.dart';
 import 'package:teacher/screens/notifications/create/bloc/noti_create_bloc.dart';
 import 'package:teacher/screens/notifications/detail/bloc/noti_detail_bloc.dart';
 
 class NotiDetailScreen extends StatelessWidget {
-  const NotiDetailScreen({super.key, required this.id});
+  const NotiDetailScreen({
+    super.key,
+    required this.id,
+  });
 
   static const String routeName = '/noti-detail';
   final int id;
@@ -25,7 +29,9 @@ class NotiDetailScreen extends StatelessWidget {
 
     return BlocProvider.value(
       value: notiDetailBloc..add(NotificationFetchDetail(id: id)),
-      child: const NotiDetailView(),
+      child: NotiDetailView(
+        notiDetailBloc: notiDetailBloc,
+      ),
     );
   }
 }
@@ -33,79 +39,135 @@ class NotiDetailScreen extends StatelessWidget {
 class NotiDetailView extends StatelessWidget {
   const NotiDetailView({
     super.key,
+    required this.notiDetailBloc,
   });
+
+  final NotiDetailBloc notiDetailBloc;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotiDetailBloc, NotiDetailState>(
-      builder: (context, state) {
-        final notiDetail = state.notiDetail.notification;
-        final recipient = NotificationRecipient.values
-            .firstWhere((element) => element.value == notiDetail.entityType,
-                orElse: () => NotificationRecipient.all)
-            .name;
+    return BlocListener<NotiDetailBloc, NotiDetailState>(
+      listener: (context, state) {
+        if (state.status == NotificationStatus.deleteSuccess) {
+          context.pop(true);
+          SnackBarUtils.showFloatingSnackBar(
+              context, 'Xóa thông báo thành công');
+        }
+      },
+      child: BlocBuilder<NotiDetailBloc, NotiDetailState>(
+        builder: (context, state) {
+          final notiDetail = state.notiDetail.notification;
+          final recipient = NotificationRecipient.values
+              .firstWhere((element) => element.value == notiDetail.entityType,
+                  orElse: () => NotificationRecipient.all)
+              .name;
 
-        return Scaffold(
-          body: BackGroundContainer(
-            child: Column(
-              children: [
-                ScreenAppBar(
-                  title: 'Chi tiết thông báo',
-                  canGoback: true,
-                  onBack: () {
-                    context.pop();
-                  },
-                ),
-                Expanded(
-                    child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+          return Material(
+            child: BackGroundContainer(
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ScreenAppBar(
+                        title: 'Chi tiết thông báo',
+                        canGoback: true,
+                        onBack: () {
+                          context.pop();
+                        },
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return DialogConfirmDelete(
+                                title: 'Xác nhận xóa thông báo này',
+                                content: 'Thao tác này không thể hoàn tác',
+                                yesText: "Xác nhận",
+                                noText: "Đóng",
+                                onNo: () {
+                                  context.pop();
+                                },
+                                onYes: () {
+                                  notiDetailBloc.add(
+                                    NotificationDelete(id: notiDetail.id),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 20, top: 40),
+                          child: const Icon(
+                            Icons.delete_rounded,
+                            color: AppColors.white,
+                            size: 30,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  child: SingleChildScrollView(
-                    child: AppSkeleton(
-                      isLoading: state.status == NotificationStatus.loading,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          NotiContentItem(
-                            title: 'Tiêu đề',
-                            content: notiDetail.title,
-                          ),
-                          NotiContentItem(
-                            title: 'Nội dung thông báo',
-                            content: notiDetail.content,
-                          ),
-                          NotiContentItem(
-                            title: 'Lớp',
-                            content: state.notiDetail.pupils.isEmpty
-                                ? ''
-                                : state.notiDetail.pupils.first.className,
-                          ),
-                          NotiContentItem(
-                            title: 'Gửi đến',
-                            content: recipient,
-                          ),
-                          if (notiDetail.attachments.isNotEmpty)
-                            NotiAttachments(
-                                attachments: notiDetail.attachments),
-                          NotiPupilItem(pupils: state.notiDetail.pupils),
-                        ],
+                  Expanded(
+                      child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
                     ),
-                  ),
-                ))
-              ],
+                    child: AppSkeleton(
+                      isLoading: state.status == NotificationStatus.loading,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            NotiContentItem(
+                              title: 'Tiêu đề',
+                              content: notiDetail.title,
+                            ),
+                            NotiContentItem(
+                              title: 'Nội dung thông báo',
+                              content: notiDetail.content,
+                            ),
+                            NotiContentItem(
+                              title: 'Lớp',
+                              content: state.notiDetail.pupils.isEmpty
+                                  ? ''
+                                  : state.notiDetail.pupils.first.className,
+                            ),
+                            NotiContentItem(
+                              title: 'Gửi đến',
+                              content: recipient,
+                            ),
+                            if (notiDetail.attachments.isNotEmpty)
+                              Text(
+                                'Đính kèm (${notiDetail.attachments.length})',
+                                style: AppTextStyles.semiBold16(
+                                  color: AppColors.brand600,
+                                ),
+                              ),
+                            if (state.otherFiles.isNotEmpty)
+                              NotiFiles(attachments: state.otherFiles),
+                            if (state.imageFiles.isNotEmpty)
+                              NotiImages(attachments: state.imageFiles),
+                            NotiPupilItem(pupils: state.notiDetail.pupils),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ))
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -151,7 +213,7 @@ class NotiPupilItem extends StatelessWidget {
     required this.pupils,
   });
 
-  final List<PupilNoti> pupils;
+  final List<PupilInClass> pupils;
 
   @override
   Widget build(BuildContext context) {
@@ -176,17 +238,7 @@ class NotiPupilItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(child.urlImage.mobile)),
-                      shape: BoxShape.circle,
-                      color: AppColors.white,
-                      border: Border.all(color: AppColors.gray100, width: 2)),
-                ),
+                CircleAvaImage(urlAva: child.urlImage!.mobile),
                 const SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,25 +283,86 @@ class NotiPupilItem extends StatelessWidget {
   }
 }
 
-class NotiAttachments extends StatelessWidget {
-  const NotiAttachments({super.key, required this.attachments});
+class NotiFiles extends StatelessWidget {
+  const NotiFiles({super.key, required this.attachments});
+
+  final List<Attachment> attachments;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = SizeUtils.width;
+    final selectedFileW = List.generate(attachments.length, (index) {
+      final file = attachments[index];
+      final fileName = file.url.substring(file.url.length - 12);
+
+      return InkWell(
+        onTap: () {
+          launchUrl(
+            Uri.parse(file.url),
+            mode: LaunchMode.inAppBrowserView,
+          );
+        },
+        child: Container(
+            width: w / 2 - 20,
+            padding: const EdgeInsets.fromLTRB(4, 4, 4, 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: AppColors.gray100,
+              border: Border.all(
+                color: AppColors.gray100,
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.file_present_rounded,
+                  color: AppColors.brand600,
+                  size: 28,
+                ),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    fileName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.normal14(
+                      color: AppColors.brand600,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            )),
+      );
+    });
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: selectedFileW,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NotiImages extends StatelessWidget {
+  const NotiImages({super.key, required this.attachments});
 
   final List<Attachment> attachments;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 12, top: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Đính kèm (${attachments.length})',
-            style: AppTextStyles.semiBold16(
-              color: AppColors.brand600,
-            ),
-          ),
-          const SizedBox(height: 4),
           SizedBox(
             height: attachments.length < 4 ? 120 : 240,
             child: GridView.builder(
@@ -264,31 +377,13 @@ class NotiAttachments extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      // CustomImageWidgetProvider customImageProvider =
-                      //     CustomImageWidgetProvider(
-                      //   imageUrls: attachments.map((e) => e.url).toList(),
-                      // initialIndex: index,
-                      // );
-
                       CustomImageWidgetProvider customImageProvider =
                           CustomImageWidgetProvider(
-                        imageUrls: [
-                          "https://picsum.photos/id/1005/4912/3264",
-                          "https://test-iportal.nhg.vn/upload/notification/2024/06/10/ut8Ckiy3IYRgHvUQosDaJchNcdrzoz7dggGyiFSU.jpg",
-                          "https://test-iportal.nhg.vn/upload/notification/2024/06/10/PrspAzorItekFnElHLoCbhahjYoOUSdUeL7IYXwQ.jpg",
-                          "https://test-iportal.nhg.vn/upload/notification/2024/06/10/dBBljg5Os8SzBfD8WlJZppHnAEGPWvAZzclNutCI.jpg",
-                        ].toList(),
+                        imageUrls: attachments.map((e) => e.url).toList(),
                         initialIndex: index,
                       );
-                      showImageViewerPager(context, customImageProvider);
 
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (_) => DialogScaleAnimated(
-                      //       dialogContent: ViewSingleImage(
-                      //     url: attachments[index].url,
-                      //   )),
-                      // );
+                      showImageViewerPager(context, customImageProvider);
                     },
                     child: Container(
                       height: 100,

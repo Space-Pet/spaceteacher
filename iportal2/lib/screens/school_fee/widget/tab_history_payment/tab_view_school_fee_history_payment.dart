@@ -46,7 +46,7 @@ class _TabViewSchoolFeeHistoryPayment
                 onRefresh: () async {
                   context
                       .read<SchoolFeeBloc>()
-                      .add( FetchSchoolFeeHistory(learnYear: state.currentYearState?.learnYear),);
+                      .add(FetchSchoolFeeHistory(learnYear: state.currentYearState?.learnYear),);
                 },
                 child: isNullOrEmpty(listData)
                     ? const Center(

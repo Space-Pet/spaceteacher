@@ -101,7 +101,6 @@ class ShowBottomSheetPhone {
                   content: phoneBook.fullName,
                   title: 'Họ & tên học sinh',
                   isShowDottedLine: false,
-                  isHighlightContent: true,
                 ),
                 RowContent(
                   content: phoneBook.userKey,
@@ -158,7 +157,6 @@ class ShowBottomSheetPhone {
         RowContent(
           content: phoneBook.parentName,
           title: 'Họ & tên mẹ',
-          isHighlightContent: true,
         ),
         RowContent(
           content: phoneBook.phoneNumber,

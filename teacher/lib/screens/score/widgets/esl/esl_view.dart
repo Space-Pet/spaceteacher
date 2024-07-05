@@ -6,10 +6,10 @@ import 'package:teacher/screens/score/widgets/score_card_other/score_card_subjec
 class EslView extends StatefulWidget {
   const EslView({
     super.key,
-    this.eslScore,
+    required this.eslScore,
   });
 
-  final List<EslScoreData>? eslScore;
+  final List<EslScoreData> eslScore;
 
   @override
   State<EslView> createState() => _EslView();
@@ -32,29 +32,29 @@ class _EslView extends State<EslView> {
 
   @override
   Widget build(BuildContext context) {
-    // final eslScore = widget.eslScore;
+    final eslScore = widget.eslScore;
+    print('dai: ${eslScore.length}');
+    final listEslId = eslScore
+        .map((e) => e.subjectEsl.subjectEslId)
+        .toList()
+        .toSet()
+        .toList();
 
-    // final listEslId = eslScore!
-    //     .map((e) => e.subjectEsl.subjectEslId)
-    //     .toList()
-    //     .toSet()
-    //     .toList();
+    final listEslW = List.generate(listEslId.length, (index) {
+      final eslId = listEslId[index];
+      final dataById = eslScore
+          .where((element) => element.subjectEsl.subjectEslId == eslId)
+          .toList();
 
-    final listEslW = List.generate(5, (index) {
-      // final eslId = listEslId[index];
-      // final dataById = eslScore!
-      //     .where((element) => element.subjectEsl.subjectEslId == eslId)
-      //     .toList();
-
-      // final subjectName = dataById.first.subjectEsl.subjectEslName;
+      final subjectName = dataById.first.subjectEsl.subjectEslName;
 
       return EslCard(
-        subjectName: 'IELTS',
-        //coreDataList: dataById,
+        subjectName: subjectName,
+        coreDataList: dataById,
         isExpanded: expandedIndex == index,
         onExpansionChanged: () => _handleExpansion(index),
         index: index,
-        lastIndex: 5 - 1,
+        lastIndex: listEslId.length - 1,
       );
     });
 

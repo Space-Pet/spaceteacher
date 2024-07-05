@@ -165,7 +165,7 @@ class _BottomSheetFeatureState extends State<BottomSheetFeature> {
           break;
 
         case FeatureKey.observation:
-          mainNavKey.currentContext?.push(const ObservationSchedule());
+          homeNavigatorKey.currentContext?.push(const ObservationSchedule());
 
         default:
       }

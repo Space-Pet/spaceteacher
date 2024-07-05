@@ -11,3 +11,9 @@ class GalleryUpdatePinnedAlbum extends GalleryEvent {
 
   GalleryUpdatePinnedAlbum({required this.albumId});
 }
+
+class GalleryDelete extends GalleryEvent {
+  final int albumId;
+
+  GalleryDelete({required this.albumId});
+}

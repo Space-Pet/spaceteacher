@@ -69,31 +69,29 @@ class _InstructionNotebookState extends State<InstructionNotebook> {
                         mode: LaunchMode.inAppBrowserView,
                       );
                     },
-                    child: Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            lesson.subjectName,
-                            style: AppTextStyles.semiBold14(
-                                color: AppColors.black24),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              SvgPicture.asset('assets/icons/paperclip.svg'),
-                              const SizedBox(width: 4),
-                              Text(
-                                fileName,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.normal12(
-                                    color: AppColors.brand600),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          lesson.subjectName,
+                          style: AppTextStyles.semiBold14(
+                              color: AppColors.black24),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            SvgPicture.asset('assets/icons/paperclip.svg'),
+                            const SizedBox(width: 4),
+                            Text(
+                              fileName,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.normal12(
+                                  color: AppColors.brand600),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],

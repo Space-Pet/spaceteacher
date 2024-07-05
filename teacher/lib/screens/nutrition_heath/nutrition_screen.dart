@@ -112,7 +112,6 @@ class NutritionScreenState extends State<NutritionScreen> {
                                           ),
                                           SelectDateNutrition(
                                             onDatePicked: (date) {
-                                              print('date: $date');
                                               context.read<NutritionBloc>().add(
                                                   SelectDateNutri(
                                                       selectDate: date));

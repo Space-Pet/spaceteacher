@@ -70,16 +70,18 @@ class _LearnYearWidgetButtonState extends State<LearnYearWidgetButton> {
                   builder: (ctx) {
                     return Dialog(
                       alignment: Alignment.center,
-                      insetPadding: const EdgeInsets.all(20),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Chọn năm học', style: AppTextStyles.bold16()),
-                          Column(
-                            children: List.generate(
-                              learnYears.length,
-                              (index) {
-                                return ListTile(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('Chọn năm học',
+                                style: AppTextStyles.semiBold18()),
+                            Column(
+                              children: List.generate(
+                                learnYears.length,
+                                (index) {
+                                  return ListTile(
                                     title:
                                         Text(learnYears[index].learnYear ?? ''),
                                     onTap: () {
@@ -96,14 +98,16 @@ class _LearnYearWidgetButtonState extends State<LearnYearWidgetButton> {
                                     trailing: currentYearTXT ==
                                             learnYears[index].learnYear
                                         ? const Icon(
-                                            Icons.check,
-                                            color: AppColors.brand500,
+                                            Icons.check_circle,
+                                            color: AppColors.brand600,
                                           )
-                                        : null);
-                              },
+                                        : const SizedBox(),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -126,7 +130,7 @@ class _LearnYearWidgetButtonState extends State<LearnYearWidgetButton> {
                   border: Border.all(
                     color: AppColors.white,
                   ),
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   children: [

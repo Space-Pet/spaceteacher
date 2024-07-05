@@ -6,33 +6,28 @@ import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/app_bar/app_bar.dart';
 import 'package:iportal2/components/back_ground_container.dart';
 import 'package:iportal2/components/custom_refresh.dart';
-import 'package:iportal2/screens/authentication/utilites/dialog_utils.dart';
 import 'package:iportal2/screens/message/bloc/message_bloc.dart';
-import 'package:iportal2/screens/message/list_new_messages.dart';
-import 'package:iportal2/screens/message/widgets/list_message.dart';
+import 'package:iportal2/screens/message/screens/new_conversation.dart';
+import 'package:iportal2/screens/message/screens/conversation_list.dart';
 import 'package:iportal2/components/textfield/input_text.dart';
 
 class MessageScreen extends StatelessWidget {
   const MessageScreen({super.key});
   static const String routeName = '/message_screen';
-  
+
   @override
   Widget build(BuildContext context) {
     final messageBloc = context.read<MessageBloc>();
-    messageBloc.add(GetListMessage());
+    messageBloc.add(GetConversationList());
 
     return BlocListener<MessageBloc, MessageState>(
         listenWhen: (previous, current) {
           return previous.messageStatus != current.messageStatus;
         },
         listener: (context, state) {
-          if (state.messageStatus == MessageStatus.loadingDelete) {
-            LoadingDialog.show(context);
-          } else if (state.messageStatus == MessageStatus.successDelete) {
-            messageBloc.add(GetListMessageResert());
-            LoadingDialog.hide(context);
-          } else if (state.messageStatus == MessageStatus.success) {
-          } else if (state.messageStatus == MessageStatus.loading) {}
+          if (state.messageStatus == MessageStatus.successDeleteConservation) {
+            messageBloc.add(GetConversationList());
+          }
         },
         child: const MessageView());
   }
@@ -52,85 +47,87 @@ class _MessageViewState extends State<MessageView> {
   Widget build(BuildContext context) {
     return BlocBuilder<MessageBloc, MessageState>(
       builder: (context, state) {
-        final isLoading = state.messageStatus == MessageStatus.loading;
-        final message = state.messages;
+        final isLoading =
+            state.messageStatus == MessageStatus.loadingConservationList;
+        final conservationList = state.conservationList;
 
-        final filteredChatRooms = message.where((chatRoom) {
+        final filteredConservationList = conservationList.where((chatRoom) {
           final searchText = search.toLowerCase();
           return chatRoom.fullName?.toLowerCase().contains(searchText) ?? false;
         }).toList();
 
         return Scaffold(
           body: BackGroundContainer(
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ScreenAppBar(
-                    title: 'Tin nhắn nội bộ',
-                    canGoback: true,
-                    onBack: () {
-                      context.pop();
-                    },
-                    iconRight: Assets.icons.addMessage,
-                    onRight: () {
-                      mainNavKey.currentContext!.pushNamed(
-                          routeName: ListNewMessagesScreen.routeName);
-                    },
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding:
-                          const EdgeInsets.only(left: 16, right: 16, top: 8),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ScreenAppBar(
+                  title: 'Tin nhắn nội bộ',
+                  canGoback: true,
+                  onBack: () {
+                    context.pop();
+                  },
+                  iconRight: Assets.icons.addMessage,
+                  onRight: () {
+                    mainNavKey.currentContext!
+                        .pushNamed(routeName: NewConversation.routeName);
+                  },
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      child: ClipRRect(
-                        borderRadius: AppRadius.rounded10,
-                        child: CustomRefresh(
-                          onRefresh: () async {
-                            context
-                                .read<MessageBloc>()
-                                .add(GetListMessageResert());
-                          },
-                          child: AppSkeleton(
-                            isLoading: isLoading,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  child: TitleAndInputText(
-                                    obscureText: true,
-                                    hintText: 'Tìm kiếm',
-                                    onChanged: (value) {
-                                      setState(() {
-                                        search = value;
-                                      });
-                                    },
-                                    prefixIcon: Assets.images.search.image(),
-                                  ),
-                                ),
-                                if (filteredChatRooms.isNotEmpty)
-                                  ListMessage(chatRooms: filteredChatRooms)
-                                else
-                                  _buildEmptyState(search),
-                              ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: AppRadius.rounded10,
+                      child: CustomRefresh(
+                        onRefresh: () async {
+                          context
+                              .read<MessageBloc>()
+                              .add(GetConversationList());
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: TitleAndInputText(
+                                obscureText: true,
+                                hintText: 'Tìm kiếm',
+                                onChanged: (value) {
+                                  setState(() {
+                                    search = value;
+                                  });
+                                },
+                                prefixIcon: Assets.images.search.image(),
+                              ),
                             ),
-                          ),
+                            Expanded(
+                              child: AppSkeleton(
+                                isLoading: isLoading,
+                                child: conservationList.isEmpty
+                                    ? const EmptyScreen(
+                                        text: 'Không có tin nhắn')
+                                    : filteredConservationList.isEmpty
+                                        ? _buildEmptyState(search)
+                                        : ConversationList(
+                                            conservations:
+                                                filteredConservationList,
+                                          ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
         );

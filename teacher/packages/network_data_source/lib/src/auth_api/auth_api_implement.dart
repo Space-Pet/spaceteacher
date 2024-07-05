@@ -48,7 +48,7 @@ class AuthApi extends AbstractAuthApi {
           'login_app': 0,
         },
       );
-      
+
       final userToken = data['data']['access_token'] as String;
       _client.updateAccessToken(userToken);
 
@@ -66,7 +66,6 @@ class AuthApi extends AbstractAuthApi {
     try {
       final data = await _client.doHttpPost(url: '/api/v1/logout');
       final isSuccess = data['status'] == 'success';
-      print('isSuccess: $isSuccess');
 
       if (true) {
         await _client.clearToken();

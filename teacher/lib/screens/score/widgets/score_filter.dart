@@ -7,29 +7,33 @@ import 'package:teacher/screens/score/edit_score_screen.dart';
 class ScoreFilter extends StatelessWidget {
   const ScoreFilter({
     super.key,
+    required this.state,
     required this.onSelectedOption,
     required this.selectedOption,
-    required this.isPrimary,
     required this.semesterList,
+    required this.programList, // Accept programList in constructor
   });
 
-  final bool isPrimary;
   final ViewScoreSelectedParam selectedOption;
   final void Function(ViewScoreSelectedParam) onSelectedOption;
-  final List<Semester> semesterList; // Add this line to accept semester list
+  final List<Semester> semesterList;
+  final List<ScoreProgram> programList;
+  final ScoreState state;
 
   void onUpdateTerm(Semester semester) {
     final newParam = selectedOption.copyWith(
       selectedTerm: semester.title,
       valueTerm: semester.value,
+      selectedScoreType: state.isMOET
     );
     onSelectedOption(newParam);
-    print(semester.value); // Print the value of the selected semester
+    print(semester.value);
   }
 
-  void onUpdateScoreType(String value) {
+  void onUpdateScoreType(ScoreProgram value) {
     final newParam = selectedOption.copyWith(
-      selectedScoreType: value,
+      selectedScoreType: value.ctName,
+      valueTerm: state.termType,
     );
     onSelectedOption(newParam);
   }
@@ -39,6 +43,8 @@ class ScoreFilter extends StatelessWidget {
     // Ensure no duplicates in the optionList
     final uniqueSemesterNames =
         semesterList.map((e) => e.title).toSet().toList();
+    final uniqueProgramNames =
+        programList.map((e) => e.ctName).toSet().toList();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -47,9 +53,14 @@ class ScoreFilter extends StatelessWidget {
         children: [
           DropdownButtonComponent(
             selectedOption: selectedOption.selectedScoreType,
-            onUpdateOption: onUpdateScoreType,
+            onUpdateOption: (value) {
+              final selectProgram =
+                  programList.firstWhere((test) => test.ctName == value);
+              onUpdateScoreType(selectProgram);
+            },
             hint: 'Chọn chương trình học',
-            optionList: ScoreType.values.map((e) => e.text()).toList(),
+            optionList:
+                uniqueProgramNames, // Use programList instead of ScoreType
           ),
           const SizedBox(height: 8),
           DropdownButtonComponent(
@@ -57,6 +68,7 @@ class ScoreFilter extends StatelessWidget {
             onUpdateOption: (value) {
               final selectedSemester = semesterList
                   .firstWhere((semester) => semester.title == value);
+
               onUpdateTerm(selectedSemester);
             },
             hint: 'Chọn học kỳ',

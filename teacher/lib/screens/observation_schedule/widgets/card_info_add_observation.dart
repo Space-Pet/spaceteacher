@@ -35,32 +35,8 @@ class CardInfoAddObservation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              height: 40,
-              width: 40,
-              margin: const EdgeInsets.only(right: 12),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.white,
-                border: Border.all(
-                  color: AppColors.white,
-                  width: 2,
-                ),
-              ),
-              child: ClipOval(
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/images/default-user.png',
-                  image: teacherInfo.teacherImg ?? '',
-                  fit: BoxFit.cover,
-                  imageErrorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      'assets/images/default-user.png',
-                      fit: BoxFit.cover,
-                    );
-                  },
-                ),
-              ),
-            ),
+            CircleAvaImage(urlAva: teacherInfo.teacherImg ?? ''),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -86,6 +86,8 @@ class NutritionBloc extends Bloc<NutritionEvent, NutritionState> {
     emit(state.copyWith(nutritionStatus: NutritionStatus.loading));
     final data = await appFetchApiRepo.getPhoneBookStudent(
       classId: state.userData.lopChuNhiem.id,
+      schoolId: 125,
+      schoolBrand: 'uka',
     );
 
     emit(state.copyWith(

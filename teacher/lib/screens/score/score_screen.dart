@@ -4,29 +4,44 @@ import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
 import 'package:teacher/components/app_bar/app_bar.dart';
 import 'package:teacher/components/back_ground_container.dart';
-import 'package:teacher/components/buttons/rounded_button.dart';
 import 'package:teacher/components/dropdown/dropdown.dart';
-import 'package:teacher/resources/assets.gen.dart';
 import 'package:teacher/screens/score/bloc/score_bloc.dart';
 import 'package:teacher/screens/score/edit_score_screen.dart';
 import 'package:repository/repository.dart';
-import 'package:teacher/screens/score/views/class_score/class_score_screen.dart';
+import 'package:teacher/screens/score/views/bloc/class_score_bloc.dart';
+import 'package:teacher/screens/score/views/class_score/primary_conduct.dart/class_score_conduct_screen.dart';
+import 'package:teacher/screens/score/views/class_score/score_esl/class_score_esl_screen.dart';
+import 'package:teacher/screens/score/views/class_score/class_score_moet_screen.dart';
 
 class ScoreScreen extends StatelessWidget {
   const ScoreScreen({super.key});
+
   static const String routeName = 'score';
   @override
   Widget build(BuildContext context) {
     final scoreBloc = ScoreBloc(
+      userRepository: context.read<UserRepository>(),
       appFetchApiRepo: context.read<AppFetchApiRepository>(),
       currentUserBloc: context.read<CurrentUserBloc>(),
     );
-
+    final now = DateTime.now().year;
+    scoreBloc.add(GetLearnYear());
+    scoreBloc.add(GetClassLeader(learnYear: '${now - 1}-${now}'));
     scoreBloc.add(ClassListFetched());
-    scoreBloc.add(ScoreFilterSemester());
+    scoreBloc.add(GetTeacherDetail());
+
     return BlocProvider.value(
       value: scoreBloc,
-      child: const ScoreView(),
+      child: BlocListener<ScoreBloc, ScoreState>(
+        listener: (context, state) {
+          if (state.status == ScoreStatus.successClassLeader) {
+            scoreBloc.add(GetListStudent(
+                classId:
+                    int.parse(state.classLeader.classCnData.first.classId)));
+          }
+        },
+        child: const ScoreView(),
+      ),
     );
   }
 }
@@ -63,28 +78,30 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
       final scoreBloc = context.read<ScoreBloc>();
       final scoreData = state.moetScore;
       final listClassScore = state.listClassScore;
+      final listStudent = state.phoneBookStudent;
+      final isLoadingStudent =
+          state.status == ScoreStatus.loadingGetListStudent;
+      final now = DateTime.now().year;
 
-      final khoiLevel = int.parse('');
-      final isPrimary = khoiLevel < 6;
-
-      void onUpdateYear(String newYear) {
-        scoreBloc.add(ScoreFilterChange(
-          ViewScoreSelectedParam(
-            selectedScoreType: state.scoreType,
-            selectedTerm: state.semester.first.title,
-            selectedYear: newYear,
-          ),
-        ));
-      }
-
+      String learnYear = '${now - 1}-$now';
       return BackGroundContainer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ScoreAppbar(
-              scoreData: scoreData,
-              selectedOption: state.txtLearnYear,
-              onUpdateYear: onUpdateYear,
+            AppSkeleton(
+              isLoading: state.status == ScoreStatus.loadingLearnYear,
+              child: ScoreAppbar(
+                learnYear: state.learnYear,
+                scoreData: scoreData,
+                selectedOption: learnYear,
+                onUpdateYear: (value) {
+                  learnYear = value;
+                  context
+                      .read<ScoreBloc>()
+                      .add(SelectYear(txtLearnYear: value));
+                  print('object: $value');
+                },
+              ),
             ),
             Expanded(
               child: Container(
@@ -116,7 +133,7 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
                             labelColor: AppColors.white,
                             dividerColor: Colors.transparent,
                             labelPadding: EdgeInsets.zero,
-                            indicatorPadding: const EdgeInsets.only(top: -3.5),
+                            indicatorPadding: const EdgeInsets.only(top: -2.5),
                             indicatorSize: TabBarIndicatorSize.label,
                             labelStyle: AppTextStyles.semiBold16(
                               color: AppColors.white,
@@ -156,83 +173,81 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
                         child: TabBarView(
                           controller: _tabController,
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: Container(
-                                padding: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20),
-                                  ),
-                                  border: Border.all(
-                                    color: AppColors.brand600,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: ListView.builder(
+                            AppSkeleton(
+                              isLoading: isLoadingStudent,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Container(
                                   padding: EdgeInsets.zero,
-                                  itemCount: 20,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 8),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          context.push(EditScoreScreen());
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                const CircleAvatar(
-                                                  radius: 25,
-                                                  backgroundColor:
-                                                      AppColors.amberA200,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        'Mel Tran',
-                                                        style: AppTextStyles
-                                                            .normal14(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: AppColors
-                                                              .brand600,
-                                                        ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.brand600,
+                                      width: 0.5,
+                                    ),
+                                  ),
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    itemCount: listStudent.length,
+                                    itemBuilder: (context, index) {
+                                      final item = listStudent[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 8),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            context.push(EditScoreScreen(
+                                              phoneBookStudent: item,
+                                              learnYear: learnYear,
+                                            ));
+                                          },
+                                          child: Row(
+                                            children: [
+                                              const CircleAvatar(
+                                                radius: 25,
+                                                backgroundColor:
+                                                    AppColors.amberA200,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      item.fullName,
+                                                      style: AppTextStyles
+                                                          .normal14(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            AppColors.brand600,
                                                       ),
-                                                      Text(
-                                                        'GHJKH77834789342',
-                                                        style: AppTextStyles
-                                                            .normal12(
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: AppColors
-                                                              .secondary,
-                                                        ),
+                                                    ),
+                                                    Text(
+                                                      item.pupilId.toString(),
+                                                      style: AppTextStyles
+                                                          .normal12(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            AppColors.secondary,
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                            Assets.icons.vector.svg()
-                                          ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -248,7 +263,7 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
                                   ),
                                   border: Border.all(
                                     color: AppColors.brand600,
-                                    width: 1.5,
+                                    width: 0.5,
                                   ),
                                 ),
                                 child: BlocBuilder<ScoreBloc, ScoreState>(
@@ -258,60 +273,179 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : ListView.builder(
-                                            padding: EdgeInsets.zero,
-                                            itemCount: listClassScore.length,
-                                            itemBuilder: (context, index) {
-                                              final item =
-                                                  listClassScore[index];
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  context.push(
-                                                    ClassScoreScreen(
-                                                      listClassScore: item,
-                                                    ),
-                                                  );
-                                                },
-                                                child: Padding(
+                                        : SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
                                                   padding:
-                                                      const EdgeInsets.all(8),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      color: AppColors.white,
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 8,
-                                                                  right: 4),
-                                                          child: Text(
-                                                            item.classTitle,
-                                                            style: AppTextStyles
-                                                                .normal14(
-                                                              color: AppColors
-                                                                  .gray700,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          item.titel,
-                                                          style: AppTextStyles
-                                                              .normal14(
-                                                                  color: AppColors
-                                                                      .gray400),
-                                                        ),
-                                                      ],
+                                                      const EdgeInsets.only(
+                                                          left: 16, top: 8),
+                                                  child: Text(
+                                                    'Nhập điểm',
+                                                    style:
+                                                        AppTextStyles.normal16(
+                                                      color: AppColors.brand600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
-                                              );
-                                            },
+                                                SingleChildScrollView(
+                                                  padding: EdgeInsets.zero,
+                                                  child: Column(
+                                                    children: listClassScore
+                                                        .map((item) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          if (item.value ==
+                                                              'esl') {
+                                                            showModalBottomSheet(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  MarkTypeSelection(
+                                                                markType:
+                                                                    MarkTypeColumn
+                                                                        .fakeDataESL(),
+                                                                onSelect:
+                                                                    (value) {
+                                                                  context.push(
+                                                                    ClassScoreESLScreen(
+                                                                      markTypeColumn:
+                                                                          value,
+                                                                      learnYear:
+                                                                          learnYear,
+                                                                      listClassScore:
+                                                                          item,
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            context.push(
+                                                              ClassScoreMoetScreen(
+                                                                learnYear:
+                                                                    learnYear,
+                                                                listClassScore:
+                                                                    item,
+                                                              ),
+                                                            );
+                                                          }
+                                                        },
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              color: AppColors
+                                                                  .white,
+                                                            ),
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          left:
+                                                                              8,
+                                                                          right:
+                                                                              4),
+                                                                  child:
+                                                                      Expanded(
+                                                                    child: Text(
+                                                                      item.titel,
+                                                                      style: AppTextStyles.normal14(
+                                                                          color:
+                                                                              AppColors.gray400),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }).toList(),
+                                                  ),
+                                                ),
+                                                if (context
+                                                        .read<CurrentUserBloc>()
+                                                        .state
+                                                        .user
+                                                        .cap_dao_tao
+                                                        .id ==
+                                                    'C_003')
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 16,
+                                                                top: 8),
+                                                        child: Text(
+                                                          'Nhập hạnh kiểm',
+                                                          style: AppTextStyles
+                                                              .normal16(
+                                                            color: AppColors
+                                                                .brand600,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 16,
+                                                                top: 8),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            context.push(
+                                                              ClassScoreConductScreen(
+                                                                listClassLeader:
+                                                                    state
+                                                                        .classLeader,
+                                                                phoneBookStudent:
+                                                                    listStudent,
+                                                                learnYear:
+                                                                    learnYear,
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Text(
+                                                            state
+                                                                .classLeader
+                                                                .classCnData
+                                                                .first
+                                                                .className,
+                                                            style: AppTextStyles
+                                                                .normal14(
+                                                              color: AppColors
+                                                                  .brand600,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              ],
+                                            ),
                                           );
                                   },
                                 ),
@@ -320,26 +454,6 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 16),
-                        child: RoundedButton(
-                          onTap: () {},
-                          borderRadius: 70,
-                          buttonColor: AppColors.primaryRedColor,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 10,
-                          ),
-                          icon: Assets.icons.editProfile
-                              .svg(color: AppColors.white, height: 24),
-                          child: Text(
-                            'Nhập điểm',
-                            style: AppTextStyles.semiBold16(
-                                color: AppColors.white),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -353,43 +467,105 @@ class _ScoreViewState extends State<ScoreView> with TickerProviderStateMixin {
 }
 
 class ScoreAppbar extends StatelessWidget {
-  const ScoreAppbar({
+  ScoreAppbar({
     super.key,
     required this.scoreData,
     required this.selectedOption,
     required this.onUpdateYear,
+    required this.learnYear,
   });
 
+  final LearnYear learnYear;
   final ScoreModel scoreData;
-  final String selectedOption;
+  String selectedOption;
   final void Function(String newYear) onUpdateYear;
+
+  void _showYearPicker(BuildContext context) {
+    final now = DateTime.now().year;
+    final years = [
+      learnYear.preLearnYear,
+      learnYear.currentLearnYear,
+      learnYear.nextLearnYear
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 200,
+          child: Column(
+            children: [
+              ListTile(
+                title: const Text('Chọn năm học'),
+                trailing: IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: years.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(years[index]),
+                      onTap: () {
+                        onUpdateYear(years[index]);
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: ScreenAppBar(
-            title: 'Xem điểm',
-            canGoback: true,
-            onBack: () {
-              context.pop();
-            },
+    return BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
+      final txtLearnYear = state.txtLearnYear;
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: ScreenAppBar(
+              title: 'Xem điểm',
+              canGoback: true,
+              onBack: () {
+                context.pop();
+              },
+            ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 28, right: 16),
-          width: 130,
-          child: DropdownButtonComponent(
-            selectedOption: selectedOption,
-            onUpdateOption: onUpdateYear,
-            hint: 'Chọn năm học',
-            optionList: [],
-            isSelectYear: true,
+          Container(
+            margin: const EdgeInsets.only(top: 20, right: 16),
+            child: GestureDetector(
+              onTap: () => _showYearPicker(context),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.gray400),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      txtLearnYear,
+                      style: AppTextStyles.normal14(color: AppColors.gray600),
+                    ),
+                    const Icon(Icons.arrow_drop_down, color: AppColors.gray600),
+                  ],
+                ),
+              ),
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }

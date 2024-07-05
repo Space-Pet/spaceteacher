@@ -48,7 +48,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     final prgramListData = await appFetchApiRepo.getProgramList(
       userKey: activeChild.user_key,
-      // userKey: '02033200186',
       txtYear: state.txtLearnYear,
     );
 
@@ -88,14 +87,10 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     final scoreTypeMoetData = await appFetchApiRepo.getMoetTypeScore(
       userKey: currentUserBloc.state.activeChild.user_key,
-      // userKey: '0563180077',
-      // userKey: '02033200186',
       txtYear: state.txtLearnYear,
       txtHocKy: state.txtHocKy.getValue(),
       ctId: state.scoreProgram.ctId,
     );
-
-    await Future.delayed(const Duration(seconds: 5));
 
     emit(
       state.copyWith(
@@ -109,7 +104,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       ScoreFetchMoetAverage event, Emitter<ScoreState> emit) async {
     final moetAverage = await appFetchApiRepo.getMoetAverage(
       userKey: currentUserBloc.state.activeChild.user_key,
-      // userKey: '0563180077',
       txtYear: state.txtLearnYear,
       txtHocKy: state.txtHocKy.getValue(),
     );
@@ -121,7 +115,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       ScoreFetchPrimaryConduct event, Emitter<ScoreState> emit) async {
     final conductData = await appFetchApiRepo.getPrimaryConduct(
       userKey: currentUserBloc.state.activeChild.user_key,
-      // userKey: '02033200186',
       txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
       hkTihValue: state.txtTihHocKy.getValue().toString(),
@@ -136,7 +129,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
 
     final scoreData = await appFetchApiRepo.getEslScore(
       userKey: currentUserBloc.state.activeChild.user_key,
-      // userKey: '0253220010',
       txtHocKy: state.txtHocKy.getValue(),
       txtYear: state.txtLearnYear,
     );

@@ -168,29 +168,53 @@ class ViewReport extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Tên biểu mẫu',
-                                        style: AppTextStyles.normal14(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w600,
+                                      RichText(
+                                        text: TextSpan(
+                                          style: AppTextStyles.normal14(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.black,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: 'Tên biểu mẫu: ',
+                                              style: AppTextStyles.normal14(
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: item.title,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Text(
-                                        item.title,
-                                        overflow: TextOverflow
-                                            .ellipsis, // Truncate text if too long
-                                        maxLines: 5, // Limit text to one line
-                                        style: AppTextStyles.normal14(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w400,
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          style: AppTextStyles.normal14(
+                                            fontWeight: FontWeight.w400,
+                                            color: AppColors.black,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: 'Mô tả: ',
+                                              style: AppTextStyles.normal14(
+                                                fontWeight: FontWeight.w600,
+                                                color: AppColors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: item.description,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -276,48 +300,25 @@ class ViewComment extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  context.push(
-                    AddPreScoreScreen(
-                      phoneBookStudent: listStudent,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(6),
-                  backgroundColor: const Color(0xFF9C292E),
+          child: ElevatedButton(
+            onPressed: () {
+              context.push(
+                AddPreScoreScreen(
+                  phoneBookStudent: listStudent,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 5, bottom: 5),
-                  child: Text(
-                    'Nhập nhận xét',
-                    style: AppTextStyles.semiBold14(color: Colors.white),
-                  ),
-                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(6),
+              backgroundColor: const Color(0xFF9C292E),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
+              child: Text(
+                'Nhập nhận xét',
+                style: AppTextStyles.semiBold14(color: Colors.white),
               ),
-              const SizedBox(
-                width: 16,
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(6),
-                    backgroundColor: Colors.white),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 5, bottom: 5),
-                  child: Text(
-                    'Nhập báo cáo',
-                    style: AppTextStyles.semiBold14(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ],

@@ -1,23 +1,22 @@
-import 'package:core/data/models/models.dart';
 import 'package:core/presentation/screens/domain/domain_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iportal2/screens/authentication/domain/domain_screen.dart';
+import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/bus/bus_screen.dart';
+import 'package:iportal2/screens/comment/comment_screen.dart';
 import 'package:iportal2/screens/exercise_notice/exercise_screen.dart';
 import 'package:iportal2/screens/fee_plan/fee_plan_screen.dart';
 import 'package:iportal2/screens/gallery/gallery_screen.dart';
 import 'package:iportal2/screens/home/home_screen.dart';
 import 'package:iportal2/screens/leave/leave_application_screen.dart';
 import 'package:iportal2/screens/leave/on_leave_screen.dart';
-import 'package:iportal2/screens/authentication/login/view/login_screen.dart';
 import 'package:iportal2/screens/menu/menu_screen.dart';
-import 'package:iportal2/screens/message/chat_room.dart';
-import 'package:iportal2/screens/message/list_new_messages.dart';
+import 'package:iportal2/screens/message/screens/conversation_detail.dart';
+import 'package:iportal2/screens/message/screens/new_conversation.dart';
 import 'package:iportal2/screens/message/message_screen.dart';
 import 'package:iportal2/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:iportal2/screens/nutrition_heath/nutrition_screen.dart';
 import 'package:iportal2/screens/phone_book/phone_book_screen.dart';
-import 'package:iportal2/screens/comment/comment_screen.dart';
 import 'package:iportal2/screens/register_notebook/register_notebook_screen.dart';
 import 'package:iportal2/screens/score/score_screen.dart';
 import 'package:iportal2/screens/splash/loading_screen.dart';
@@ -74,15 +73,23 @@ class CustomRouter {
           routeName: RegisterNoteBoookScreen.routeName,
         );
 
-      case ChatRoomScreen.routeName:
+      case ConversationDetail.routeName:
         final arguments = settings.arguments as Map<String, dynamic>;
-        final message = arguments['message'] as Message;
+        final conversationId = arguments['conversationId'] as String;
+        final recipientId = arguments['recipientId'] as String;
+        final isGetById = arguments['isGetById'] as bool;
+        final fullName = arguments['fullName'] as String?;
+        final urlImage = arguments['urlImage'] as String?;
 
         return transitionAnimation(
-          child: ChatRoomScreen(
-            messageChatRoom: message,
+          child: ConversationDetail(
+            conversationId: conversationId,
+            recipientId: recipientId,
+            isGetById: isGetById,
+            fullName: fullName,
+            urlImage: urlImage,
           ),
-          routeName: ChatRoomScreen.routeName,
+          routeName: ConversationDetail.routeName,
         );
 
       case OnLeaveScreen.routeName:
@@ -103,10 +110,10 @@ class CustomRouter {
           routeName: MessageScreen.routeName,
         );
 
-      case ListNewMessagesScreen.routeName:
+      case NewConversation.routeName:
         return transitionAnimation(
-          child: const ListNewMessagesScreen(),
-          routeName: ListNewMessagesScreen.routeName,
+          child: const NewConversation(),
+          routeName: NewConversation.routeName,
         );
 
       case LeaveApplicationScreen.routeName:

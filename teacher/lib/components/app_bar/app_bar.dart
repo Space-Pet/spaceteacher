@@ -32,30 +32,37 @@ class ScreenAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              if (canGoback)
-                GestureDetector(
-                  onTap: onBack,
-                  child: const Icon(
+          Expanded(
+            child: InkWell(
+              onTap: canGoback ? onBack : null,
+              child: Row(
+                children: [
+                  const Icon(
                     Icons.arrow_back_ios_sharp,
                     size: 18,
                     color: AppColors.whiteBackground,
                   ),
-                ),
-              const SizedBox(width: 8),
-              Text(title,
-                  style: AppTextStyles.semiBold18(color: AppColors.white)),
-            ],
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.semiBold18(color: AppColors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           if (hasUpdateYear)
             GestureDetector(
               onTap: onOpenIcon,
               child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: AppColors.blackTransparent),
-                  child: iconWidget),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    color: AppColors.blackTransparent),
+                child: iconWidget,
+              ),
             ),
           if (iconRight != null)
             GestureDetector(

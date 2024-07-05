@@ -17,6 +17,8 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       required this.currentUserBloc,
       required this.userRepository})
       : super(CommentState(
+          startDate: DateTime.now(),
+          endDate: DateTime.now(),
           comment: Comment.fakeData(),
           listReportStudent: ListReportStudent.fakeData(),
         )) {
@@ -43,8 +45,6 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     final data = await appFetchApiRepo.getComment(
       userKey: currentUserBloc.state.activeChild.user_key,
       txtDate: event.txtDate,
-      // userKey: '0282810220108',
-      // txtDate: '22-04-2024',
     );
 
     emit(state.copyWith(
@@ -70,8 +70,6 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
           ? CommentState._calculateYearRange()
           : event.learnYear,
     );
-
-    await Future.delayed(const Duration(seconds: 3));
 
     emit(state.copyWith(
       commentStatus: CommentStatus.successListReport,

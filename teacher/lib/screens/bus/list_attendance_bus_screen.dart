@@ -98,19 +98,8 @@ class _ListAttendanceBusScreenState extends State<ListAttendanceBusScreen> {
                           children: [
                             Row(
                               children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(detailTeacher
-                                              .info.urlImage.mobile)),
-                                      shape: BoxShape.circle,
-                                      color: AppColors.white,
-                                      border: Border.all(
-                                          color: AppColors.black, width: 1)),
-                                ),
+                                CircleAvaImage(
+                                    urlAva: detailTeacher.info.urlImage.mobile),
                                 const SizedBox(width: 8),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,24 +290,9 @@ class _ListAttendanceBusScreenState extends State<ListAttendanceBusScreen> {
                                         children: [
                                           Row(
                                             children: [
-                                              Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: AssetImage(
-                                                        detailTeacher.info
-                                                            .urlImage.mobile),
-                                                  ),
-                                                  shape: BoxShape.circle,
-                                                  color: AppColors.white,
-                                                  border: Border.all(
-                                                    color: AppColors.white,
-                                                    width: 2,
-                                                  ),
-                                                ),
-                                              ),
+                                              CircleAvaImage(
+                                                  urlAva: detailTeacher
+                                                      .info.urlImage.mobile),
                                               const SizedBox(width: 8),
                                               Column(
                                                 crossAxisAlignment:

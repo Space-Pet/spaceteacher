@@ -1,9 +1,13 @@
 import 'package:core/data/models/models.dart';
+import 'package:core/presentation/common_widget/default_circle_ava.dart';
 import 'package:core/resources/assets.gen.dart';
 import 'package:core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iportal2/app.dart';
+import 'package:iportal2/app_config/router_configuration.dart';
 import 'package:iportal2/components/textfield/input_text.dart';
+import 'package:iportal2/screens/message/screens/conversation_detail.dart';
 
 class TabBarViewPhoneBook extends StatefulWidget {
   const TabBarViewPhoneBook({
@@ -117,24 +121,9 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      info?.urlImage.mobile ??
-                                          infoTeacher!.urlImageTeacher.mobile,
-                                    ),
-                                  ),
-                                  shape: BoxShape.circle,
-                                  color: AppColors.white,
-                                  border: Border.all(
-                                    color: AppColors.white,
-                                    width: 2,
-                                  ),
-                                ),
+                              CircleAvaImage(
+                                urlAva: info?.urlImage.mobile ??
+                                    infoTeacher!.urlImageTeacher.mobile,
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8),
@@ -161,7 +150,18 @@ class _TabBarViewPhoneBookState extends State<TabBarViewPhoneBook> {
                             ],
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              mainNavKey.currentContext!.pushNamed(
+                                routeName: ConversationDetail.routeName,
+                                arguments: {
+                                  'conversationId': '',
+                                  'recipientId': info?.userId.toString(),
+                                  'isGetById': true,
+                                  'fullName': info?.fullName,
+                                  'urlImage': info?.urlImage.mobile,
+                                },
+                              );
+                            },
                             child: SvgPicture.asset(Assets.icons.send),
                           )
                         ],

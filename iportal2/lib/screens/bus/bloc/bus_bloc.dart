@@ -37,7 +37,6 @@ class BusBloc extends Bloc<BusEvent, BusState> {
       schoolId: schoolId,
     );
     
-    await Future.delayed(const Duration(milliseconds: 300));
 
     emit(state.copyWith(
       busSchedules: busSchedules,

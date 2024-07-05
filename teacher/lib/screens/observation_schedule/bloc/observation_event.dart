@@ -13,33 +13,8 @@ class DateChanged extends ObservationEvent {
   final DateTime datePicked;
 }
 
-class SubjectChanged extends ObservationEvent {
-  SubjectChanged({required this.subject});
-  final String subject;
-}
-
-class ClassChanged extends ObservationEvent {
-  ClassChanged({required this.className});
-  final String className;
-}
-
-class PeriodChanged extends ObservationEvent {
-  PeriodChanged({required this.period});
-  final String period;
-}
-
-class InfoChanged extends ObservationEvent {
-  InfoChanged({required this.info});
-  final String info;
-}
-
 class TeacherSelected extends ObservationEvent {
   TeacherSelected({required this.teacher});
-  final TeacherItem teacher;
-}
-
-class TeacherRemoved extends ObservationEvent {
-  TeacherRemoved({required this.teacher});
   final TeacherItem teacher;
 }
 

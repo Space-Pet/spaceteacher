@@ -105,7 +105,6 @@ class _TabBarAttendanceState extends State<TabBarAttendance> {
                                         formatDate.format(firstDayOfWeek),
                                   ));
                             });
-                            print('Selected classId: ${selectedClass.classId}');
                           },
                           isSelectYear: false,
                           optionList: optionList,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/components/dialog/dialog_confirm.dart';
 import 'package:teacher/screens/observation_schedule/bloc/observation_bloc.dart';
-import 'package:teacher/screens/observation_schedule/views/hourly_assessment/hourly_assessment_screen.dart';
+import 'package:teacher/screens/observation_schedule/views/hourly_assessment/assessment_screen.dart';
 
 class CardRegisteredLesson extends StatelessWidget {
   const CardRegisteredLesson({
@@ -84,8 +84,12 @@ class CardRegisteredLesson extends StatelessWidget {
                                 ));
                               },
                               child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.blue100,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
+                                    horizontal: 8, vertical: 4),
                                 child: Row(
                                   children: [
                                     Row(
@@ -141,7 +145,12 @@ class CardRegisteredLesson extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
-                                  vertical: 2,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 255, 200, 200),
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Row(
                                   children: [

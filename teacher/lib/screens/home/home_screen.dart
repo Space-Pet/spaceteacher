@@ -60,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen>
                   child: PinFeatures(
                     isKinderGarten: isKinderGarten,
                     userFeatures: localUser.features,
-                    isLoading: homeBloc.state.statusNoti == HomeStatus.loading,
                   ),
                 ),
                 CenterPositioned(

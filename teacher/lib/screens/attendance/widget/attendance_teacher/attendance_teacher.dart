@@ -218,49 +218,50 @@ class _AttendanceTeacherScreenState extends State<AttendanceTeacherScreen>
                                 AppTextStyles.normal12(color: AppColors.gray61),
                           ),
                           const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
-                            width: 110,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: AppColors.red900),
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                context.push(AttendanceQRScreen(
-                                  onTapAttendance: () {
-                                    context.pop();
-                                    context.read<AttendanceBloc>().add(
-                                        GetAttendanceClassLeader(
-                                            date: _selectedDateTab.yyyyMMdd));
-                                    context.read<AttendanceBloc>().add(
-                                        GetAttendanceClassTeacher(
-                                            date: _selectedDateTab.yyyyMMdd));
-                                  },
-                                  date: startOfWeek,
-                                  type: 1,
-                                  attendanceTeacher: lesson,
-                                ));
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Điểm danh',
-                                    style: AppTextStyles.normal12(
-                                        color: AppColors.red900),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 4),
-                                    child: Assets.icons.checkFull.svg(
-                                      color: AppColors.red900,
+                          if (sumAttendance != 0)
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(8, 2, 8, 2),
+                              width: 110,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: AppColors.red900),
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.push(AttendanceQRScreen(
+                                    onTapAttendance: () {
+                                      context.pop();
+                                      context.read<AttendanceBloc>().add(
+                                          GetAttendanceClassLeader(
+                                              date: _selectedDateTab.yyyyMMdd));
+                                      context.read<AttendanceBloc>().add(
+                                          GetAttendanceClassTeacher(
+                                              date: _selectedDateTab.yyyyMMdd));
+                                    },
+                                    date: startOfWeek,
+                                    type: 1,
+                                    attendanceTeacher: lesson,
+                                  ));
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Điểm danh',
+                                      style: AppTextStyles.normal12(
+                                          color: AppColors.red900),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 4),
+                                      child: Assets.icons.checkFull.svg(
+                                        color: AppColors.red900,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
                           // const SizedBox(height: 4),
                           // GestureDetector(
                           //   onTap: () {

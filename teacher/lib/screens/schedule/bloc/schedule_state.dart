@@ -2,20 +2,31 @@ part of 'schedule_bloc.dart';
 
 enum ScheduleStatus { init, loading, success, failure }
 
-enum ScheduleFilter {
-  lopChuNhiem,
-  lopGiangDay,
+enum ClassType {
+  chuNhiem,
+  giangDay,
 }
 
-extension ScheduleFilterExtension on ScheduleFilter {
+extension ClassTypeExtension on ClassType {
   String get name {
     switch (this) {
-      case ScheduleFilter.lopChuNhiem:
+      case ClassType.chuNhiem:
         return 'Lớp chủ nhiệm';
-      case ScheduleFilter.lopGiangDay:
+      case ClassType.giangDay:
         return 'Lớp giảng dạy';
       default:
-        return '';
+        return 'Lớp giảng dạy';
+    }
+  }
+
+  int get value {
+    switch (this) {
+      case ClassType.chuNhiem:
+        return 1;
+      case ClassType.giangDay:
+        return 2;
+      default:
+        return 2;
     }
   }
 }
@@ -26,14 +37,14 @@ class ScheduleState extends Equatable {
     required this.datePicked,
     required this.exerciseDataList,
     this.status = ScheduleStatus.init,
-    this.filter = ScheduleFilter.lopChuNhiem,
+    this.classType = ClassType.giangDay,
   });
 
   final Schedule scheduleData;
   final DateTime datePicked;
   final List<ExerciseItem> exerciseDataList;
   final ScheduleStatus status;
-  final ScheduleFilter filter;
+  final ClassType classType;
 
   @override
   List<Object?> get props => [
@@ -41,7 +52,7 @@ class ScheduleState extends Equatable {
         datePicked,
         exerciseDataList,
         status,
-        filter,
+        classType,
       ];
 
   ScheduleState copyWith({
@@ -49,14 +60,14 @@ class ScheduleState extends Equatable {
     DateTime? datePicked,
     List<ExerciseItem>? exerciseDataList,
     ScheduleStatus? status,
-    ScheduleFilter? filter,
+    ClassType? classType,
   }) {
     return ScheduleState(
       scheduleData: scheduleData ?? this.scheduleData,
       datePicked: datePicked ?? this.datePicked,
       exerciseDataList: exerciseDataList ?? this.exerciseDataList,
       status: status ?? this.status,
-      filter: filter ?? this.filter,
+      classType: classType ?? this.classType,
     );
   }
 }

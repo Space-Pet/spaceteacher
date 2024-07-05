@@ -13,10 +13,9 @@ class ReportStudent {
         comment: CommentReport.fromJson(json['comment']),
         teacherName: TeacherName.fromJson(json['teacher_name']),
         dataItems: List<DataItem>.from(
-            json['data']['items']?.map(DataItem.fromJson) ?? []),
+            (json['data']['items'] ?? []).map((item) => DataItem.fromJson(item))),
         listMarks: List<ListMarks>.from(
-            json['list_marks']['items']?.map(ListMarks.fromJson) ??
-                []));
+            (json['list_marks']['items'] ?? []).map((item) => ListMarks.fromJson(item))));
   }
 }
 
@@ -82,8 +81,7 @@ class DataItem {
   factory DataItem.fromJson(Map<String, dynamic> json) {
     return DataItem(
         childrenItems: List<ChildrenItems>.from(
-            json['children_items']?.map(ChildrenItems.fromJson) ??
-                []),
+            (json['children_items'] ?? []).map((item) => ChildrenItems.fromJson(item))),
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         priority: json['priority'] ?? 0,
@@ -106,8 +104,7 @@ class ChildrenItems {
   factory ChildrenItems.fromJson(Map<String, dynamic> json) {
     return ChildrenItems(
         dataChildrenItems: List<DataChildrenItems>.from(
-            json['children_items']?.map(DataChildrenItems.fromJson) ??
-                []),
+            (json['children_items'] ?? []).map((item) => DataChildrenItems.fromJson(item))),
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         priority: json['priority'] ?? 0,
@@ -130,8 +127,7 @@ class DataChildrenItems {
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         listCriterial: List<ListCriterial>.from(
-            json['list_criterial']?.map(ListCriterial.fromJson) ??
-                []),
+            (json['list_criterial'] ?? []).map((item) => ListCriterial.fromJson(item))),
         title: json['title'] ?? '');
   }
 }
@@ -155,7 +151,7 @@ class ListCriterial {
         evaluationFormId: json['evaluation_form_id'] ?? 0,
         id: json['id'] ?? 0,
         result: List<Result>.from(
-            json['result']?.map(Result.fromJson) ?? []));
+            (json['result'] ?? []).map((item) => Result.fromJson(item))));
   }
 }
 

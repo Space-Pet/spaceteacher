@@ -16,11 +16,11 @@ class MethodPaymentScreen extends StatefulWidget {
   const MethodPaymentScreen(
       {required this.paymentGateways,
       required this.totalMoneyPayment,
-      required this.learnyear,
+      required this.learnYear,
       super.key});
   final List<PaymentGateway> paymentGateways;
   final int totalMoneyPayment;
-  final String learnyear;
+  final String learnYear;
   @override
   State<MethodPaymentScreen> createState() => _MethodPaymentScreenState();
 }
@@ -171,7 +171,7 @@ class _MethodPaymentScreenState extends State<MethodPaymentScreen> {
                             OpenPaymentGateway(
                               paymentId: _paymentId,
                               totalMoneyPayment: widget.totalMoneyPayment,
-                              learnYear: widget.learnyear,
+                              learnYear: widget.learnYear,
                             ),
                           );
                     },

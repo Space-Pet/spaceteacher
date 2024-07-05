@@ -14,6 +14,11 @@ enum RegisterNotebookStatus {
 
   loadingPostRegister,
   successPostRegister,
+
+  loadingPostViolation,
+  successPostViolation,
+
+  failPost,
 }
 
 class RegisterNotebookState extends Equatable {
@@ -24,6 +29,9 @@ class RegisterNotebookState extends Equatable {
     this.status = RegisterNotebookStatus.init,
     this.violationData,
     required this.listViolation,
+    this.message = '',
+    this.containerData,
+    this.classSelect = 2,
   });
 
   final List<LessonData> lessonData;
@@ -32,17 +40,26 @@ class RegisterNotebookState extends Equatable {
   final RegisterNotebookStatus status;
   final ViolationData? violationData;
   final List<ListViolation> listViolation;
+  final String message;
+  final List<Map<String, dynamic>>? containerData;
+  final int classSelect;
   @override
   List<Object?> get props => [
+        classSelect,
+        message,
         lessonData,
         datePicked,
         status,
         classCn,
         violationData,
         listViolation,
+        containerData,
       ];
 
   RegisterNotebookState copyWith({
+    int? classSelect,
+    List<Map<String, dynamic>>? containerData,
+    String? message,
     List<ListViolation>? listViolation,
     ViolationData? violationData,
     List<ClassCn>? classCn,
@@ -51,6 +68,9 @@ class RegisterNotebookState extends Equatable {
     RegisterNotebookStatus? status,
   }) {
     return RegisterNotebookState(
+      classSelect: classSelect ?? this.classSelect,
+      containerData: containerData ?? this.containerData,
+      message: message ?? this.message,
       listViolation: listViolation ?? this.listViolation,
       violationData: violationData ?? this.violationData,
       classCn: classCn ?? this.classCn,

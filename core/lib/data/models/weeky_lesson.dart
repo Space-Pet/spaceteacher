@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'dart:convert';
-
 class WeeklyLessonData {
   final List<ClassCn>? classCn;
   final List<LessonData> lessonDataList;
@@ -127,9 +125,22 @@ class LessonData {
     );
   }
 
+  static List<LessonData> fakeDataList() {
+    return List.generate(
+        5,
+        (index) => LessonData(
+              ngay: Ngay(
+                date: index + 1,
+                dateName: 'dateName$index',
+                day: '2024-09-25',
+              ),
+              dataList: LessonData.fakeListLesson(),
+            ));
+  }
+
   static List<LessonDataItem> fakeListLesson() {
     return List.generate(
-      10,
+      7,
       (index) => LessonDataItem(
         classId: 'classId$index',
         lessonId: 'lessonId$index',
@@ -138,10 +149,10 @@ class LessonData {
         subjectName: 'subjectName$index',
         lessonNote: 'lessonNote$index',
         danDoBaoBai: 'danDoBaoBai$index',
-        fileBaoBai: 'fileBaoBai$index',
+        fileBaoBai: null,
         fileBaoBaiDomain: 'fileBaoBaiDomain$index',
         linkBaoBai: 'linkBaoBai$index',
-        hanNopBaoBai: 'hanNopBaoBai$index',
+        hanNopBaoBai: null,
         teacherId: 'teacherId$index',
         teacherName: 'teacherName$index',
         teacherImg: 'teacherImg$index',
@@ -189,7 +200,8 @@ class Ngay {
 
   factory Ngay.fromJson(String source) => Ngay.fromMap(json.decode(source));
 
-  factory Ngay.empty() => Ngay(date: 0, dateName: '', day: '');
+  factory Ngay.empty() =>
+      Ngay(date: 2, dateName: '2024-09-25', day: '2024-09-25');
 
   String toJson() => json.encode(toMap());
 
@@ -206,6 +218,7 @@ class LessonDataItem {
   final String? danDoBaoBai;
   final String? fileBaoBai;
   final String? classId;
+  final String? className;
   final String? fileBaoBaiDomain;
   final String? linkBaoBai;
   final String? hanNopBaoBai;
@@ -223,6 +236,7 @@ class LessonDataItem {
     required this.subjectId,
     required this.subjectName,
     this.classId,
+    this.className,
     this.lessonNote,
     this.danDoBaoBai,
     this.fileBaoBai,
@@ -249,6 +263,7 @@ class LessonDataItem {
       fileBaoBai: map['file_bao_bai'],
       fileBaoBaiDomain: map['file_bao_bai_domain'],
       classId: map['class_id'],
+      className: map['class_name'],
       linkBaoBai: map['link_bao_bai'],
       hanNopBaoBai: map['han_nop_bao_bai'],
       teacherId: map['teacher_id'],
@@ -268,6 +283,7 @@ class LessonDataItem {
   Map<String, dynamic> toMap() {
     return {
       'class_id': classId,
+      'class_name': className,
       'lesson_id': lessonId,
       'lesson_name': lessonName,
       'subject_id': subjectId,
@@ -296,10 +312,6 @@ class LessonDataItem {
       LessonDataItem.fromMap(json.decode(source));
 
   String toJson() => json.encode(toMap());
-
-  @override
-  String toString() =>
-      'Data(lessonId: $lessonId, lessonName: $lessonName, subjectId: $subjectId, subjectName: $subjectName, lessonNote: $lessonNote, danDoBaoBai: $danDoBaoBai, fileBaoBai: $fileBaoBai, fileBaoBaiDomain: $fileBaoBaiDomain, linkBaoBai: $linkBaoBai, hanNopBaoBai: $hanNopBaoBai, teacherId: $teacherId, teacherName: $teacherName, teacherImg: $teacherImg, tietNum: $tietNum, tietStatus: $tietStatus, tietStatusNote: $tietStatusNote, lessonRank: $lessonRank, classId: $classId)';
 }
 
 class LessonRank {

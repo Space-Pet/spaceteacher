@@ -3,45 +3,62 @@ part of 'message_bloc.dart';
 @immutable
 sealed class MessageEvent {}
 
-class GetListMessage extends MessageEvent {}
+class GetConversationList extends MessageEvent {
+  final bool isResetConservationDetail;
 
-class GetListMessageResert extends MessageEvent {}
+  GetConversationList({this.isResetConservationDetail = false});
 
-class GetPhoneBookStudent extends MessageEvent {}
+  List<Object> get props => [isResetConservationDetail];
+}
 
-class GetMessageDetail extends MessageEvent {
+class GetConservationDetail extends MessageEvent {
   final String conversationId;
+  final String recipientId;
+  final bool isGetById;
   final int page;
+  final bool isGetNewMessage;
   final bool showLoading;
+  final bool isFetchNextPage;
 
-  GetMessageDetail({
-    required this.conversationId,
+  GetConservationDetail({
+    this.conversationId = '',
+    this.recipientId = '',
     this.page = 1,
+    this.isGetNewMessage = false,
+    this.isGetById = false,
     this.showLoading = false,
+    this.isFetchNextPage = false,
   });
 
-  List<Object> get props => [conversationId, page, showLoading];
+  List<Object> get props => [
+        conversationId,
+        recipientId,
+        page,
+        isGetById,
+        showLoading,
+        isFetchNextPage,
+      ];
 }
 
-class PostMessage extends MessageEvent {
+class SendMessage extends MessageEvent {
   final String content;
   final String recipient;
-  PostMessage({required this.content, required this.recipient});
-  List<Object> get props => [content, recipient];
+  final List<File> files;
+
+  SendMessage({
+    required this.content,
+    required this.recipient,
+    this.files = const [],
+  });
+
+  List<Object> get props => [content, recipient, files];
 }
 
-class GetMessageDetailRestart extends MessageEvent {
-  final String conversationId;
-  final int page;
-  GetMessageDetailRestart({required this.conversationId, this.page = 1});
-  List<Object> get props => [conversationId, page];
-}
-
-class DeleteMessageDetail extends MessageEvent {
+class DeleteMessage extends MessageEvent {
   final String content;
   final String recipient;
   final int idMessage;
-  DeleteMessageDetail({
+  DeleteMessage({
     required this.content,
     required this.idMessage,
     required this.recipient,
@@ -49,30 +66,38 @@ class DeleteMessageDetail extends MessageEvent {
   List<Object> get props => [content, idMessage, recipient];
 }
 
-class DeleteMessage extends MessageEvent {
-  final int idMessage;
-  DeleteMessage({
-    required this.idMessage,
+class DeleteConservation extends MessageEvent {
+  final int conservationId;
+  DeleteConservation({
+    required this.conservationId,
   });
-  List<Object> get props => [
-        idMessage,
-      ];
+  List<Object> get props => [conservationId];
+}
+
+class GetPinMessage extends MessageEvent {
+  final String recipientId;
+
+  GetPinMessage({required this.recipientId});
 }
 
 class PinMessage extends MessageEvent {
+  final String conservationId;
   final int idMessage;
-  PinMessage({required this.idMessage});
+
+  PinMessage({
+    required this.idMessage,
+    required this.conservationId,
+  });
+
+  List<Object> get props => [idMessage, conservationId];
+}
+
+class UnPinMessage extends MessageEvent {
+  final int idMessage;
+  UnPinMessage({required this.idMessage});
   List<Object> get props => [
         idMessage,
       ];
 }
 
-class DeletePinMessage extends MessageEvent {
-  final int idMessage;
-  DeletePinMessage({required this.idMessage});
-  List<Object> get props => [
-        idMessage,
-      ];
-}
-
-class GetPinMessage extends MessageEvent {}
+class GetPhoneBookStudent extends MessageEvent {}

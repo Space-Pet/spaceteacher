@@ -77,14 +77,14 @@ class _MultiSelectItemPageState extends State<NotiMultiSelect> {
                 child: ListView.builder(
                   itemBuilder: (builder, index) {
                     final pupil = listPupilState[index];
-                    final isSelected = index == 0
+                    final isSelected = index == 0 && search.isEmpty
                         ? listPupilId.length == listPupilState.length
                         : listPupilId.contains(pupil.pupilId);
 
                     return ListTile(
                       contentPadding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       onTap: () {
-                        if (index == 0) {
+                        if (index == 0 && search.isEmpty) {
                           setState(() {
                             if (isSelected) {
                               listPupilId.clear();
@@ -113,13 +113,6 @@ class _MultiSelectItemPageState extends State<NotiMultiSelect> {
                           ),
                         ],
                       ),
-                      // subtitle: Container(
-                      //   child: Wrap(
-                      //     children: [
-                      //       Text("Email    :   "),
-                      //     ],
-                      //   ),
-                      // ),
                       trailing: Icon(
                         isSelected
                             ? Icons.check_box

@@ -19,7 +19,6 @@ class RegisteredView extends StatelessWidget {
       child: BlocListener<ObservationBloc, ObservationState>(
         listener: (context, state) {
           if (state.registeredstatus == ObservationStatus.successDelete) {
-            context.pop();
             SnackBarUtils.showFloatingSnackBar(
                 context, 'Xóa tiết dự giờ thành công');
           }

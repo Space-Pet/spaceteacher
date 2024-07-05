@@ -1,35 +1,37 @@
-import 'teacher_detail.dart';
+import 'class_teacher.dart';
+import 'pupil_in_class.dart';
 
 class SentNotiDetail {
-  final Notification notification;
-  final List<PupilNoti> pupils;
+  final NotificationDetail notification;
+  final List<PupilInClass> pupils;
+  final List<ClassTeacher> classes;
 
-  SentNotiDetail({required this.notification, required this.pupils});
+  SentNotiDetail({
+    required this.notification,
+    required this.pupils,
+    required this.classes,
+  });
 
   factory SentNotiDetail.fromMap(Map<String, dynamic> map) {
     return SentNotiDetail(
-      notification: Notification.fromMap(map['notification']),
-      pupils:
-          List<PupilNoti>.from(map['pupils'].map((x) => PupilNoti.fromMap(x))),
+      notification: NotificationDetail.fromMap(map['notification']),
+      pupils: List<PupilInClass>.from(map['pupils']
+          .map((x) => PupilInClass.fromJson(x as Map<String, dynamic>))),
+      classes: List<ClassTeacher>.from(map['classes']
+          .map((x) => ClassTeacher.fromJson(x as Map<String, dynamic>))),
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'notification': notification.toMap(),
-      'pupils': List<dynamic>.from(pupils.map((x) => x.toMap())),
-    };
   }
 
   factory SentNotiDetail.empty() {
     return SentNotiDetail(
-      notification: Notification.empty(),
+      notification: NotificationDetail.empty(),
       pupils: [],
+      classes: [],
     );
   }
 }
 
-class Notification {
+class NotificationDetail {
   final int id;
   final int schoolId;
   final String title;
@@ -42,7 +44,7 @@ class Notification {
   final String createdAt;
   final String createdBy;
 
-  Notification({
+  NotificationDetail({
     required this.id,
     required this.schoolId,
     required this.title,
@@ -56,8 +58,8 @@ class Notification {
     required this.createdBy,
   });
 
-  factory Notification.fromMap(Map<String, dynamic> map) {
-    return Notification(
+  factory NotificationDetail.fromMap(Map<String, dynamic> map) {
+    return NotificationDetail(
       id: map['id'],
       schoolId: map['school_id'],
       title: map['title'],
@@ -89,8 +91,8 @@ class Notification {
     };
   }
 
-  factory Notification.empty() {
-    return Notification(
+  factory NotificationDetail.empty() {
+    return NotificationDetail(
       id: 0,
       schoolId: 0,
       title: '',
@@ -134,66 +136,6 @@ class Attachment {
       'resource_id': resourceId,
       'url': url,
       'file_type': fileType,
-    };
-  }
-}
-
-class PupilNoti {
-  final int pupilId;
-  final String userId;
-  final int classId;
-  final int customerId;
-  final String fullName;
-  final String userKey;
-  final int parentId;
-  final String className;
-  final UrlImage urlImage;
-  final String email;
-  final String? selected;
-
-  PupilNoti({
-    required this.pupilId,
-    required this.userId,
-    required this.classId,
-    required this.customerId,
-    required this.fullName,
-    required this.userKey,
-    required this.parentId,
-    required this.className,
-    required this.urlImage,
-    required this.email,
-    this.selected,
-  });
-
-  factory PupilNoti.fromMap(Map<String, dynamic> map) {
-    return PupilNoti(
-      pupilId: map['pupil_id'],
-      userId: map['user_id'],
-      classId: map['class_id'],
-      customerId: map['customer_id'],
-      fullName: map['full_name'],
-      userKey: map['user_key'],
-      parentId: map['parent_id'],
-      className: map['class_name'],
-      urlImage: UrlImage.fromMap(map['url_image']),
-      email: map['email'],
-      selected: map['selected'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'pupil_id': pupilId,
-      'user_id': userId,
-      'class_id': classId,
-      'customer_id': customerId,
-      'full_name': fullName,
-      'user_key': userKey,
-      'parent_id': parentId,
-      'class_name': className,
-      'url_image': urlImage.toMap(),
-      'email': email,
-      'selected': selected,
     };
   }
 }

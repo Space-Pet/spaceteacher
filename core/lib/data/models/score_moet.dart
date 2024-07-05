@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class ScoreModel {
-  final String txtLearnYear;
-  final String txtHocKy;
+  final String? txtLearnYear;
+  final String? txtHocKy;
   final String txtClassName;
   final TxtDiemMoetType txtDiem;
   final String statusNote;
@@ -23,9 +23,9 @@ class ScoreModel {
     }
 
     return ScoreModel(
-      txtDiem: map['txt_diem'] == null
+      txtDiem: (map['txt_diem'] == null && map['txt_diem_moet'] == null)
           ? TxtDiemMoetType.empty()
-          : TxtDiemMoetType.fromMap(map['txt_diem']),
+          : TxtDiemMoetType.fromMap(map['txt_diem'] ?? map['txt_diem_moet']),
       txtLearnYear: map['txt_learn_year'],
       txtHocKy: map['txt_hoc_ky'],
       txtClassName: map['txt_class_name'],
@@ -72,6 +72,7 @@ class ScoreModel {
 
 class TxtDiemMoetType {
   final List<ScoreDataType>? scoreData;
+  final List<ScoreDataType>? scoreMoetData;
   final List<DiemDataType>? diemData;
   final String? kqht;
   final String? kqrl;
@@ -85,6 +86,7 @@ class TxtDiemMoetType {
   final String? nhanXetChungCuaGvcn;
 
   TxtDiemMoetType({
+    this.scoreMoetData,
     this.scoreData,
     this.diemData,
     this.kqht,
@@ -100,6 +102,13 @@ class TxtDiemMoetType {
   });
   factory TxtDiemMoetType.fromMap(Map<String, dynamic> map) {
     return TxtDiemMoetType(
+      scoreMoetData: map['txt_diem_moet'] == null
+          ? null
+          : List<ScoreDataType>.from(
+              (map['txt_diem_moet']['score_data'] as List<dynamic>).map(
+                (item) => ScoreDataType.fromMap(item as Map<String, dynamic>),
+              ),
+            ),
       scoreData: map['score_data'] == null
           ? null
           : List<ScoreDataType>.from(

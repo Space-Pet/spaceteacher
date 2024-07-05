@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:core/common/constants/app_locale.dart';
-import 'package:core/common/services/firebase_notification_service.dart';
 import 'package:core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:repository/repository.dart';
 import 'package:teacher/app_config/router_configuration.dart';
 import 'package:teacher/common_bloc/current_user/current_user_bloc.dart';
+import 'package:teacher/screens/message/bloc/message_bloc.dart';
+import 'package:teacher/screens/message/message_screen.dart';
+import 'package:teacher/screens/message/screens/conversation_detail.dart';
 import 'package:teacher/screens/notifications/detail/notification_detail_screen.dart';
 import 'package:teacher/screens/splash/loading_screen.dart';
 
@@ -48,22 +50,73 @@ class _TeacherAppState extends State<TeacherApp> {
   }
 
   void onNotificationOpened(Map<String, dynamic>? data) {
-    log("IPortal2App - onNotificationOpened: $data");
+    log("TeacherApp - onNotificationOpened: $data");
     final notiType = data?['type'];
     switch (notiType) {
       case 'notification':
         final notiId = data?['id'] as String;
 
-        mainNavKey.currentContext?.push(NotiDetailScreen(
-          id: int.tryParse(notiId) ?? 0,
-        ));
+        mainNavKey.currentContext?.push(
+          NotiDetailScreen(
+            id: int.tryParse(notiId) ?? 0,
+          ),
+        );
         break;
+
+      case 'message':
+        final conversationId = data?['conversation_id'];
+        final recipientId = data?['recipient_id'];
+
+        mainNavKey.currentContext?.push(
+          ConversationDetail(
+            conversationId: conversationId,
+            recipientId: recipientId,
+          ),
+        );
+
+        final currentContext = mainNavKey.currentState!.context;
+        currentContext
+            .read<MessageBloc>()
+            .add(GetConservationDetail(conversationId: conversationId));
+
       default:
     }
   }
 
-  void onReceiveNotification(Map<String, dynamic>? data) {
-    log("IPortal2App - onReceiveNotification: $data");
+  void onReceiveNotification(Map<String, dynamic>? data) async {
+    log("TeacherApp - onReceiveNotification: $data");
+    final notiType = data?['type'];
+
+    switch (notiType) {
+      case 'message':
+        final conversationId = data?['conversation_id'];
+        final currentContext = mainNavKey.currentState!.context;
+        bool isMessageScreen = false;
+        bool isMessageDetail = false;
+
+        currentContext.popUntil(predicate: (Route route) {
+          if (route.settings.name == MessageScreen.routeName) {
+            isMessageScreen = true;
+          }
+          return true;
+        });
+
+        if (isMessageScreen) {
+          currentContext.read<MessageBloc>().add(GetConversationList());
+        }
+        currentContext.popUntil(predicate: (Route route) {
+          if (route.settings.name == ConversationDetail.routeName) {
+            isMessageDetail = true;
+          }
+          return true;
+        });
+        if (isMessageDetail) {
+          currentContext
+              .read<MessageBloc>()
+              .add(GetConservationDetail(conversationId: conversationId));
+        }
+      default:
+    }
   }
 
   @override
@@ -75,10 +128,19 @@ class _TeacherAppState extends State<TeacherApp> {
           RepositoryProvider.value(value: widget.userRepository),
           RepositoryProvider.value(value: widget.appFetchApiRepository),
         ],
-        child: BlocProvider(
-          create: (context) => CurrentUserBloc(
-            userRepository: context.read<UserRepository>(),
-          ),
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => CurrentUserBloc(
+                userRepository: context.read<UserRepository>(),
+              ),
+            ),
+            BlocProvider(
+                create: (context) => MessageBloc(
+                      appApiRepository: context.read<AppFetchApiRepository>(),
+                      currentUserBloc: context.read<CurrentUserBloc>(),
+                    )),
+          ],
           child: BlocListener<CurrentUserBloc, CurrentUserState>(
             listenWhen: (previous, current) => previous.user != current.user,
             listener: (context, state) {},

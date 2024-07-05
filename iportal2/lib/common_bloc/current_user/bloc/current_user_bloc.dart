@@ -24,8 +24,10 @@ class CurrentUserBloc extends Bloc<CurrentUserEvent, CurrentUserState> {
     CurrentUserUpdated event,
     Emitter<CurrentUserState> emit,
   ) async {
-    final activeChild =
-        event.user.children.firstWhere((element) => element.isActive);
+    final activeChild = event.user.children.firstWhere(
+      (element) => element.isActive,
+      orElse: () => event.user.children.first,
+    );
 
     emit(state.copyWith(
       user: event.user,

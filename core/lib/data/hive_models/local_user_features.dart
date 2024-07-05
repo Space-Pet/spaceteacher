@@ -479,7 +479,7 @@ final List<FeatureModel> hihgSTeacherFeatures = [
   // Thông tin học tập
   FeatureModel(
     key: FeatureKey.scores,
-    name: 'Xem điểm',
+    name: 'Sổ điểm',
     icon: 'highS_scores',
     category: FeatureCategory.studyInfo,
     order: 3,

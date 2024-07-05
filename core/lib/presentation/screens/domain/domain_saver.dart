@@ -24,7 +24,6 @@ class DomainSaver {
     // Save domain to local storage
     try {
       final isValid = await isDomainValid(domain);
-      print('object: $isValid');
       if (isValid) {
         await tryOpenHive();
         await box?.put(domainKey, domain);

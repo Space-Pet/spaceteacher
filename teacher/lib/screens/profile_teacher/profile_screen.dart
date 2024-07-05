@@ -24,12 +24,7 @@ class ProfileScreen extends StatelessWidget {
         return BackGroundContainer(
           child: Column(
             children: [
-              ProfileAppBar(
-                user: teacherInfo,
-                onBack: () {
-                  context.pop();
-                },
-              ),
+              ProfileAppBar(user: teacherInfo),
               Flexible(
                 child: Container(
                   width: double.infinity,

@@ -90,7 +90,7 @@ class DialogConfirm extends StatelessWidget {
                   if (onYes != null) {
                     onYes!();
                   }
-                  // context.pop();
+                  context.pop();
                 },
                 style: ElevatedButton.styleFrom(
                   alignment: Alignment.center,

@@ -33,11 +33,13 @@ class PostRegister extends RegisterNotebookEvent {
   final String tietPpct;
   final String lessionRank;
   final String danDoBaoBai;
-  final File fileBaoBai;
-  final String linkBaoBai;
+  final File? fileBaoBai;
+  final String? linkBaoBai;
   final String hanNop;
   final String userKey;
+  final List<Map<String, dynamic>>? containerData;
   PostRegister({
+    this.containerData,
     required this.danDoBaoBai,
     required this.fileBaoBai,
     required this.hanNop,
@@ -48,5 +50,12 @@ class PostRegister extends RegisterNotebookEvent {
     required this.linkBaoBai,
     required this.tietPpct,
     required this.userKey,
+  });
+}
+
+class PostViolation extends RegisterNotebookEvent {
+  final List<Map<String, dynamic>>? containerData;
+  PostViolation({
+     this.containerData,
   });
 }

@@ -48,7 +48,6 @@ class _SelectFeedBackTypeState extends State<SelectFeedBackType> {
   }
 
   int getWeekNumber(DateTime date) {
-    print('object: $date');
     final firstDayOfWeek = date.subtract(Duration(days: date.weekday - 1));
     final firstDayOfYear = DateTime(firstDayOfWeek.year);
     final daysOffset = firstDayOfYear.weekday;
