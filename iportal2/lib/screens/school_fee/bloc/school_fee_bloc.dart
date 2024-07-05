@@ -220,8 +220,17 @@ class SchoolFeeBloc extends Bloc<SchoolFeeEvent, SchoolFeeState> {
         schoolFeeGetLearnYearsStatus: SchoolFeeGetLearnYearsStatus.loading));
     try {
       final res = await appFetchApiRepo.getLearnYears(number: event.number);
-      final currentYear = res.firstWhere((element) =>
-          element.learnYear == currentUserBloc.state.activeChild.learn_year);
+      final currentYear = res.firstWhere(
+        (element) {
+          return element.currentLearnYear == 1 &&
+              element.learnYear == currentUserBloc.state.activeChild.learn_year;
+        },
+        orElse: () {
+          return res.firstWhere((element) {
+            return element.currentLearnYear == 1;
+          });
+        },
+      );
       emit(state.copyWith(
           learnYears: res,
           currentYearState: currentYear,
