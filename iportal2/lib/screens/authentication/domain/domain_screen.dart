@@ -22,7 +22,13 @@ class DomainScreen extends StatelessWidget {
     return CDomainScreen(
       onDomainSaved: ((isSaved, domain) {
         if (isSaved) {
-          context.push(const LoginScreen());
+          context.push(const LoginScreen()).then(
+            (value) {
+              if (value == true) {
+                SingletonDomainSaver().clearDomain();
+              }
+            },
+          );
         } else {
           Fluttertoast.showToast(
             msg: domain,

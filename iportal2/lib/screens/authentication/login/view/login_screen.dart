@@ -105,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
                   padding: const EdgeInsets.only(top: 40, left: 8, right: 12),
                   child: IconButton(
                       onPressed: () {
-                        context.pop();
+                        context.pop(true);
                       },
                       icon: const Icon(
                         Icons.keyboard_arrow_left,
